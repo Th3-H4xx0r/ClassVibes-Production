@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const util = require('util')
+const request = require('request');
 const router = express.Router();
 
 router.get('/',function(req,res){
@@ -53,10 +55,11 @@ router.get('/teacher/dashboard',function(req,res){
 
 
 
-app.get('/test/:username', function(req, res) {
-    var username = req.params.username;
+app.get('/classes/:class', function(req, res) {
+    var username = req.params.class;
 
-    res.sendFile(path.join(__dirname+'/test.html'));
+    const html = fs.readFileSync( __dirname + '/main.html' );
+    res.json({html: html.toString(), data: username});
     //get user's stories from database using the username
 })
 
