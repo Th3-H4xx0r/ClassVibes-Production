@@ -71,4 +71,15 @@ app.use('/vendor', express.static('vendor'))
 app.use('/authcss', express.static('app/authentication/css/'))
 app.use('/authjs', express.static('app/authentication/js/'))
 app.use('/authimg', express.static('app/authentication/img/'))
-app.use('/student', express.static('app/studentP
+app.use('/student', express.static('app/studentPortal/'))
+
+app.use('/teacher', express.static('app/teacherPortal/'))
+app.use('/app', express.static('app/'))
+
+app.use('/js', express.static('jsMain'))
+
+//add the router
+app.use('/', router);
+app.listen(process.env.port || 3000);
+
+console.log('Running at Port 3000');
