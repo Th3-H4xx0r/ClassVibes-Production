@@ -57,6 +57,22 @@ router.get('/teacher/dashboard',function(req,res){
     res.sendFile(path.join(__dirname+'/app/teacherPortal/dashboard.html'));
 });
 
+router.get('/teacher/class',function(req,res){
+  res.sendFile(path.join(__dirname+'/app/teacherPortal/classPage.html'));
+});
+
+router.get('/teacher/create-class',function(req,res){
+  res.sendFile(path.join(__dirname+'/app/teacherPortal/createClass.html'));
+});
+
+router.get('/teacher/meetings',function(req,res){
+  res.sendFile(path.join(__dirname+'/app/teacherPortal/meetingsPage.html'));
+});
+
+router.get('/teacher/students-requests',function(req,res){
+  res.sendFile(path.join(__dirname+'/app/teacherPortal/studentRequest.html'));
+});
+
 
 
 app.get('/classes/:class', function(req, res) {
