@@ -19,6 +19,10 @@ router.get('/index.html',function(req,res){
     res.sendFile(path.join(__dirname+'/app/authentication/studentLogin.html'));
   });
 
+  router.get('/login-teacher',function(req,res){
+    res.sendFile(path.join(__dirname+'/app/authentication/teacherLogin.html'));
+  });
+
 router.get('/login',function(req,res){
   res.sendFile(path.join(__dirname+'/app/authentication/loginOptions.html'));
 });
