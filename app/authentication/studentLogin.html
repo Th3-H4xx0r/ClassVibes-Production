@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable = no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="authcss/index.css">
+  <script src="authjs/auth.js"></script>
+
+
+  <title>Student Login</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="/authcss/sb-admin-2.min.css" rel="stylesheet">
+
+
+  <link href="authcss/signup.css" rel="stylesheet">
+
+  <script src="js/applicationManagement.js"></script>
+
+  <script src="https://cstatic.classvibes.net/aes.js"></script>
+
+  
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
+
+
+
+  <!--BOOTSTRAP-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"
+  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+    integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+    crossorigin="anonymous"></script>
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body style="background-image: url('authimg/background_signup.png'); width: 100%; height: 100%; position: absolute;
+background-position: center;
+background-repeat: no-repeat; margin: 0px; padding: 0px;">
+
+  <script>
+    AOS.init();
+    $( document ).ready(function() {
+      initializeFirebase();
+      getServerStatus();
+    });
+
+  </script>
+
+
+  <!-- NAVBAR -->
+
+  <div class="container-fluid" style="background-color: royalblue;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-custom">
+      <a class="navbar-brand" href="../index.html" style="color: white; font-size: 25px; font-weight: 700;">ClassVibes</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+
+        <a href="loginOptions.html">
+          <p class="login-signup-btn">Login/Sign Up</p>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!--MAIN CONTENT-->
+
+  <section class="card-center">
+
+    <div class="row">
+      <div class="side-descript">
+        <h1 style="color: white; padding-top: 15%; padding-left: 15%; padding-right: 15%; padding-bottom: 5%;">Welcome Back
+
+        <h5 style="color: white; padding-left: 15%; padding-right: 15%; font-size: 18px;">Welcome back to ClassVibes, login to continue. If you have trouble logging in, contact your teacher or district administrator.</h5>
+
+        <p style="color: white; padding-left: 15%; padding-right: 15%; padding-top: 4%;">By signing up for ClassVibes,
+          you agree with our <a href="#" style="text-decoration: underline; color: white;">Privacy Policy</a> and <a
+            href="#" style="text-decoration: underline; color: white;">Terms and Conditions</a>. </p>
+      </div>
+
+      <div class="signup-fourm" id = "signup-page-full">
+
+        <div id = "serverErrorMessage" style = "display: none;">
+          <img src = "authimg/undraw_server_down_s4lk.svg" class = "img-fluid" width="400px" style="margin-left: 13%; margin-top: 10%;">
+
+          <div class="alert alert-warning" role="alert" id = "serverStatusMessage" style="margin-top: 10%; margin-left: 6%; margin-bottom: 30%;">
+          <strong><i class="fas fa-cloud"></i>  Cloud Error </strong>Servers are experiencing downtime
+      </div>
+        </div>
+
+        
+
+<div id = "signup-section">
+  <div style="margin-left: 34%; margin-top: 4%;">
+    <h1>Student Login</h1>
+  </div>
+
+  <section id="signupError" style="margin-top: 5%;">
+      
+  </section>
+
+
+    <div style="margin-left: 4%; margin-top: 5%;">
+    <div class="container" style="margin-top: 5%;">
+
+      <div class="row">
+
+        <button class="fb-btn" onclick="facebookLoginStudent()">
+          <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+        </button>
+
+
+        <button class="google-btn" onclick="googleSignInStudent()">
+          <i class="fa fa-google fa-fw"></i> Login with Google
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-left: 4%; margin-top: 5%;">
+
+    <div class="form-label-group" style="margin-top: 5%; margin-left: 2%;">
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+
+    </div>
+
+    <div class="form-label-group" style="margin-top: 3%; margin-left: 2%;">
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    </div>
+
+  </div>
+
+    <div style="margin-left: 4%; margin-top: 5%;">
+
+      <button class="sign-up-btn" style="margin-bottom: 5%;" onclick="loginWithEmailStudent()" id = "signup-btn-main-button">
+
+        <p style="margin-top: 12px;" id = "signup-btn-text">Sign in As a Student</p>
+
+        <section id = "btn-loading" style="display: none;">
+          <center>
+            <div class="loader"></div>
+          </center>
+        </section>
+        
+        
+      </button>
+    </div></div>
+
+
+
+      </div>
+
+    </div>
+
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="page-footer font-small unique-color-dark" style="background-color: royalblue; color: white;">
+
+    <!-- Footer Links -->
+    <div class="container text-center text-md-left mt-5" style="padding-top: 40px;">
+
+      <!-- Grid row -->
+      <div class="row mt-3">
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+
+          <!-- Content -->
+          <h6 class="text-uppercase font-weight-bold">Xeon Developers 2020</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>Xeon Developers is a tech solutions company based in the Bay Area. Contact support@classvibes.net for any
+            inquiries or questions. Contact sales@classvibes.net for sales information.</p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Navigation</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="#header" style="color: white; text-decoration: none;">Home</a>
+          </p>
+          <p>
+            <a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
+          </p>
+          <p>
+            <a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
+          </p>
+          <p>
+            <a href="#!" style="color: white; text-decoration: none;">Help</a>
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Legal</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="#!" style="color: white; text-decoration: none;">Privacy Policy</a>
+          </p>
+          <p>
+            <a href="#!" style="color: white; text-decoration: none;">Terms and Conditions</a>
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Contact</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <i class="fas fa-home mr-3"></i> Mountain House, California</p>
+          <p>
+            <i class="fas fa-envelope mr-3"></i> support@classvibes.net</p>
+
+          <p>
+            <i class="fas fa-comments-dollar mr-3"></i>sales@classvibes.net</p>
+
+        </div>
+        <!-- Grid column -->
+
+      </div>
+      <!-- Grid row -->
+
+    </div>
+    <!-- Footer Links -->
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">2020 Class Vibes</a>
+    </div>
+    <!-- Copyright -->
+
+  </footer>
+  <!-- Footer -->
+
+
+</body>
+
+</html>

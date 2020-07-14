@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>TeacherFY - Class Vibes</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <script src="js/studentDashboard.js"></script>
+
+  <!--BOOTSTRAP-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"
+    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+    integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+    crossorigin="anonymous"></script>
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script src="https://cstatic.classvibes.net/aes.js"></script>
+
+  <script src="../app_config.js"></script>
+
+
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-firestore.js"></script>
+
+
+
+
+</head>
+
+<body id="page-top">
+
+  <script>
+    $(document).ready(function () {
+      initializeFirebase();
+      getClassData()
+
+      setVersionFooter();
+
+      function getProfileInfo() {
+        var name = localStorage.getItem("name");
+        var pic = localStorage.getItem("photo");
+
+        let outputPic = "";
+        outputPic += `
+   <img class="img-profile rounded-circle" src="${pic}">
+
+   `
+
+        if (outputPic !== "") {
+          $(outputPic).appendTo("#profilePic")
+        }
+
+        document.getElementById("displayName").innerHTML = name
+
+      }
+
+      getProfileInfo();
+      var email = localStorage.getItem("email");
+
+
+
+
+    })
+
+    function getClassData() {
+      var emailRef = localStorage.getItem("email")
+      var classesRef = firebase.database().ref().child("UserData").child(emailRef).child("Classes")
+      var classesList = [];
+      console.log(classesList);
+
+      classesRef.once("value", (snap) => {
+        console.log(snap.val());
+        rawData = snap.val();
+
+        if (rawData != null) {
+          snap.forEach((child) => {
+            classesList.push([child.child("Code").val(), child.child("class-name").val(),]);
+            storeClassforChart(child.child.code);
+          })
+        }
+      }).then(function () {
+
+        for (var i = 0; i <= classesList.length; i++) {
+          let output3 = "";
+          var classData = classesList[i];
+          console.log(classData);
+
+          if (classData != null || classData != undefined) {
+
+            console.log("works");
+            var className = classData[1];
+            var classCode = classData[0];
+
+            output3 = `
+              <option value="${className}" onclick = "setClassCode(${classCode})">${className}</option>
+
+            
+            `
+
+
+
+
+
+
+            $(output3).appendTo("#classesTeacherfy");
+          }
+
+        }
+
+        function setClassCode(classCode) {
+          localStorage.setItem("code", classCode);
+        }
+
+
+
+
+
+
+
+
+      }).then(() => {
+      });
+
+    };
+  </script>
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../">
+        <div class="sidebar-brand-icon">
+          <img src="/img/classvibelogo.png" alt="" style="width: 50px;">
+        </div>
+        <div class="sidebar-brand-text mx-3">Class Vibe</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="dashboard">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Quick Access
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="" data-toggle="collapse"
+          data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fas fa-stream"></i>
+          <span>Classes</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded" id="classesListSideBar">
+            <h6 class="collapse-header">MY CLASSES</h6>
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Add Class -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="add">
+          <i class="fas fa-fw fas fa-plus-square"></i>
+          <span>Add Class</span>
+        </a>
+      </li>
+
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="announcements">
+          <i class="fas fa-fw fas fa-bullhorn"></i>
+          <span>Announcements</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="announcementsPageStudentPortal.html">
+          <i class="fas fa-fw fas fa-bullhorn"></i>
+          <span>Teacherfy</span>
+        </a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Information
+      </div>
+
+      <!-- Nav Item - Mettings -->
+      <li class="nav-item">
+        <a class="nav-link" href="meetings">
+          <i class="fas fa-fw fas fa-phone-square-alt"></i>
+          <span>Meetings</span>
+        </a>
+      </li>
+
+      <!-- Nav Item - Chat -->
+      <li class="nav-item">
+        <a class="nav-link" href="chatPageStudentPortal.html">
+          <i class="fas fa-fw far far fa-comments"></i>
+          <span>Chat</span></a>
+      </li>
+
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+            </li>
+
+            <div class="topbar-divider d-none d-sm-block"></div>
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="displayName"></span>
+                <img class="img-profile rounded-circle" id="profilePic">
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Profile
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Settings
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Activity Log
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-4 text-gray-800">Teacherfy</h1>
+          <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <strong>Introducing Teacherfy!</strong> Teacherfy allows you to contact your teachers with a more visual
+            experience. Just record yourself or just you audio and upload it to your desired Class!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">
+            Record Now!
+          </button>
+
+          <!-- Modal -->
+          <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Choose Recording Type!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" style="width: 900px">
+
+                  <main>
+
+
+
+                    <center style="margin-left: -60px">
+                      <div class="col">
+                        <video controls id="vidPreview"></video>
+
+                        <video id="vid2" controls style=" display: none"></video>
+                        <div style="width: 200px">
+
+                        </div>
+                        <button type="button" name="button" class="btn btn-primary" id="btnStart">Start
+                          Recording</button>
+                        <button type="button" name="button" class="btn btn-primary" id="btnStop"
+                          style="display: none">End Recording</button>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                          data-parent="#accordionSidebar">
+                          <div class="bg-white py-2 collapse-inner rounded" id="classesListSideBar">
+                            <h6 class="collapse-header">MY CLASSES</h6>
+                          </div>
+                        </div>
+                        <select id="classesTeacherfy">
+
+                        </select>
+                        <progress value="0" max="100" id="uploader">0%</progress>
+                        <input type="file" value="upload" id="">
+
+
+
+                    </center>
+
+                    <!-- could save to canvas and do image manipulation and saving too -->
+                  </main>
+                  <script>
+
+                    let constraintObj = {
+                      audio: false,
+                      video: {
+                        facingMode: "user",
+                        width: { min: 640, ideal: 1280, max: 1000 },
+                        height: { min: 480, ideal: 720, max: 1080 }
+                      }
+                    };
+                    // width: 1280, height: 720  -- preference only
+                    // facingMode: {exact: "user"}
+                    // facingMode: "environment"
+
+                    //handle older browsers that might implement getUserMedia in some way
+                    if (navigator.mediaDevices === undefined) {
+                      navigator.mediaDevices = {};
+                      navigator.mediaDevices.getUserMedia = function (constraintObj) {
+                        let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                        if (!getUserMedia) {
+                          return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                        }
+                        return new Promise(function (resolve, reject) {
+                          getUserMedia.call(navigator, constraintObj, resolve, reject);
+                        });
+                      }
+                    } else {
+                      navigator.mediaDevices.enumerateDevices()
+                        .then(devices => {
+                          devices.forEach(device => {
+                            console.log(device.kind.toUpperCase(), device.label);
+                            //, device.deviceId
+                          })
+                        })
+                        .catch(err => {
+                          console.log(err.name, err.message);
+                        })
+                    }
+
+                    navigator.mediaDevices.getUserMedia(constraintObj)
+                      .then(function (mediaStreamObj) {
+                        //connect the media stream to the first video element
+                        let video = document.querySelector('video');
+                        if ("srcObject" in video) {
+                          video.srcObject = mediaStreamObj;
+                        } else {
+                          //old version
+                          video.src = window.URL.createObjectURL(mediaStreamObj);
+                        }
+
+                        video.onloadedmetadata = function (ev) {
+                          //show in the video element what is being captured by the webcam
+                          video.play();
+                        };
+
+                        //add listeners for saving video/audio
+                        let start = document.getElementById('btnStart');
+                        let stop = document.getElementById('btnStop');
+                        let vidSave = document.getElementById('vid2');
+                        let mediaRecorder = new MediaRecorder(mediaStreamObj);
+                        let chunks = [];
+
+                        start.addEventListener('click', (ev) => {
+                          mediaRecorder.start();
+                          console.log(mediaRecorder.state);
+                          document.getElementById('btnStart').style.display = "none";
+                          document.getElementById('btnStop').style.display = "initial";
+                        })
+                        stop.addEventListener('click', (ev) => {
+                          mediaRecorder.stop();
+                          console.log(mediaRecorder.state);
+                          document.getElementById('vid2').style.display = "initial"
+                          document.getElementById('vidPreview').style.display = "none"
+                        });
+                        mediaRecorder.ondataavailable = function (ev) {
+                          chunks.push(ev.data);
+                        }
+                        mediaRecorder.onstop = (ev) => {
+                          let blob = new Blob(chunks, { 'type': 'video/mp4;' });
+                          chunks = [];
+                          let videoURL = window.URL.createObjectURL(blob);
+                          vidSave.src = videoURL;
+                        }
+                      })
+                      .catch(function (err) {
+                        console.log(err.name, err.message);
+                      });
+
+                    /*********************************
+                    getUserMedia returns a Promise
+                    resolve - returns a MediaStream Object
+                    reject returns one of the following errors
+                    AbortError - generic unknown cause
+                    NotAllowedError (SecurityError) - user rejected permissions
+                    NotFoundError - missing media track
+                    NotReadableError - user permissions given but hardware/OS error
+                    OverconstrainedError - constraint video settings preventing
+                    TypeError - audio: false, video: false
+                    *********************************/
+
+                    var uploader = document.getElementById('uploader');
+                    var fileButton = document.getElementById('fileButton');
+
+                    fileButton.addEventListener('change', function (e) {
+                      var file = vidSave
+
+                      var storageRef = firebase.storage().ref('class_images/' + file.name)
+
+                      var task = storageRef.put(file);
+
+                      task.on('state_change',
+                        function progress(snapshot) {
+                          var percentage = (snapshot.bytesTransferres / snapshot.totalBytes) * 100;
+                          uploader.value = percentage;
+
+                        },
+
+                        function error(err) {
+
+                        },
+
+                        function complete() {
+
+                        }
+                      )
+                    })
+                  </script>
+                  <style>
+                    #uploader {
+                      -webkit-appearance: none;
+                      appearance: none;
+                      width: 50%;
+
+                    }
+                  </style>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="fileButton">Upload!</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto" id = "footer-version-code">
+            <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="authentication/loginOptions.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+
+</html>

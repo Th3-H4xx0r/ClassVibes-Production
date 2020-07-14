@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable = no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="css/index.css">
+  <script src="js/auth.js"></script>
+
+
+  <title>ClassVibes Signup</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
+
+  <link href="/css/signup.css" rel="stylesheet">
+
+  <script src="../studentPortal/js/applicationManagement.js"></script>
+
+  <script src="https://cstatic.classvibes.net/aes.js"></script>
+
+
+
+  <!--BOOTSTRAP-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"
+  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+    integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+    crossorigin="anonymous"></script>
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body style="background-image: url('img/background_signup.png'); width: 100%; height: 100%; position: absolute;
+background-position: center;
+background-repeat: no-repeat; margin: 0px; padding: 0px;">
+  <script>
+    AOS.init();
+  </script>
+
+<script>
+  $(document).ready(function () {
+    initializeFirebase();
+   
+  });
+</script>
+
+<script async defer src="https://apis.google.com/js/api.js"
+onload="this.onload=function(){};handleClientLoad()"
+onreadystatechange="if (this.readyState === 'complete') this.onload()">
+</script>
+
+
+
+  <!-- NAVBAR -->
+
+  <div class="container-fluid" style="background-color: royalblue;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-custom">
+      <a class="navbar-brand" href="../index.html" style="color: white; font-size: 25px; font-weight: 700;">ClassVibes</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+
+        <a href="authentication/loginOptions.html">
+          <p class="login-signup-btn">Login/Sign Up</p>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!--MAIN CONTENT-->
+
+
+  <section class="card-center">
+
+    <div class="row">
+      <div class="side-descript">
+        <h1 style="color: white; padding-top: 15%; padding-left: 15%; padding-right: 15%; padding-bottom: 5%;">Managing
+          your <br> class, just <br> got easier!</h1>
+
+        <h5 style="color: white; padding-left: 15%; padding-right: 15%; font-size: 18px;">With ClassVibe, managing
+          classes during distance learning, and just in general, is much easier as you get to communicate with your
+          students in an efficient way.</h5>
+
+        <p style="color: white; padding-left: 15%; padding-right: 15%; padding-top: 4%;">By signing up for ClassVibes,
+          you agree with our <a href="#" style="text-decoration: underline; color: white;">Privacy Policy</a> and <a
+            href="#" style="text-decoration: underline; color: white;">Terms and Conditions</a>. </p>
+      </div>
+
+      <div class="signup-fourm" id = "signup-page-full">
+
+        <div style="margin-left: 45%; margin-top: 4%;">
+          <h1>Sign Up</h1>
+        </div>
+
+
+        <h3 style="padding-top: 30px; padding-left: 30px;">I am a..</h3>
+
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="padding-left:5%; padding-top: 1%;">
+          <label class="btn btn-primary active" onclick='showInfoSelected("student")'>
+            <input type="radio" name="options" id="student" autocomplete="off" checked> Student
+          </label>
+          <label class="btn btn-primary" onclick='showInfoSelected("teacher")'>
+            <input type="radio" name="options" id="teacher" autocomplete="off"> Teacher
+          </label>
+          <label class="btn btn-primary" onclick='showInfoSelected("district")'>
+            <input type="radio" name="options" id="district" autocomplete="off"> District
+          </label>
+        </div>
+
+        <section id="signupError">
+
+        </section>
+
+        <section id="studentsInfo-mediaLogin">
+          <div style="margin-left: 4%;">
+          <div class="container" style="margin-top: 5%;">
+
+            <div class="row">
+
+              <button class="fb-btn" onclick="facebookSignUp('student')">
+                <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+              </button>
+
+
+              <button class="google-btn" onclick="googleSignUp('student')">
+                <i class="fa fa-google fa-fw"></i> Login with Google
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section id="teacherInfo-mediaLogin" style="display: none;">
+        <div style="margin-left: 4%;">
+        <div class="container" style="margin-top: 5%;">
+
+          <div class="row">
+
+            <button class="fb-btn" onclick="facebookSignUp('teacher')">
+              <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+            </button>
+
+
+            <button class="google-btn" onclick="googleSignUp('teacher')">
+              <i class="fa fa-google fa-fw"></i> Login with Google
+            </button>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="districtInfo-mediaLogin" style="display: none;">
+      <div style="margin-left: 4%;">
+      <div class="container" style="margin-top: 5%;">
+
+        <div class="row">
+
+          <button class="fb-btn" onclick="facebookSignUp('district')">
+            <i class="fa fa-facebook fa-fw"></i> Login with Facebook
+          </button>
+
+
+          <button class="google-btn" onclick="googleSignUp('district')">
+            <i class="fa fa-google fa-fw"></i> Login with Google
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+        <div style="margin-left: 4%;">
+
+          <div class="form-label-group" style="margin-top: 5%; margin-left: 2%;">
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+
+            <div class="invalid-form" id = "email-error">
+              
+            </div>
+
+          </div>
+
+          <div class="form-label-group" style="margin-top: 3%; margin-left: 2%;">
+            <input type="name" id="inputDisplayName" class="form-control" placeholder="Full Name" required>
+          </div>
+
+          <div class="form-label-group" style="margin-top: 3%; margin-left: 2%;">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+            <div class="invalid-form" id = "password-error">
+              
+            </div>
+          </div>
+
+          
+
+          <div class="form-label-group" style="margin-top: 3%; margin-left: 2%;">
+            <input type="password" id="inputRepeatPassword" class="form-control" placeholder="Confirm Password"
+              required>
+          </div>
+
+        </div>
+
+        <section id="studentsInfo">
+          <div style="margin-left: 4%;">
+
+            <button class="sign-up-btn" style="margin-bottom: 25%;" onclick="emailSignUp('student')" id = "signup-btn-main-button">
+
+              <p style="margin-top: 12px;" id = "signup-btn-text">Sign Up As a Student</p>
+
+              <section id = "btn-loading" style="display: none;">
+                <center>
+                  <div class="loader"></div>
+                </center>
+              </section>
+              
+              
+            </button>
+          </div>
+        </section>
+
+        <section id="teacherInfo" style="display: none;">
+
+          <div style="margin-left: 4%;">
+
+            <button class="sign-up-btn" style="margin-bottom: 25%;" onclick="emailSignUp('teacher')" id = "signup-btn-main-button">
+
+              <p style="margin-top: 12px;" id = "signup-btn-text">Sign Up As a Teacher</p>
+
+              <section id = "btn-loading" style="display: none;">
+                <center>
+                  <div class="loader"></div>
+                </center>
+              </section>
+              
+              
+            </button>
+
+          </div>
+
+        </section>
+
+        <div id="districtInfo" style="display: none;">
+          <div style="margin-left: 4%;">
+
+
+            <button class="sign-up-btn" style="margin-bottom: 25%;" onclick="emailSignUp('district')" id = "signup-btn-main-button">
+
+              <p style="margin-top: 12px;" id = "signup-btn-text">Sign Up As a District Admin</p>
+
+              <section id = "btn-loading" style="display: none;">
+                <center>
+                  <div class="loader"></div>
+                </center>
+              </section>
+              
+              
+            </button>
+          </div>
+        </div>
+
+
+
+
+      </div>
+
+
+        <div class="signup-fourm" style="display: none;" id = "signup-success-form">
+          <section style="margin-top: 50%;">
+  
+            <div align = "center" style="margin-left: 10%; margin-bottom: 50%;">
+              <i class="far fa-check-circle fa-5x" style="color: green;"></i>
+  
+              <h3>Account Created</h3>
+  
+              <p style="color: grey;">Your account has been created. <a href="../authentication/loginOptions.html">Login</a> to continue.</p>
+            </div>
+            
+          </section>
+        </div>
+
+      
+
+    </div>
+
+    <script>
+      function showInfoSelected(selected) {
+
+        if (selected == 'student') {
+          document.getElementById("studentsInfo").style.display = "initial";
+          document.getElementById("studentsInfo-mediaLogin").style.display = "initial";
+          document.getElementById("teacherInfo").style.display = "none";
+          document.getElementById("teacherInfo-mediaLogin").style.display = "none";
+          document.getElementById("districtInfo").style.display = "none";
+          document.getElementById("districtInfo-mediaLogin").style.display = "none";
+        }
+
+
+        if (selected == 'teacher') {
+          document.getElementById("studentsInfo").style.display = "none";
+          document.getElementById("studentsInfo-mediaLogin").style.display = "none";
+          document.getElementById("teacherInfo").style.display = "initial";
+          document.getElementById("teacherInfo-mediaLogin").style.display = "initial";
+          document.getElementById("districtInfo").style.display = "none";
+          document.getElementById("districtInfo-mediaLogin").style.display = "none";
+        }
+
+        if (selected == 'district') {
+          document.getElementById("studentsInfo").style.display = "none";
+          document.getElementById("studentsInfo-mediaLogin").style.display = "none";
+          document.getElementById("teacherInfo").style.display = "none";
+          document.getElementById("teacherInfo-mediaLogin").style.display = "none";
+          document.getElementById("districtInfo").style.display = "initial";
+          document.getElementById("districtInfo-mediaLogin").style.display = "initial";
+        }
+
+      }
+    </script>
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="page-footer font-small unique-color-dark" style="background-color: royalblue; color: white;">
+
+    <!-- Footer Links -->
+    <div class="container text-center text-md-left mt-5" style="padding-top: 40px;">
+
+      <!-- Grid row -->
+      <div class="row mt-3">
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+
+          <!-- Content -->
+          <h6 class="text-uppercase font-weight-bold">Xeon Developers 2020</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>Xeon Developers is a tech solutions company based in the Bay Area. Contact support@classvibes.net for any
+            inquiries or questions. Contact sales@classvibes.net for sales information.</p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Navigation</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="#header" style="color: white; text-decoration: none;">Home</a>
+          </p>
+          <p>
+            <a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
+          </p>
+          <p>
+            <a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
+          </p>
+          <p>
+            <a href="#!" style="color: white; text-decoration: none;">Help</a>
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Legal</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <a href="#!" style="color: white; text-decoration: none;">Privacy Policy</a>
+          </p>
+          <p>
+            <a href="#!" style="color: white; text-decoration: none;">Terms and Conditions</a>
+          </p>
+
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
+          <!-- Links -->
+          <h6 class="text-uppercase font-weight-bold">Contact</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+          <p>
+            <i class="fas fa-home mr-3"></i> Mountain House, California</p>
+          <p>
+            <i class="fas fa-envelope mr-3"></i> support@classvibes.net</p>
+
+          <p>
+            <i class="fas fa-comments-dollar mr-3"></i>sales@classvibes.net</p>
+
+        </div>
+        <!-- Grid column -->
+
+      </div>
+      <!-- Grid row -->
+
+    </div>
+    <!-- Footer Links -->
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">2020 Class Vibes</a>
+    </div>
+    <!-- Copyright -->
+
+  </footer>
+  <!-- Footer -->
+
+</body>
+
+</html>

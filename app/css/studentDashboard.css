@@ -1,0 +1,113 @@
+
+.fas:hover {
+    color: royalblue;
+}
+
+.join-class-btn
+{
+    background-color: rgb(131, 158, 241);
+    border: none;
+    height: 40px;
+    width: 90px;
+    color: white;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+.join-class-btn:hover
+{
+    background-color: royalblue;
+    border: none;
+    height: 40px;
+    width: 90px;
+    color: white;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+.join-class-btn:focus
+{
+    background-color: royalblue;
+    border: none;
+    height: 40px;
+    width: 90px;
+    color: white;
+    font-weight: 700;
+    border-radius: 5px;
+    outline: none;
+}
+
+.chat-contactBox
+{
+    background-color: white;
+    color: black;
+    height: 90px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 1px 5px 8px #888888;
+}
+
+.chat-contactBox:hover
+{
+    background-color: rgb(226, 226, 226);
+    color: black;
+    height: 90px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 1px 5px 8px #888888;
+}
+
+.chat-contactBox-active
+{
+    background-color: royalblue;
+    height: 90px;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 1px 5px 8px #888888;
+}
+
+.chat-contactBox-active:hover
+{
+    background-color: rgb(90, 130, 248);
+    height: 90px;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 1px 5px 8px #888888;
+}
+
+.msg-chat-bubble
+{
+    background-color: lavender;
+    border-radius: 15px;
+    width: 450px;
+    margin-left: 30px;
+}
+
+.msg-chat-title
+{
+    margin-top: 30px;
+    margin-left: 20px;
+    font-size: 25px;
+    font-size: 700;
+}
+
+.msg-chat-time
+{
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 15px;
+    font-size: 700;
+    padding-bottom: 0px;
+}
+
+.msg-chat-text
+{
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 18px;
+    margin-right: 20px;
+    font-size: 700;
+}
+

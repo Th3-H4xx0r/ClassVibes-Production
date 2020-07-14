@@ -1,0 +1,205 @@
+html
+{
+    overflow-x: hidden;
+    margin: none;
+}
+
+body
+{
+    background-color: royalblue;
+    margin: none;
+    padding: none;
+    width: 100%;
+}
+
+.bg-img {
+    /* The image used */
+    background-image: url('img/background_signup.png');
+  
+    /* Full height */
+    height: 100%;
+    width: 100%;
+  
+    /* Center and scale the image nicely */
+    position: absolute;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+.card-center
+{
+    margin-top: 6%;
+    width: 70%;
+    margin-left: 15%;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.side-descript
+{
+    width: 45%;
+    background-color: steelblue;
+}
+
+.signup-fourm
+{
+    width: 45%;
+    background-color: white;
+}
+
+.mainTitle
+{
+    font-size:80px;
+    margin-top: 20%;
+}
+
+.option-text
+{
+    padding: 3%;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.option-btns-row
+{
+    margin-top: 4%;
+    margin-bottom: 30%;
+}
+
+#option-btns
+  {
+    background-color: royalblue;
+    margin-right: 10px;
+    height: 40px;
+    width: 120px;
+    border-radius: 10px;
+
+  }
+
+  #option-btns:hover
+  {
+    background-color: rgb(98, 118, 184);
+  }
+
+  #option-btns:active
+  {
+    background-color: rgb(123, 149, 226);
+  }
+
+  .description
+  {
+    margin-left: 26px;
+    margin-top: 20px;
+  }
+
+  .teacherInfo1
+  {
+    display: none;
+  }
+
+  /* STUDENT SIGNUP */
+  
+  .emailInput
+  {
+    height: 30px;
+    width: 40%;
+  }
+
+  .fb-btn
+  {
+    background-color: #4267B2;
+    border: none;
+    border-radius: 5px;
+    height: 50px;
+    margin-left: 10px;
+    color: white;
+    font-weight: 700;
+    width: 48%;
+  }
+
+  .google-btn
+  {
+    background-color: #DB4437;
+    border: none;
+    border-radius: 5px;
+    height: 50px;
+    margin-left: 10px;
+    color: white;
+    font-weight: 700;
+    width: 48%;
+  }
+
+  .google-btn:hover
+  {
+    border: none;
+    outline: none;
+    background-color: rgb(207, 98, 89);
+  }
+
+  .google-btn:focus
+  {
+    border: none;
+    outline: none;
+  }
+
+  .sign-up-btn
+  {
+    background-color: royalblue;
+    height: 50px;
+    width: 98%;
+    margin-left: 2%;
+    margin-top: 3%;
+    color: white;
+    font-weight: 700;
+    border-radius: 5px;
+    border: none;
+  }
+
+  .sign-up-btn:hover
+{
+  background-color: rgb(101, 127, 206);
+  border: none;
+  outline: none;
+}
+
+.sign-up-btn:focus
+{
+  background-color: rgb(101, 127, 206);
+  border: none;
+  outline: none;
+}
+
+.sign-up-btn:active
+{
+  background-color: rgb(101, 127, 206);
+  border: none;
+  outline: none;
+}
+
+.invalid-form
+{
+  color: red;
+  font-weight: 600;
+}
+
+.loader {
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 6px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Animation */
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}

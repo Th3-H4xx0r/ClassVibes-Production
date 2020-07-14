@@ -1,0 +1,116 @@
+html
+{
+    width: 100%;
+    margin: 0px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body
+{
+    width: 100%;
+    margin: 0px;
+}
+
+.getStarted-btn
+{
+    border-radius: 20px;
+    border: none;
+   height: 37px;
+   width: 140px;
+   background: linear-gradient(186deg, rgba(67,206,162,1) 0%, rgba(89,171,255,1) 100%);
+   color: white;
+   font-weight: 700;
+   outline: none;
+}
+
+.getStarted-btn:hover
+{
+   background: linear-gradient(186deg, rgba(84,163,227,1) 0%, rgba(176,106,179,1) 100%);
+   outline: none;
+}
+
+.getStarted-btn:focus
+{
+    
+   outline: none;
+}
+
+.login-signup-btn
+{
+    color:white;
+    font-weight: 800;
+    margin-left: 10px;
+    margin-top: 15px;
+}
+
+.mainTitle-header
+{
+    color: white;
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 60px;
+    margin-left: 20px;
+    
+}
+
+.mainTitle-header-caption
+{
+    margin-top: 20px;
+    color: white;
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 35px;
+    margin-left: 20px;
+    
+}
+
+.pricing-titles
+{
+    font-weight: 700;
+    font-size: 35px;
+}
+
+.pricing-titles-caption
+{
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.check-list
+{
+    list-style: none;   
+    margin-left: -40px;
+}
+
+.check-list::before
+{
+    content: "✓ ";
+}
+
+.buy-btn
+{
+    border-radius: 40px;
+    outline: none;
+    border: none;
+    height: 40px;
+    width: 250px;
+    background-color: rgb(235, 235, 235);
+    transition: background-color 0.3s ease-in-out;
+}
+
+.buy-btn:hover
+{
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    background-color: #4169e1;
+    color: white;
+}
+
+.buy-btn:focus
+{
+    border-radius: 20px;
+    outline: none;
+    border: none;
+}

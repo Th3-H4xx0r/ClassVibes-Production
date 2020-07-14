@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="authcss/index.css">
+
+  <title>ClassVibes</title>
+
+  <!-- Custom fonts for this template-->
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="authcss/loginOptions.css" rel="stylesheet">
+
+  <script src="js/applicationManagement.js"></script>
+
+  <script src="https://cstatic.classvibes.net/aes.js"></script>
+
+  <!--BOOTSTRAP-->
+
+   <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-firestore.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
+</head>
+
+<body style="background-color: royalblue;">
+  <script>
+    AOS.init();
+  </script>
+
+<script>
+  $(document).ready(function () {
+    initializeFirebase();
+    getServerStatus();
+  });
+</script>
+
+  <!-- HEADER -->
+  <section id="header">
+    <header style="background-color: royalblue; margin-bottom: 0px;">
+
+      <!-- NAVBAR -->
+
+      <div class="container-fluid" >
+        <nav class="navbar navbar-expand-lg navbar-light bg-custom">
+          <a class="navbar-brand" href="/" style="color: white; font-size: 25px; font-weight: 700;">ClassVibes</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+            </ul>
+
+            <a href="loginOptions.html"><p class="login-signup-btn">Login/Sign Up</p></a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="center-card">
+
+      <center>
+        <h1 class="main-title">Login as a..</h1>
+      </center>
+
+      <div class="d-flex justify-content-center">
+        <div class="row" align = "center">
+
+            <button class="option-buttons" onclick="window.location = '../login-student'">Student</button>
+    
+            <button class="option-buttons"  onclick="window.location = '../authentication/teacherLogin.html'">Teacher</button>
+    
+            <button class="option-buttons" onclick="window.location = '../authentication/districtLogin.html'">District</button>
+          </div>
+
+      </div>
+
+      <div class="d-flex justify-content-center">
+
+        <h5 class="signup">Don't have an account? <a href="../authentication/signup.html" class="signup-a">Sign Up</a></h5>
+      </div>
+
+      </div>
+
+
+      
+
+
+
+    </header>
+  </section>
+
+
+<!-- Footer -->
+<footer class="page-footer font-small unique-color-dark" style="background-color: royalblue; color: white;">
+
+  <!-- Footer Links -->
+  <div class="container text-center text-md-left mt-5" style="padding-top: 40px;">
+
+    <!-- Grid row -->
+    <div class="row mt-3">
+
+      <!-- Grid column -->
+      <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+
+        <!-- Content -->
+        <h6 class="text-uppercase font-weight-bold">Xeon Developers 2020</h6>
+        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+        <p>Xeon Developers is a tech solutions company based in the Bay Area. Contact support@classvibes.net for any inquiries or questions. Contact sales@classvibes.net for sales information.</p>
+
+      </div>
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+
+        <!-- Links -->
+        <h6 class="text-uppercase font-weight-bold">Navigation</h6>
+        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+        <p>
+          <a href="#header" style="color: white; text-decoration: none;">Home</a>
+        </p>
+        <p>
+          <a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
+        </p>
+        <p>
+          <a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
+        </p>
+        <p>
+          <a href="#!" style="color: white; text-decoration: none;">Help</a>
+        </p>
+
+      </div>
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4" >
+
+        <!-- Links -->
+        <h6 class="text-uppercase font-weight-bold">Legal</h6>
+        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+        <p>
+          <a href="#!" style="color: white; text-decoration: none;">Privacy Policy</a>
+        </p>
+        <p>
+          <a href="#!" style="color: white; text-decoration: none;">Terms and Conditions</a>
+        </p>
+
+      </div>
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
+        <!-- Links -->
+        <h6 class="text-uppercase font-weight-bold">Contact</h6>
+        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+        <p>
+          <i class="fas fa-home mr-3"></i> Mountain House, California</p>
+        <p>
+          <i class="fas fa-envelope mr-3"></i> support@classvibes.com</p>
+        
+          <p>
+            <i class="fas fa-comments-dollar mr-3"></i>sales@classvibes.com</p>
+
+      </div>
+      <!-- Grid column -->
+
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2020 Xeon Developers</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+
+
+  
+
+
+</body>
+
+</html>

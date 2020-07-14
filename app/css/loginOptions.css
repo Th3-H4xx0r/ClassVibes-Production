@@ -1,0 +1,61 @@
+html
+{
+    font-family: 'Roboto';
+}
+
+.main-title
+{
+    color:white;
+    font-size: 80px;
+}
+
+.center-card
+{
+    margin-top: 18%;
+
+    margin-bottom: 23%;
+}
+
+.option-buttons
+{
+    margin-top: 10%;
+    height: 60px;
+    width: 170px;
+    border-radius: 10px;
+    outline: none;
+    background-color: royalblue;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    margin-left: 40px;
+    border: 4px solid white; /* Green */
+}
+
+.option-buttons:hover
+{
+    background-color: white;
+    color: royalblue;
+    border: none;
+    outline: none;
+}
+
+.option-buttons:focus
+{
+    border: none;
+    outline: none;
+    background-color: white;
+    color: royalblue;
+}
+
+.signup
+{
+    color: white;
+    margin-top: 5%;
+}
+
+.signup-a
+{
+    text-decoration: underline;
+    color: white;
+
+}
