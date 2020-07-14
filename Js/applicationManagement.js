@@ -60,6 +60,21 @@ function getLiveSeverAlerts(){
 }
 
 function getServerStatus(){
+  var socket = io.connect('http://localhost:3000');
+  socket.on('connect', function(data) {
+     console.log("Connected")
+
+     socket.on('serverStatus', function(data) {
+      console.log(data);
+
+      if(data == false || data == null){
+        window.location = "serverDown";
+    } 
+  });
+  
+  });
+
+  /*
   firebase.firestore().collection('Application Management').doc("ServerManagement").onSnapshot(function(result){
 
       var data = result.data()["serversAreUp"];
@@ -69,6 +84,8 @@ function getServerStatus(){
       } 
       
   });
+  */
+
 }
 
 function checkUserAuthStatus(){
