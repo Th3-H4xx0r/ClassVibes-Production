@@ -1,8 +1,23 @@
 <html>
-<body>
-<script type="text/javascript">
-   var obj = JSON.parse(<%= objSentFromServer %>)
-   // do something with obj
-</script>
-</body>
+  <head>
+
+  </head>
+  <body>
+    <script>
+      function readFilePath(){
+        var classCode = document.getElementById('classCode').value
+        document.getElementById('classCode1').innerHTML = classCode
+      }
+
+      readFilePath()
+
+
+    </script>
+    <h1 id = "classCode"> Welcome to the <%= code %> subreddit</h1>
+
+    <h1 id = "classCode1"></h1>
+  </body>
+
+  
 </html>
+
