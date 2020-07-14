@@ -207,7 +207,7 @@ function facebookLoginTeacher() {
                     localStorage.setItem("email", emailEncrypted);
                     localStorage.setItem("name", name3);
 
-                    window.location = "../teacherPortal/dashboard.html";
+                    window.location = "teacher/dashboard";
                 } else {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
@@ -356,7 +356,7 @@ googleSignInTeacher = () => {
 
                         console.log("Email:" + email + ":" + emailDisplay);
 
-                        window.location = "../teacherPortal/dashboard.html";
+                        window.location = "teacher/dashboard";
                     } else {
 
                         errorHTML = `<div class="alert alert-danger" role="alert" 
@@ -969,7 +969,7 @@ function loginWithEmailTeacher() {
 
                                 localStorage.setItem("email", emailEncrypted);
                                 //localStorage.setItem("name", name3);
-                                window.location = "../../teacherPortal/dashboard.html";
+                                window.location = "teacher/dashboard";
                            }, 500); 
 
 
