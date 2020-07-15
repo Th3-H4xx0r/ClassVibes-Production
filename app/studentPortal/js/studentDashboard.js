@@ -458,16 +458,9 @@ function checkIfClassCodeExists(addType) {
      `;
 
         addClassToStudentData(code);
-
       }
-
-
     });
-
-
   }
-
-
 }
 
 
