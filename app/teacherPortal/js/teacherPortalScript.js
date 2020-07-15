@@ -493,23 +493,35 @@ function checkIfSchoolCodeExists() {
 }
 
 function getProfileInfo() {
-  var name = localStorage.getItem("name");
-  var pic = localStorage.getItem("photo");
 
-  var outputPic = ``;
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var name = user.displayName;
+      var pic = user.photoURL;
 
-  if (pic != null && pic != undefined && pic != "") {
-    outputPic = `<img class="img-profile rounded-circle" src="${pic}">`;
-  } else {
-    outputPic = `<img class="img-profile rounded-circle" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">`;
-  }
+      var outputPic = ``;
 
+      if(pic != null && pic != undefined && pic != ""){
+          outputPic = `<img class="img-profile rounded-circle" src="${pic}">`;
+      } else {
+          outputPic = `<img class="img-profile rounded-circle" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">`;
+      }
+    
+    
+      $(outputPic).appendTo("#profilePic")
 
-
-
-  $(outputPic).appendTo("#profilePic")
-
-  document.getElementById("displayName").innerHTML = name
+      if(name != null, undefined){
+        document.getElementById("displayName").innerHTML = name
+      } else {
+        document.getElementById("displayName").innerHTML = "Error Occured"
+      }
+    
+      
+    } else {
+      console.log("user Signed out");
+      
+    }
+  })
 
 }
 
