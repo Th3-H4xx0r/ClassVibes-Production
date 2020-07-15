@@ -128,7 +128,7 @@ function liveServerRedirects(){
      socket.on('serverStatus', function(data) {
       console.log(data);
 
-      if(data != false && data != null){
+      if(data == true ){
         window.location = "login";
     } 
   });
