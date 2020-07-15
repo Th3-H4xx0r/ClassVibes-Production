@@ -582,7 +582,7 @@ function getClassData() {
             `;
 
           output2 = `
-            <a class="collapse-item" href="classPage.html" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "setClassCode(${classCode})">${className}</a>
+            <a class="collapse-item" href="/teacher/classes/${classCode}" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${className}</a>
             `;
 
           output3 = `
@@ -724,11 +724,11 @@ function getClassDataDropdown() {
         var classCode = classData[0];
 
         output2 = `
-    <a class="collapse-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeClassPref('${classCode}', '${className}')">${className}</a>
+    <a class="collapse-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeClassPref('${classCode}')">${className}</a>
     `;
 
         output3 = `
-    <a class="dropdown-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeClassPref('${classCode}', '${className}')">${className}</a>
+    <a class="dropdown-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeClassPref('${classCode}')">${className}</a>
 <div class="dropdown-divider"></div>
     
     `;
@@ -742,19 +742,8 @@ function getClassDataDropdown() {
   })
 }
 
-function storeClassPref(code, name) {
-  localStorage.setItem("code", code);
-  localStorage.setItem("className", name);
-  var name = localStorage.getItem("className");
-  console.log(code);
-  window.location = "classPage.html"
-  output = ''
-  output += `
-  <h1 class="h3 mb-4 text-gray-800" id="className">${name}</h1>
-
-  
-  `
-  $(output).appendTo('#className')
+function storeClassPref(code) {
+  window.location = "/teacher/classes/" + code
 }
 
 function createClass() {
@@ -796,20 +785,7 @@ function createClass() {
 }
 
 
-function storeClassPref(code, name) {
-  localStorage.setItem("code", code);
-  localStorage.setItem("className", name);
-  var name = localStorage.getItem("className");
-  console.log(code);
-  window.location = "classPage.html"
-  output = ''
-  output += `
-  <h1 class="h3 mb-4 text-gray-800" id="className">${name}</h1>
 
-  
-  `
-  $(output).appendTo('#className')
-}
 
 function getStudentData(code) {
 
