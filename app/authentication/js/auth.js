@@ -60,9 +60,7 @@ function facebookLoginStudent() {
                 if (accountType != null) {
                     if (accountType == "Student") {
 
-                        let emailEncrypted = encrypt(email)
-
-                        localStorage.setItem("email", emailEncrypted);
+                        localStorage.setItem("email", email);
 
                         window.location = "/student/dashboard";
                     } else {
@@ -132,9 +130,7 @@ function facebookLoginDistrict() {
                 if (accountType == "District") {
                     console.log('Login Success');
 
-                    let emailEncrypted = encrypt(email)
-
-                    localStorage.setItem("email", emailEncrypted);
+                    localStorage.setItem("email", email);
                     window.location = "districtDashboard.html";
                 } else {
 
@@ -201,10 +197,9 @@ function facebookLoginTeacher() {
             if (accountType != null) {
                 if (accountType == "Teacher") {
 
-                    let emailEncrypted = encrypt(email)
                     console.log('Login Success');
                     localStorage.setItem("photo", profilePic);
-                    localStorage.setItem("email", emailEncrypted);
+                    localStorage.setItem("email", email);
                     localStorage.setItem("name", name3);
 
                     window.location = "teacher/dashboard";
@@ -275,10 +270,9 @@ googleSignInStudent = () => {
             if (accountType != null) {
                 if (accountType == "Student") {
                     console.log('Login Success');
-                    let emailEncrypted = encrypt(email)
 
                     localStorage.setItem("photo", profilePic);
-                    localStorage.setItem("email", emailEncrypted);
+                    localStorage.setItem("email", email);
                     localStorage.setItem("name", name3);
 
                     window.location = "/student/dashboard";
@@ -329,9 +323,8 @@ googleSignInTeacher = () => {
 
         firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
-            let emailEncrypted = encrypt(email)
 
-            localStorage.setItem("email", emailEncrypted);
+            localStorage.setItem("email", email);
 
 
             console.log("data from doc : ", doc.data());
@@ -347,9 +340,7 @@ googleSignInTeacher = () => {
 
                         localStorage.setItem("photo", profilePic);
 
-                        let emailEncrypted = encrypt(email)
-
-                        localStorage.setItem("email", emailEncrypted);
+                        localStorage.setItem("email", email);
                         localStorage.setItem("name", name3);
 
                         var emailDisplay = localStorage.getItem("email");
@@ -429,9 +420,7 @@ googleSignInDistrict = () => {
             if (accountType != null) {
                 if (accountType == "District") {
                     console.log('Login Success');
-                    let emailEncrypted = encrypt(email)
-
-                    localStorage.setItem("email", emailEncrypted);
+                    localStorage.setItem("email", email);
                     window.location = "../districtDashboard.html";
                 } else {
 
@@ -881,11 +870,8 @@ function loginWithEmailStudent() {
                         getProfileName(email);
 
                         setTimeout(function(){
-
-                            let emailEncrypted = encrypt(email)
-
                         
-                            window.localStorage.setItem("email", emailEncrypted.toString());
+                            window.localStorage.setItem("email", email.toString());
 
                             console.log(email);
     
@@ -965,9 +951,7 @@ function loginWithEmailTeacher() {
 
                             setTimeout(function(){
 
-                                let emailEncrypted = encrypt(email)
-
-                                localStorage.setItem("email", emailEncrypted);
+                                localStorage.setItem("email", email);
                                 //localStorage.setItem("name", name3);
                                 window.location = "teacher/dashboard";
                            }, 500); 
@@ -1049,9 +1033,9 @@ function loginWithEmailDistrict() {
                         getProfileName(email);
 
                         setTimeout(() => { 
-                            let emailEncrypted = encrypt(email)
 
-                            localStorage.setItem("email", emailEncrypted);
+
+                            localStorage.setItem("email", email);
 
                             window.location = "districtDashboard.html";
                          }, 500)
