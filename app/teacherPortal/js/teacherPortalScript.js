@@ -1145,24 +1145,21 @@ function updateDetails(code) {
     "teacher": newTeacher
 
   }).then(() => {
-    window.location.reload()
+    firebase.firestore().collection('Classes').doc(code).update({
+      "class-name": newName,
+      "Course": newCourse,
+      "teacher": newTeacher
+
+    }).then(() => {
+      window.location.reload()
+    });
 
   });
 
-  firebase.firestore().collection('Classes').doc(code).update({
-    "class-name": newName,
-    "Course": newCourse,
-    "teacher": newTeacher
-
-  }).then(() => {
-    window.location.reload()
-
-  });
 }
 })
 
 
-  
 };
 
 
