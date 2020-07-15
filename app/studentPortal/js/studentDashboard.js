@@ -57,6 +57,8 @@ function getProfileInfo() {
       var name = user.displayName;
       var pic = user.photoURL;
 
+      console.log(user)
+
       var outputPic = ``;
 
       if(pic != null && pic != undefined && pic != ""){
@@ -68,7 +70,7 @@ function getProfileInfo() {
     
       $(outputPic).appendTo("#profilePic")
 
-      if(name != null, undefined){
+      if(name != null&& name != undefined){
         document.getElementById("displayName").innerHTML = name
       } else {
         document.getElementById("displayName").innerHTML = "Error Occured"
@@ -303,35 +305,39 @@ function updateReaction(reaction) {
 
   var currentDate = new Date();
 
-  var studentEmail = decrypt(localStorage.getItem("email"))
+  
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var studentEmail = user.email;
 
 
-  var classSelected = localStorage.getItem("selectedClassDropdown");
+      var classSelected = localStorage.getItem("selectedClassDropdown");
 
 
 
-  firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
-    "Last Status Update": currentDate.toString(),
-  }).then(() => {
-  });
-
-
-  firebase.firestore().collection("Classes").doc(classSelected).collection("Student Reactions").doc().set({
-    studentEmail: studentEmail,
-    reaction: reaction,
-    date: currentDate.toString()
-  });
-
-  firebase.firestore().collection("Classes").doc(classSelected).collection("Students").doc(studentEmail).update({
-    reaction: reaction
-  });
-
-  firebase.firestore().collection("UserData").doc(studentEmail).update({
-    reaction: reaction
-  });
-
-  getStudentStatus();
-
+      firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
+        "Last Status Update": currentDate.toString(),
+      }).then(() => {
+      });
+    
+    
+      firebase.firestore().collection("Classes").doc(classSelected).collection("Student Reactions").doc().set({
+        studentEmail: studentEmail,
+        reaction: reaction,
+        date: currentDate.toString()
+      });
+    
+      firebase.firestore().collection("Classes").doc(classSelected).collection("Students").doc(studentEmail).update({
+        reaction: reaction
+      });
+    
+      firebase.firestore().collection("UserData").doc(studentEmail).update({
+        reaction: reaction
+      });
+    
+      getStudentStatus();
+    }
+  })
 
 }
 
@@ -367,8 +373,6 @@ function checkIfClassCodeExists(addType) {
 
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var classCode = doc.data();
-
-      var email = decrypt(localStorage.getItem("email"))
 
       if (classCode != null) {
         exists = true;
@@ -470,31 +474,32 @@ function checkIfClassCodeExists(addType) {
 //Firestore migrated fully
 function addClassToStudentData(classCode) {
 
-  var email = decrypt(localStorage.getItem("email"))
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var name = user.displayName;
+      var email = user.email;
 
-  var name = localStorage.getItem('name')
-
-
-  firebase.firestore().collection("Classes").doc(classCode).get().then(function (doc) {
-    var classNamE = doc.data()['class-name'];
-
-    firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(classCode).set({
-      'Code': classCode.toString(),
-      'class-name': classNamE,
-    });
-
-    firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
-      'name': name,
-      'email': email,
-    });
-
-  }).then(() => {
-    setTimeout(function(){
-      window.location.reload();
-   }, 500);
+      firebase.firestore().collection("Classes").doc(classCode).get().then(function (doc) {
+        var classNamE = doc.data()['class-name'];
     
+        firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(classCode).set({
+          'Code': classCode.toString(),
+          'class-name': classNamE,
+        });
+    
+        firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
+          'name': name,
+          'email': email,
+        });
+    
+      }).then(() => {
+        setTimeout(function(){
+          window.location.reload();
+       }, 500);
+        
+      });
+    }
   });
-
 }
 
 //FIRESTORE MIGRATED FULLY

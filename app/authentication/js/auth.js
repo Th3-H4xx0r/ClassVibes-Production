@@ -530,6 +530,17 @@ function emailSignUp(type) {
                 console.log(loginSuccess);
 
                 if (loginSuccess == true) {
+                    var user = firebase.auth().currentUser;
+
+                    user.updateProfile({
+                      displayName: displayName,
+                    }).then(function() {
+                      console.log("update success")
+                    }).catch(function(error) {
+                        console.log("update Failed")
+                    });
+
+
                     var signUpPage = document.getElementById('signup-page-full');
 
                     signUpPage.style.display = "none";
@@ -735,7 +746,6 @@ googleSignUp = (type) => {
         var user = result.user;
         var email = user.email;
         var displayName = user.displayName;
-        var profilePic = user.photoURL;
 
         firebase.firestore().collection("UserData").doc(email).get().then((documentSnapshot) => {
 
