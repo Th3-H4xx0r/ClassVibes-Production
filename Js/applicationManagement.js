@@ -16,6 +16,8 @@ function initializeFirebase(){
 
 
 function getLiveSeverAlerts(){
+
+  /*
     firebase.firestore().collection('Application Management').doc("ServerAlerts").onSnapshot(function(result){
 
         var data = result.data();
@@ -57,6 +59,40 @@ function getLiveSeverAlerts(){
 
         console.log(data);
     });
+
+    */
+
+
+   var socket = io.connect('http://localhost:3000');
+   socket.on('connect', function(data) {
+      console.log("Connected")
+ 
+      socket.on('serverAlertMessage', function(data) {
+
+        var title = data.alertTitle;
+        var message = data.alertMessage;
+    
+        var toastHTML = `
+        <center style=" padding-top: 1%; position: absolute; width: 98%; margin-left: 1%; z-index: 999; top: 0px;">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>${title}</strong> ${message}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </center>
+        
+        `;
+        console.log("Adding alert");
+
+        $(toastHTML).appendTo('#page-top');
+
+
+        console.log(data);
+ 
+   });
+   
+   });
 }
 
 function getServerStatus(){

@@ -103,6 +103,7 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+//LIVE SERVER STATUS
 firebase.firestore().collection('Application Management').doc("ServerManagement").onSnapshot(function(result){
 
   console.log("new server status")
@@ -117,6 +118,25 @@ firebase.firestore().collection('Application Management').doc("ServerManagement"
   }
 
   io.emit('serverStatus', serverStatus); 
+})
+
+//LIVE SERVER ALERT MESSAGES
+firebase.firestore().collection('Application Management').doc("ServerAlerts").onSnapshot(function(result){
+
+  console.log("new Alert")
+
+  var data = result.data();
+
+  if(data == undefined || data == null){
+     
+  } else {
+    var title = data.alertTitle;
+    var message = data.alertMessage;
+
+    io.emit('serverAlertMessage', {alertTitle: title, alertMessage: message}); 
+  }
+
+  
 })
   
 

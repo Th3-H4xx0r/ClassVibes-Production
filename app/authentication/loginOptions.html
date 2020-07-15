@@ -22,11 +22,7 @@
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
   <link href="authcss/loginOptions.css" rel="stylesheet">
 
-  <script src="/socket.io/socket.io.js"></script>
-  
-  <script src="js/applicationManagement.js"></script>
 
-  <script src="https://cstatic.classvibes.net/aes.js"></script>
 
   <!--BOOTSTRAP-->
 
@@ -46,15 +42,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
+<script src="/socket.io/socket.io.js"></script>
+  
 
+
+<script src="https://cstatic.classvibes.net/aes.js"></script>
 
 </head>
 
-<body style="background-color: royalblue;">
-
+<body style="background-color: royalblue;" id="page-top">
+  <script src="js/applicationManagement.js"></script>
 
 
   <script>
@@ -64,6 +66,7 @@
 <script>
   $(document).ready(function () {
     initializeFirebase();
+    getLiveSeverAlerts()
     getServerStatus();
   });
 </script>
@@ -71,6 +74,9 @@
   <!-- HEADER -->
   <section id="header">
     <header style="background-color: royalblue; margin-bottom: 0px;">
+
+      
+
 
       <!-- NAVBAR -->
 
