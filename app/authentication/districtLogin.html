@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="stylesheet" href="../css/index.css">
-  <script src="js/auth.js"></script>
+  <script src="authjs/auth.js"></script>
 
 
   <title>District Login</title>
@@ -21,7 +21,7 @@
     rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="authcss/sb-admin-2.min.css" rel="stylesheet">
 
 
   <!--BOOTSTRAP-->
@@ -40,9 +40,11 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <link href="css\signup.css" rel="stylesheet">
+  <link href="authcss\signup.css" rel="stylesheet">
 
-  <script src="../studentPortal/js/applicationManagement.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script src="js/applicationManagement.js"></script>
 
   <script src="https://cstatic.classvibes.net/aes.js"></script>
 
@@ -60,14 +62,15 @@
 
 </head>
 
-<body style="background-image: url('img/background_signup.png'); width: 100%; height: 100%; position: absolute;
+<body style="background-image: url('authimg/background_signup.png'); width: 100%; height: 100%; position: absolute;
 background-position: center;
-background-repeat: no-repeat; margin: 0px; padding: 0px;">
+background-repeat: no-repeat; margin: 0px; padding: 0px;" id = "page-top">
 
 <script>
   AOS.init();
   $( document ).ready(function() {
     initializeFirebase();
+    getLiveSeverAlerts();
     getServerStatus();
   });
 
@@ -79,7 +82,7 @@ background-repeat: no-repeat; margin: 0px; padding: 0px;">
 
   <div class="container-fluid" style="background-color: royalblue;">
     <nav class="navbar navbar-expand-lg navbar-light bg-custom">
-      <a class="navbar-brand" href="../index.html" style="color: white; font-size: 25px; font-weight: 700;">ClassVibes</a>
+      <a class="navbar-brand" href="/" style="color: white; font-size: 25px; font-weight: 700;">ClassVibes</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -90,7 +93,7 @@ background-repeat: no-repeat; margin: 0px; padding: 0px;">
 
         </ul>
 
-        <a href="../authentication/loginOptions.html">
+        <a href="login">
           <p class="login-signup-btn">Login/Sign Up</p>
         </a>
       </div>
@@ -108,8 +111,8 @@ background-repeat: no-repeat; margin: 0px; padding: 0px;">
         <h5 style="color: white; padding-left: 15%; padding-right: 15%; font-size: 18px;">Welcome back to ClassVibes, login to continue. If you have trouble logging in, contact your teacher or district administrator.</h5>
 
         <p style="color: white; padding-left: 15%; padding-right: 15%; padding-top: 4%;">By signing up for ClassVibes,
-          you agree with our <a href="#" style="text-decoration: underline; color: white;">Privacy Policy</a> and <a
-            href="#" style="text-decoration: underline; color: white;">Terms and Conditions</a>. </p>
+          you agree with our <a href="privacy" style="text-decoration: underline; color: white;">Privacy Policy</a> and <a
+            href="legal" style="text-decoration: underline; color: white;">Terms and Conditions</a>. </p>
       </div>
 
       <div class="signup-fourm" id = "signup-page-full">
@@ -208,13 +211,13 @@ background-repeat: no-repeat; margin: 0px; padding: 0px;">
           <h6 class="text-uppercase font-weight-bold">Navigation</h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p>
-            <a href="#header" style="color: white; text-decoration: none;">Home</a>
+            <a href="/#header" style="color: white; text-decoration: none;">Home</a>
           </p>
           <p>
-            <a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
+            <a href="/#pricing" style="color: white; text-decoration: none;">Pricing</a>
           </p>
           <p>
-            <a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
+            <a href="/#featuresSection2" style="color: white; text-decoration: none;">Features</a>
           </p>
           <p>
             <a href="#!" style="color: white; text-decoration: none;">Help</a>
@@ -230,10 +233,10 @@ background-repeat: no-repeat; margin: 0px; padding: 0px;">
           <h6 class="text-uppercase font-weight-bold">Legal</h6>
           <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
           <p>
-            <a href="#!" style="color: white; text-decoration: none;">Privacy Policy</a>
+            <a href="privacy" style="color: white; text-decoration: none;">Privacy Policy</a>
           </p>
           <p>
-            <a href="#!" style="color: white; text-decoration: none;">Terms and Conditions</a>
+            <a href="terms" style="color: white; text-decoration: none;">Terms and Conditions</a>
           </p>
 
         </div>
