@@ -121,6 +121,21 @@ function logout(){
 
 
 function liveServerRedirects(){
+  var socket = io.connect('http://localhost:3000');
+  socket.on('connect', function(data) {
+     console.log("Connected")
+
+     socket.on('serverStatus', function(data) {
+      console.log(data);
+
+      if(data != false && data != null){
+        window.location = "login";
+    } 
+  });
+  
+  });
+
+  /*
   firebase.firestore().collection('Application Management').doc("ServerManagement").onSnapshot(function(result){
 
     var data = result.data()["serversAreUp"];
@@ -130,4 +145,5 @@ function liveServerRedirects(){
     } 
     
 });
+*/
 }
