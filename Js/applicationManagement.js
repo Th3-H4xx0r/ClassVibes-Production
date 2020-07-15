@@ -107,7 +107,7 @@ function getServerStatus(){
       console.log(data);
 
       if(data == false || data == null){
-        window.location = "serverDown";
+        window.location = "../serverDown";
     } 
   });
   
