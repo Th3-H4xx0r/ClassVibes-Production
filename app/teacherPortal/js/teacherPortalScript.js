@@ -104,6 +104,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
               getClassDataDropdown()
               getStudentData(classCode);
               getEditData(classCode);
+              getAnnouncementForClass(classCode);
             }
 
             else if (pageType == 'dashboard') {
@@ -159,6 +160,8 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             getClassDataDropdown()
             getStudentData(classCode);
             getEditData(classCode);
+            getAnnouncementForClass(classCode);
+
           }
           else if (pageType == 'dashboard') {
             console.log("executing");
@@ -687,6 +690,43 @@ function getMeetings() {
     }
   });
 
+}
+
+function getAnnouncementForClass(code) {
+  firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
+    doc.forEach(snapshot => {
+      var data = snapshot.data()
+      var date = data["Date"]
+      var message = data["Message"]
+      var title = data["title"]
+
+      output = `
+      <div class="col-xl-12 col-md-6 mb-4">
+                <div class="card border-left-success" style = 'height: max-content'>
+                      <div class="card-body">
+                        <h4 class="badge badge-info">${date}</h4>
+
+                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1; /* number of lines to show /
+                        -webkit-box-orient: vertical;''>${title}</h5>
+
+                        <p style = '   overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1; / number of lines to show */
+                        -webkit-box-orient: vertical;'>${message}</p>
+
+
+                      </div>
+                    </div>
+
+                    </div>
+      `
+
+      $(output).appendTo('#classAnnouncement')
+    })
+  })
 }
 
 

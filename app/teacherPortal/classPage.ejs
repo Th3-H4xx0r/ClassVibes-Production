@@ -213,9 +213,18 @@
                         <li class="nav-item">
                           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Students</a>
                         </li>
+                        
                         <li class="nav-item">
-                          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Settings</a>
+                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#meetings" role="tab" aria-controls="meetings" aria-selected="false">Meetings</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#announcements" role="tab" aria-controls="announcements" aria-selected="false">Announcements</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Settings</a>
+                          </li>
                        
                       </ul>
                       <div style="height: 100px;"></div>
@@ -404,7 +413,23 @@
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <!--Settings Content-->
                             <div id="editInfo"></div>
+                                
+
+                            <!--End of Setting Content-->
+                        </div>
+                        <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
+                            <!--Settings Content-->
+                            <div class="row" id="meetingsList" style="margin-left: 20px;">
+
+                            </div>
                             
+                            <!--End of Setting Content-->
+                        </div>
+                        <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
+                            <!--Settings Content-->
+                            <div id="classAnnouncement"></div>
+                                
+
                             <!--End of Setting Content-->
                         </div>
                       </div>
