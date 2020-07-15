@@ -7,7 +7,14 @@ const firebase = require('firebase');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
+
+////////////////////////////////////////
+//----------GLOBAL VARIABLES -----------
+////////////////////////////////////////
 var serverStatus = false;
+
+var alertTitleGlobal = null
+var alertMessageGlobal = null
 
 
 router.get('/',function(req,res){
@@ -89,6 +96,9 @@ router.get('/serverdown',function(req,res){
 
 
 
+/////////////////////////
+//FIREBBASE INIT
+/////////////////////////
 var firebaseConfig = {
   apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
   authDomain: "cyberdojo-a2a3e.firebaseapp.com",
@@ -103,37 +113,43 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+/////////////////////////
 //LIVE SERVER STATUS
+/////////////////////////
 firebase.firestore().collection('Application Management').doc("ServerManagement").onSnapshot(function(result){
 
-  console.log("new server status")
+
 
   var data = result.data()["serversAreUp"];
 
   if(data != false && data != null){
+    console.log("new server status")
     serverStatus = true
 
   } else {
+    console.log("new server status")
     serverStatus = false
   }
 
   io.emit('serverStatus', serverStatus); 
 })
 
-//LIVE SERVER ALERT MESSAGES
+/////////////////////////
+//LIVE SERVER ALERTS
+/////////////////////////
 firebase.firestore().collection('Application Management').doc("ServerAlerts").onSnapshot(function(result){
-
-  console.log("new Alert")
 
   var data = result.data();
 
   if(data == undefined || data == null){
-     
+    alertTitleGlobal = null
+    alertMessageGlobal = null
   } else {
-    var title = data.alertTitle;
-    var message = data.alertMessage;
+    console.log("new Alert")
+    alertTitleGlobal = data.alertTitle;
+    alertMessageGlobal = data.alertMessage;
 
-    io.emit('serverAlertMessage', {alertTitle: title, alertMessage: message}); 
+    io.emit('serverAlertMessage', {alertTitle: alertTitleGlobal, alertMessage: alertMessageGlobal}); 
   }
 
   
@@ -141,11 +157,13 @@ firebase.firestore().collection('Application Management').doc("ServerAlerts").on
   
 
 
-
+/////////////////////////
+//CLIENT CONNECTION HANDLER
+/////////////////////////
 io.on('connection', (socket) => {
   console.log('a user connected');
   io.emit('serverStatus', serverStatus); 
-  console.log(serverStatus)
+  io.emit('serverAlertMessage', {alertTitle: alertTitleGlobal, alertMessage: alertMessageGlobal}); 
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
@@ -154,16 +172,10 @@ io.on('connection', (socket) => {
 
 
 
-app.get("/classes/:class", function(req, res){
-  var classCode = req.params.class;
-  res.render("../test.html", {code: classCode});
-});
 
-
-
-
-
-//Add assets
+/////////////////////////
+//STATIC ASSETS HANDLER
+/////////////////////////
 app.use('/css', express.static('css'))
 app.use('/img', express.static('img'))
 app.use('/js', express.static('js'))
@@ -182,6 +194,10 @@ app.use('/js', express.static('jsMain'))
 app.use('/', router);
 //app.listen(process.env.port || 3000);
 
+
+/////////////////////////
+//HTTP SERVER LISTENER CONFIG
+/////////////////////////
 http.listen(3000, () => {
   console.log('listening on *:3000');
 });
