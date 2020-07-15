@@ -26,6 +26,8 @@
 
   <link href="authcss/signup.css" rel="stylesheet">
 
+  <script src="/socket.io/socket.io.js"></script>
+
   <script src="js/applicationManagement.js"></script>
 
   <script src="https://cstatic.classvibes.net/aes.js"></script>
@@ -71,6 +73,7 @@ background-repeat: no-repeat; margin: 0px; padding: 0px;">
     AOS.init();
     $( document ).ready(function() {
       initializeFirebase();
+      getLiveSeverAlerts()
       getServerStatus();
     });
 
