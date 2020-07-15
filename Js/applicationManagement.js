@@ -76,7 +76,7 @@ function getLiveSeverAlerts(){
     
           var toastHTML = `
           <center style=" padding-top: 1%; position: absolute; width: 98%; margin-left: 1%; z-index: 999; top: 0px;">
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>${title}</strong> ${message}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
