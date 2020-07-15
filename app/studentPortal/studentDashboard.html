@@ -38,10 +38,7 @@
 
   <!-- Core plugin JavaScript-->
   <script src="vendor/jquery.easing.min.js"></script>
-
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
-    integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
-    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -62,9 +59,8 @@
   <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-firestore.js"></script>
 
-
   <link href='css/loader.css' rel="stylesheet">
-
+  
   <style>
     html{
       text-overflow: ellipsis;
@@ -82,6 +78,10 @@
       getProfileInfo();
 
       setVersionFooter();
+      
+      getLiveSeverAlerts();
+      getServerStatus();
+      checkUserAuthStatus();
 
      // var email = localStorage.getItem('email');;
 
@@ -93,9 +93,6 @@
       getStudentStatus(email);
       getMeetings(email, 'dashboard');
 
-      getLiveSeverAlerts();
-      getServerStatus();
-      checkUserAuthStatus();
 
       getAnnouncements(email, 'dashboard');
 
