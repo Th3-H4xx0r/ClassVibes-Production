@@ -1117,7 +1117,7 @@ function getEditData(code) {
   <input type="text" class="form-control" placeholder="${teacher}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacher" id="editTeacher">
 </div>
 
-<button class="btn btn-primary" onclick="updateDetails()">Update Class Details</button>
+<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
 
   `
 
@@ -1128,16 +1128,18 @@ function getEditData(code) {
   })
 }
 
-function updateDetails() {
-  var code = localStorage.getItem("code");
-  var emailRef = localStorage.getItem("email")
-
+function updateDetails(code) {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var name = user.displayName;
+      var email = user.email;
+      console.log(email)
 
   var newName = document.getElementById('editName').value;
   var newCourse = document.getElementById('editCourse').value;
   var newTeacher = document.getElementById('editTeacher').value;
 
-  firebase.firestore().collection('UserData').doc(emailRef).collection('Classes').doc(code).update({
+  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
     "class-name": newName,
     "Course": newCourse,
     "teacher": newTeacher
@@ -1156,6 +1158,11 @@ function updateDetails() {
     window.location.reload()
 
   });
+}
+})
+
+
+  
 };
 
 
