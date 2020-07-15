@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const router = express.Router();
 const firebase = require('firebase');
-
+const ejs = require('ejs')
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
@@ -94,11 +94,13 @@ router.get('/teacher/students-requests',function(req,res){
 res.sendFile(path.join(__dirname+'/app/teacherPortal/studentRequest.html'));
 });
 
-router.get('/test',function(req,res){
-  res.sendFile(path.join(__dirname+'/test.html'));
+router.get('/teacher/classes/:class',function(req,res){
+  var classCode = req.params.class
+  res.render(path.join(__dirname+'/app/teacherPortal/classPage.ejs'), {code: classCode})
 });
 
 router.get('/serverdown',function(req,res){
+
   res.sendFile(path.join(__dirname+'/serverDown.html'));
 });
 
@@ -195,7 +197,8 @@ app.use('/student', express.static('app/studentPortal/'))
 
 app.use('/teacher', express.static('app/teacherPortal/'))
 app.use('/app', express.static('app/'))
-
+app.use('/teacherjs', express.static('app/teacherPortal/js/'))
+app.use('/teachercss', express.static('app/teacherPortal/css/'))
 app.use('/js', express.static('jsMain'))
 
 //add the router

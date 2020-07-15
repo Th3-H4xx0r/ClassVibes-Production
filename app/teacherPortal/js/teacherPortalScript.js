@@ -16,7 +16,7 @@ function initializeFirebase() {
   //firebase.firestore().enablePersistence();
 }
 
-function getTeacherAccountStatus(pageType) {
+function getTeacherAccountStatus(pageType, classCode = "null") {
 
   var email = localStorage.getItem('email');
 
@@ -102,8 +102,8 @@ function getTeacherAccountStatus(pageType) {
               getProfileInfo();
               //getClassData();
               getClassDataDropdown()
-              getStudentData();
-              getEditData();
+              getStudentData(classCode);
+              getEditData(classCode);
             }
 
             else if (pageType == 'dashboard') {
@@ -156,9 +156,9 @@ function getTeacherAccountStatus(pageType) {
           else if (pageType == 'class-page') {
             getProfileInfo();
             //getClassData();
-            getStudentData();
             getClassDataDropdown()
-            getEditData();
+            getStudentData(classCode);
+            getEditData(classCode);
           }
           else if (pageType == 'dashboard') {
             console.log("executing");
@@ -811,11 +811,7 @@ function storeClassPref(code, name) {
   $(output).appendTo('#className')
 }
 
-function getStudentData() {
-  var code = localStorage.getItem("code");
-
-  var className = localStorage.getItem("className");
-  document.getElementById("className").innerHTML = `<h1>${className}</h1>`
+function getStudentData(code) {
 
   var classInfoList = [];
   console.log(classInfoList);
@@ -1042,8 +1038,7 @@ function cancelTeacherRequest(ID, districtID, teacher_email) {
   });
 }
 
-function getEditData() {
-  var code = localStorage.getItem("code");
+function getEditData(code) {
   output = ''
 
   firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
@@ -1054,6 +1049,8 @@ function getEditData() {
 
   }).then((data) => {
     var className = data['class-name'];
+    document.getElementById("className").innerHTML = `<h1>${className}</h1>`
+
     var course = data['Course']
     var teacher = data['teacher']
     output += `
