@@ -106,6 +106,8 @@ router.get('/serverdown',function(req,res){
 
 
 
+
+
 /////////////////////////
 //FIREBBASE INIT
 /////////////////////////
@@ -200,6 +202,7 @@ app.use('/app', express.static('app/'))
 app.use('/teacherjs', express.static('app/teacherPortal/js/'))
 app.use('/teachercss', express.static('app/teacherPortal/css/'))
 app.use('/js', express.static('jsMain'))
+app.use('/404page', express.static('PageNotFound/'))
 
 //add the router
 app.use('/', router);
@@ -209,6 +212,11 @@ app.use('/', router);
 /////////////////////////
 //HTTP SERVER LISTENER CONFIG
 /////////////////////////
+
+app.get('*', function(req, res){
+  res.status(404).sendFile(path.join(__dirname+'/PageNotFound/404.html'));
+});
+
 http.listen(3000, () => {
   console.log('listening on *:3000');
 });
