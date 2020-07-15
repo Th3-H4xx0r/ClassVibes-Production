@@ -36,9 +36,17 @@ router.get('/login-teacher',function(req,res){
   res.sendFile(path.join(__dirname+'/app/authentication/teacherLogin.html'));
 });
 
+router.get('/login-district',function(req,res){
+  res.sendFile(path.join(__dirname+'/app/authentication/districtLogin.html'));
+  });
+
 router.get('/login',function(req,res){
 res.sendFile(path.join(__dirname+'/app/authentication/loginOptions.html'));
 });
+
+router.get('/signup',function(req,res){
+  res.sendFile(path.join(__dirname+'/app/authentication/signup.html'));
+  });
 
 /////////////////////////
 //Student Portal Paths
