@@ -202,12 +202,55 @@ function getClassDataClassesPage(code){
     var courseDescription = data["courseDescription"]
     var teacher = data['teacher']
     var teacherNote = data['teachersNote']
+    var grayTimelimit = data['Gray Time Limit'] != undefined? data['Gray Time Limit']: "Not Set"
 
     if(document.getElementById('className') != null){
       document.getElementById('className').innerHTML = `<h1>${className}</h1>`
     }
 
-    
+    var courseInfoHTML = `
+    <h3>Instructor</h3>
+
+    <div style="margin-top: 20px;">
+
+        <div class="row">
+            <img class="img-profile rounded-circle" style= "width: 6%;" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">
+           <div class="col" style="margin-left: 20px; margin-top: 20px;">
+            <h4>${teacher}</h4>
+            <p>krishnatechpranav@gmail.com</p>
+           </div>
+        </div>
+
+    </div>
+
+    <h3 style="margin-top: 40px;">Course Description</h3>
+
+    <div style="margin-top: 20px; width: 95%;">
+        
+        <p>${courseDescription}</p>
+
+    </div>
+
+    <h3 style="margin-top: 40px;">Teacher's Note</h3>
+
+    <div style="margin-top: 20px; width: 95%;">
+        
+        <p>${teacherNote}</p>
+
+    </div>
+
+    <h3 style="margin-top: 40px;">Student Inactive Time Limit</h3>
+
+    <div style="margin-top: 20px; width: 95%;">
+        
+        <p>${grayTimelimit}</p>
+
+    </div>
+    `;
+
+    document.getElementById('info-pannel').innerHTML = courseInfoHTML;
+
+
   })
 }
 
