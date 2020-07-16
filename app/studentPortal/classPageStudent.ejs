@@ -74,6 +74,8 @@
       //getStudentClasses(email);
       getStudentStatus(email);
 
+      updateAddClasesDropdown(email)
+
       getAnnouncementForClass(classCode);
 
       getClassDataClassesPage(classCode)
@@ -109,7 +111,7 @@
   
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-          <a class="nav-link" href="dashboard">
+          <a class="nav-link" href="/student/dashboard">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
         </li>
@@ -138,7 +140,7 @@
   
         <!-- Nav Item - Add Class -->
         <li class="nav-item">
-          <a class="nav-link collapsed" href="add">
+          <a class="nav-link collapsed" href="/student/add">
             <i class="fas fa-fw fas fa-plus-square"></i>
             <span>Add Class</span>
           </a>
@@ -146,7 +148,7 @@
   
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
-          <a class="nav-link collapsed" href="announcements">
+          <a class="nav-link collapsed" href="/student/announcements">
             <i class="fas fa-fw fas fa-bullhorn"></i>
             <span>Announcements</span>
           </a>
@@ -162,7 +164,7 @@
   
         <!-- Nav Item - Mettings -->
         <li class="nav-item">
-          <a class="nav-link" href="meetings">
+          <a class="nav-link" href="/student/meetings">
             <i class="fas fa-fw fas fa-phone-square-alt"></i>
             <span>Meetings</span>
           </a>
@@ -170,7 +172,7 @@
   
         <!-- Nav Item - Chat -->
         <li class="nav-item">
-          <a class="nav-link" href="chat">
+          <a class="nav-link" href="/student/chat">
             <i class="fas fa-fw far far fa-comments"></i>
             <span>Chat</span></a>
         </li>
@@ -257,107 +259,51 @@
 
                     <!-- Page Heading -->
                     <div id="className"></div>
+
+
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
 
                         <li class="nav-item">
-                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Course Info</a>
+                            <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Course Info</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#meetings" role="tab" aria-controls="meetings" aria-selected="false">Meetings</a>
+                            <a class="nav-link" id="meetings-tab" data-toggle="tab" href="#meetings" role="tab" aria-controls="meetings" aria-selected="false">Meetings</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#announcements" role="tab" aria-controls="announcements" aria-selected="false">Announcements</a>
+                            <a class="nav-link" id="announcements-tab" data-toggle="tab" href="#announcements" role="tab" aria-controls="announcements" aria-selected="false">Announcements</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Settings</a>
+                            <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
                           </li>
                        
                       </ul>
 
                       <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div id="content">
 
-                                <!-- Topbar -->
-        
-                                <!-- Sidebar Toggle (Topbar) -->
-                                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                                    <i class="fa fa-bars"></i>
-                                </button>
-        
-        
-        
-                                <!-- Topbar Navbar -->
-                                <ul class="navbar-nav ml-auto">
-        
-                                    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                                    <li class="nav-item dropdown no-arrow d-sm-none">
-                                        <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-search fa-fw"></i>
-                                        </a>
-                                        <!-- Dropdown - Messages -->
-                                        <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                            aria-labelledby="searchDropdown">
-                                            <form class="form-inline mr-auto w-100 navbar-search">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control bg-light border-0 small"
-                                                        placeholder="Search for..." aria-label="Search"
-                                                        aria-describedby="basic-addon2">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-primary" type="button">
-                                                            <i class="fas fa-search fa-sm"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </li>
-        
-                     
-                                    
-                            </div>
-
-                        </div>
-
-                        <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="profile-tab">
-                            <!--Settings Content-->
+                        <!-- COURSE INFO TAB -->
+                        <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="profile-tab">
                             <div id="info-pannel" style="margin-top: 20px;">
-
                             </div>
-                                
-
-                            <!--End of Setting Content-->
                         </div>
 
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <!--Settings Content-->
-                            <div id="editInfo"></div>
-                                
+                        <!-- SETTINGS TAB -->
+                        <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                            <div id="editInfo">df</div></div>
 
-                            <!--End of Setting Content-->
-                        </div>
+                        <!-- MEETINGS TAB -->
                         <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
-                            <!--Settings Content-->
-                            <div class="row" id="meetingsList" style="margin-left: 20px;">
-
-                            </div>
-                            
-                            <!--End of Setting Content-->
+                            <div class="row" id="meetingsList" style="margin-left: 20px;"></div>
                         </div>
-                        <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
-                            <!--Settings Content-->
-                            <div id="classAnnouncement" style="margin-top: 30px;"></div>
-                                
 
-                            <!--End of Setting Content-->
+                        <!-- ANNOUNCEMENTS TAB -->
+                        <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
+                            <div id="classAnnouncement" style="margin-top: 30px;"></div>
                         </div>
                       </div>
 
-                    <!--TABLES-->
                 </div>
 
                 <!-- /.container-fluid -->

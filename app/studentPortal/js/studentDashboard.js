@@ -200,55 +200,66 @@ function getClassDataClassesPage(code){
     var className = data['class-name']
     var course = data['Course']
     var courseDescription = data["courseDescription"]
-    var teacher = data['teacher']
+    var teacherName = ""
+    var teacherPicture = ""
+    var teacherEmail = data['teacher email']
     var teacherNote = data['teachersNote']
     var grayTimelimit = data['Gray Time Limit'] != undefined? data['Gray Time Limit']: "Not Set"
 
-    if(document.getElementById('className') != null){
-      document.getElementById('className').innerHTML = `<h1>${className}</h1>`
-    }
+    firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
+      var data = snap.data();
 
-    var courseInfoHTML = `
-    <h3>Instructor</h3>
+      teacherName = data['display-name']
+      teacherPicture = data['Profile Picture'] != undefined ? data['Profile Picture'] : "https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg"
+    }).then(() => {
+      if(document.getElementById('className') != null){
+        document.getElementById('className').innerHTML = `<h1>${className}</h1>`
+      }
+  
+      var courseInfoHTML = `
+      <h3>Instructor</h3>
+  
+      <div style="margin-top: 20px;">
+  
+          <div class="row" style = "margin-left: 6px">
+              <img class="img-profile rounded-circle" style= "width: 90px; height: 90px; object-fit: cover" src="${teacherPicture}">
+             <div class="col" style="margin-left: 20px; margin-top: 10px;">
+              <h4>${teacherName}</h4>
+              <p>${teacherEmail}</p>
+             </div>
+          </div>
+  
+      </div>
+  
+      <h3 style="margin-top: 40px;">Course Description</h3>
+  
+      <div style="margin-top: 20px; width: 95%;">
+          
+          <p>${courseDescription}</p>
+  
+      </div>
+  
+      <h3 style="margin-top: 40px;">Teacher's Note</h3>
+  
+      <div style="margin-top: 20px; width: 95%;">
+          
+          <p>${teacherNote}</p>
+  
+      </div>
+  
+      <h3 style="margin-top: 40px;">Student Inactive Time Limit</h3>
+  
+      <div style="margin-top: 20px; width: 95%;">
+          
+          <p>${grayTimelimit}</p>
+  
+      </div>
+      `;
+  
+      document.getElementById('info-pannel').innerHTML = courseInfoHTML;
+    })
 
-    <div style="margin-top: 20px;">
 
-        <div class="row">
-            <img class="img-profile rounded-circle" style= "width: 6%;" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">
-           <div class="col" style="margin-left: 20px; margin-top: 20px;">
-            <h4>${teacher}</h4>
-            <p>krishnatechpranav@gmail.com</p>
-           </div>
-        </div>
-
-    </div>
-
-    <h3 style="margin-top: 40px;">Course Description</h3>
-
-    <div style="margin-top: 20px; width: 95%;">
-        
-        <p>${courseDescription}</p>
-
-    </div>
-
-    <h3 style="margin-top: 40px;">Teacher's Note</h3>
-
-    <div style="margin-top: 20px; width: 95%;">
-        
-        <p>${teacherNote}</p>
-
-    </div>
-
-    <h3 style="margin-top: 40px;">Student Inactive Time Limit</h3>
-
-    <div style="margin-top: 20px; width: 95%;">
-        
-        <p>${grayTimelimit}</p>
-
-    </div>
-    `;
-
-    document.getElementById('info-pannel').innerHTML = courseInfoHTML;
 
 
   })
