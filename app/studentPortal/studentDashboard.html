@@ -27,7 +27,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
 
-  <script src="/js/applicationManagement.js"></script>
+  <script src="http://classvibes.net/js/applicationManagement.js"></script>
 
   <script src="/app/app_config.js"></script>
 
@@ -74,16 +74,12 @@
   <script>
     $(document).ready(function () {
       initializeFirebase();
-
       getProfileInfo();
-
       setVersionFooter();
-      
       getLiveSeverAlerts();
       getServerStatus();
       checkUserAuthStatus();
 
-     // var email = localStorage.getItem('email');;
 
       firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -93,7 +89,6 @@
       getStudentStatus(email);
       getMeetings(email, 'dashboard');
 
-
       getAnnouncements(email, 'dashboard');
 
     } else {
@@ -101,8 +96,6 @@
       
     }
   })
-
-
 
     });
   </script>
