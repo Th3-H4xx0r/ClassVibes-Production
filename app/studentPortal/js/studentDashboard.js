@@ -158,6 +158,53 @@ function getGrayStudentStatus(email, classCode){
 
 }
 
+function getAnnouncementForClass(code) {
+  firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
+    doc.forEach(snapshot => {
+      var data = snapshot.data()
+      var date = data["Date"]
+      var message = data["Message"]
+      var title = data["Title"]
+
+      output = `
+      <div class="col-xl-12 col-md-6 mb-4">
+                <div class="card border-left-success" style = 'height: max-content'>
+                      <div class="card-body">
+                        <h4 class="badge badge-info">${date}</h4>
+
+                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1; /* number of lines to show /
+                        -webkit-box-orient: vertical;''>${title}</h5>
+
+                        <p style = '   overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1; / number of lines to show */
+                        -webkit-box-orient: vertical;'>${message}</p>
+                      </div>
+                    </div>
+
+                    </div>
+      `
+
+      $(output).appendTo('#classAnnouncement')
+    })
+  })
+}
+
+function getClassDataClassesPage(code){
+  firebase.firestore().collection("Classes").doc(code).get().then(snap => {
+    var data = snap.data();
+
+    var className = data['class-name']
+
+    if(document.getElementById('className') != null){
+      document.getElementById('className').innerHTML = `<h1>${className}</h1>`
+    }
+  })
+}
+
 // FIRESTORE MIGRATED FULLY
 async function getStudentClasses(studentUsername, pageType) {
 
@@ -243,7 +290,7 @@ async function getStudentClasses(studentUsername, pageType) {
             `;
 
         output2 = `
-            <a class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
+            <a href = "classes/${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
             `;
 
         output3 = `
@@ -462,6 +509,7 @@ function checkIfClassCodeExists(addType) {
     });
   }
 }
+
 
 
 //Firestore migrated fully

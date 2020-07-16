@@ -99,6 +99,11 @@ router.get('/teacher/classes/:class',function(req,res){
   res.render(path.join(__dirname+'/app/teacherPortal/classPage.ejs'), {code: classCode})
 });
 
+router.get('/student/classes/:class',function(req,res){
+  var classCode = req.params.class
+  res.render(path.join(__dirname+'/app/studentPortal/classPageStudent.ejs'), {code: classCode})
+});
+
 router.get('/serverdown',function(req,res){
 
   res.sendFile(path.join(__dirname+'/serverDown.html'));
