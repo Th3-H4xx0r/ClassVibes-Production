@@ -943,7 +943,7 @@ function getStudentData(code) {
                   </textarea>
               </div>
               <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Length</label>
+              <label for="recipient-name" class="col-form-label">Meeting Length</label>
               <input type="text" class="form-control" id="len${i}" textarea>
               </div>
               <div class="form-group">
