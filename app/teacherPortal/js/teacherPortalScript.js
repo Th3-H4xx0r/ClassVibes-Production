@@ -105,6 +105,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
               getStudentData(classCode);
               getEditData(classCode);
               getAnnouncementForClass(classCode);
+              getMeetingForClass(classCode);
             }
 
             else if (pageType == 'dashboard') {
@@ -157,10 +158,12 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
           else if (pageType == 'class-page') {
             getProfileInfo();
             //getClassData();
-            getClassDataDropdown()
+            getClassDataDropdown();
             getStudentData(classCode);
             getEditData(classCode);
             getAnnouncementForClass(classCode);
+            getMeetingForClass(classCode);
+
 
           }
           else if (pageType == 'dashboard') {
@@ -711,6 +714,8 @@ function getAnnouncementForClass(code) {
       var date = data["Date"]
       var message = data["Message"]
       var title = data["Title"]
+      var announcementId = data.id
+      console.log(announcementId)
 
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
@@ -740,6 +745,51 @@ function getAnnouncementForClass(code) {
       $(output).appendTo('#classAnnouncement')
     })
   })
+}
+
+function getMeetingForClass(code) {
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var name = user.displayName;
+      var email = user.email;
+
+      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).get().then(function(doc) {
+        doc.forEach(snapshot => {
+          var data = snapshot.data();
+          var classForMeeting = data["Course"]
+          var date = data["Date"];
+          var title = data["Title"];
+          var message = data["message"]
+          var length = data["len"]
+
+          output = `
+          <section class="resume" style="margin-left: 0px;">
+            <div class="row">
+            <div class="col-lg-6" data-aos="fade-up">
+                  <h3 class="resume-title">${date} </h3>
+
+                  <h3 class="resume-title" style="width: 500px">${classForMeeting}</h3>
+                  <div class="resume-item pb-0">
+                    <h4 style="width: 500px">${title}</h4>
+                    <h5>${length}</h5>
+                    <p style="width: 100%">
+                      ${message}
+
+                    </p>
+                  </div>
+
+            </div>
+          </section>
+            `;
+
+            $(output).appendTo("#meetingsListforClassPage")
+
+        })
+
+      })
+    }
+  })
+
 }
 
 
@@ -802,41 +852,54 @@ function storeClassPref(code) {
 }
 
 function createClass() {
-  var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-  var className = document.getElementById("className").value;
-  var course = document.getElementById("course").value;
-  var teacher = document.getElementById("teacher").value;
-  var classImg = document.getElementById("imageInput").value;
-  var courseDescription = document.getElementById("courseDescription").value;
-  var courseVideo = localStorage.getItem("videoLink");
-  var teachersNote = document.getElementById("teachersNote").value;
-  var classCreator = localStorage.getItem("email")
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var name = user.displayName;
+      var email = user.email;
 
-  firebase.firestore().collection("UserData").doc(classCreator).collection("Classes").doc(code).set({
-    "Code": code,
-    "class-name": className,
-    "Course": course,
-    "teacher": teacher,
-    "classImg": classImg,
-    "courseDescription": courseDescription,
-    "courseVideo": courseVideo,
-    "teachersNote": teachersNote,
+      var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+      var className = document.getElementById("className").value;
+      var course = document.getElementById("course").value;
+      var teacher = document.getElementById("teacher").value;
+      var classImg = document.getElementById("imageInput").value;
+      var courseDescription = document.getElementById("courseDescription").value;
+      var courseVideo = localStorage.getItem("videoLink");
+      var teachersNote = document.getElementById("teachersNote").value;
+      var classCreator = localStorage.getItem("email")
+    
+      firebase.firestore().collection("UserData").doc(classCreator).collection("Classes").doc(code).set({
+        "Code": code,
+        "class-name": className,
+        "Course": course,
+        "teacher": teacher,
+        "classImg": classImg,
+        "courseDescription": courseDescription,
+        "courseVideo": courseVideo,
+        "teachersNote": teachersNote,
+        "teacher email" : email,
+    
+      });
+    
+      firebase.firestore().collection("Classes").doc(code).set({
+        "Code": code,
+        "class-name": className,
+        "Course": course,
+        "teacher": teacher,
+        "classImg": classImg,
+        "courseDescription": courseDescription,
+        "courseVideo": courseVideo,
+        "teachersNote": teachersNote,
+        "teacher email" : email,
 
-  });
+    
+      }).then(() => {
+        window.location = "dashboard.html"
+      });
 
-  firebase.firestore().collection("Classes").doc(code).set({
-    "Code": code,
-    "class-name": className,
-    "Course": course,
-    "teacher": teacher,
-    "classImg": classImg,
-    "courseDescription": courseDescription,
-    "courseVideo": courseVideo,
-    "teachersNote": teachersNote,
 
-  }).then(() => {
-    window.location = "dashboard.html"
-  });
+}
+})
+
 }
 
 
@@ -855,7 +918,7 @@ function getStudentData(code) {
 
       var reaction = data["reaction"];
       var studentName = data["name"];
-      var studentEmail = data["email"]
+      var studentEmail = data["email"];
       classInfoList.push([studentName, reaction, studentEmail])
       console.log(classInfoList)
 
@@ -957,7 +1020,7 @@ function getStudentData(code) {
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onclick = "schedualMeeting('${studentEmail}', '${className}', '${i}')" data-dismiss = "modal">Send message</button>
+              <button type="button" class="btn btn-primary" onclick = "schedualMeeting('${studentEmail}', '${className}', '${code}', '${i}')" data-dismiss = "modal">Send message</button>
           </div>
           </div>
       </div>
@@ -995,7 +1058,7 @@ function getStudentData(code) {
 }
 
 
-function schedualMeeting(emailStudent, course, index) {
+function schedualMeeting(emailStudent, course, code, index) {
   console.log("schedual meeting")
 
   var nameLocal = localStorage.getItem("email");
@@ -1009,7 +1072,7 @@ function schedualMeeting(emailStudent, course, index) {
   firebase.firestore().collection('UserData').doc(emailStudent).collection("Meetings").doc().set({
     "Title": meetingTitle,
     "Date": meetingDate,
-    "Course": course,
+    "Class": code,
     "Timestamp": dateNow.toString(),
     "message" : meetingMessage,
     "len" : len
@@ -1018,7 +1081,7 @@ function schedualMeeting(emailStudent, course, index) {
   firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
     "Title": meetingTitle,
     "Date": meetingDate,
-    "Course": course,
+    "Class": code,
     "Timestamp": dateNow.toString(),
     "message" : meetingMessage,
     "len" : len
@@ -1119,6 +1182,15 @@ function getEditData(code) {
 
   <input type="text" class="form-control" placeholder="${teacher}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacher" id="editTeacher">
 </div>
+<h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text">Days</span>
+    <span class="input-group-text">1-14</span>
+  </div>
+  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays">
+</div>
 
 <button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
 
@@ -1141,17 +1213,21 @@ function updateDetails(code) {
   var newName = document.getElementById('editName').value;
   var newCourse = document.getElementById('editCourse').value;
   var newTeacher = document.getElementById('editTeacher').value;
-
+  var maxDays = document.getElementById('maxDays').value;
+  let maxDaysNum = parseInt(maxDays);
   firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
     "class-name": newName,
     "Course": newCourse,
-    "teacher": newTeacher
+    "teacher": newTeacher,
+    "max days inactive": maxDaysNum,
 
   }).then(() => {
     firebase.firestore().collection('Classes').doc(code).update({
       "class-name": newName,
       "Course": newCourse,
-      "teacher": newTeacher
+      "teacher": newTeacher,
+      "max days inactive": maxDaysNum,
+
 
     }).then(() => {
       window.location.reload()
