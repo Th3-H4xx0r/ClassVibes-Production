@@ -254,6 +254,10 @@ function getClassDataClassesPage(code){
           <p>${grayTimelimit}</p>
   
       </div>
+
+      <h3 style="margin-top: 30px;">Leave Class</h3>
+
+      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${className}')">Leave Class</button>
       `;
   
       document.getElementById('info-pannel').innerHTML = courseInfoHTML;
@@ -263,6 +267,38 @@ function getClassDataClassesPage(code){
 
 
   })
+}
+
+function toggleLeaveClassPopup(className){
+
+  console.log("Exitucin")
+  var modalHTML = `
+  <!-- Modal -->
+<div class="modal fade" id="leaveClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Leave Class?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to leave the class <strong>${className}</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+  `;
+
+  $(modalHTML).appendTo('#body-top');
+  
+  $('#leaveClassModal').modal('toggle')
+
 }
 
 // FIRESTORE MIGRATED FULLY
