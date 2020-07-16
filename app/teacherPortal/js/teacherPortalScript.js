@@ -710,7 +710,7 @@ function getAnnouncementForClass(code) {
       var data = snapshot.data()
       var date = data["Date"]
       var message = data["Message"]
-      var title = data["title"]
+      var title = data["Title"]
 
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
