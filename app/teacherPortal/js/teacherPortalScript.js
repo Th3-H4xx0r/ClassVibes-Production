@@ -1077,7 +1077,7 @@ function getEditData(code) {
 
   }).then((data) => {
     var className = data['class-name'];
-    document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-dark">${code}</span></h1>`
+    document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
     var course = data['Course']
     var teacher = data['teacher']
