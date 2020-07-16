@@ -383,10 +383,18 @@ async function getStudentClasses(studentUsername, pageType) {
                   </div>
             `;
 
-        output2 = `
-            <a href = "classes/${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
-            `;
 
+            
+
+            if(pageType == 'class-page'){
+              output2 = `
+              <a href = "${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
+              `;
+            } else {
+              output2 = `
+              <a href = "/student/classes/${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
+              `;
+            }
         output3 = `
         <option selected value="base">${item}</option>
             `;
@@ -638,7 +646,7 @@ function addClassToStudentData(classCode) {
 }
 
 //FIRESTORE MIGRATED FULLY
-async function updateAddClasesDropdown(studentUsername) {
+async function updateAddClasesDropdown(studentUsername, pageType) {
 
   let output = "";
 
@@ -678,9 +686,15 @@ async function updateAddClasesDropdown(studentUsername) {
 
     classesList.forEach(function (item, index) {
 
-      output2 = `
-          <a class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
-          `;
+          if(pageType == 'class-page'){
+            output2 = `
+            <a href = "${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
+            `;
+          } else {
+            output2 = `
+            <a href = "/student/classes/${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
+            `;
+          }
 
 
       $(output2).appendTo("#classesListSideBar");
