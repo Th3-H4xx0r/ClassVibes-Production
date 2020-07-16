@@ -93,7 +93,7 @@ function getGrayStudentStatus(email, classCode){
 
     var className = data["class-name"];
 
-    var greyTimeLimit = data['Gray Time Limit'];
+    var greyTimeLimit = data['max days inactive'];
 
     if(greyTimeLimit != null && greyTimeLimit != undefined){
       var _ref = firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(classCode)
