@@ -109,17 +109,14 @@ function getGrayStudentStatus(email, classCode){
 
           var today = new Date();
 
-            var days = greyTimeLimit[0];
-            var hours = greyTimeLimit[1];
-            var minutes = greyTimeLimit[2];
-            var seconds = greyTimeLimit[3];
+            var days = greyTimeLimit;
 
             var lastDate = new Date();
 
             lastDate.setDate ( lastStatusUpdate.getDate() + days );
-            lastDate.setHours ( lastStatusUpdate.getHours() + hours );
-            lastDate.setMinutes ( lastStatusUpdate.getMinutes() + minutes );
-            lastDate.setSeconds ( lastStatusUpdate.getSeconds() + seconds );
+            lastDate.setHours ( lastStatusUpdate.getHours() );
+            lastDate.setMinutes ( lastStatusUpdate.getMinutes() );
+            lastDate.setSeconds ( lastStatusUpdate.getSeconds() );
 
             if(today.getTime() > lastDate.getTime()){
 
