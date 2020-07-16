@@ -728,6 +728,7 @@ function getAnnouncementForClass(code) {
                         display: -webkit-box;
                         -webkit-line-clamp: 1; / number of lines to show */
                         -webkit-box-orient: vertical;'>${message}</p>
+                        <h3><i class="fa fa-trash" aria-hidden="true"></i></h3>
 
 
                       </div>
@@ -740,6 +741,8 @@ function getAnnouncementForClass(code) {
     })
   })
 }
+
+
 
 
 function getClassDataDropdown() {
@@ -931,7 +934,7 @@ function getStudentData(code) {
               <form>
               <div class="form-group">
                   <label for="recipient-name" class="col-form-label">Title:</label>
-                  <input type="text" class="form-control" id="title${i}">
+                  <input type="text" class="form-control" id="title1${i}">
               </div>
               <div class="form-group">
                   <label for="recipient-name" class="col-form-label">Date/Time</label>
@@ -943,7 +946,7 @@ function getStudentData(code) {
                   </textarea>
               </div>
               <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Length</label>
+              <label for="recipient-name" class="col-form-label">Meeting Length</label>
               <input type="text" class="form-control" id="len${i}" textarea>
               </div>
               <div class="form-group">
@@ -996,7 +999,7 @@ function schedualMeeting(emailStudent, course, index) {
   console.log("schedual meeting")
 
   var nameLocal = localStorage.getItem("email");
-  var meetingTitle = document.getElementById("title" + index).value;
+  var meetingTitle = document.getElementById("title1" + index).value;
   var meetingDate = document.getElementById("date" + index).value;
   var meetingMessage = document.getElementById("message" + index).value;
   var len = document.getElementById("len" + index).value;
