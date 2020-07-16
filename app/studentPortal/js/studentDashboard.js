@@ -201,7 +201,7 @@ function getClassDataClassesPage(code){
     var teacherPicture = ""
     var teacherEmail = data['teacher email']
     var teacherNote = data['teachersNote']
-    var grayTimelimit = data['Gray Time Limit'] != undefined? data['Gray Time Limit']: "Not Set"
+    var grayTimelimit = data['max days inactive'] != undefined? data['max days inactive']: "Not Set"
 
     firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
       var data = snap.data();
@@ -248,13 +248,13 @@ function getClassDataClassesPage(code){
   
       <div style="margin-top: 20px; width: 95%;">
           
-          <p>${grayTimelimit}</p>
+          <p>Inactive time limit: ${grayTimelimit} Days</p>
   
       </div>
 
       <h3 style="margin-top: 30px;">Leave Class</h3>
 
-      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${className}', ''${code})">Leave Class</button>
+      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${className}', '${code}')">Leave Class</button>
       `;
   
       document.getElementById('info-pannel').innerHTML = courseInfoHTML;
@@ -295,6 +295,10 @@ function toggleLeaveClassPopup(className, classCode){
   $(modalHTML).appendTo('#page-top');
 
   $('#leaveClassModal').modal('toggle')
+
+}
+
+function leaveClass(code){
 
 }
 
@@ -472,7 +476,7 @@ function updateReaction(reaction) {
         reaction: reaction
       });
     
-      getStudentStatus();
+      getStudentStatus(studentEmail);
     }
   })
 
