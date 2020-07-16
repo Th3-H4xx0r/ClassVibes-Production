@@ -257,7 +257,7 @@ function getClassDataClassesPage(code){
 
       <h3 style="margin-top: 30px;">Leave Class</h3>
 
-      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${className}')">Leave Class</button>
+      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${className}', ''${code})">Leave Class</button>
       `;
   
       document.getElementById('info-pannel').innerHTML = courseInfoHTML;
@@ -269,9 +269,8 @@ function getClassDataClassesPage(code){
   })
 }
 
-function toggleLeaveClassPopup(className){
+function toggleLeaveClassPopup(className, classCode){
 
-  console.log("Exitucin")
   var modalHTML = `
   <!-- Modal -->
 <div class="modal fade" id="leaveClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -284,19 +283,20 @@ function toggleLeaveClassPopup(className){
         </button>
       </div>
       <div class="modal-body">
-        Are you sure you want to leave the class <strong>${className}</strong>
+        Are you sure you want to leave the class <strong>${className}?</strong>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick = "leaveClass('${classCode}')">Leave Class</button>
       </div>
     </div>
   </div>
 </div>
   `;
 
-  $(modalHTML).appendTo('#body-top');
-  
+
+  $(modalHTML).appendTo('#page-top');
+
   $('#leaveClassModal').modal('toggle')
 
 }
