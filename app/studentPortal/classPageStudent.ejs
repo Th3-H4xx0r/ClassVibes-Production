@@ -259,8 +259,8 @@
                     <div id="className"></div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
 
-                        <li class="active">
-                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#meetings" role="tab" aria-controls="info" aria-selected="false">Course Info</a>
+                        <li class="nav-item">
+                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Course Info</a>
                         </li>
 
                         <li class="nav-item">
@@ -276,7 +276,7 @@
                           </li>
                        
                       </ul>
-                      <div style="height: 100px;"></div>
+
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div id="content">
@@ -317,11 +317,50 @@
                                         </div>
                                     </li>
         
-                                    </nav>
+                     
                                     
                             </div>
 
                         </div>
+
+                        <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="profile-tab">
+                            <!--Settings Content-->
+                            <div id="info-pannel" style="margin-top: 20px;">
+                                <h3>Instructor</h3>
+
+                                <div style="margin-top: 20px;">
+
+                                    <div class="row">
+                                        <img class="img-profile rounded-circle" style= "width: 6%;" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">
+                                       <div class="col" style="margin-left: 20px; margin-top: 20px;">
+                                        <h4>Daddy Shea</h4>
+                                        <p>krishnatechpranav@gmail.com</p>
+                                       </div>
+                                    </div>
+
+                                </div>
+
+                                <h3 style="margin-top: 20px;">Course Description</h3>
+
+                                <div style="margin-top: 20px; width: 95%;">
+                                    
+                                    <p>This course is a biomed course</p>
+
+                                </div>
+
+                                <h3 style="margin-top: 20px;">Teacher's Note</h3>
+
+                                <div style="margin-top: 20px; width: 95%;">
+                                    
+                                    <p>This course is a biomed course</p>
+
+                                </div>
+                            </div>
+                                
+
+                            <!--End of Setting Content-->
+                        </div>
+
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <!--Settings Content-->
                             <div id="editInfo"></div>

@@ -198,10 +198,16 @@ function getClassDataClassesPage(code){
     var data = snap.data();
 
     var className = data['class-name']
+    var course = data['Course']
+    var courseDescription = data["courseDescription"]
+    var teacher = data['teacher']
+    var teacherNote = data['teachersNote']
 
     if(document.getElementById('className') != null){
       document.getElementById('className').innerHTML = `<h1>${className}</h1>`
     }
+
+    
   })
 }
 
@@ -218,9 +224,6 @@ async function getStudentClasses(studentUsername, pageType) {
   classesList = [];
 
   var index = 0;
-
-  /////////////////////
-
 
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
   let classesRefGet = await classesRef.get();
