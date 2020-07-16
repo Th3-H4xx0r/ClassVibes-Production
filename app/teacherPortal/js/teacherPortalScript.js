@@ -513,7 +513,7 @@ function getProfileInfo() {
     
       $(outputPic).appendTo("#profilePic")
 
-      if(name != null, undefined){
+      if(name != null && name != undefined){
         document.getElementById("displayName").innerHTML = name
       } else {
         document.getElementById("displayName").innerHTML = "Error Occured"
