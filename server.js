@@ -190,7 +190,7 @@ io.on('connection', (socket) => {
 /////////////////////////
 app.use('/css', express.static('css'))
 app.use('/img', express.static('img'))
-app.use('/js1', express.static('js'))
+app.use('/js', express.static('js'))
 app.use('/vendor', express.static('vendor'))
 app.use('/authcss', express.static('app/authentication/css/'))
 app.use('/authjs', express.static('app/authentication/js/'))
