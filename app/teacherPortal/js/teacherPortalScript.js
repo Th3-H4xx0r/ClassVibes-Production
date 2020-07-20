@@ -1158,7 +1158,7 @@ function getEditData(code) {
     </span>
   </div>
 
-  <input type="text" class="form-control" placeholder="${className}" aria-label="Username" aria-describedby="basic-addon1" name="editName" id="editName">
+  <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="editName" id="editName" value = '${className}'>
 </div>
 <h6>Edit Class Course</h6>
 
@@ -1169,7 +1169,7 @@ function getEditData(code) {
     </span>
   </div>
 
-  <input type="text" class="form-control" placeholder="${course}" aria-label="Username" aria-describedby="basic-addon1" name="editCourse" id="editCourse">
+  <input type="text" class="form-control" value="${course}" aria-label="Username" aria-describedby="basic-addon1" name="editCourse" id="editCourse">
 </div>
 <h6>Edit Class Teacher</h6>
 
@@ -1180,7 +1180,7 @@ function getEditData(code) {
     </span>
   </div>
 
-  <input type="text" class="form-control" placeholder="${teacher}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacher" id="editTeacher">
+  <input type="text" class="form-control" value="${teacher}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacher" id="editTeacher">
 </div>
 <h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
 
@@ -1191,6 +1191,8 @@ function getEditData(code) {
   </div>
   <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays">
 </div>
+
+<p style = "color: red; font-weight: 700" id = "error-feedback-edit-class"></p>
 
 <button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
 
@@ -1206,7 +1208,6 @@ function getEditData(code) {
 function updateDetails(code) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      var name = user.displayName;
       var email = user.email;
       console.log(email)
 
@@ -1215,25 +1216,44 @@ function updateDetails(code) {
   var newTeacher = document.getElementById('editTeacher').value;
   var maxDays = document.getElementById('maxDays').value;
   let maxDaysNum = parseInt(maxDays);
-  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
-    "class-name": newName,
-    "Course": newCourse,
-    "teacher": newTeacher,
-    "max days inactive": maxDaysNum,
 
-  }).then(() => {
-    firebase.firestore().collection('Classes').doc(code).update({
+  console.log(newName, newCourse, newTeacher, maxDays, maxDaysNum)
+
+  if(newName, newCourse, newTeacher, maxDays != null && newName, newCourse, newTeacher, maxDays != ""){
+
+    var feedbackError = document.getElementById('error-feedback-edit-class');
+
+    feedbackError.innerHTML = ''
+
+
+    firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
       "class-name": newName,
       "Course": newCourse,
       "teacher": newTeacher,
       "max days inactive": maxDaysNum,
-
-
+  
     }).then(() => {
-      window.location.reload()
+      firebase.firestore().collection('Classes').doc(code).update({
+        "class-name": newName,
+        "Course": newCourse,
+        "teacher": newTeacher,
+        "max days inactive": maxDaysNum,
+  
+  
+      }).then(() => {
+        window.location.reload()
+      });
+  
     });
 
-  });
+  } else {
+    console.log("Feilds blank")
+    var feedbackError = document.getElementById('error-feedback-edit-class');
+
+    feedbackError.innerHTML = 'You cannot leave any fields blank'
+  }
+
+
 
 }
 })
