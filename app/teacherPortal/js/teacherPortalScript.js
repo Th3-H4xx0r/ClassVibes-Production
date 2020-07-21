@@ -505,6 +505,31 @@ function getProfileInfo() {
   })
 }
 
+function getWeekStudentAverageReactions_ALL_CLASSES(code){
+    var d = new Date();
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6:1);
+
+    var weekStart =  new Date(d.setDate(diff));
+
+    var weekStartTimestamp = weekStart.getTime();
+
+    console.log("GEttings data")
+
+    firebase.firestore().collection("Classes").doc(code).collection("Student Reactions").where(new Date('date').getTime().toString(), '>=', weekStartTimestamp.toString()).get().then(snap => {
+
+      snap.forEach(doc => {
+        console.log(doc.data());
+      })
+    }).then(() => {
+      console.log('//')
+    })
+
+    
+
+
+}
+
 function getClassData() {
   var emailRef = localStorage.getItem("email")
   var classesList = [];
@@ -1198,7 +1223,7 @@ function updateDetails(code) {
 
 function getChartData() {
   
-  console.log("GETTING PIE CHART DEMO");
+  //console.log("GETTING PIE CHART DEMO");
 
   var code = localStorage.getItem("codeForChart");
 
@@ -1211,8 +1236,6 @@ function getChartData() {
         doc.forEach(snapshot => {
 
             var data1 = snapshot.data();
-
-            console.log(data1);
 
             var reaction = data1["reaction"];
 
@@ -1266,6 +1289,6 @@ function getChartData() {
               cutoutPercentage: 80,
             },
           });
-       }, 700);//wait 2 seconds
+       }, 700);
     });
 }
