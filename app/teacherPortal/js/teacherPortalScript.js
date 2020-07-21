@@ -530,6 +530,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
   
         if(dateNow.getTime() >= restrictionTimeEnd.getTime()){
           getNewData = true
+          console.log("SHOULD GET NEW REPORT")
         }
       } else {
         getNewData = true
@@ -552,8 +553,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     }
 
   }).then((reportData) => {
-
-    console.log("")
     
     var monAverage = 0;
     var tueAverage = 0;
@@ -571,9 +570,9 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     var satTotal = [];
     var sunTotal = [];
 
-    console.log(code)
+    console.log(reportData)
 
-    if(reportData == null || reportData == []){
+    if(reportData == null || reportData.length == 0){
       console.log("GETTING NEW DATA")
       var d = new Date();
       var day = d.getDay(),
