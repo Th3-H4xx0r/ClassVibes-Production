@@ -1,19 +1,3 @@
-function initializeFirebase() {
-  var firebaseConfig = {
-    apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
-    authDomain: "cyberdojo-a2a3e.firebaseapp.com",
-    databaseURL: "https://cyberdojo-a2a3e.firebaseio.com",
-    projectId: "cyberdojo-a2a3e",
-    storageBucket: "cyberdojo-a2a3e.appspot.com",
-    messagingSenderId: "938057332518",
-    appId: "1:938057332518:web:99c34da5abf1b1548533e7",
-    measurementId: "G-0EWJ1V40VX"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  //firebase.firestore().enablePersistence();
-}
-
 function getTeacherAccountStatus(pageType, classCode = "null") {
 
   var email = localStorage.getItem('email');
@@ -107,6 +91,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             else if (pageType == 'dashboard') {
               getProfileInfo();
               getClassData();
+              getWeekStudentAverageReactions_ALL_CLASSES()
             }
 
             else if(pageType == "student-requests"){
@@ -164,6 +149,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             console.log("executing");
             getProfileInfo();
             getClassData();
+            getWeekStudentAverageReactions_ALL_CLASSES()
           }
 
           else if(pageType == 'create-class'){
