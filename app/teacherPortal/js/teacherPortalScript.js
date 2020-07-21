@@ -509,19 +509,100 @@ function getWeekStudentAverageReactions_ALL_CLASSES(code){
     var d = new Date();
     var day = d.getDay(),
         diff = d.getDate() - day + (day == 0 ? -6:1);
+        d.setHours(0);
+        d.setMinutes(0);
+        d.setSeconds(0);
+        d.setMilliseconds(0);
 
     var weekStart =  new Date(d.setDate(diff));
 
+    console.log(weekStart)
+
     var weekStartTimestamp = weekStart.getTime().toString();
 
-    console.log("GEttings data")
+    var monAverage = 0;
+    var tueAverage = 0;
+    var wedAverage = 0;
+    var thuAverage = 0;
+    var friAverage = 0;
+    var satAverage = 0;
+    var sunAverage = 0;
 
-    firebase.firestore().collection("Classes").doc(code).collection("Student Reactions").where('date', '>=', weekStartTimestamp).get().then(snap => {
+    var monTotal = [];
+    var tueTotal = [];
+    var wedTotal = [];
+    var thuTotal = [];
+    var friTotal = [];
+    var satTotal = [];
+    var sunTotal = [];
+
+
+    firebase.firestore().collection("Classes").doc(code).collection("Student Reactions").where('timestamp', '>', weekStartTimestamp).get().then(snap => {
 
       snap.forEach(doc => {
+        var data = doc.data();
+
+        var studentReaction = data['reaction']
+
+        var date = data['date']
+
+        var reactionDate = new Date(date)
+        
+        var reactionDay = reactionDate.getDay()
+
+        var reactionKey = 0;
+
+        if(studentReaction == 'good'){
+          reactionKey = 3
+        } else if (studentReaction == 'meh') {
+          reactionKey = 2
+        } else if (studentReaction == 'needs help'){
+          reactionKey = 1
+        }
+
+        console.log(reactionDay)
+
+        if(reactionDay == 1){
+          monTotal.push(reactionKey)
+        }
+
+        if(reactionDay == 2){
+          tueTotal.push(reactionKey)
+        }
+
+        if(reactionDay == 3){
+          wedTotal.push(reactionKey)
+        }
+
+        if(reactionDay == 4){
+          thuTotal.push(reactionKey)
+        }
+
+        if(reactionDay == 5){
+          friTotal.push(reactionKey)
+        }
+
+        if(reactionDay == 6){
+          satTotal.push(reactionKey)
+        }
+
+        if(reactionDay == 7){
+          sunTotal.push(reactionKey)
+        }
+
         console.log(doc.data());
       })
     }).then(() => {
+
+      console.log("MON: " + monTotal)
+
+      let sum = monTotal.reduce((previous, current) => current += previous);
+      let avg = sum / monTotal.length;
+
+      console.log(avg)
+
+
+    
       console.log('//')
     })
 
