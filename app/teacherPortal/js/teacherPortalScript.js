@@ -528,17 +528,17 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         var restrictionTimeEnd = new Date(lastWeeklyReport)
         restrictionTimeEnd.setHours(restrictionTimeEnd.getHours() + 5)
 
-        console.log(dateNow.getTime(),  restrictionTimeEnd.getTime(), restrictionTimeEnd)
+        //console.log(dateNow.getTime(),  restrictionTimeEnd.getTime(), restrictionTimeEnd)
   
         if(dateNow.getTime() >= restrictionTimeEnd.getTime()){
           getNewData = true
-          console.log("SHOULD GET NEW REPORT")
+          //console.log("SHOULD GET NEW REPORT")
         }
       } else {
         getNewData = true
       }
 
-      console.log("GET NEW REPORT:" + getNewData)
+      //console.log("GET NEW REPORT:" + getNewData)
 
       if(getNewData == false){
         
@@ -574,10 +574,10 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     var satTotal = [];
     var sunTotal = [];
 
-    console.log(reportData)
+    //console.log(reportData)
 
     if(reportData == null || reportData.length == 0){
-      console.log("GETTING NEW DATA")
+      //console.log("GETTING NEW DATA")
       var d = new Date();
       var day = d.getDay(),
           diff = d.getDate() - day + (day == 0 ? -6:1);
@@ -588,7 +588,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
   
       var weekStart =  new Date(d.setDate(diff));
   
-      console.log(weekStart)
+      //console.log(weekStart)
   
       var weekStartTimestamp = weekStart.getTime().toString();
   
@@ -646,7 +646,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
             sunTotal.push(reactionKey)
           }
   
-          console.log(doc.data());
+         // console.log(doc.data());
         })
       }).then(() => {
   
@@ -686,8 +686,8 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         sunAverage = sumSun / sunTotal.length;
         sunAverage = sunAverage ? sunAverage: 0
   
-        console.log(monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage)
-        console.log('//')
+       // console.log(monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage)
+        //console.log('//')
 
         firebase.firestore().collection("Classes-Cache").doc(code).set({
           "Last Weekly Report": new Date().toString(),
@@ -698,7 +698,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 
       })
     } else {
-      console.log("GETTING FROM CACHE")
+      //onsole.log("GETTING FROM CACHE")
       monAverage = reportData[0],
       tueAverage = reportData[1],
       wedAverage = reportData[2],
@@ -711,7 +711,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     return [monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage]
 
   }).then((avgList) => {
-    console.log("Setting area chart")
+    //console.log("Setting area chart")
     //Configure Graph
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
