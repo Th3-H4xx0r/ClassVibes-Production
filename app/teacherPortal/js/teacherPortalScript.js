@@ -1,3 +1,5 @@
+const e = require("express");
+
 function initializeFirebase() {
   var firebaseConfig = {
     apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
@@ -505,7 +507,12 @@ function getProfileInfo() {
   })
 }
 
-function getWeekStudentAverageReactions_ALL_CLASSES(code){
+function getWeekStudentAverageReactions_ALL_CLASSES(){
+
+  var code = localStorage.getItem("graphClassCode");
+
+  console.log(code)
+
     var d = new Date();
     var day = d.getDay(),
         diff = d.getDate() - day + (day == 0 ? -6:1);
@@ -780,6 +787,8 @@ function getClassData() {
 
           if (i == 0) {
             storeClassforChart(classCode)
+            storeGraphReactionsCode(classCode)
+            
           }
           output = `
             <div class="col-xl-3 col-md-6 mb-4">
@@ -806,11 +815,18 @@ function getClassData() {
           output3 = `
             <a class="dropdown-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeClassforChart('${classCode}')">${className.toString()}</a>
                         <div class="dropdown-divider"></div>
+            `
+
+            output4 = `
+            <a class="dropdown-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeGraphReactionsCode('${classCode}', 'onclick')">${className.toString()}</a>
+                        <div class="dropdown-divider"></div>
+                      
             
             `
           $(output).appendTo("#topClassesSection");
           $(output2).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
+          $(output4).appendTo("#classesDropdownGraphWeeklyReactions");
           $(output2).appendTo("#dropdown-sidebar");
         }
       }
@@ -1495,4 +1511,12 @@ function getChartData() {
           });
        }, 700);
     });
+}
+
+function storeGraphReactionsCode(code, event = "none"){
+  localStorage.setItem('graphClassCode', code)
+
+  if(event == "onclick"){
+    window.location.reload()
+  }
 }
