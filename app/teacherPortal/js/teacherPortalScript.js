@@ -517,7 +517,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
   firebase.firestore().collection("Classes-Cache").doc(code).get().then(doc => {
     var data = doc.data();
 
-    if(data){
+    if(data != undefined && data != null){
       var lastWeeklyReport = data['Last Weekly Report']
 
       var reportData = data['Weekly Reaction Report Data']
@@ -538,9 +538,15 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
       if(getNewData == false){
         return reportData
       }
+    } else {
+      return null
     }
 
+    console.log("GET NEW REPORT:" + getNewData)
+
   }).then((reportData) => {
+
+    console.log("")
     
     var monAverage = 0;
     var tueAverage = 0;
@@ -560,7 +566,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 
     console.log(code)
 
-    if(getNewData == true){
+    if(reportData == null || reportData == []){
       var d = new Date();
       var day = d.getDay(),
           diff = d.getDate() - day + (day == 0 ? -6:1);
@@ -680,6 +686,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
   
       })
     } else {
+      console.log("GETTING FROM CACHE")
       monAverage = reportData[0],
       tueAverage = reportData[1],
       wedAverage = reportData[2],
