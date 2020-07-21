@@ -509,6 +509,8 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 
   var code = localStorage.getItem("graphClassCode");
 
+  console.log(code)
+
   var getNewData = false;
 
 
@@ -551,6 +553,8 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     } else {
       return null
     }
+
+
 
   }).then((reportData) => {
     
@@ -704,6 +708,9 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
       sunAverage = reportData[6]
     }
 
+    return [monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage]
+
+  }).then((avgList) => {
     console.log("Setting area chart")
     //Configure Graph
     // Set new default font family and font color to mimic Bootstrap's default styling
@@ -729,7 +736,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
           pointHoverBorderColor: "rgba(78, 115, 223, 1)",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: [monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage],
+          data: [avgList[0], avgList[1], avgList[2], avgList[3], avgList[4], avgList[5], avgList[6]],
         }],
       },
       options: {
@@ -799,7 +806,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         }
       }
     });
-
   })
     
 }
