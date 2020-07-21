@@ -1,5 +1,3 @@
-const e = require("express");
-
 function initializeFirebase() {
   var firebaseConfig = {
     apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
@@ -524,9 +522,11 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
   
       var dateNow = new Date()
   
-      if(lastWeeklyReport){
+      if(lastWeeklyReport != null){
         var restrictionTimeEnd = new Date(lastWeeklyReport)
-        restrictionTimeEnd.setTime(restrictionTimeEnd.getHours() + 5)
+        restrictionTimeEnd.setHours(restrictionTimeEnd.getHours() + 5)
+
+        console.log(dateNow.getTime(),  restrictionTimeEnd.getTime(), restrictionTimeEnd)
   
         if(dateNow.getTime() >= restrictionTimeEnd.getTime()){
           getNewData = true
@@ -535,14 +535,21 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         getNewData = true
       }
 
+      console.log("GET NEW REPORT:" + getNewData)
+
       if(getNewData == false){
+        
         return reportData
+      } 
+      
+      if(getNewData == true){
+        return []
       }
+
+
     } else {
       return null
     }
-
-    console.log("GET NEW REPORT:" + getNewData)
 
   }).then((reportData) => {
 
@@ -567,6 +574,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     console.log(code)
 
     if(reportData == null || reportData == []){
+      console.log("GETTING NEW DATA")
       var d = new Date();
       var day = d.getDay(),
           diff = d.getDate() - day + (day == 0 ? -6:1);
@@ -679,31 +687,20 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         console.log('//')
 
         firebase.firestore().collection("Classes-Cache").doc(code).set({
-          "Last Weekly Report": new Date(),
+          "Last Weekly Report": new Date().toString(),
           "Weekly Reaction Report Data": [monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage]
           
         })
-  
-      })
-    } else {
-      console.log("GETTING FROM CACHE")
-      monAverage = reportData[0],
-      tueAverage = reportData[1],
-      wedAverage = reportData[2],
-      thuAverage = reportData[3],
-      friAverage = reportData[4],
-      satAverage = reportData[5],
-      sunAverage = reportData[6]
-    }
 
-      //Configure Graph
+        
+    //Configure Graph
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#858796';
     
     // Area Chart Example
     var ctx = document.getElementById("myAreaChart");
-    var myLineChart = new Chart(ctx, {
+    new Chart(ctx, {
       type: 'line',
       data: {
         labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -790,16 +787,119 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         }
       }
     });
+
+
+  
+      })
+    } else {
+      console.log("GETTING FROM CACHE")
+      monAverage = reportData[0],
+      tueAverage = reportData[1],
+      wedAverage = reportData[2],
+      thuAverage = reportData[3],
+      friAverage = reportData[4],
+      satAverage = reportData[5],
+      sunAverage = reportData[6]
+
+    console.log("Setting area chart")
+    //Configure Graph
+    // Set new default font family and font color to mimic Bootstrap's default styling
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
     
-    
+    // Area Chart Example
+    var ctx = document.getElementById("myAreaChart");
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [{
+          label: "Average Reaction Index: ",
+          lineTension: 0.3,
+          backgroundColor: "rgba(78, 115, 223, 0.05)",
+          borderColor: "rgba(78, 115, 223, 1)",
+          pointRadius: 3,
+          pointBackgroundColor: "rgba(78, 115, 223, 1)",
+          pointBorderColor: "rgba(78, 115, 223, 1)",
+          pointHoverRadius: 3,
+          pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+          pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+          pointHitRadius: 10,
+          pointBorderWidth: 2,
+          data: [monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage],
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
+        scales: {
+          xAxes: [{
+            time: {
+              unit: 'date'
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              maxTicksLimit: 7
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              maxTicksLimit: 5,
+              padding: 10,
+              // Include a dollar sign in the ticks
+              callback: function(value, index, values) {
+                return value;
+              }
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2]
+            }
+          }],
+        },
+        legend: {
+          display: false
+        },
+        tooltips: {
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          titleMarginBottom: 10,
+          titleFontColor: '#6e707e',
+          titleFontSize: 14,
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false,
+          intersect: false,
+          mode: 'index',
+          caretPadding: 10,
+          callbacks: {
+            label: function(tooltipItem, chart) {
+              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + tooltipItem.yLabel;
+            }
+          }
+        }
+      }
+    });
+    }
 
   })
-
-
-
     
-
-
 }
 
 function getClassData() {
