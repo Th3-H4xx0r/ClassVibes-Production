@@ -9,10 +9,8 @@ function initializeFirebase() {
     appId: "1:938057332518:web:99c34da5abf1b1548533e7",
     measurementId: "G-0EWJ1V40VX"
   };
-
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-
   //firebase.firestore().enablePersistence();
 }
 
@@ -83,7 +81,6 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
               document.getElementById('loader-icon').style.display = 'none';
             }
 
-
             if (pageType == 'meetings-page') {
               document.getElementById('main-page-content-meetings-page').style.display = "initial";
               getProfileInfo();
@@ -91,7 +88,6 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
               getMeetings();
             }
             else if (pageType == "") {
-
             }
 
             else if(pageType == 'create-class'){
@@ -130,7 +126,6 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
       }
       //NOT IN A DISTRICT
       else {
-
         var accountStatus = data['Account Status'];
 
         //ACCOUNT ACTIVE
@@ -164,7 +159,6 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             getAnnouncementForClass(classCode);
             getMeetingForClass(classCode);
 
-
           }
           else if (pageType == 'dashboard') {
             console.log("executing");
@@ -187,7 +181,6 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             getChartData();
             getClassDataDropdown();
           }
-
 
           //ACCOUNT NOT ACTIVE
         } else {
@@ -252,9 +245,7 @@ function getStudentRequests(){
   var classesList = [];
 
   firebase.firestore().collection('UserData').doc(emailRef).collection("Classes").get().then(function (doc) {
-
     doc.forEach(snapshot => {
-
       var data1 = snapshot.data();
 
       var classCode = data1["Code"];
@@ -267,9 +258,7 @@ function getStudentRequests(){
         classesList.push([classCode, className])
 
       })
-
     });
-
   }).then(function () {
 
     setTimeout(function(){
@@ -323,7 +312,7 @@ function getStudentRequests(){
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
-      
+  
                         <div class="row">
       
                             <div class="col">
@@ -345,9 +334,6 @@ function getStudentRequests(){
                             </a>
       
                         </div>
-      
-      
-      
                       </div>
                     </div>
                   </div>
@@ -359,9 +345,7 @@ function getStudentRequests(){
             })
         })
       }
-
     }
-
    }, 1000);
 
   }).then(() => {
@@ -426,26 +410,26 @@ function checkIfSchoolCodeExists() {
 
       $('#joinSchool-district-err').html('');
 
-      /*
+
       firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).collection('Teachers').doc(teacher_email).set({
         "Teacher Name": teacher_name,
         "Teacher Email": teacher_email,
       });
-      */
 
-      /*
+
+
 
       firebase.firestore().collection('UserData').doc(teacher_email).update({
         "District Code": district_code,
       })
-      */
 
-      /*
+
+
       firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).collection('Teachers').doc(teacher_email).set({
         "Teacher Name": teacher_name,
         "Teacher Email": teacher_email,
       });
-      */
+
 
       firebase.firestore().collection('Districts').doc(district_code).collection('Schools').doc(school_code).get().then(snapshot => {
         var data = snapshot.data();
@@ -482,15 +466,9 @@ function checkIfSchoolCodeExists() {
           }).then(() => {
             window.location.reload();
           })
-
         })
-
       })
-
-
-
     } else {
-
       var errHTML = `<p style = 'color: red; margin-top: 5px'>School doesn't exist</p>`;
 
       $('#joinSchool-district-err').html(errHTML);
@@ -513,7 +491,6 @@ function getProfileInfo() {
           outputPic = `<img class="img-profile rounded-circle" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">`;
       }
     
-    
       $(outputPic).appendTo("#profilePic")
 
       if(name != null && name != undefined){
@@ -521,18 +498,14 @@ function getProfileInfo() {
       } else {
         document.getElementById("displayName").innerHTML = "Error Occured"
       }
-    
-      
     } else {
       console.log("user Signed out");
       
     }
   })
-
 }
 
 function getClassData() {
-
   var emailRef = localStorage.getItem("email")
   var classesList = [];
 
@@ -548,9 +521,7 @@ function getClassData() {
   var index = 0;
 
   firebase.firestore().collection('UserData').doc(emailRef).collection("Classes").get().then(function (doc) {
-
     doc.forEach(snapshot => {
-
       index = index + 1
 
       var data = snapshot.data();
@@ -608,7 +579,6 @@ function getClassData() {
                         <div class="dropdown-divider"></div>
             
             `
-
           $(output).appendTo("#topClassesSection");
           $(output2).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
@@ -631,7 +601,6 @@ function setClassCode(classCode) {
 function storeClassforChart(code) {
   localStorage.setItem("codeForChart", code);
   getChartData();
-
 }
 
 function writeAnnouncement() {
@@ -656,10 +625,8 @@ function getMeetings() {
   var index = 0;
 
   firebase.firestore().collection('UserData').doc(name).collection("Meetings").get().then(function (doc) {
-
     doc.forEach(snapshot => {
       index = index + 1
-
       var data1 = snapshot.data();
       var classForMeeting = data1["Course"]
 
@@ -704,7 +671,6 @@ function getMeetings() {
       document.getElementById('main-body-page-teacher').innerHTML = noMeetingsHTML;
     }
   });
-
 }
 
 function getAnnouncementForClass(code) {
@@ -783,38 +749,28 @@ function getMeetingForClass(code) {
             `;
 
             $(output).appendTo("#meetingsListforClassPage")
-
         })
-
       })
     }
   })
-
 }
-
-
 
 
 function getClassDataDropdown() {
   var emailRef = localStorage.getItem("email")
-
   var classesList = [];
 
   firebase.firestore().collection('UserData').doc(emailRef).collection("Classes").get().then(function (doc) {
-
     doc.forEach(snapshot => {
-
       var data1 = snapshot.data();
 
       var classCode = data1["Code"];
       var className = data1["class-name"];
 
       classesList.push([classCode, className])
-
     });
 
   }).then(function () {
-
 
     for (var i = 0; i <= classesList.length; i++) {
       let output = "";
@@ -842,7 +798,6 @@ function getClassDataDropdown() {
         $(output3).appendTo("#classesOp1");
         $(output3).appendTo("#classesOp2")
       }
-
     }
   })
 }
@@ -895,15 +850,9 @@ function createClass() {
       }).then(() => {
         window.location = "dashboard.html"
       });
-
-
 }
 })
-
 }
-
-
-
 
 function getStudentData(code) {
 
@@ -911,9 +860,7 @@ function getStudentData(code) {
   console.log(classInfoList);
 
   firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
-
     doc.forEach(snapshot => {
-
       var data = snapshot.data();
 
       var reaction = data["reaction"];
@@ -923,7 +870,6 @@ function getStudentData(code) {
       console.log(classInfoList)
 
     });
-
     document.getElementById("studentTable").innerHTML = "";
 
     for (var i = 0; i <= classInfoList.length; i++) {
@@ -1085,8 +1031,6 @@ function schedualMeeting(emailStudent, course, code, index) {
     "Timestamp": dateNow.toString(),
     "message" : meetingMessage,
     "len" : len
-
-
   });
 
 }
@@ -1197,11 +1141,7 @@ function getEditData(code) {
 <button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
 
   `
-
-    $(output).appendTo("#editInfo");
-
-    
-
+    $(output).appendTo("#editInfo");   
   })
 }
 
@@ -1224,7 +1164,6 @@ function updateDetails(code) {
     var feedbackError = document.getElementById('error-feedback-edit-class');
 
     feedbackError.innerHTML = ''
-
 
     firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
       "class-name": newName,
@@ -1252,13 +1191,8 @@ function updateDetails(code) {
 
     feedbackError.innerHTML = 'You cannot leave any fields blank'
   }
-
-
-
 }
 })
-
-
 };
 
 
@@ -1267,10 +1201,6 @@ function getChartData() {
   console.log("GETTING PIE CHART DEMO");
 
   var code = localStorage.getItem("codeForChart");
-
-  //var _chartDataRef = firebase.database().ref().child("Classes").child(code).child("Students");
- // _chartDataRef.on('value', get);
-
 
       firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
 
@@ -1297,10 +1227,7 @@ function getChartData() {
             if(reaction == "needs help"){
               studentsReactionLists[2] = studentsReactionLists[2] + 1;
             }
-
-
         });
-
         setTimeout(function(){
           console.log(studentsReactionLists);
     
@@ -1340,20 +1267,5 @@ function getChartData() {
             },
           });
        }, 700);//wait 2 seconds
-    
-        
-
     });
-
 }
-
-
-
-
-
-
-
-
-
-
-
