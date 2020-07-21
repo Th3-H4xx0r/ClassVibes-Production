@@ -512,11 +512,11 @@ function getWeekStudentAverageReactions_ALL_CLASSES(code){
 
     var weekStart =  new Date(d.setDate(diff));
 
-    var weekStartTimestamp = weekStart.getTime();
+    var weekStartTimestamp = weekStart.getTime().toString();
 
     console.log("GEttings data")
 
-    firebase.firestore().collection("Classes").doc(code).collection("Student Reactions").where(new Date('date').getTime().toString(), '>=', weekStartTimestamp.toString()).get().then(snap => {
+    firebase.firestore().collection("Classes").doc(code).collection("Student Reactions").where('date', '>=', weekStartTimestamp).get().then(snap => {
 
       snap.forEach(doc => {
         console.log(doc.data());
