@@ -86,6 +86,10 @@ router.get('/teacher/create-class',function(req,res){
 res.sendFile(path.join(__dirname+'/app/teacherPortal/createClass.html'));
 });
 
+router.get('/teacher/announcements',function(req,res){
+  res.sendFile(path.join(__dirname+'/app/teacherPortal/announcementTeacher.html'));
+  });
+
 router.get('/teacher/meetings',function(req,res){
 res.sendFile(path.join(__dirname+'/app/teacherPortal/meetingsPage.html'));
 });

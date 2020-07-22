@@ -114,6 +114,10 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
               getStudentRequests();
             }
 
+            else if(pageType == "announcementsTeacher"){
+              getAnnouncements(email);
+            }
+
             else {
               getClassData();
               getProfileInfo();
@@ -168,6 +172,10 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
 
           else if(pageType == 'create-class'){
             getClassDataDropdown();
+          }
+
+          else if(pageType == "announcementsTeacher"){
+            getAnnouncements(email);
           }
 
           else if(pageType == "student-requests"){
@@ -1587,4 +1595,209 @@ function storeGraphReactionsCode(code, event = "none"){
   if(event == "onclick"){
     window.location.reload()
   }
+}
+
+async function getAnnouncements(email, pageType = "annoncements-page-main") {
+
+  document.getElementById("loadingIndicator").style.display = "initial";
+
+  var classesListCodes = [];
+
+  var classnamesList = [];
+
+  classesList = [];
+
+  var index = 0;
+
+  let classesRef = firebase.firestore().collection('UserData').doc(email).collection("Classes");
+  let classesRefGet = await classesRef.get();
+  for(const doc of classesRefGet.docs){
+
+    var classData = doc.data();
+
+    var classCode = classData["Code"];
+
+    var className = "loading"
+
+    var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
+      var data = snap.data();
+  
+      if(data != null && data != undefined){
+          className = data['class-name'];
+      }
+    }).then(() => {
+      classesListCodes.push(classCode)
+      classnamesList.push(className)
+    })
+  }
+
+    if(pageType == 'dashboard'){
+
+      var announcementsCount = 0;
+
+      for (let i = 0; i <= classesListCodes.length; i++) {
+        var classcode = classesListCodes[i];
+  
+        if (classcode != undefined && classcode != null) {
+  
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy("Timestamp").limitToLast(3).get().then(function (doc) {
+  
+  
+            doc.forEach(snapshot => {
+  
+              var annoucementData = snapshot.data();
+  
+              if (annoucementData != undefined && annoucementData != null) {
+                outputAnnouncements = "";
+  
+                announcementsCount += 1;
+
+  
+                var title = annoucementData["Title"];
+                var message = annoucementData["Message"];
+                var date = annoucementData['Date'];
+
+  
+                var nameClass = classnamesList[i];
+  
+                outputDashboard = `
+
+                <div class="col-xl-12 col-md-6 mb-4">
+                <div class="card border-left-success" style = 'height: max-content'>
+                      <div class="card-body">
+                        <h4 class="badge badge-info">${nameClass}</h4>
+
+                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1; /* number of lines to show */
+                        -webkit-box-orient: vertical;''>${title}</h5>
+
+                        <p style = '   overflow: hidden;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1; /* number of lines to show */
+                        -webkit-box-orient: vertical;'>${message}</p>
+
+                        
+                      </div>
+                    </div>
+
+                    </div>
+                `;
+
+                $(outputDashboard).appendTo("#AnnouncementsPageSection");
+  
+              }
+            });
+          });
+        }
+  
+      }
+  
+      setTimeout(() => {
+  //IF there is no annonucements
+  
+  if (announcementsCount == 0) {
+  
+    var noAnnouncementsHTML = ` 
+      
+    <center>
+    <img src="img/undraw_work_chat_erdt.svg" width="73%">
+  
+    <h2 style="margin-top: 3%;">No Announcements</h2>
+    <p>You're all caught up</p>
+  </center>
+    `;
+  document.getElementById("AnnouncementsPageSection").innerHTML = noAnnouncementsHTML;
+  
+  } else {
+  
+  }
+       }, 1000)
+    } 
+    
+    
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    else {
+      var announcementsCount = 0;
+
+      for (let i = 0; i <= classesListCodes.length; i++) {
+        var classcode = classesListCodes[i];
+  
+        if (classcode != undefined && classcode != null) {
+  
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").get().then(function (doc) {
+  
+  
+            doc.forEach(snapshot => {
+  
+              var annoucementData = snapshot.data();
+  
+              if (annoucementData != undefined && annoucementData != null) {
+                outputAnnouncements = "";
+  
+                announcementsCount += 1;
+  
+  
+                var title = annoucementData["Title"];
+                var message = annoucementData["Message"];
+                var date = annoucementData['Date'];
+  
+                var nameClass = classnamesList[i];
+  
+                outputAnnouncements = `
+                <div class="col-xl-6 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <h4 class="badge badge-info">${nameClass}</h4>
+
+                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+
+                        <p style = 'color: gray'>${message}</p>
+  
+                        <div class="h6 mb-0" style = "color: #a2a39b">${date}</div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+                `;
+  
+                  $(outputAnnouncements).appendTo("#annoucementsSection");
+              }
+            });
+          });
+        }
+      }
+  
+      setTimeout(() => {
+  //IF there is no annonucements
+  
+  if (announcementsCount == 0) {
+
+      document.getElementById("loadingIndicator").style.display = "none";
+  
+      document.getElementById("announcementsSection-section").style.display = "none";
+      
+      document.getElementById("no-Announcements-section").style.display = "initial";
+  
+  } else {
+
+      document.getElementById("loadingIndicator").style.display = "none";
+  
+      document.getElementById("announcementsSection-section").style.display = "initial";
+      
+      document.getElementById("no-Announcements-section").style.display = "none";
+  }
+       }, 1000)
+    }
 }
