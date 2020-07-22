@@ -1118,7 +1118,7 @@ function getMeetingForClass(code) {
       firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
-          var classForMeeting = data["Class"]
+          var classForMeeting = data["Course"]
           var date = data["Date"];
           var title = data["Title"];
           var message = data["message"]
@@ -1255,148 +1255,160 @@ function getStudentData(code) {
   var classInfoList = [];
   console.log(classInfoList);
 
-  firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
-    doc.forEach(snapshot => {
-      var data = snapshot.data();
+  var className = '';
 
-      var reaction = data["reaction"];
-      var studentName = data["name"];
-      var studentEmail = data["email"];
-      classInfoList.push([studentName, reaction, studentEmail])
-      console.log(classInfoList)
+  firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
+      var data = doc.data();
 
-    });
-    document.getElementById("studentTable").innerHTML = "";
+      className = data["class-name"];
 
-    for (var i = 0; i <= classInfoList.length; i++) {
-      let descriptionOutput = "";
-      classInfoData = classInfoList[i];
-      var happy = '<h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1>';
-      var meh = '<h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1>';
-      var sad = '<h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1>'
-
-      if (classInfoData != null || classInfoData != undefined) {
-        console.log("works")
-        var studentName = classInfoData[0];
-
-        var studentReaction = classInfoData[1];
-
-        var studentEmail = classInfoData[2];
-        console.log(classInfoData)
-
-        descriptionOutput2 = `
-      <tr>
-      <td>${studentName}</td>
-      <td>${studentEmail}</td>
-      <td>Some Comment</td>
-      <td><div id = "face"></div></td>
-      <td>2011/04/25</td>
-      <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
-      `;
-
-        happy_face_Column = `
-      <tr>
-      <td>${studentName}</td>
-      <td>${studentEmail}</td>
-      <td>Some Comment</td>
-      <td><h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1></td>
-      <td>2011/04/25</td>
-      <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
-      `;
-
-        meh_colum_face = `
-      <tr>
-      <td>${studentName}</td>
-      <td>${studentEmail}</td>
-      <td>Some Comment</td>
-      <td><h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1></td>
-      <td>2011/04/25</td>
-      <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
-      `;
-
-        frustrated_column_face = `
-      <tr>
-      <td>${studentName}</td>
-      <td>${studentEmail}</td>
-      <td>Some Comment</td>
-      <td><h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1></td>
-      <td>2011/04/25</td>
-      <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
-  </div>
-      `;
-
-        outputModel = `
-      <div class="modal fade" id="exampleModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel${i}" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel${i}">Schedual Meeting</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <form>
-              <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Title:</label>
-                  <input type="text" class="form-control" id="title1${i}">
-              </div>
-              <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Date/Time</label>
-                  <input type="text" class="form-control" id="date${i}">
-              </div>
-              <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Message</label>
-                  <textarea type="text" class="form-control" id="message${i}">
-                  </textarea>
-              </div>
-              <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Meeting Length</label>
-              <input type="text" class="form-control" id="len${i}" textarea>
-              </div>
-              <div class="form-group">
-                  <label for="message-text" class="col-form-label">Student</label>
-                  <input type="text" class="form-control" placeholder = "${studentName}" readonly>
-              </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onclick = "schedualMeeting('${studentEmail}', '${className}', '${code}', '${i}')" data-dismiss = "modal">Send message</button>
-          </div>
-          </div>
+    }).then(() => {
+      firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
+        doc.forEach(snapshot => {
+          var data = snapshot.data();
+    
+          var reaction = data["reaction"];
+          var studentName = data["name"];
+          var studentEmail = data["email"];
+          classInfoList.push([studentName, reaction, studentEmail])
+          console.log(classInfoList)
+    
+        });
+    
+        document.getElementById("studentTable").innerHTML = "";
+    
+        for (var i = 0; i <= classInfoList.length; i++) {
+          let descriptionOutput = "";
+          classInfoData = classInfoList[i];
+          var happy = '<h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1>';
+          var meh = '<h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1>';
+          var sad = '<h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1>'
+    
+          if (classInfoData != null || classInfoData != undefined) {
+            console.log("works")
+            var studentName = classInfoData[0];
+    
+            var studentReaction = classInfoData[1];
+    
+            var studentEmail = classInfoData[2];
+            console.log(classInfoData)
+    
+            descriptionOutput2 = `
+          <tr>
+          <td>${studentName}</td>
+          <td>${studentEmail}</td>
+          <td>Some Comment</td>
+          <td><div id = "face"></div></td>
+          <td>2011/04/25</td>
+          <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
+          `;
+    
+            happy_face_Column = `
+          <tr>
+          <td>${studentName}</td>
+          <td>${studentEmail}</td>
+          <td>Some Comment</td>
+          <td><h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1></td>
+          <td>2011/04/25</td>
+          <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
+          `;
+    
+            meh_colum_face = `
+          <tr>
+          <td>${studentName}</td>
+          <td>${studentEmail}</td>
+          <td>Some Comment</td>
+          <td><h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1></td>
+          <td>2011/04/25</td>
+          <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
+          `;
+    
+            frustrated_column_face = `
+          <tr>
+          <td>${studentName}</td>
+          <td>${studentEmail}</td>
+          <td>Some Comment</td>
+          <td><h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1></td>
+          <td>2011/04/25</td>
+          <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
       </div>
-      </div>
-      `
-        $(outputModel).appendTo("#outputModel")
-        $(descriptionOutput2).appendTo("#studentTable")
-
-        if (studentReaction == "good") {
-          document.getElementById("face").outerHTML = happy;
-          $(descriptionOutput2).appendTo("#studentsListGreat");
-          $(happy_face_Column).appendTo('#studentTable-doing-good');
-
-        } else if (studentReaction == "meh") {
-          document.getElementById("face").outerHTML = meh;
-          $(descriptionOutput2).appendTo("#studentsListHelp");
-          $(meh_colum_face).appendTo('#studentTable-meh');
-
-
-        } else if (studentReaction == "needs help") {
-
-          document.getElementById("face").outerHTML = sad;
-
-          $(descriptionOutput2).appendTo("#studentsListFrustrated");
-          $(frustrated_column_face).appendTo("#studentTable-frustrated");
-
-        } else {
-          document.getElementById("face").outerHTML = happy;
-
-          $(happy_face_Column).appendTo("#studentsListGreat");
+          `;
+    
+            outputModel = `
+          <div class="modal fade" id="exampleModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel${i}" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel${i}">Schedual Meeting</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form>
+                  <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Title:</label>
+                      <input type="text" class="form-control" id="title1${i}">
+                  </div>
+                  <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Date/Time</label>
+                      <input type="text" class="form-control" id="date${i}">
+                  </div>
+                  <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Message</label>
+                      <textarea type="text" class="form-control" id="message${i}">
+                      </textarea>
+                  </div>
+                  <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Meeting Length</label>
+                  <input type="text" class="form-control" id="len${i}" textarea>
+                  </div>
+                  <div class="form-group">
+                      <label for="message-text" class="col-form-label">Student</label>
+                      <input type="text" class="form-control" placeholder = "${studentName}" readonly>
+                  </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" onclick = "schedualMeeting('${studentEmail}', '${className}', '${code}', '${i}')" data-dismiss = "modal">Send message</button>
+              </div>
+              </div>
+          </div>
+          </div>
+          `
+            $(outputModel).appendTo("#outputModel")
+            $(descriptionOutput2).appendTo("#studentTable")
+    
+            if (studentReaction == "good") {
+              document.getElementById("face").outerHTML = happy;
+              $(descriptionOutput2).appendTo("#studentsListGreat");
+              $(happy_face_Column).appendTo('#studentTable-doing-good');
+    
+            } else if (studentReaction == "meh") {
+              document.getElementById("face").outerHTML = meh;
+              $(descriptionOutput2).appendTo("#studentsListHelp");
+              $(meh_colum_face).appendTo('#studentTable-meh');
+    
+    
+            } else if (studentReaction == "needs help") {
+    
+              document.getElementById("face").outerHTML = sad;
+    
+              $(descriptionOutput2).appendTo("#studentsListFrustrated");
+              $(frustrated_column_face).appendTo("#studentTable-frustrated");
+    
+            } else {
+              document.getElementById("face").outerHTML = happy;
+    
+              $(happy_face_Column).appendTo("#studentsListGreat");
+            }
+          }
         }
-      }
-    }
-  });
+      });
+    })
+
+
 }
 
 
