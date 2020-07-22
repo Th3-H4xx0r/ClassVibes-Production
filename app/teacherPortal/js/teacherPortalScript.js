@@ -1496,7 +1496,7 @@ function updateDetails(code) {
   
   
       }).then(() => {
-        //window.location.reload()
+        window.location.reload()
       });
   
     });
