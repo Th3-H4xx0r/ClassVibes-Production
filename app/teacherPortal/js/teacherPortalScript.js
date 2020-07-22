@@ -1479,7 +1479,7 @@ function updateDetails(code) {
     if(maxDaysNum > 14){
       var feedbackError = document.getElementById('error-feedback-edit-class');
 
-      feedbackError.innerHTML = 'The max inactive days has to been less than 14'
+      feedbackError.innerHTML = 'The max inactive days has to be less than or equal to 14 days'
     } else {
       var feedbackError = document.getElementById('error-feedback-edit-class');
 
