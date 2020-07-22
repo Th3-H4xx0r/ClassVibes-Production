@@ -1118,7 +1118,7 @@ function getMeetingForClass(code) {
       firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
-          var classForMeeting = data["Course"]
+          var classForMeeting = data["Class"]
           var date = data["Date"];
           var title = data["Title"];
           var message = data["message"]
@@ -1129,8 +1129,6 @@ function getMeetingForClass(code) {
             <div class="row">
             <div class="col-lg-6" data-aos="fade-up">
                   <h3 class="resume-title">${date} </h3>
-
-                  <h3 class="resume-title" style="width: 500px">${classForMeeting}</h3>
                   <div class="resume-item pb-0">
                     <h4 style="width: 500px">${title}</h4>
                     <h5>${length}</h5>
