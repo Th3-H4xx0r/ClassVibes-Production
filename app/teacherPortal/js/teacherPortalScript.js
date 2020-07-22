@@ -1466,12 +1466,12 @@ function updateDetails(code) {
 
   var newName = document.getElementById('editName').value;
   var newCourse = document.getElementById('editCourse').value;
-  var newDescription = document.getElementById('editCourse').value;
+  var newDescription = document.getElementById('editDescription').value;
   var teachersNote = document.getElementById('editTeacherNote').value;
   var maxDays = document.getElementById('maxDays').value;
   let maxDaysNum = parseInt(maxDays);
 
-  console.log(newName, newCourse, newTeacher, maxDays, maxDaysNum)
+  console.log(newName, newCourse, newDescription, maxDays, teachersNote)
 
   if(newName, newCourse, newDescription, maxDays, teachersNote != null && newName, newCourse, newDescription, maxDays, teachersNote != ""){
 
@@ -1489,13 +1489,14 @@ function updateDetails(code) {
     }).then(() => {
       firebase.firestore().collection('Classes').doc(code).update({
         "class-name": newName,
-        "Course": newCourse,
-        "teacher": newTeacher,
-        "max days inactive": maxDaysNum,
+      "Course": newCourse,
+      "courseDescription": newDescription,
+      "teachersNote": teachersNote,
+      "max days inactive": maxDaysNum,
   
   
       }).then(() => {
-        window.location.reload()
+        //window.location.reload()
       });
   
     });
