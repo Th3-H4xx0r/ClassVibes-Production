@@ -1389,7 +1389,8 @@ function getEditData(code) {
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
     var course = data['Course']
-    var teacher = data['teacher']
+    var teacherNote = data['teachersNote']
+    var description = data['courseDescription']
     output += `
 
     <h6>Edit Class Name</h6>
@@ -1414,7 +1415,7 @@ function getEditData(code) {
 
   <input type="text" class="form-control" value="${course}" aria-label="Username" aria-describedby="basic-addon1" name="editCourse" id="editCourse">
 </div>
-<h6>Edit Class Teacher</h6>
+<h6>Edit Class Description</h6>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
@@ -1423,8 +1424,21 @@ function getEditData(code) {
     </span>
   </div>
 
-  <input type="text" class="form-control" value="${teacher}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacher" id="editTeacher">
+  <input type="text" class="form-control" value="${description}" aria-label="Username" aria-describedby="basic-addon1" name="editDescription" id="editDescription">
 </div>
+
+<h6>Edit Teacher's Note</h6>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">
+    <i class="fa fa-pencil" aria-hidden="true" onclick = "editTitle()"></i>
+    </span>
+  </div>
+
+  <input type="text" class="form-control" value="${teacherNote}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacherNote" id="editTeacherNote">
+</div>
+
 <h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
 
 <div class="input-group mb-3">
@@ -1452,13 +1466,14 @@ function updateDetails(code) {
 
   var newName = document.getElementById('editName').value;
   var newCourse = document.getElementById('editCourse').value;
-  var newTeacher = document.getElementById('editTeacher').value;
+  var newDescription = document.getElementById('editCourse').value;
+  var teachersNote = document.getElementById('editTeacherNote').value;
   var maxDays = document.getElementById('maxDays').value;
   let maxDaysNum = parseInt(maxDays);
 
   console.log(newName, newCourse, newTeacher, maxDays, maxDaysNum)
 
-  if(newName, newCourse, newTeacher, maxDays != null && newName, newCourse, newTeacher, maxDays != ""){
+  if(newName, newCourse, newDescription, maxDays, teachersNote != null && newName, newCourse, newDescription, maxDays, teachersNote != ""){
 
     var feedbackError = document.getElementById('error-feedback-edit-class');
 
@@ -1467,7 +1482,8 @@ function updateDetails(code) {
     firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
       "class-name": newName,
       "Course": newCourse,
-      "teacher": newTeacher,
+      "courseDescription": newDescription,
+      "teachersNote": teachersNote,
       "max days inactive": maxDaysNum,
   
     }).then(() => {
