@@ -1115,10 +1115,10 @@ function getMeetingForClass(code) {
       var name = user.displayName;
       var email = user.email;
 
-      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).get().then(function(doc) {
+      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
-          var classForMeeting = data["Course"]
+          var classForMeeting = data["Class"]
           var date = data["Date"];
           var title = data["Title"];
           var message = data["message"]
@@ -1415,6 +1415,7 @@ function schedualMeeting(emailStudent, course, code, index) {
     "Title": meetingTitle,
     "Date": meetingDate,
     "Class": code,
+    "Course": course,
     "Timestamp": dateNow.toString(),
     "message" : meetingMessage,
     "len" : len
@@ -1423,6 +1424,7 @@ function schedualMeeting(emailStudent, course, code, index) {
       "Title": meetingTitle,
       "Date": meetingDate,
       "Class": code,
+      "Course": course,
       "Timestamp": dateNow.toString(),
       "message" : meetingMessage,
       "len" : len
