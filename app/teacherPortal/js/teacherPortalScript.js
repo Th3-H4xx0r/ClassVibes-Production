@@ -1,19 +1,3 @@
-function initializeFirebase() {
-  var firebaseConfig = {
-    apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
-    authDomain: "cyberdojo-a2a3e.firebaseapp.com",
-    databaseURL: "https://cyberdojo-a2a3e.firebaseio.com",
-    projectId: "cyberdojo-a2a3e",
-    storageBucket: "cyberdojo-a2a3e.appspot.com",
-    messagingSenderId: "938057332518",
-    appId: "1:938057332518:web:99c34da5abf1b1548533e7",
-    measurementId: "G-0EWJ1V40VX"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  //firebase.firestore().enablePersistence();
-}
-
 function getTeacherAccountStatus(pageType, classCode = "null") {
 
   var email = localStorage.getItem('email');
@@ -107,6 +91,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             else if (pageType == 'dashboard') {
               getProfileInfo();
               getClassData();
+              getWeekStudentAverageReactions_ALL_CLASSES()
             }
 
             else if(pageType == "student-requests"){
@@ -168,6 +153,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             console.log("executing");
             getProfileInfo();
             getClassData();
+            getWeekStudentAverageReactions_ALL_CLASSES()
           }
 
           else if(pageType == 'create-class'){
@@ -995,14 +981,16 @@ function getMeetings() {
 }
 
 function getAnnouncementForClass(code) {
-  firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
+  var _ref = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
+  
+  _ref.get().then(function(doc) {
     doc.forEach(snapshot => {
       var data = snapshot.data()
       var date = data["Date"]
       var message = data["Message"]
       var title = data["Title"]
-      var announcementId = data.id
-      console.log(announcementId)
+      var announcementId = snapshot.id
+      console.log("THING:" + announcementId)
 
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
@@ -1020,7 +1008,7 @@ function getAnnouncementForClass(code) {
                         display: -webkit-box;
                         -webkit-line-clamp: 1; / number of lines to show */
                         -webkit-box-orient: vertical;'>${message}</p>
-                        <h3><i class="fa fa-trash" aria-hidden="true"></i></h3>
+                        <h3><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}')"></i></h3>
 
 
                       </div>
@@ -1031,6 +1019,14 @@ function getAnnouncementForClass(code) {
 
       $(output).appendTo('#classAnnouncement')
     })
+  })
+}
+
+function deleteAnnouncement(id, classCode){
+  console.log(id)
+
+  firebase.firestore().collection("Classes").doc(classCode).collection("Announcements").doc(id).delete().then(() => {
+    window.location.reload()
   })
 }
 
@@ -1358,6 +1354,7 @@ function schedualMeeting(emailStudent, course, code, index) {
 
 function showGreat() {
   document.getElementById('studentTable').style.display = "none";
+  document.getElementById('allStudentsTable').style.display = "none";
   document.getElementById("doing-good-table-section").style.display = "initial";
   document.getElementById("meh-table-section").style.display = "none";
   document.getElementById("frustrated-table-section").style.display = "none";
@@ -1367,6 +1364,7 @@ function showGreat() {
 function showHelp() {
 
   document.getElementById('studentTable').style.display = "none";
+  document.getElementById('allStudentsTable').style.display = "none";
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "initial";
   document.getElementById("frustrated-table-section").style.display = "none";
@@ -1374,6 +1372,7 @@ function showHelp() {
 
 function showFrustrated() {
   document.getElementById('studentTable').style.display = "none";
+  document.getElementById('allStudentsTable').style.display = "none";
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "none";
   document.getElementById("frustrated-table-section").style.display = "initial";
@@ -1411,7 +1410,9 @@ function getEditData(code) {
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
     var course = data['Course']
-    var teacher = data['teacher']
+    var teacherNote = data['teachersNote']
+    var description = data['courseDescription']
+    var inactiveDays = data['max days inactive']
     output += `
 
     <h6>Edit Class Name</h6>
@@ -1436,7 +1437,7 @@ function getEditData(code) {
 
   <input type="text" class="form-control" value="${course}" aria-label="Username" aria-describedby="basic-addon1" name="editCourse" id="editCourse">
 </div>
-<h6>Edit Class Teacher</h6>
+<h6>Edit Class Description</h6>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
@@ -1445,8 +1446,21 @@ function getEditData(code) {
     </span>
   </div>
 
-  <input type="text" class="form-control" value="${teacher}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacher" id="editTeacher">
+  <input type="text" class="form-control" value="${description}" aria-label="Username" aria-describedby="basic-addon1" name="editDescription" id="editDescription">
 </div>
+
+<h6>Edit Teacher's Note</h6>
+
+<div class="input-group mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="basic-addon1">
+    <i class="fa fa-pencil" aria-hidden="true" onclick = "editTitle()"></i>
+    </span>
+  </div>
+
+  <input type="text" class="form-control" value="${teacherNote}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacherNote" id="editTeacherNote">
+</div>
+
 <h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
 
 <div class="input-group mb-3">
@@ -1454,7 +1468,7 @@ function getEditData(code) {
     <span class="input-group-text">Days</span>
     <span class="input-group-text">1-14</span>
   </div>
-  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays">
+  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" placeholder = ${inactiveDays}>
 </div>
 
 <p style = "color: red; font-weight: 700" id = "error-feedback-edit-class"></p>
@@ -1474,37 +1488,46 @@ function updateDetails(code) {
 
   var newName = document.getElementById('editName').value;
   var newCourse = document.getElementById('editCourse').value;
-  var newTeacher = document.getElementById('editTeacher').value;
+  var newDescription = document.getElementById('editDescription').value;
+  var teachersNote = document.getElementById('editTeacherNote').value;
   var maxDays = document.getElementById('maxDays').value;
   let maxDaysNum = parseInt(maxDays);
 
-  console.log(newName, newCourse, newTeacher, maxDays, maxDaysNum)
+  console.log(newName, newCourse, newDescription, maxDays, teachersNote)
 
-  if(newName, newCourse, newTeacher, maxDays != null && newName, newCourse, newTeacher, maxDays != ""){
+  if(newName, newCourse, newDescription, maxDaysNum, teachersNote != null && newName, newCourse, newDescription, maxDaysNum, teachersNote != ""){
 
-    var feedbackError = document.getElementById('error-feedback-edit-class');
+    if(maxDaysNum > 14){
+      var feedbackError = document.getElementById('error-feedback-edit-class');
 
-    feedbackError.innerHTML = ''
+      feedbackError.innerHTML = 'The max inactive days has to be less than or equal to 14 days'
+    } else {
+      var feedbackError = document.getElementById('error-feedback-edit-class');
 
-    firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
-      "class-name": newName,
-      "Course": newCourse,
-      "teacher": newTeacher,
-      "max days inactive": maxDaysNum,
+      feedbackError.innerHTML = ''
   
-    }).then(() => {
-      firebase.firestore().collection('Classes').doc(code).update({
+      firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
         "class-name": newName,
         "Course": newCourse,
-        "teacher": newTeacher,
+        "courseDescription": newDescription,
+        "teachersNote": teachersNote,
         "max days inactive": maxDaysNum,
-  
-  
+    
       }).then(() => {
-        window.location.reload()
+        firebase.firestore().collection('Classes').doc(code).update({
+          "class-name": newName,
+        "Course": newCourse,
+        "courseDescription": newDescription,
+        "teachersNote": teachersNote,
+        "max days inactive": maxDaysNum,
+    
+    
+        }).then(() => {
+          window.location.reload()
+        });
       });
-  
-    });
+    
+    }
 
   } else {
     console.log("Feilds blank")
