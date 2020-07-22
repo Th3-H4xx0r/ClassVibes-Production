@@ -999,6 +999,13 @@ function getAnnouncementForClass(code) {
       var announcementId = snapshot.id
       console.log("THING:" + announcementId)
 
+      if(index == 1){
+        var addAnnouncementButtonHTML = `
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style = 'float: right; margin-top:-4%'>Send Announcement</button>
+        `;
+        $(addAnnouncementButtonHTML).appendTo('#classAnnouncement')
+      }
+
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-success" style = 'height: max-content'>
@@ -1023,7 +1030,7 @@ function getAnnouncementForClass(code) {
 
                     </div>
       `
-
+      
       $(output).appendTo('#classAnnouncement')
     })
 
@@ -1035,6 +1042,9 @@ function getAnnouncementForClass(code) {
   <center style="margin-top: 1%;">
       <h2>No Announcements</h2>
       <p>Click Send Announcement to create a announcement</p>
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Send Announcement</button>
+
   </center>
       `;
 
@@ -1408,16 +1418,20 @@ function schedualMeeting(emailStudent, course, code, index) {
     "Timestamp": dateNow.toString(),
     "message" : meetingMessage,
     "len" : len
+  }).then(() => {
+    firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
+      "Title": meetingTitle,
+      "Date": meetingDate,
+      "Class": code,
+      "Timestamp": dateNow.toString(),
+      "message" : meetingMessage,
+      "len" : len
+    }).then(() => {
+      window.location.reload()
+    });
   });
 
-  firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
-    "Title": meetingTitle,
-    "Date": meetingDate,
-    "Class": code,
-    "Timestamp": dateNow.toString(),
-    "message" : meetingMessage,
-    "len" : len
-  });
+
 
 }
 
