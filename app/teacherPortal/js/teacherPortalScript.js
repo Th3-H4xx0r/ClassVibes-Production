@@ -973,14 +973,16 @@ function getMeetings() {
 }
 
 function getAnnouncementForClass(code) {
-  firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
+  var _ref = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
+  
+  _ref.get().then(function(doc) {
     doc.forEach(snapshot => {
       var data = snapshot.data()
       var date = data["Date"]
       var message = data["Message"]
       var title = data["Title"]
-      var announcementId = data.id
-      console.log(announcementId)
+      var announcementId = snapshot.id
+      console.log("THING:" + announcementId)
 
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
@@ -998,7 +1000,7 @@ function getAnnouncementForClass(code) {
                         display: -webkit-box;
                         -webkit-line-clamp: 1; / number of lines to show */
                         -webkit-box-orient: vertical;'>${message}</p>
-                        <h3><i class="fa fa-trash" aria-hidden="true"></i></h3>
+                        <h3><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}')"></i></h3>
 
 
                       </div>
@@ -1009,6 +1011,14 @@ function getAnnouncementForClass(code) {
 
       $(output).appendTo('#classAnnouncement')
     })
+  })
+}
+
+function deleteAnnouncement(id, classCode){
+  console.log(id)
+
+  firebase.firestore().collection("Classes").doc(classCode).collection("Announcements").doc(id).delete().then(() => {
+    window.location.reload()
   })
 }
 
