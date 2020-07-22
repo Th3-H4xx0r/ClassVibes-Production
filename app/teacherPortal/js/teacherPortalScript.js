@@ -86,6 +86,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
               getEditData(classCode);
               getAnnouncementForClass(classCode);
               getMeetingForClass(classCode);
+              showSendAnnouncementModal();
             }
 
             else if (pageType == 'dashboard') {
@@ -143,6 +144,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             getEditData(classCode);
             getAnnouncementForClass(classCode);
             getMeetingForClass(classCode);
+            showSendAnnouncementModal();
 
           }
           else if (pageType == 'dashboard') {
@@ -915,6 +917,8 @@ function writeAnnouncement() {
     "Message": messageText,
     "Date": formattedDate.toString(),
     "Timestamp": dateNow.toString(),
+  }).then(() => {
+    window.location.reload()
   });
 }
 
@@ -976,7 +980,10 @@ function getAnnouncementForClass(code) {
   var _ref = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
   
   _ref.get().then(function(doc) {
+    var index = 0;
+
     doc.forEach(snapshot => {
+      index = index + 1
       var data = snapshot.data()
       var date = data["Date"]
       var message = data["Message"]
@@ -1000,7 +1007,7 @@ function getAnnouncementForClass(code) {
                         display: -webkit-box;
                         -webkit-line-clamp: 1; / number of lines to show */
                         -webkit-box-orient: vertical;'>${message}</p>
-                        <h3><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}')"></i></h3>
+                        <h3><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
 
 
                       </div>
@@ -1011,7 +1018,69 @@ function getAnnouncementForClass(code) {
 
       $(output).appendTo('#classAnnouncement')
     })
+
+    if(index == 0){
+      var noAnnouncementsHTML = `
+      <div class="d-flex justify-content-center" style="margin-top: 10%;">
+      <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
+  </div>
+  <center style="margin-top: 1%;">
+      <h2>No Announcements</h2>
+      <p>Click Send Announcement to create a announcement</p>
+  </center>
+      `;
+
+      document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML
+    }
   })
+}
+
+function showSendAnnouncementModal(){
+  var modalHTML = `
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Send Announcement</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Recipient:</label>
+            <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
+              <label for="message-text" class="col-form-label">Class Number:</label>
+              <input class="form-control" id="numberClass" type="number"></input>
+            </div>
+          </div>
+      </div>
+      <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
+        <label for="message-text" class="col-form-label">Title:</label>
+        <input class="form-control" id="messageTitle"></input>
+      </div>
+      <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
+        <label for="message-text" class="col-form-label">Message:</label>
+        <textarea class="form-control" id="messageText"></textarea>
+      </div>
+      <center>
+        <div style="height: 30px;"></div>
+        <button class="btn btn-primary" onclick="writeAnnouncement()" data-dismiss="modal" style="width: 200px;">Send
+          Announcement</button>
+          <div style="height: 30px;"></div>
+      </center>
+      </form>
+     
+    </div>
+   
+    
+  </div>
+</div>
+  `;
+
+  $(modalHTML).appendTo('#page-top')
 }
 
 function deleteAnnouncement(id, classCode){
