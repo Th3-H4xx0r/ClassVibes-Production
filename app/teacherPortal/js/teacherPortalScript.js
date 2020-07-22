@@ -1476,31 +1476,37 @@ function updateDetails(code) {
 
   if(newName, newCourse, newDescription, maxDaysNum, teachersNote != null && newName, newCourse, newDescription, maxDaysNum, teachersNote != ""){
 
-    var feedbackError = document.getElementById('error-feedback-edit-class');
+    if(maxDaysNum > 14){
+      var feedbackError = document.getElementById('error-feedback-edit-class');
 
-    feedbackError.innerHTML = ''
+      feedbackError.innerHTML = 'The max inactive days has to been less than 14'
+    } else {
+      var feedbackError = document.getElementById('error-feedback-edit-class');
 
-    firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
-      "class-name": newName,
-      "Course": newCourse,
-      "courseDescription": newDescription,
-      "teachersNote": teachersNote,
-      "max days inactive": maxDaysNum,
+      feedbackError.innerHTML = ''
   
-    }).then(() => {
-      firebase.firestore().collection('Classes').doc(code).update({
+      firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
         "class-name": newName,
-      "Course": newCourse,
-      "courseDescription": newDescription,
-      "teachersNote": teachersNote,
-      "max days inactive": maxDaysNum,
-  
-  
+        "Course": newCourse,
+        "courseDescription": newDescription,
+        "teachersNote": teachersNote,
+        "max days inactive": maxDaysNum,
+    
       }).then(() => {
-        window.location.reload()
+        firebase.firestore().collection('Classes').doc(code).update({
+          "class-name": newName,
+        "Course": newCourse,
+        "courseDescription": newDescription,
+        "teachersNote": teachersNote,
+        "max days inactive": maxDaysNum,
+    
+    
+        }).then(() => {
+          window.location.reload()
+        });
       });
-  
-    });
+    
+    }
 
   } else {
     console.log("Feilds blank")
