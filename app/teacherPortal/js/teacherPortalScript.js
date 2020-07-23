@@ -1077,7 +1077,7 @@ function showSendAnnouncementModal(){
       </div>
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Title:</label>
-        <input class="form-control" id="messageTitle"></input>
+        <input class="form-control" id="messageTitle" maxlength="100"></input>
       </div>
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Message:</label>
@@ -1386,11 +1386,11 @@ function getStudentData(code) {
                   <form>
                   <div class="form-group">
                       <label for="recipient-name" class="col-form-label">Title:</label>
-                      <input type="text" class="form-control" id="title1${i}">
+                      <input type="text" class="form-control" id="title1${i}" maxlength="100">
                   </div>
                   <div class="form-group">
                       <label for="recipient-name" class="col-form-label">Date/Time</label>
-                      <input type="text" class="form-control" id="date${i}">
+                      <input type="text" class="form-control" id="date${i}" maxlength="60">
                   </div>
                   <div class="form-group">
                       <label for="recipient-name" class="col-form-label">Message</label>
@@ -1399,7 +1399,7 @@ function getStudentData(code) {
                   </div>
                   <div class="form-group">
                   <label for="recipient-name" class="col-form-label">Meeting Length</label>
-                  <input type="text" class="form-control" id="len${i}" textarea>
+                  <input type="text" class="form-control" id="len${i}" textarea >
                   </div>
                   <div class="form-group">
                       <label for="message-text" class="col-form-label">Student</label>
