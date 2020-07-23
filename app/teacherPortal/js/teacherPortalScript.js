@@ -1117,17 +1117,23 @@ function getMeetingForClass(code) {
       var name = user.displayName;
       var email = user.email;
 
+      var index = 0;
+
       firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
+          index  = index + 1
           var data = snapshot.data();
           var classForMeeting = data["Class"]
           var date = data["Date"];
           var title = data["Title"];
           var message = data["message"]
           var length = data["len"]
+          var recipient = data["Recipient"]
+
+          var meetingID = snapshot.id
 
           output = `
-          <section class="resume" style="margin-left: 0px;">
+          <section class="resume" style="margin-left: 20px;">
             <div class="row">
             <div class="col-lg-6" data-aos="fade-up">
                   <h3 class="resume-title">${date} </h3>
@@ -1136,8 +1142,8 @@ function getMeetingForClass(code) {
                     <h5>${length}</h5>
                     <p style="width: 100%">
                       ${message}
-
                     </p>
+                    <button type="button" class="btn btn-outline-danger" onclick = "cancelMeeting('${meetingID}', '${recipient}', '${classForMeeting}', '${message}', '${title}', '${email}', '${date}')">Cancel</button>
                   </div>
 
             </div>
@@ -1146,9 +1152,41 @@ function getMeetingForClass(code) {
 
             $(output).appendTo("#meetingsListforClassPage")
         })
+      }).then(() => {
+        if(index == 0){
+
+          var noMeetingsHTML = `
+    <center style="margin-top: 8%;">
+    <img src = '/teacher/img/undraw_checking_boxes_2ibd.svg' width="25%"/>
+  
+    <h1 style="margin-top: 20px;">No Meetings</h1>
+    <p>You do not have any scheduled meetings yet, go <br> to <strong> Sidebar > Classes > Class</strong> to schedule <br> meetings with your students</p>
+    </center>
+    `;
+          document.getElementById('meetingsListforClassPage').innerHTML = noMeetingsHTML;
+        }
       })
     }
   })
+}
+
+function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title, teacherEmail, date){
+  //Delete for Teacher
+  firebase.firestore().collection('UserData').doc(teacherEmail).collection('Meetings').doc(teacherMeetingID).delete().then(() => {
+
+  //Delete for Student
+  firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('Class', '==', meetingClass).where('Date', '==', date).where('Title', '==', title).get().then(snap => {
+    snap.forEach(doc => {
+      console.log(doc.data())
+      doc.ref.delete()
+    })
+  }).then(() => {
+    window.location.reload()
+  });
+
+  });
+
+
 }
 
 
@@ -1430,6 +1468,7 @@ function schedualMeeting(emailStudent, course, code, index) {
     "Course": course,
     "Timestamp": dateNow.toString(),
     "message" : meetingMessage,
+    "Recipient": emailStudent,
     "len" : len
   }).then(() => {
     firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
@@ -1439,6 +1478,7 @@ function schedualMeeting(emailStudent, course, code, index) {
       "Course": course,
       "Timestamp": dateNow.toString(),
       "message" : meetingMessage,
+      "Recipient": emailStudent,
       "len" : len
     }).then(() => {
       window.location.reload()
