@@ -842,7 +842,6 @@ function getMeetings(email, pageType) {
         var classForMeeting = meetingsData["Course"];
         var date = meetingsData["Date"];
         var title = meetingsData["Title"];
-  
 
         output = `
           <div class="col-xl-12 col-md-6 mb-4">
@@ -851,8 +850,13 @@ function getMeetings(email, pageType) {
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
                   <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">${title}</div>
-                  <h6 style = 'color: gray; font-weight: 700'>${date}</h6>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" style = 'overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 1;
+                  max-width: 25ch;
+                  -webkit-box-orient: vertical;'>${title}</div>
+                  <h6 style = 'color: gray; font-weight: 700; margin-top: 10px'>${date}</h6>
                 </div>
                 <div class="col-auto">
   
@@ -1014,7 +1018,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
                         <h5 style = 'overflow: hidden;
                         text-overflow: ellipsis;
-                        max-width: 35ch;
+                        max-width: 25ch;
                         display: -webkit-box;
                         -webkit-line-clamp: 1;
                         -webkit-box-orient: vertical;'>${title}</h5>
@@ -1023,7 +1027,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                         text-overflow: ellipsis;
                         display: -webkit-box;
                         -webkit-line-clamp: 1;
-                        max-width: 40ch;
+                        max-width: 30ch;
                         -webkit-box-orient: vertical;'>${message}</p>
 
                         
