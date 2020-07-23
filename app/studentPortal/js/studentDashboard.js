@@ -1012,15 +1012,18 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                       <div class="card-body">
                         <h4 class="badge badge-info">${nameClass}</h4>
 
-                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
+                        <h5 style = 'overflow: hidden;
+                        text-overflow: ellipsis;
+                        max-width: 35ch;
                         display: -webkit-box;
-                        -webkit-line-clamp: 1; /* number of lines to show */
-                        -webkit-box-orient: vertical;''>${title}</h5>
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;'>${title}</h5>
 
-                        <p style = '   overflow: hidden;
+                        <p style = 'overflow: hidden;
                         text-overflow: ellipsis;
                         display: -webkit-box;
-                        -webkit-line-clamp: 1; /* number of lines to show */
+                        -webkit-line-clamp: 1;
+                        max-width: 40ch;
                         -webkit-box-orient: vertical;'>${message}</p>
 
                         
