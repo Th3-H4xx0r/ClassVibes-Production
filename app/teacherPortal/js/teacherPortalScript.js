@@ -503,11 +503,13 @@ function getProfileInfo() {
 
 function getWeekStudentAverageReactions_ALL_CLASSES(){
 
-  var code = localStorage.getItem("graphClassCode") != null ? localStorage.getItem("graphClassCode") : "test";
+  var code = localStorage.getItem("graphClassCode") != null ? localStorage.getItem("graphClassCode") : "none";
 
   console.log(code)
 
   var getNewData = false;
+
+  document.getElementById('studentReportText').innerText = "Student Report - " + code
 
   firebase.firestore().collection("Classes-Cache").doc(code).get().then(doc => {
     var data = doc.data();
