@@ -75,6 +75,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             }
 
             else if(pageType == 'create-class'){
+              getProfileInfo();
               getClassDataDropdown();
             }
 
@@ -162,10 +163,12 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
           }
 
           else if(pageType == 'create-class'){
+            getProfileInfo();
             getClassDataDropdown();
           }
 
           else if(pageType == "announcementsTeacher"){
+            getProfileInfo();
             getAnnouncements(email);
           }
 
