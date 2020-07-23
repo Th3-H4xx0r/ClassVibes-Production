@@ -503,11 +503,13 @@ function getProfileInfo() {
 
 function getWeekStudentAverageReactions_ALL_CLASSES(){
 
-  var code = localStorage.getItem("graphClassCode") != null ? localStorage.getItem("graphClassCode") : "test";
+  var code = localStorage.getItem("graphClassCode") != null ? localStorage.getItem("graphClassCode") : "none";
 
   console.log(code)
 
   var getNewData = false;
+
+  document.getElementById('studentReportText').innerText = "Student Report - " + code
 
   firebase.firestore().collection("Classes-Cache").doc(code).get().then(doc => {
     var data = doc.data();
@@ -999,13 +1001,6 @@ function getAnnouncementForClass(code) {
       var announcementId = snapshot.id
       console.log("THING:" + announcementId)
 
-      if(index == 1){
-        var addAnnouncementButtonHTML = `
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style = 'float: right; margin-top:-4%'>Send Announcement</button>
-        `;
-        $(addAnnouncementButtonHTML).appendTo('#classAnnouncement')
-      }
-
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-success" style = 'height: max-content'>
@@ -1035,6 +1030,8 @@ function getAnnouncementForClass(code) {
     })
 
     if(index == 0){
+
+      document.getElementById('send_announcement_top_classPage').style.display = 'none'
       var noAnnouncementsHTML = `
       <div class="d-flex justify-content-center" style="margin-top: 10%;">
       <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
@@ -1115,17 +1112,25 @@ function getMeetingForClass(code) {
       var name = user.displayName;
       var email = user.email;
 
+      var index = 0;
+
+      document.getElementById('meetingsListforClassPage').innerHTML = '';
+
       firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
+          index  = index + 1
           var data = snapshot.data();
           var classForMeeting = data["Class"]
           var date = data["Date"];
           var title = data["Title"];
           var message = data["message"]
           var length = data["len"]
+          var recipient = data["Recipient"]
+
+          var meetingID = snapshot.id
 
           output = `
-          <section class="resume" style="margin-left: 0px;">
+          <section class="resume" style="margin-left: 20px;">
             <div class="row">
             <div class="col-lg-6" data-aos="fade-up">
                   <h3 class="resume-title">${date} </h3>
@@ -1134,8 +1139,8 @@ function getMeetingForClass(code) {
                     <h5>${length}</h5>
                     <p style="width: 100%">
                       ${message}
-
                     </p>
+                    <button type="button" class="btn btn-outline-danger" onclick = "cancelMeeting('${meetingID}', '${recipient}', '${classForMeeting}', '${message}', '${title}', '${email}', '${date}')">Cancel</button>
                   </div>
 
             </div>
@@ -1144,9 +1149,41 @@ function getMeetingForClass(code) {
 
             $(output).appendTo("#meetingsListforClassPage")
         })
+      }).then(() => {
+        if(index == 0){
+
+          var noMeetingsHTML = `
+    <center style="margin-top: 8%;">
+    <img src = '/teacher/img/undraw_checking_boxes_2ibd.svg' width="25%"/>
+  
+    <h1 style="margin-top: 20px;">No Meetings</h1>
+    <p>You do not have any scheduled meetings yet, go <br> to <strong> Sidebar > Classes > Class</strong> to schedule <br> meetings with your students</p>
+    </center>
+    `;
+          document.getElementById('meetingsListforClassPage').innerHTML = noMeetingsHTML;
+        }
       })
     }
   })
+}
+
+function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title, teacherEmail, date){
+  //Delete for Teacher
+  firebase.firestore().collection('UserData').doc(teacherEmail).collection('Meetings').doc(teacherMeetingID).delete().then(() => {
+
+  //Delete for Student
+  firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('Class', '==', meetingClass).where('Date', '==', date).where('Title', '==', title).get().then(snap => {
+    snap.forEach(doc => {
+      console.log(doc.data())
+      doc.ref.delete()
+    })
+  }).then(() => {
+    getMeetingForClass(meetingClass)
+  });
+
+  });
+
+
 }
 
 
@@ -1292,7 +1329,7 @@ function getStudentData(code) {
             console.log(classInfoData)
     
             descriptionOutput2 = `
-          <tr>
+          <tr role = "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
@@ -1302,7 +1339,7 @@ function getStudentData(code) {
           `;
     
             happy_face_Column = `
-          <tr>
+          <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
@@ -1312,7 +1349,7 @@ function getStudentData(code) {
           `;
     
             meh_colum_face = `
-          <tr>
+          <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
@@ -1322,7 +1359,7 @@ function getStudentData(code) {
           `;
     
             frustrated_column_face = `
-          <tr>
+          <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
@@ -1428,6 +1465,7 @@ function schedualMeeting(emailStudent, course, code, index) {
     "Course": course,
     "Timestamp": dateNow.toString(),
     "message" : meetingMessage,
+    "Recipient": emailStudent,
     "len" : len
   }).then(() => {
     firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
@@ -1437,6 +1475,7 @@ function schedualMeeting(emailStudent, course, code, index) {
       "Course": course,
       "Timestamp": dateNow.toString(),
       "message" : meetingMessage,
+      "Recipient": emailStudent,
       "len" : len
     }).then(() => {
       window.location.reload()
