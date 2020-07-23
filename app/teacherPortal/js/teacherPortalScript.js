@@ -101,7 +101,10 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             }
 
             else if(pageType == "announcementsTeacher"){
+              getProfileInfo();
+              getClassDataDropdown();
               getAnnouncements(email);
+
             }
 
             else {
