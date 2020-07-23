@@ -1001,13 +1001,6 @@ function getAnnouncementForClass(code) {
       var announcementId = snapshot.id
       console.log("THING:" + announcementId)
 
-      if(index == 1){
-        var addAnnouncementButtonHTML = `
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style = 'float: right; margin-top:-4%'>Send Announcement</button>
-        `;
-        $(addAnnouncementButtonHTML).appendTo('#classAnnouncement')
-      }
-
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-success" style = 'height: max-content'>
@@ -1037,6 +1030,8 @@ function getAnnouncementForClass(code) {
     })
 
     if(index == 0){
+
+      document.getElementById('send_announcement_top_classPage').style.display = 'none'
       var noAnnouncementsHTML = `
       <div class="d-flex justify-content-center" style="margin-top: 10%;">
       <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
@@ -1119,6 +1114,8 @@ function getMeetingForClass(code) {
 
       var index = 0;
 
+      document.getElementById('meetingsListforClassPage').innerHTML = '';
+
       firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
           index  = index + 1
@@ -1181,7 +1178,7 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
       doc.ref.delete()
     })
   }).then(() => {
-    window.location.reload()
+    getMeetingForClass(meetingClass)
   });
 
   });
@@ -1332,7 +1329,7 @@ function getStudentData(code) {
             console.log(classInfoData)
     
             descriptionOutput2 = `
-          <tr>
+          <tr role = "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
@@ -1342,7 +1339,7 @@ function getStudentData(code) {
           `;
     
             happy_face_Column = `
-          <tr>
+          <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
@@ -1352,7 +1349,7 @@ function getStudentData(code) {
           `;
     
             meh_colum_face = `
-          <tr>
+          <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
@@ -1362,7 +1359,7 @@ function getStudentData(code) {
           `;
     
             frustrated_column_face = `
-          <tr>
+          <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td>Some Comment</td>
