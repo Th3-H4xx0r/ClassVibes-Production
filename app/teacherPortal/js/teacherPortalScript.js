@@ -111,7 +111,6 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             else {
               getClassData();
               getProfileInfo();
-              getChartData();
             }
 
           }
@@ -180,7 +179,6 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
           else {
             getClassData();
             getProfileInfo();
-            getChartData();
             getClassDataDropdown();
           }
 
@@ -895,18 +893,42 @@ function getClassData() {
                       
             
             `
-          $(output).appendTo("#topClassesSection");
+
+            
+
+            output5 = `
+            <a href="classes/${classCode}">
+            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 30px">
+                <div class="card-body">
+                  <div class="chart-pie pt-4 pb-2">
+                    <canvas id="myPieChart${classCode}"></canvas>
+                  </div>
+                  <div style="height: 30px"></div>
+                  <center>    <h5 class="card-title">${className}: ${classCode}</h5>
+                  </center>
+
+                </div>
+              </div>
+            </a>
+            `
+
+            
+          $(output5).appendTo("#topClassesSection");
           $(output2).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
           $(output4).appendTo("#classesDropdownGraphWeeklyReactions");
           $(output2).appendTo("#dropdown-sidebar");
+
+          
+          // Pie Chart Example
+          getChartData(classCode)
         }
       }
     }
   }).then(function () {
     if (document.getElementById('dashboard-section') != null) {
       document.getElementById('dashboard-section').style.display = "initial";
-      getChartData();
+      //getChartData(classCode);
     }
   })
 }
@@ -917,7 +939,6 @@ function setClassCode(classCode) {
 
 function storeClassforChart(code) {
   localStorage.setItem("codeForChart", code);
-  getChartData();
 }
 
 function writeAnnouncement() {
@@ -1680,15 +1701,14 @@ function updateDetails(code) {
 };
 
 
-function getChartData() {
+function getChartData(code) {
   
   //console.log("GETTING PIE CHART DEMO");
 
-  var code = localStorage.getItem("codeForChart");
 
       firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
 
-        document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
+        //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
 
         var studentsReactionLists = [0,0,0];
 
@@ -1718,7 +1738,7 @@ function getChartData() {
           Chart.defaults.global.defaultFontColor = '#858796';
           
           // Pie Chart Example
-          var ctx = document.getElementById("myPieChart");
+          var ctx = document.getElementById(`myPieChart${code}`);
           var myPieChart = new Chart(ctx, {
             type: 'doughnut',
             data: {

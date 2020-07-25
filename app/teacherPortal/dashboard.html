@@ -202,11 +202,16 @@
                 </form>
               </div>
             </li>
-
+            <div type="button" data-toggle="modal" data-target="#exampleModal" style="margin-top: 20px">
+              <h3><i class="fa fa-question" aria-hidden="true"></i>
+              </h3>
+            </div>
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->
+            
             <li class="nav-item dropdown no-arrow">
+              
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="displayName">Loading...</span>
@@ -258,18 +263,74 @@
 </div>
 
 <!-- Content Row -->
+<!--
+  
+-->
+
 <div class="row" id="topClassesSection">
 
 </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Legend</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card bg-success text-white shadow">
+          <div class="card-body">
+            Green: Doing Great
+          </div>
+
+        </div>
+        <div style="height: 10px;"></div>
+        <div class="card bg-warning text-white shadow">
+          <div class="card-body">
+            Yellow: Needs Help
+          </div>
+
+        </div>
+        <div style="height: 10px;"></div>
+
+        <div class="card bg-danger text-white shadow">
+          <div class="card-body">
+            Red: Frustrated
+          </div>
+
+        </div>
+        <div style="height: 10px;"></div>
+
+        <div class="card bg-secondary text-white shadow">
+          <div class="card-body">
+            Gray: Inactive
+          </div>
+
+        </div>
+        <div style="height: 10px;"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Content Row -->
 
-<div class="row">
+<!--
+  <div class="row">
 
   <div class="col-xl-8 col-lg-7">
     <div class="card shadow mb-4">
-      <!-- Card Header - Dropdown -->
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary" id = "studentReportText">Student Report</h6>
         <div class="dropdown no-arrow">
@@ -294,10 +355,8 @@
     </div>
   </div
 
-  <!-- Pie Chart -->
   <div class="col-xl-4 col-lg-5">
     <div class="card shadow mb-4">
-      <!-- Card Header - Dropdown -->
       <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary" id="studentReportHeadline">Student Report</h6>
         <div class="dropdown no-arrow">
@@ -312,32 +371,12 @@
           </div>
         </div>
       </div>
-      <!-- Card Body -->
       <div class="card-body">
         <div class="chart-pie pt-4 pb-2">
           <canvas id="myPieChart"></canvas>
         </div>
         <div style="height: 20px;"></div>
-        <!--
-            <center>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons" >
-              <label class="btn btn-primary active" onclick="showAll()">
-                  <input type="radio" name="options" id="allstudents" autocomplete="off" checked >
-                  All Students
-              </label>
-              <label class="btn btn-success" onclick="showGreat()">
-                  <input type="radio" name="options" id="great" autocomplete="off" > Doing Great
-              </label>
-              <label class="btn btn-warning" onclick="showHelp()">
-                  <input type="radio" name="options" id="help" autocomplete="off"> Needs Help
-              </label>
-              <label class="btn btn-danger" onclick="showFrustrated()">
-                  <input type="radio" name="options" id="frustrated" autocomplete="off">
-                  Frustrated
-              </label>
-          </div>
-          </center>
-          -->
+        
         <div class="mt-4 text-center small">
 
           <span class="mr-2">
@@ -395,17 +434,19 @@
       </form>
      
     </div>
+-->
    
     
-  </div>
-</div>
-
-
 </div>
 
 </div>
+</div>
+</div>
+</div>
 
-    <!-- Footer -->
+</div>
+
+    <!-- Footer
     <footer class="sticky-footer bg-white">
       <div class="container my-auto">
         <div class="copyright text-center my-auto" id = "footer-version-code">
@@ -413,6 +454,8 @@
         </div>
       </div>
     </footer>
+    -->
+    
     <!-- End of Footer -->
 
 </div>
