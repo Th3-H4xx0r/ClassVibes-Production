@@ -110,6 +110,13 @@
     font-size: 700;
 }
 
+.doing-well-icon{
+    color: green;
+}
+
+.doing-well-icon:hover{
+    color: rgb(14, 177, 14);
+}
 /*DROPDOWN*/
 
 
