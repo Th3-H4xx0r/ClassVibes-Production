@@ -295,6 +295,8 @@ async function getStudentClasses(studentUsername, pageType) {
 
   classesList = [];
 
+  var reactionsList = {}
+
   var index = 0;
 
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
@@ -305,7 +307,13 @@ async function getStudentClasses(studentUsername, pageType) {
 
     var classCode = classData["Code"];
 
+    var reaction = classData["Reaction"];
+
+    reactionsList[classCode] = reaction
+
     var className = "loading"
+
+    console.log(classData['Reaction'])
 
     var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
@@ -344,24 +352,77 @@ async function getStudentClasses(studentUsername, pageType) {
 
 
         index = index + 1
+      
+        console.log(reactionsList[classCode])
 
+        var reaction = reactionsList[classCode]
+
+        var buttonsGrid = ``;
+
+        if(reaction == 'good'){
+          buttonsGrid = `
+          
+          <a onclick = "updateReaction('good', '${classCode}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: green;"></i></a>
+
+          <a onclick = "updateReaction('meh', '${classCode}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('needs help', '${classCode}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+
+          `
+        } else if (reaction == "meh"){
+          buttonsGrid = `
+          
+          <a onclick = "updateReaction('good', '${classCode}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('meh', '${classCode}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: f6c23e;"></i></a>
+
+          <a onclick = "updateReaction('needs help', '${classCode}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+          `
+        } else if (reaction == "needs help"){
+          buttonsGrid = `
+          
+          <a onclick = "updateReaction('good', '${classCode}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('meh', '${classCode}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('needs help', '${classCode}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: red;"></i></a>
+
+          `
+        } else {
+          buttonsGrid = `
+          
+          <a onclick = "updateReaction('good', '${classCode}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: green;"></i></a>
+
+          <a onclick = "updateReaction('meh', '${classCode}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('needs help', '${classCode}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+
+          `
+        }
 
         output = `
-            <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                      <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                          <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">CLASS</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">${item}</div>
-                          </div>
-                          <div class="col-auto">
-                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
+        <div class="card bg-white text-black shadow">
+          <div class="card-body">
+            <div style="display: inline;">
+              <h4 style="margin-left:20px; padding-top: 2%;">${item}</h4>
+              
+              <section>
+                <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
+                     ${buttonsGrid}
+
+                </div>
+              </section>
+
+             
+            </div>
+            
+          </div>
+        </div>
+    </div>
             `;
 
 
@@ -428,10 +489,10 @@ async function getStudentClasses(studentUsername, pageType) {
 
 
 // FIRESTORE MIGRATED FULLY
-function updateReaction(reaction) {
-  var box = document.getElementById("moodBox");
+function updateReaction(reaction, classSelected) {
+  //var box = document.getElementById("moodBox");
 
-  box.innerHTML = '<center><div class="center-text">Response reported.</div><div><button class = "btn btn-primary" onclick = "reloadPage()">Update Response</button></div></center>';
+  //box.innerHTML = '<center><div class="center-text">Response reported.</div><div><button class = "btn btn-primary" onclick = "reloadPage()">Update Response</button></div></center>';
 
   var currentDate = new Date();
 
@@ -441,32 +502,33 @@ function updateReaction(reaction) {
       var studentEmail = user.email;
 
 
-      var classSelected = localStorage.getItem("selectedClassDropdown");
-
-
+      //var classSelected = localStorage.getItem("selectedClassDropdown");
 
       firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
         "Last Status Update": currentDate.toString(),
+        "Reaction": reaction
       }).then(() => {
+        firebase.firestore().collection("Classes").doc(classSelected).collection("Student Reactions").doc().set({
+          studentEmail: studentEmail,
+          reaction: reaction,
+          date: currentDate.toString(),
+          timestamp: currentDate.getTime().toString()
+        }).then(() => {
+          firebase.firestore().collection("Classes").doc(classSelected).collection("Students").doc(studentEmail).update({
+            reaction: reaction
+          });
+        
+          firebase.firestore().collection("UserData").doc(studentEmail).update({
+            reaction: reaction
+          }).then(() => {
+            window.location.reload()
+          });
+        });
       });
     
+
     
-      firebase.firestore().collection("Classes").doc(classSelected).collection("Student Reactions").doc().set({
-        studentEmail: studentEmail,
-        reaction: reaction,
-        date: currentDate.toString(),
-        timestamp: currentDate.getTime().toString()
-      });
-    
-      firebase.firestore().collection("Classes").doc(classSelected).collection("Students").doc(studentEmail).update({
-        reaction: reaction
-      });
-    
-      firebase.firestore().collection("UserData").doc(studentEmail).update({
-        reaction: reaction
-      });
-    
-      getStudentStatus(studentEmail);
+      //getStudentStatus(studentEmail);
     }
   })
 

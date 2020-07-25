@@ -87,7 +87,7 @@
       var email = user.email;
 
       getStudentClasses(email);
-      getStudentStatus(email);
+      //getStudentStatus(email);
       getMeetings(email, 'dashboard');
 
       getAnnouncements(email, 'dashboard');
@@ -277,118 +277,7 @@
           <section id="dashboardSection-content" style="display: none;">
 
   
-            <div class="row">
-
-              <div class="col-lg-6 mb-6" >
-                <div class="card bg-white text-black shadow">
-                  <div class="card-body">
-                    <div style="display: inline;">
-                      <h4 style="margin-left:20px; padding-top: 2%;">AP</h4>
-                      
-                      <section>
-                        <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
- 
-                          <i class="fas fa-smile" style="font-size: 50px; color: green;"></i>
-  
-                          <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i>
-  
-                          <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: red;"></i>
-  
-  
-  
-                        </div>
-                      </section>
-
-                     
-                    </div>
-                    
-                  </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6 mb-6" >
-              <div class="card bg-white text-black shadow">
-                <div class="card-body">
-                  <div style="display: inline;">
-                    <h4 style="margin-left:20px; padding-top: 2%;">AP</h4>
-                    
-                    <section>
-                      <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
-
-                        <i class="fas fa-smile" style="font-size: 50px; color: green;"></i>
-
-                        <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i>
-
-                        <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: red;"></i>
-
-
-
-                      </div>
-                    </section>
-
-                   
-                  </div>
-                  
-                </div>
-              </div>
-          </div>
-          <div class="col-lg-6 mb-6" >
-            <div class="card bg-white text-black shadow">
-              <div class="card-body">
-                <div style="display: inline;">
-                  <h4 style="margin-left:20px; padding-top: 2%;">AP</h4>
-                  
-                  <section>
-                    <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
-
-                      <i class="fas fa-smile" style="font-size: 50px; color: green;"></i>
-
-                      <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i>
-
-                      <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: red;"></i>
-
-
-
-                    </div>
-                  </section>
-
-                 
-                </div>
-                
-              </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6 mb-6" >
-          <div class="card bg-white text-black shadow">
-            <div class="card-body">
-              <div style="display: inline;">
-                <h4 style="margin-left:20px; padding-top: 2%;">AP</h4>
-                
-                <section>
-                  <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
-
-                    <i class="fas fa-smile" style="font-size: 50px; color: green;"></i>
-
-                    <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i>
-
-                    <i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: red;"></i>
-
-
-
-                  </div>
-                </section>
-
-               
-              </div>
-              
-            </div>
-          </div>
-      </div>
-          
-
-
-            </div>
+            <div class="row" id="classesRowDisplay"></div>
             <!--CLASSES SECTION-->
 
               <!--
