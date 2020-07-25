@@ -11,11 +11,6 @@ var io = require('socket.io')(http);
 ////////////////////////////////////////
 //----------GLOBAL VARIABLES -----------
 ////////////////////////////////////////
-var serverStatus = false;
-
-var alertTitleGlobal = null
-var alertMessageGlobal = null
-
 
 router.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/index.html'));
@@ -112,85 +107,6 @@ router.get('/serverdown',function(req,res){
 
   res.sendFile(path.join(__dirname+'/serverDown.html'));
 });
-
-
-
-
-
-/////////////////////////
-//FIREBBASE INIT
-/////////////////////////
-var firebaseConfig = {
-  apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
-  authDomain: "cyberdojo-a2a3e.firebaseapp.com",
-  databaseURL: "https://cyberdojo-a2a3e.firebaseio.com",
-  projectId: "cyberdojo-a2a3e",
-  storageBucket: "cyberdojo-a2a3e.appspot.com",
-  messagingSenderId: "938057332518",
-  appId: "1:938057332518:web:99c34da5abf1b1548533e7",
-  measurementId: "G-0EWJ1V40VX"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-/////////////////////////
-//LIVE SERVER STATUS
-/////////////////////////
-firebase.firestore().collection('Application Management').doc("ServerManagement").onSnapshot(function(result){
-
-
-
-  var data = result.data()["serversAreUp"];
-
-  if(data != false && data != null){
-    console.log("new server status")
-    serverStatus = true
-
-  } else {
-    console.log("new server status")
-    serverStatus = false
-  }
-
-  io.emit('serverStatus', serverStatus); 
-})
-
-/////////////////////////
-//LIVE SERVER ALERTS
-/////////////////////////
-firebase.firestore().collection('Application Management').doc("ServerAlerts").onSnapshot(function(result){
-
-  var data = result.data();
-
-  if(data == undefined || data == null){
-    alertTitleGlobal = null
-    alertMessageGlobal = null
-  } else {
-    console.log("new Alert")
-    alertTitleGlobal = data.alertTitle;
-    alertMessageGlobal = data.alertMessage;
-
-    io.emit('serverAlertMessage', {alertTitle: alertTitleGlobal, alertMessage: alertMessageGlobal}); 
-  }
-
-  
-})
-  
-
-
-/////////////////////////
-//CLIENT CONNECTION HANDLER
-/////////////////////////
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  io.emit('serverStatus', serverStatus); 
-  io.emit('serverAlertMessage', {alertTitle: alertTitleGlobal, alertMessage: alertMessageGlobal}); 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-
-
 
 
 
