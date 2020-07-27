@@ -1015,9 +1015,9 @@ function getAnnouncementForClass(code) {
     doc.forEach(snapshot => {
       index = index + 1
       var data = snapshot.data()
-      var date = data["Date"]
-      var message = data["Message"]
-      var title = data["Title"]
+      var date = data["timestamp"]
+      var message = data["message"]
+      var title = data["title"]
       var announcementId = snapshot.id
       console.log("THING:" + announcementId)
 
