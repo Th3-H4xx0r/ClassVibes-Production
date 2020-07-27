@@ -185,6 +185,7 @@ function getClassDataClassesPage(code){
     var teacherPicture = ""
     var teacherEmail = data['teacher email']
     var teacherNote = data['teachersNote']
+    console.log(data['max days inactive'])
     var grayTimelimit = data['max days inactive'] != undefined? data['max days inactive']: "Not Set"
 
     firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
@@ -717,6 +718,8 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
   classesList = [];
 
+  var classCodesList = []
+
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
   let classesRefGet = await classesRef.get();
   for(const doc of classesRefGet.docs){
@@ -735,6 +738,7 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
       }
     }).then(() => {
       classesList.push(className);
+      classCodesList.push(classCode)
     })
   }
 
@@ -753,14 +757,13 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
           if(pageType == 'class-page'){
             output2 = `
-            <a href = "${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
+            <a href = "${classCodesList[index]}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
             `;
           } else {
             output2 = `
             <a href = "/student/classes/${classCode}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
             `;
           }
-
 
       $(output2).appendTo("#classesListSideBar");
 
