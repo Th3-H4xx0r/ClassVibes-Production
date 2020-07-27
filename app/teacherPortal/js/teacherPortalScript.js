@@ -892,7 +892,7 @@ function getClassData() {
             
             output5 = `
             <a href="classes/${classCode}" style = 'text-decoration: none'>
-            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 20px; margin-bottom: 40px">
+            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2" id = "chartPie${classCode}">
                     <canvas id="myPieChart${classCode}"></canvas>
