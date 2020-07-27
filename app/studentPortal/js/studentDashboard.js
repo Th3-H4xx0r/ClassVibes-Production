@@ -137,8 +137,11 @@ function getGrayStudentStatus(email, classCode){
 }
 
 function getAnnouncementForClass(code) {
+  var announcementCount = 0;
+
   firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
     doc.forEach(snapshot => {
+      announcementCount = announcementCount + 1
       var data = snapshot.data()
       var date = data["date"]
       var message = data["message"]
@@ -171,7 +174,23 @@ function getAnnouncementForClass(code) {
 
       $(output).appendTo('#classAnnouncement')
     })
-  })
+
+  }).then(() => {
+      if(announcementCount == 0){
+        var noAnnouncementsHTML = `
+        <div class="d-flex justify-content-center" style="margin-top: 10%;">
+        <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
+    </div>
+    <center style="margin-top: 1%;">
+        <h2>No Announcements</h2>
+        <p>There aren't any announcements for this class</p>
+  
+    </center>
+        `
+
+        document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML;
+      }
+    })
 }
 
 function getClassDataClassesPage(code){
@@ -1156,10 +1175,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
        }, 1000)
     } 
     
-    
-    
     //////////////////////////////////////////////////////////////////////////////////////////
-    
     
     else {
       var announcementsCount = 0;
@@ -1170,7 +1186,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
         if (classcode != undefined && classcode != null) {
   
           firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date').get().then(function (doc) {
-  
   
             doc.forEach(snapshot => {
   

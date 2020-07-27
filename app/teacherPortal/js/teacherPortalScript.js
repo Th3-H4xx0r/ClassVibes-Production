@@ -943,10 +943,10 @@ function writeAnnouncement() {
   var formattedDate = dateNow.toLocaleString();
 
   firebase.firestore().collection("Classes").doc(numberClass).collection("Announcements").doc().set({
-    "Title": messageTitle,
-    "Message": messageText,
-    "Date": formattedDate.toString(),
-    "Timestamp": dateNow.toString(),
+    "title": messageTitle,
+    "message": messageText,
+    "date": dateNow,
+    "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
     window.location.reload()
   });
