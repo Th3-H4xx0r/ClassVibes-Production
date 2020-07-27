@@ -93,7 +93,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             else if (pageType == 'dashboard') {
               getProfileInfo();
               getClassData();
-              getWeekStudentAverageReactions_ALL_CLASSES()
+              //getWeekStudentAverageReactions_ALL_CLASSES()
             }
 
             else if(pageType == "student-requests"){
@@ -119,7 +119,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
       }
       //NOT IN A DISTRICT
       else {
-        var accountStatus = data['Account Status'];
+        var accountStatus = data['account status'];
 
         //ACCOUNT ACTIVE
         if (accountStatus == "Activated") {
@@ -158,7 +158,7 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             console.log("executing");
             getProfileInfo();
             getClassData();
-            getWeekStudentAverageReactions_ALL_CLASSES()
+            //getWeekStudentAverageReactions_ALL_CLASSES()
           }
 
           else if(pageType == 'create-class'){
@@ -253,7 +253,7 @@ function getStudentRequests(){
       firebase.firestore().collection('Classes').doc(classCode).get().then(function (doc) {
         var data = doc.data();
 
-        var className = data["class-name"]
+        var className = data["class name"]
 
         classesList.push([classCode, className])
 
@@ -832,8 +832,8 @@ function getClassData() {
 
       var data = snapshot.data();
 
-      var classCode = data["Code"];
-      var className = data["class-name"];
+      var classCode = data["class code"];
+      var className = data["class name"];
       classesList.push([classCode, className])
     });
 
@@ -898,7 +898,7 @@ function getClassData() {
 
             output5 = `
             <a href="classes/${classCode}">
-            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 30px">
+            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 30px; margin-bottom: 40px">
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2">
                     <canvas id="myPieChart${classCode}"></canvas>
@@ -1222,8 +1222,8 @@ function getClassDataDropdown() {
     doc.forEach(snapshot => {
       var data1 = snapshot.data();
 
-      var classCode = data1["Code"];
-      var className = data1["class-name"];
+      var classCode = data1["class code"];
+      var className = data1["class name"];
 
       classesList.push([classCode, className])
     });
@@ -1281,8 +1281,8 @@ function createClass() {
       var classCreator = localStorage.getItem("email")
     
       firebase.firestore().collection("UserData").doc(classCreator).collection("Classes").doc(code).set({
-        "Code": code,
-        "class-name": className,
+        "class code": code,
+        "class name": className,
         "Course": course,
         "teacher": teacher,
         "classImg": classImg,
@@ -1290,12 +1290,13 @@ function createClass() {
         "courseVideo": courseVideo,
         "teachersNote": teachersNote,
         "teacher email" : email,
+        "allow join": true
     
       });
     
       firebase.firestore().collection("Classes").doc(code).set({
-        "Code": code,
-        "class-name": className,
+        "class code": code,
+        "class name": className,
         "Course": course,
         "teacher": teacher,
         "classImg": classImg,
@@ -1303,6 +1304,8 @@ function createClass() {
         "courseVideo": courseVideo,
         "teachersNote": teachersNote,
         "teacher email" : email,
+        "allow join": true
+
 
     
       }).then(() => {
@@ -1322,7 +1325,7 @@ function getStudentData(code) {
   firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var data = doc.data();
 
-      className = data["class-name"];
+      className = data["class name"];
 
     }).then(() => {
       firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
@@ -1567,7 +1570,7 @@ function getEditData(code) {
 
 
   }).then((data) => {
-    var className = data['class-name'];
+    var className = data['class name'];
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
     var course = data['Course']
@@ -1668,7 +1671,7 @@ function updateDetails(code) {
       feedbackError.innerHTML = ''
   
       firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
-        "class-name": newName,
+        "class name": newName,
         "Course": newCourse,
         "courseDescription": newDescription,
         "teachersNote": teachersNote,
@@ -1676,7 +1679,7 @@ function updateDetails(code) {
     
       }).then(() => {
         firebase.firestore().collection('Classes').doc(code).update({
-          "class-name": newName,
+          "class name": newName,
         "Course": newCourse,
         "courseDescription": newDescription,
         "teachersNote": teachersNote,
@@ -1716,17 +1719,17 @@ function getChartData(code) {
 
             var data1 = snapshot.data();
 
-            var reaction = data1["reaction"];
+            var reaction = data1["status"];
 
-            if(reaction == "good"){
+            if(reaction == "doing great"){
               studentsReactionLists[0] = studentsReactionLists[0] + 1;
             }
     
-            if(reaction == "meh"){
+            if(reaction == "need help"){
               studentsReactionLists[1] = studentsReactionLists[1] + 1;
             }
     
-            if(reaction == "needs help"){
+            if(reaction == "frustrated"){
               studentsReactionLists[2] = studentsReactionLists[2] + 1;
             }
         });
@@ -1798,7 +1801,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
     var classData = doc.data();
 
-    var classCode = classData["Code"];
+    var classCode = classData["class code"];
 
     var className = "loading"
 
@@ -1806,7 +1809,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       var data = snap.data();
   
       if(data != null && data != undefined){
-          className = data['class-name'];
+          className = data['class name'];
       }
     }).then(() => {
       classesListCodes.push(classCode)
