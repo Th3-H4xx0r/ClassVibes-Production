@@ -851,7 +851,6 @@ function getClassData() {
 
         if (classData != null || classData != undefined) {
 
-          console.log("works");
           var className = classData[1];
           var classCode = classData[0];
 
@@ -890,28 +889,23 @@ function getClassData() {
             output4 = `
             <a class="dropdown-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeGraphReactionsCode('${classCode}', 'onclick')">${className.toString()}</a>
                         <div class="dropdown-divider"></div>
-                      
-            
             `
-
             
-
             output5 = `
-            <a href="classes/${classCode}">
-            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 30px; margin-bottom: 40px">
+            <a href="classes/${classCode}" style = 'text-decoration: none'>
+            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 20px; margin-bottom: 40px">
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2">
                     <canvas id="myPieChart${classCode}"></canvas>
                   </div>
                   <div style="height: 30px"></div>
-                  <center>    <h5 class="card-title">${className}: ${classCode}</h5>
+                  <center><h5 class="card-title">${className} <span class = 'badge badge-primary'>${classCode}</span></h5>
                   </center>
 
                 </div>
               </div>
             </a>
             `
-
             
           $(output5).appendTo("#topClassesSection");
           $(output2).appendTo("#classesOp");
