@@ -574,8 +574,19 @@ function checkIfClassCodeExists(addType) {
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var classCode = doc.data();
 
+      var allowJoin = classCode['allow join']
+
       if (classCode != null) {
-        exists = true;
+        if(allowJoin == true){
+          exists = true;
+        } else {
+          error.innerHTML = `
+          <div class="alert alert-danger" role="alert" style="width: 310px;">
+          This class isn't currently accepting students
+         </div>
+         `;
+        }
+        
 
       } else {
         exists = false;
