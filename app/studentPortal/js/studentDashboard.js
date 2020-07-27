@@ -72,7 +72,7 @@ function getGrayStudentStatus(email, classCode){
 
     var data = snapshot.data();
 
-    var className = data["class-name"];
+    var className = data["class name"];
 
     var greyTimeLimit = data['max days inactive'];
 
@@ -140,26 +140,29 @@ function getAnnouncementForClass(code) {
   firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
     doc.forEach(snapshot => {
       var data = snapshot.data()
-      var date = data["Date"]
-      var message = data["Message"]
-      var title = data["Title"]
+      var date = data["date"]
+      var message = data["message"]
+      var title = data["title"]
+
+      var formattedDate = new Date(date.seconds*1000).toLocaleString() 
 
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-success" style = 'height: max-content'>
                       <div class="card-body">
-                        <h4 class="badge badge-info">${date}</h4>
 
-                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
+                        <h4 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis; margin-top: 10px;
                         display: -webkit-box;
                         -webkit-line-clamp: 1; /* number of lines to show /
-                        -webkit-box-orient: vertical;''>${title}</h5>
+                        -webkit-box-orient: vertical;''>${title}</h4>
 
                         <p style = '   overflow: hidden;
                         text-overflow: ellipsis;
                         display: -webkit-box;
                         -webkit-line-clamp: 1; / number of lines to show */
                         -webkit-box-orient: vertical;'>${message}</p>
+
+                        <h3 style = 'font-size: 15px'>${formattedDate}</h3>
                       </div>
                     </div>
 
@@ -175,7 +178,7 @@ function getClassDataClassesPage(code){
   firebase.firestore().collection("Classes").doc(code).get().then(snap => {
     var data = snap.data();
 
-    var className = data['class-name']
+    var className = data['class name']
     var course = data['Course']
     var courseDescription = data["courseDescription"]
     var teacherName = ""
@@ -309,21 +312,21 @@ async function getStudentClasses(studentUsername, pageType) {
 
     var classData = doc.data();
 
-    var classCode = classData["Code"];
+    var classCode = classData["code"];
 
-    var reaction = classData["Reaction"];
+    var reaction = classData["status"];
 
     reactionsList[classCode] = reaction
 
     var className = "loading"
 
-    console.log(classData['Reaction'])
+    console.log(classData['status'])
 
     var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
   
       if(data != null && data != undefined){
-          className = data['class-name'];
+          className = data['class name'];
       }
     }).then(() => {
       
@@ -363,45 +366,45 @@ async function getStudentClasses(studentUsername, pageType) {
 
         var buttonsGrid = ``;
 
-        if(reaction == 'good'){
+        if(reaction == 'doing great'){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('good', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
 
-          <a onclick = "updateReaction('meh', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
-          <a onclick = "updateReaction('needs help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
 
           `
-        } else if (reaction == "meh"){
+        } else if (reaction == "need help"){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('good', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
 
-          <a onclick = "updateReaction('meh', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
 
-          <a onclick = "updateReaction('needs help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
           `
-        } else if (reaction == "needs help"){
+        } else if (reaction == "frustrated"){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('good', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
 
-          <a onclick = "updateReaction('meh', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
-          <a onclick = "updateReaction('needs help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
 
           `
         } else {
           buttonsGrid = `
           
-          <a onclick = "updateReaction('good', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
 
-          <a onclick = "updateReaction('meh', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
-          <a onclick = "updateReaction('needs help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
 
           `
@@ -510,20 +513,20 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
 
       firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
         "Last Status Update": currentDate.toString(),
-        "Reaction": reaction
+        "status": reaction
       }).then(() => {
         firebase.firestore().collection("Classes").doc(classSelected).collection("Student Reactions").doc().set({
           studentEmail: studentEmail,
-          reaction: reaction,
+          status: reaction,
           date: currentDate.toString(),
           timestamp: currentDate.getTime().toString()
         }).then(() => {
           firebase.firestore().collection("Classes").doc(classSelected).collection("Students").doc(studentEmail).update({
-            reaction: reaction
+            status: reaction
           });
         
           firebase.firestore().collection("UserData").doc(studentEmail).update({
-            reaction: reaction
+            status: reaction
           }).then(() => {
             getStudentClasses(studentUsername, pageType)
           });
@@ -671,11 +674,12 @@ function addClassToStudentData(classCode) {
       var email = user.email;
 
       firebase.firestore().collection("Classes").doc(classCode).get().then(function (doc) {
-        var classNamE = doc.data()['class-name'];
+
+        var classNamE = doc.data()['class name'];
     
         firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(classCode).set({
-          'Code': classCode.toString(),
-          'class-name': classNamE,
+          'code': classCode.toString(),
+          'class name': classNamE,
         });
     
         firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
@@ -706,7 +710,7 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
     var classData = doc.data();
 
-    var classCode = classData["Code"];
+    var classCode = classData["code"];
 
     var className = "loading"
 
@@ -714,7 +718,7 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
       var data = snap.data();
   
       if(data != null && data != undefined){
-          className = data['class-name'];
+          className = data['class name'];
       }
     }).then(() => {
       classesList.push(className);
@@ -764,7 +768,7 @@ function getStudentContactsList(studentUsername) {
 
     if (snapshot.val() != null) {
       snapshot.forEach((child) => {
-        var className = child.child("class-name").val();
+        var className = child.child("class name").val();
 
         classesListContacts.push(className);
 
@@ -807,18 +811,18 @@ function getStudentStatus(studentEmail) {
   var page = document.getElementById('currentStatusSection');
 
   firebase.firestore().collection('UserData').doc(studentEmail).get().then(function (doc) {
-    var value = doc.data()["reaction"];
+    var value = doc.data()["status"];
 
     if (value != undefined) {
-      if (value == "needs help") {
+      if (value == "frustrated") {
         page.innerHTML = `<h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;" >&#128545;</h1>`;
       }
 
-      if (value == "meh") {
+      if (value == "need help") {
         page.innerHTML = `<h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;" style="color: yellow;">&#128533;</h1>`;
       }
 
-      if (value == "good") {
+      if (value == "doing great") {
         page.innerHTML = `<h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;" style="color: green;">&#128513;</h1>`;
       }
     } else {
@@ -1030,7 +1034,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
     var classData = doc.data();
 
-    var classCode = classData["Code"];
+    var classCode = classData["code"];
 
     var className = "loading"
 
@@ -1038,7 +1042,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       var data = snap.data();
   
       if(data != null && data != undefined){
-          className = data['class-name'];
+          className = data['class name'];
       }
     }).then(() => {
       classesListCodes.push(classCode)
@@ -1055,7 +1059,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy("Timestamp").limitToLast(3).get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy("date").limitToLast(3).get().then(function (doc) {
   
   
             doc.forEach(snapshot => {
@@ -1068,9 +1072,11 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 announcementsCount += 1;
 
   
-                var title = annoucementData["Title"];
-                var message = annoucementData["Message"];
-                var date = annoucementData['Date'];
+                var title = annoucementData["title"];
+                var message = annoucementData["message"];
+                var date = annoucementData['date'];
+                var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+        
 
   
                 var nameClass = classnamesList[i];
@@ -1147,7 +1153,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date').get().then(function (doc) {
   
   
             doc.forEach(snapshot => {
@@ -1160,9 +1166,12 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 announcementsCount += 1;
   
   
-                var title = annoucementData["Title"];
-                var message = annoucementData["Message"];
-                var date = annoucementData['Date'];
+                var title = annoucementData["title"];
+                var message = annoucementData["message"];
+                var date = annoucementData['date'];
+
+                var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+
   
                 var nameClass = classnamesList[i];
   
@@ -1178,7 +1187,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
                         <p style = 'color: gray'>${message}</p>
   
-                        <div class="h6 mb-0" style = "color: #a2a39b">${date}</div>
+                        <div class="h6 mb-0" style = "color: #a2a39b">${formattedDate}</div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
