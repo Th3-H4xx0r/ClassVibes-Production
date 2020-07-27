@@ -522,7 +522,8 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
           timestamp: currentDate.getTime().toString()
         }).then(() => {
           firebase.firestore().collection("Classes").doc(classSelected).collection("Students").doc(studentEmail).update({
-            status: reaction
+            status: reaction,
+            "date": new Date()
           });
         
           firebase.firestore().collection("UserData").doc(studentEmail).update({
