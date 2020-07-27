@@ -38,7 +38,7 @@ function facebookLoginStudent() {
 
         firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
             if (doc.exists) {
-                var accountType = doc.data()["Account Type"];
+                var accountType = doc.data()["account type"];
 
 
                 if (accountType != null) {
@@ -108,7 +108,7 @@ function facebookLoginDistrict() {
 
         firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
-            var accountType = doc.data()["Account Type"];
+            var accountType = doc.data()["account type"];
 
             if (accountType != null) {
                 if (accountType == "District") {
@@ -175,7 +175,7 @@ function facebookLoginTeacher() {
 
         firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
-            var accountType = doc.data()['Account Type'];
+            var accountType = doc.data()['account type'];
 
 
             if (accountType != null) {
@@ -247,9 +247,9 @@ googleSignInStudent = () => {
 
             console.log("data from doc : ", doc.data());
 
-            var accountType = doc.data()['Account Type'];
+            var accountType = doc.data()['account type'];
 
-            console.log("Document data:", doc.data()["Account Type"]);
+            console.log("Document data:", doc.data()["account type"]);
 
             if (accountType != null) {
                 if (accountType == "Student") {
@@ -313,10 +313,10 @@ googleSignInTeacher = () => {
 
             console.log("data from doc : ", doc.data());
 
-            var accountType = doc.data()['Account Type'];
+            var accountType = doc.data()['account type'];
 
             if (doc.exists) {
-                console.log("Document data:", doc.data()["Account Type"]);
+                console.log("Document data:", doc.data()["account type"]);
 
                 if (accountType != null) {
                     if (accountType == "Teacher" || accountType == 'Solo Teacher') {
@@ -393,7 +393,7 @@ googleSignInDistrict = () => {
             var accountType = "";
 
             if (doc.exists) {
-                accountType = doc.data()["Account Type"];
+                accountType = doc.data()["account type"];
                 // console.log("Document data:", doc.data()["Account Type"]);
             } else {
                 // doc.data() will be undefined in this case
@@ -538,11 +538,11 @@ function emailSignUp(type) {
                     if (type == "student") {
 
                         firebase.firestore().collection("UserData").doc(email).set({
-                            "display-name": displayName,
+                            "display name": displayName,
                             "email": email,
                             "username": email,
-                            "Account Type": "Student",
-                            "Account Status": "Deactivated",
+                            "account type": "Student",
+                            "account status": "Deactivated",
                         });
 
                         const increment = firebase.firestore.FieldValue.increment(1);
@@ -555,11 +555,11 @@ function emailSignUp(type) {
 
                     else if (type == 'teacher' || type == 'Solo Teacher') {
                         firebase.firestore().collection("UserData").doc(email).set({
-                            "display-name": displayName,
+                            "display name": displayName,
                             "email": email,
                             "username": email,
-                            "Account Type": "Teacher",
-                            "Account Status": "Deactivated",
+                            "account type": "Teacher",
+                            "account status": "Deactivated",
                         });
 
                         const increment = firebase.firestore.FieldValue.increment(1);
@@ -572,11 +572,11 @@ function emailSignUp(type) {
 
                     else if (type == 'district') {
                         firebase.firestore().collection("UserData").doc(email).set({
-                            "display-name": displayName,
+                            "display name": displayName,
                             "email": email,
                             "username": email,
-                            "Account Type": "District",
-                            "Account Status": "Deactivated",
+                            "account type": "District",
+                            "account status": "Deactivated",
                         });
 
                         const increment = firebase.firestore.FieldValue.increment(1);
@@ -635,11 +635,11 @@ facebookSignUp = (type) => {
                 if (type == "student") {
 
                     firebase.firestore().collection("UserData").doc(email).set({
-                        "display-name": displayName,
+                        "display name": displayName,
                         "email": email,
                         "username": email,
-                        "Account Type": "Student",
-                        "Account Status": "Deactivated",
+                        "account type": "Student",
+                        "account status": "Deactivated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -652,11 +652,11 @@ facebookSignUp = (type) => {
 
                 else if (type == 'teacher' || type == 'Solo Teacher') {
                     firebase.firestore().collection("UserData").doc(email).set({
-                        "display-name": displayName,
+                        "display name": displayName,
                         "email": email,
                         "username": email,
-                        "Account Type": "Teacher",
-                        "Account Status": "Deactivated",
+                        "account type": "Teacher",
+                        "account status": "Deactivated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -670,11 +670,11 @@ facebookSignUp = (type) => {
                 else if (type == 'district') {
 
                     firebase.firestore().collection("UserData").doc(email).set({
-                        "display-name": displayName,
+                        "display name": displayName,
                         "email": email,
                         "username": email,
-                        "Account Type": "District",
-                        "Account Status": "Deactivated",
+                        "account type": "District",
+                        "account status": "Deactivated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -752,11 +752,11 @@ googleSignUp = (type) => {
                 if (type == "student") {
 
                     firebase.firestore().collection("UserData").doc(email).set({
-                        "display-name": displayName,
+                        "display name": displayName,
                         "email": email,
                         "username": email,
-                        "Account Type": "Student",
-                        "Account Status": "Deactivated",
+                        "account type": "Student",
+                        "account status": "Deactivated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -769,11 +769,11 @@ googleSignUp = (type) => {
 
                 else if (type == 'teacher' || type == 'Solo Teacher') {
                     firebase.firestore().collection("UserData").doc(email).set({
-                        "display-name": displayName,
+                        "display name": displayName,
                         "email": email,
                         "username": email,
-                        "Account Type": "Teacher",
-                        "Account Status": "Deactivated",
+                        "account type": "Teacher",
+                        "account status": "Deactivated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -787,11 +787,11 @@ googleSignUp = (type) => {
                 else if (type == 'district') {
 
                     firebase.firestore().collection("UserData").doc(email).set({
-                        "display-name": displayName,
+                        "display name": displayName,
                         "email": email,
                         "username": email,
-                        "Account Type": "District",
-                        "Account Status": "Deactivated",
+                        "account type": "District",
+                        "account status": "Deactivated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -854,7 +854,7 @@ function loginWithEmailStudent() {
 
         if (authValid == true) {
             firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
-                var accountType = doc.data()['Account Type'];
+                var accountType = doc.data()['account type'];
 
                 console.log(accountType);
 
@@ -932,7 +932,7 @@ function loginWithEmailTeacher() {
 
             firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
-                var accountType = doc.data()['Account Type'];
+                var accountType = doc.data()['account type'];
 
 
                 if (doc.exists) {
@@ -1020,7 +1020,7 @@ function loginWithEmailDistrict() {
 
             firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
-                var accountType = doc.data()["Account Type"];
+                var accountType = doc.data()["account type"];
 
                 if (accountType != null) {
                     if (accountType == "District") {
@@ -1069,7 +1069,7 @@ function getProfileName(email){
     firebase.firestore().collection("UserData").doc(email).get().then(function (doc) {
         var data = doc.data();
 
-        var name = data["display-name"];
+        var name = data["display name"];
 
         localStorage.setItem("name", name);
     });
