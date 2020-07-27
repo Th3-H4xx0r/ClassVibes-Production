@@ -697,6 +697,7 @@ function addClassToStudentData(classCode) {
         firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
           'name': name,
           'email': email,
+          'date': new Date(),
         });
     
       }).then(() => {
