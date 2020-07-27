@@ -886,16 +886,15 @@ function getClassData() {
                         <div class="dropdown-divider"></div>
             `
 
-            output4 = `
-            <a class="dropdown-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeGraphReactionsCode('${classCode}', 'onclick')">${className.toString()}</a>
-                        <div class="dropdown-divider"></div>
-            `
+            //output4 = `
+           // <a class="dropdown-item" href="#" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;' onclick = "storeGraphReactionsCode('${classCode}', 'onclick')">${className.toString()}</a>
+              // <div class="dropdown-divider"></div>`
             
             output5 = `
             <a href="classes/${classCode}" style = 'text-decoration: none'>
             <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 20px; margin-bottom: 40px">
                 <div class="card-body">
-                  <div class="chart-pie pt-4 pb-2">
+                  <div class="chart-pie pt-4 pb-2" id = "chartPie${classCode}">
                     <canvas id="myPieChart${classCode}"></canvas>
                   </div>
                   <div style="height: 30px"></div>
@@ -910,7 +909,7 @@ function getClassData() {
           $(output5).appendTo("#topClassesSection");
           $(output2).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
-          $(output4).appendTo("#classesDropdownGraphWeeklyReactions");
+          //$(output4).appendTo("#classesDropdownGraphWeeklyReactions");
           $(output2).appendTo("#dropdown-sidebar");
 
           
@@ -1273,38 +1272,46 @@ function createClass() {
       var courseVideo = localStorage.getItem("videoLink");
       var teachersNote = document.getElementById("teachersNote").value;
       var classCreator = localStorage.getItem("email")
-    
-      firebase.firestore().collection("UserData").doc(classCreator).collection("Classes").doc(code).set({
-        "class code": code,
-        "class name": className,
-        "Course": course,
-        "teacher": teacher,
-        "classImg": classImg,
-        "courseDescription": courseDescription,
-        "courseVideo": courseVideo,
-        "teachersNote": teachersNote,
-        "teacher email" : email,
-        "allow join": true
-    
-      });
-    
-      firebase.firestore().collection("Classes").doc(code).set({
-        "class code": code,
-        "class name": className,
-        "Course": course,
-        "teacher": teacher,
-        "classImg": classImg,
-        "courseDescription": courseDescription,
-        "courseVideo": courseVideo,
-        "teachersNote": teachersNote,
-        "teacher email" : email,
-        "allow join": true
+      var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
+      var maxInactiveDays = Number(maxInactiveDaysInput)
 
-
+      if(maxInactiveDays <= 14){
     
-      }).then(() => {
-        window.location = "dashboard.html"
-      });
+        firebase.firestore().collection("UserData").doc(classCreator).collection("Classes").doc(code).set({
+          "class code": code,
+          "class name": className,
+          "Course": course,
+          "teacher": teacher,
+          "classImg": classImg,
+          "courseDescription": courseDescription,
+          "courseVideo": courseVideo,
+          "teachersNote": teachersNote,
+          "teacher email" : email,
+          "allow join": true
+      
+        });
+      
+        firebase.firestore().collection("Classes").doc(code).set({
+          "class code": code,
+          "class name": className,
+          "Course": course,
+          "teacher": teacher,
+          "classImg": classImg,
+          "courseDescription": courseDescription,
+          "courseVideo": courseVideo,
+          "teachersNote": teachersNote,
+          "teacher email" : email,
+          "allow join": true
+  
+  
+      
+        }).then(() => {
+          window.location = "dashboard.html"
+        });
+      } else {
+        document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
+      }
+
 }
 })
 }
@@ -1702,6 +1709,8 @@ function getChartData(code) {
   
   //console.log("GETTING PIE CHART DEMO");
 
+  var index = 0;
+
 
       firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
 
@@ -1710,7 +1719,7 @@ function getChartData(code) {
         var studentsReactionLists = [0,0,0];
 
         doc.forEach(snapshot => {
-
+          index = index + 1
             var data1 = snapshot.data();
 
             var reaction = data1["status"];
@@ -1728,43 +1737,56 @@ function getChartData(code) {
             }
         });
         setTimeout(function(){
-          console.log(studentsReactionLists);
+
+          if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0){
+
+            var noStudentsHTML = `
+            <center style = 'margin-top: 10%'>
+              <img src = 'img/undraw_empty_xct9.svg' width = "50%" />
+              <h3 style = 'margin-top: 10px'>No Students</h3>
+            </center>
+            `;
+
+            document.getElementById(`chartPie${code}`).innerHTML = noStudentsHTML;
+          } else {
+  // Set new default font family and font color to mimic Bootstrap's default styling
+  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  Chart.defaults.global.defaultFontColor = '#858796';
+  
+  // Pie Chart Example
+  var ctx = document.getElementById(`myPieChart${code}`);
+  var myPieChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ["Doing Great", "Needs Help", "Frustrated"],
+      datasets: [{
+        data: studentsReactionLists,
+        backgroundColor: ['#4feb34', '#ebe834', '#eb0c00'],
+        hoverBackgroundColor: ['#15b809', '#c2cc00', '#cc0011'],
+        hoverBorderColor: "rgba(234, 236, 244, 1)",
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+      },
+      legend: {
+        display: false
+      },
+      cutoutPercentage: 80,
+    },
+  });
+          }
     
-          // Set new default font family and font color to mimic Bootstrap's default styling
-          Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-          Chart.defaults.global.defaultFontColor = '#858796';
-          
-          // Pie Chart Example
-          var ctx = document.getElementById(`myPieChart${code}`);
-          var myPieChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-              labels: ["Doing Great", "Needs Help", "Frustrated"],
-              datasets: [{
-                data: studentsReactionLists,
-                backgroundColor: ['#4feb34', '#ebe834', '#eb0c00'],
-                hoverBackgroundColor: ['#15b809', '#c2cc00', '#cc0011'],
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-              }],
-            },
-            options: {
-              maintainAspectRatio: false,
-              tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10,
-              },
-              legend: {
-                display: false
-              },
-              cutoutPercentage: 80,
-            },
-          });
+        
        }, 700);
     });
 }
