@@ -1302,7 +1302,7 @@ function createClass() {
           "courseVideo": courseVideo,
           "teachersNote": teachersNote,
           "teacher email" : email,
-          "max inactive days": maxInactiveDays,
+          "max days inactive": maxInactiveDays,
           "allow join": true
   
   
