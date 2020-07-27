@@ -140,26 +140,29 @@ function getAnnouncementForClass(code) {
   firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
     doc.forEach(snapshot => {
       var data = snapshot.data()
-      var date = data["Date"]
-      var message = data["Message"]
-      var title = data["Title"]
+      var date = data["date"]
+      var message = data["message"]
+      var title = data["title"]
+
+      var formattedDate = new Date(date.seconds*1000).toLocaleString() 
 
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-success" style = 'height: max-content'>
                       <div class="card-body">
-                        <h4 class="badge badge-info">${date}</h4>
 
-                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
+                        <h4 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis; margin-top: 10px;
                         display: -webkit-box;
                         -webkit-line-clamp: 1; /* number of lines to show /
-                        -webkit-box-orient: vertical;''>${title}</h5>
+                        -webkit-box-orient: vertical;''>${title}</h4>
 
                         <p style = '   overflow: hidden;
                         text-overflow: ellipsis;
                         display: -webkit-box;
                         -webkit-line-clamp: 1; / number of lines to show */
                         -webkit-box-orient: vertical;'>${message}</p>
+
+                        <h3 style = 'font-size: 15px'>${formattedDate}</h3>
                       </div>
                     </div>
 
@@ -1056,7 +1059,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy("Timestamp").limitToLast(3).get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy("date").limitToLast(3).get().then(function (doc) {
   
   
             doc.forEach(snapshot => {
@@ -1069,9 +1072,11 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 announcementsCount += 1;
 
   
-                var title = annoucementData["Title"];
-                var message = annoucementData["Message"];
-                var date = annoucementData['Date'];
+                var title = annoucementData["title"];
+                var message = annoucementData["message"];
+                var date = annoucementData['date'];
+                var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+        
 
   
                 var nameClass = classnamesList[i];
@@ -1148,7 +1153,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date').get().then(function (doc) {
   
   
             doc.forEach(snapshot => {
@@ -1161,9 +1166,12 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 announcementsCount += 1;
   
   
-                var title = annoucementData["Title"];
-                var message = annoucementData["Message"];
-                var date = annoucementData['Date'];
+                var title = annoucementData["title"];
+                var message = annoucementData["message"];
+                var date = annoucementData['date'];
+
+                var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+
   
                 var nameClass = classnamesList[i];
   
@@ -1179,7 +1187,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
                         <p style = 'color: gray'>${message}</p>
   
-                        <div class="h6 mb-0" style = "color: #a2a39b">${date}</div>
+                        <div class="h6 mb-0" style = "color: #a2a39b">${formattedDate}</div>
                       </div>
                       <div class="col-auto">
                         <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
