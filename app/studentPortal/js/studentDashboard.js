@@ -187,7 +187,7 @@ function getClassDataClassesPage(code){
     firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
       var data = snap.data();
 
-      teacherName = data['display-name']
+      teacherName = data['display name']
       teacherPicture = data['Profile Picture'] != undefined ? data['Profile Picture'] : "https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg"
     }).then(() => {
       if(document.getElementById('className') != null){
