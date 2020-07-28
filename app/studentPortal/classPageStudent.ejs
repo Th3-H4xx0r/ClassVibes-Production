@@ -103,7 +103,8 @@
 
 <script>
         
-  var socket = io.connect('http://api-chat.classvibes.net/');
+  //var socket = io.connect('http://api-chat.classvibes.net/');
+  var socket = io.connect('ws://localhost:3111');
   var $messageArea = $('#message-area');
   var $errorMessage = $('#error-msg');
   
@@ -126,29 +127,84 @@
     }, 500);
   }
   
-  socket.on('message', function(message) {
+  socket.on('joinRoomTriggered', function(message) {
+    document.getElementById('message-components').innerHTML = '';
+
     var momentTimestamp = new Date().getTime()
     var $message = $('#message-components');
-    //$message.append('<p><strong>' + message.username + '</strong> <span class="time">' + momentTimestamp + '</span></p>');
-    //$message.append('<div class="wrap-msg"><p>' + message.text + '</p></div>');
 
-    var messageHTML = `
+    message.forEach(elm => {
+
+      if(elm.text != undefined){
+        var momentTimestamp = new Date().getTime()
+    var $message = $('#message-components');
+
+      var messageHTML = `
     <div class="message-component" style="margin-top: 50px">
                               <div class="row">
                                 <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
                                 <div class="col">
                                   <div class="row" style="margin-left: 5px;">
-                                    <h6>${message.username}</h6>
+                                    <h6>${elm.username}</h6>
                                     <div style="width: 80%;"></div>
                                     <h6>July 28, 2020</h6>
                                   </div>
-                                  <p style="width: 100%;">${message.text}</p>
+                                  <p style="width: 100%;">${elm.text}</p>
                                 </div>
                               </div>
                               <hr>
                             </div>
     `
     $message.append(messageHTML)
+      }
+
+    
+    })
+    //$message.append('<p><strong>' + message.username + '</strong> <span class="time">' + momentTimestamp + '</span></p>');
+    //$message.append('<div class="wrap-msg"><p>' + message.text + '</p></div>');
+
+    
+    scrollSmoothToBottom('messages');
+  });
+
+  socket.on('message', function(message) {
+    console.log(message)
+    document.getElementById('message-components').innerHTML = '';
+
+    var momentTimestamp = new Date().getTime()
+    var $message = $('#message-components');
+
+    message.forEach(elm => {
+
+      if(elm.text != undefined){
+        var momentTimestamp = new Date().getTime()
+    var $message = $('#message-components');
+
+      var messageHTML = `
+    <div class="message-component" style="margin-top: 50px">
+                              <div class="row">
+                                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+                                <div class="col">
+                                  <div class="row" style="margin-left: 5px;">
+                                    <h6>${elm.username}</h6>
+                                    <div style="width: 80%;"></div>
+                                    <h6>July 28, 2020</h6>
+                                  </div>
+                                  <p style="width: 100%;">${elm.text}</p>
+                                </div>
+                              </div>
+                              <hr>
+                            </div>
+    `
+    $message.append(messageHTML)
+      }
+
+    
+    })
+    //$message.append('<p><strong>' + message.username + '</strong> <span class="time">' + momentTimestamp + '</span></p>');
+    //$message.append('<div class="wrap-msg"><p>' + message.text + '</p></div>');
+
+    
     scrollSmoothToBottom('messages');
   });
   
