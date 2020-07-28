@@ -90,7 +90,7 @@
 
       getClassDataClassesPage(classCode)
 
-      getMessagesForChat_Classes_page(email, classCode)
+      //getMessagesForChat_Classes_page(email, classCode)
 
     } else {
       console.log("user Signed out");
@@ -98,6 +98,13 @@
     }
   })
 });
+  </script>
+
+  <script>
+ $("#chatTab").click(function(e) {
+      console.log('shown - after the tab has been shown');
+      alert("Hhi")
+ });
         
   </script>
 
@@ -418,7 +425,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false">Chat</a>
+                            <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" id = "chatTab" onclick='getMessagesForChat_Classes_page("<%= code %>")'>Chat</a>
                           </li>
                        
                       </ul>

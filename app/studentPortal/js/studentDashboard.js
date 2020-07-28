@@ -1260,94 +1260,103 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
     }
 }
 
-function getMessagesForChat_Classes_page(email, classCode){
+function getMessagesForChat_Classes_page(classCode){
   console.log("Getting messages")
 
   var lastID = '';
 
-  firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').get().then(snap => {
-    snap.forEach(doc => {
-      var data = doc.data();
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
 
-      lastID = doc.id
-
-      var message = data.message;
-      var time = data.timestamp;
-
-      var user = data.user
-
-      var formattedTime = new Date(time).toLocaleString()
-
-      console.log(formattedTime)
-
-      console.log(data)
-
-      var messageHTML = `
-      <div class="message-component" style="margin-top: 50px">
-      <div class="row">
-        <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-        <div class="col">
-          <div class="row" style="margin-left: 5px;">
-            <h5>${user}</h5>
-            <div style="width: 80%;"></div>
-            <p>${formattedTime}</p>
-          </div>
-          <p style="width: 100%;">${message}</p>
-        </div>
-      </div>
-      <hr>
-    </div>
-    `
-
-      $(messageHTML).appendTo('#message-components')
-
-    })
-
-    scrollSmoothToBottom('messages')
-  }).then(() => {
-
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
-
-          if (doc.id != lastID){
-            var message = data.message;
-            var time = data.timestamp;
-      
-            var user = data.user
-
-            var formattedTime = new Date(time).toLocaleString()
-
-            console.log(formattedTime)
-      
-            console.log(data)
-      
-            var messageHTML = `
-            <div class="message-component" style="margin-top: 50px">
-            <div class="row">
-              <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-              <div class="col">
-                <div class="row" style="margin-left: 5px;">
-                  <h5>${user}</h5>
-                  <div style="width: 80%;"></div>
-                  <p>${formattedTime}</p>
-                </div>
-                <p style="width: 100%;">${message}</p>
+    
+          lastID = doc.id
+    
+          var message = data.message;
+          var time = data.timestamp;
+    
+          var user = data.user
+    
+          var formattedTime = new Date(time).toLocaleString()
+    
+          console.log(formattedTime)
+    
+          console.log(data)
+    
+          var messageHTML = `
+          <div class="message-component" style="margin-top: 50px">
+          <div class="row">
+            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+            <div class="col">
+              <div class="row" style="margin-left: 5px;">
+                <h5>${user}</h5>
+                <div style="width: 80%;"></div>
+                <p>${formattedTime}</p>
               </div>
+              <p style="width: 100%;">${message}</p>
             </div>
-            <hr>
           </div>
-          `
-      
-            $(messageHTML).appendTo('#message-components')
-          }
-  
+          <hr>
+        </div>
+        `
+    
+          $(messageHTML).appendTo('#message-components')
+    
+          
         })
-
+    
+      }).then(() => {
         scrollSmoothToBottom()
+    
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+            snap.forEach(doc => {
+              var data = doc.data();
+    
+              if (doc.id != lastID){
+                var message = data.message;
+                var time = data.timestamp;
+          
+                var user = data.user
+    
+                var formattedTime = new Date(time).toLocaleString()
+    
+                console.log(formattedTime)
+          
+                console.log(data)
+          
+                var messageHTML = `
+                <div class="message-component" style="margin-top: 50px">
+                <div class="row">
+                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+                  <div class="col">
+                    <div class="row" style="margin-left: 5px;">
+                      <h5>${user}</h5>
+                      <div style="width: 80%;"></div>
+                      <p>${formattedTime}</p>
+                    </div>
+                    <p style="width: 100%;">${message}</p>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              `
+          
+                $(messageHTML).appendTo('#message-components')
+              }
+      
+            })
+    
+            scrollSmoothToBottom()
+          })
+    
       })
+    }
+  });
 
-  })
+
 } 
 
 function sendMessage_Classes_page(classCode){
@@ -1374,6 +1383,7 @@ function sendMessage_Classes_page(classCode){
 } 
 
 function scrollSmoothToBottom() {
+  console.log("scrolling")
   var div = document.getElementById('message-components');
   $(div).animate({
     scrollTop: div.scrollHeight - div.clientHeight
