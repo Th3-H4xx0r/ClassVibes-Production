@@ -1301,7 +1301,7 @@ function getMessagesForChat_Classes_page(classCode){
                 <div style="width: 80%;"></div>
                 <p style="float: right">${formattedTime}</p>
               </div>
-              <div style="width: 100px">
+              <div>
               <p>${message}</p>
               </div>
               
@@ -1345,7 +1345,7 @@ function getMessagesForChat_Classes_page(classCode){
                       <div style="width: 80%;"></div>
                       <p style="float: right">${formattedTime}</p>
                     </div>
-                    <div style="width: 100px">
+                    <div >
                       <p>${message}</p>
                       </div>
                   </div>
