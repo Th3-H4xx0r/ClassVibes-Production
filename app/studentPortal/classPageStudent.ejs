@@ -65,7 +65,6 @@
    var email = "TEST EMAIL"
    var classCode = '<%= code %>'
 
-
     $(document).ready(function () {
       initializeFirebase();
       getProfileInfo();
@@ -84,13 +83,9 @@
       getStudentClasses(email);
       //getStudentStatus(email);
 
-      updateAddClasesDropdown(email, 'class-page')
-
       getAnnouncementForClass(classCode);
 
       getClassDataClassesPage(classCode)
-
-      //getMessagesForChat_Classes_page(email, classCode)
 
     } else {
       console.log("user Signed out");
