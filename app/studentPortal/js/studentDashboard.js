@@ -1373,7 +1373,7 @@ function sendMessage_Classes_page(classCode){
     });
 } 
 
-function scrollSmoothToBottom(id) {
+function scrollSmoothToBottom() {
   var div = document.getElementById('message-components');
   $(div).animate({
     scrollTop: div.scrollHeight - div.clientHeight
