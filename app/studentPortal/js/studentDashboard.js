@@ -1299,9 +1299,12 @@ function getMessagesForChat_Classes_page(classCode){
               <div class="row" style="margin-left: 5px;">
                 <h5>${user}</h5>
                 <div style="width: 80%;"></div>
-                <p>${formattedTime}</p>
+                <p style="float: right">${formattedTime}</p>
               </div>
-              <p style="width: 100%;">${message}</p>
+              <div style="width: 100px">
+              <p>${message}</p>
+              </div>
+              
             </div>
           </div>
           <hr>
@@ -1340,9 +1343,11 @@ function getMessagesForChat_Classes_page(classCode){
                     <div class="row" style="margin-left: 5px;">
                       <h5>${user}</h5>
                       <div style="width: 80%;"></div>
-                      <p>${formattedTime}</p>
+                      <p style="float: right">${formattedTime}</p>
                     </div>
-                    <p style="width: 100%;">${message}</p>
+                    <div style="width: 100px">
+                      <p>${message}</p>
+                      </div>
                   </div>
                 </div>
                 <hr>
