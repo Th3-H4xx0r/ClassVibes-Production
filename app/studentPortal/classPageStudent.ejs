@@ -102,7 +102,8 @@
       console.log('shown - after the tab has been shown');
       alert("Hhi")
  });
-        
+
+
   </script>
 
 <!--
@@ -450,9 +451,12 @@
                           
                           <div style="height: 30px;"></div>
                           <div class="input-group mb-3" >
-                            <input class="form-control" role="textbox"  placeholder="Message ..." aria-label="Message ..." aria-describedby="basic-addon2" id = "message-input"contenteditable></input></p>
+                            <form  onsubmit="event.preventDefault(); sendMessage_Classes_page('<%= code %>')" style="width: 90%;">
+                              <input class="form-control" role="textbox"  placeholder="Message ..." aria-label="Message ..." aria-describedby="basic-addon2" id = "message-input"  contenteditable></input>
+                            </form>
+
                             <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true" onclick = 'sendMessage_Classes_page("<%= code %>")'></i>
+                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true" onclick = 'sendMessage_Classes_page("<%= code %>")' id = "sendMessagebutton"></i>
                           
                               </span>
                             </div>

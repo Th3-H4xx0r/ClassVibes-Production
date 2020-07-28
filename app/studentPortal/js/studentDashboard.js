@@ -1260,8 +1260,13 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
     }
 }
 
+
+var classCodeChat = 'NONE'
+
 function getMessagesForChat_Classes_page(classCode){
   console.log("Getting messages")
+
+  classCodeChat = classCode
 
   var lastID = '';
 
@@ -1389,3 +1394,5 @@ function scrollSmoothToBottom() {
     scrollTop: div.scrollHeight - div.clientHeight
   }, 500);
 }
+
+
