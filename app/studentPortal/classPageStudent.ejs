@@ -19,10 +19,8 @@
 
     <script src="/socket.io/socket.io.js"></script>
 
-    <!--
-    <script src="https://cstatic.classvibes.net/applicationManagement.js"></script>
 
-    -->
+    <script src="https://cstatic.classvibes.net/applicationManagement.js"></script>
 
 
     <!-- Custom styles for this template-->
@@ -72,9 +70,9 @@
       initializeFirebase();
       getProfileInfo();
       setVersionFooter();
-      //getLiveSeverAlerts();
-     // getServerStatus();
-      //checkUserAuthStatus();
+      getLiveSeverAlerts();
+       getServerStatus();
+      checkUserAuthStatus();
       firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
@@ -83,7 +81,7 @@
 
       username = user.displayName
 
-      //getStudentClasses(email);
+      getStudentClasses(email);
       //getStudentStatus(email);
 
       updateAddClasesDropdown(email, 'class-page')
@@ -91,6 +89,8 @@
       getAnnouncementForClass(classCode);
 
       getClassDataClassesPage(classCode)
+
+      getMessagesForChat_Classes_page(email, classCode)
 
     } else {
       console.log("user Signed out");
@@ -101,6 +101,7 @@
         
   </script>
 
+<!--
 <script>
         
   var socket = io.connect('https://api-chat.classvibes.net/');
@@ -226,6 +227,9 @@
   
           }
           </script>
+
+-->
+
 
 
 
@@ -438,7 +442,7 @@
                           <div class="input-group mb-3" >
                             <input class="form-control" role="textbox"  placeholder="Message ..." aria-label="Message ..." aria-describedby="basic-addon2" id = "message-input"contenteditable></input></p>
                             <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true"onclick = "sendChatMessage()"></i>
+                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true" onclick = 'sendMessage_Classes_page("<%= code %>")'></i>
                           
                               </span>
                             </div>
