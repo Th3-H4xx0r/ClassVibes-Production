@@ -291,8 +291,44 @@
 
                         <!-- CHAT TAB -->
                         <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                            <div id="editInfo1">CHAT TAB</div>
+                          <div class="message-components" style="height: 600px; overflow-x: hidden; overflow-y: scroll; margin-left: 40px;">
+                            
+                            <div class="message-component" style="margin-top: 50px">
+                              <div class="row">
+                                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+                                <div class="col">
+                                  <div class="row" style="margin-left: 5px;">
+                                    <h6>Jack Sparrow</h6>
+                                    <div style="width: 80%;"></div>
+                                    <h6>July 28, 2020</h6>
+                                  </div>
+                                  <p style="width: 100%;">Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+                                </div>
+                              </div>
+                              <hr>
+                            </div>
+                          </div>
+                          
+                          <div style="height: 30px;"></div>
+                          <div class="input-group mb-3" >
+                            <span class="form-control" role="textbox"  placeholder="Message ..." aria-label="Message ..." aria-describedby="basic-addon2" contenteditable></span></p>
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                
+                              </span>
+                            </div>
+                            
+                          </div>
                         </div>
+
+                        <style>
+                          .avatar {
+                              vertical-align: middle;
+                              width: 60px;
+                              height: 60px;
+                              border-radius: 60%;
+                            }
+                        </style>
 
                         <!-- MEETINGS TAB -->
                         <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
@@ -315,13 +351,7 @@
     <!-- End of Main Content -->
 
     <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto" id = "footer-version-code">
-            <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
-          </div>
-        </div>
-      </footer>
+    
     <!-- End of Footer -->
 
     </div>
