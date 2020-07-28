@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="https://cstatic.classvibes.net/init.js"></script>
-    <title>ClassVibe</title>
+    <title>Chat</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -67,7 +67,7 @@
    var email = "TEST EMAIL"
    var classCode = '<%= code %>'
 
-   
+
     $(document).ready(function () {
       initializeFirebase();
       getProfileInfo();
@@ -103,7 +103,7 @@
 
 <script>
         
-  var socket = io.connect('ws://api-chat.classvibes.net/');
+  var socket = io.connect('http://api-chat.classvibes.net/');
   var $messageArea = $('#message-area');
   var $errorMessage = $('#error-msg');
   
