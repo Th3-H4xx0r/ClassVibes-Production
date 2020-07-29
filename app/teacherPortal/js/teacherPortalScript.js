@@ -2066,7 +2066,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     
           var user = data.user
     
-          var formattedTime = new Date(time.seconds).toLocaleString()
+          var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
           console.log(formattedTime)
     
@@ -2107,7 +2107,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           
                 var user = data.user
     
-                var formattedTime = new Date(time.seconds).toLocaleString()
+                var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
                 console.log(formattedTime)
           
