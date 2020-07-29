@@ -1299,9 +1299,12 @@ function getMessagesForChat_Classes_page(classCode){
               <div class="row" style="margin-left: 5px;">
                 <h5>${user}</h5>
                 <div style="width: 80%;"></div>
-                <p>${formattedTime}</p>
+                <p style="float: right">${formattedTime}</p>
               </div>
-              <p style="width: 100%;">${message}</p>
+              <div>
+              <p>${message}</p>
+              </div>
+              
             </div>
           </div>
           <hr>
@@ -1340,9 +1343,11 @@ function getMessagesForChat_Classes_page(classCode){
                     <div class="row" style="margin-left: 5px;">
                       <h5>${user}</h5>
                       <div style="width: 80%;"></div>
-                      <p>${formattedTime}</p>
+                      <p style="float: right">${formattedTime}</p>
                     </div>
-                    <p style="width: 100%;">${message}</p>
+                    <div >
+                      <p>${message}</p>
+                      </div>
                   </div>
                 </div>
                 <hr>
@@ -1370,13 +1375,15 @@ function sendMessage_Classes_page(classCode){
     if (user) {
       var email = user.email;
       var name = user['displayName'];
+      var date = new Date()
 
       var message = document.getElementById('message-input').value
     
       firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).doc().set({
           "message": message,
           "user": name,
-          "timestamp": new Date().getTime()
+          "timestamp": date,
+          "sent type": "student"
     
       }).then(() => {
         console.log("Message sent")
