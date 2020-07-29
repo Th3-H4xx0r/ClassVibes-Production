@@ -2066,7 +2066,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     
           var user = data.user
     
-          var formattedTime = new Date(time).toLocaleString()
+          var formattedTime = new Date(time.seconds).toLocaleString()
     
           console.log(formattedTime)
     
@@ -2107,7 +2107,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           
                 var user = data.user
     
-                var formattedTime = new Date(time).toLocaleString()
+                var formattedTime = new Date(time.seconds).toLocaleString()
     
                 console.log(formattedTime)
           
@@ -2157,7 +2157,7 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).doc().set({
           "message": message,
           "user": name,
-          "timestamp": new Date().getTime()
+          "timestamp": new Date()
     
       }).then(() => {
         console.log("Message sent")

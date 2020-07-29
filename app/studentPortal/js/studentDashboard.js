@@ -1285,7 +1285,7 @@ function getMessagesForChat_Classes_page(classCode){
     
           var user = data.user
     
-          var formattedTime = new Date(time).toLocaleString()
+          var formattedTime = new Date(time.seconds).toLocaleString()
     
           console.log(formattedTime)
     
@@ -1329,7 +1329,7 @@ function getMessagesForChat_Classes_page(classCode){
           
                 var user = data.user
     
-                var formattedTime = new Date(time).toLocaleString()
+                var formattedTime = new Date(time.seconds).toLocaleString()
     
                 console.log(formattedTime)
           
