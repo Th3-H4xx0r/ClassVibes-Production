@@ -67,6 +67,11 @@ router.get('/student/chat',function(req,res){
   res.sendFile(path.join(__dirname+'/app/studentPortal/chatPageStudentPortal.html'));
 });
 
+router.get('/student/classes/:class',function(req,res){
+  var classCode = req.params.class
+  res.render(path.join(__dirname+'/app/studentPortal/classPageStudent.ejs'), {code: classCode})
+});
+
 /////////////////////////
 //Teacher Portal Paths
 /////////////////////////
@@ -99,10 +104,13 @@ router.get('/teacher/classes/:class',function(req,res){
   res.render(path.join(__dirname+'/app/teacherPortal/classPage.ejs'), {code: classCode})
 });
 
-router.get('/student/classes/:class',function(req,res){
-  var classCode = req.params.class
-  res.render(path.join(__dirname+'/app/studentPortal/classPageStudent.ejs'), {code: classCode})
+router.get('/teacher/chats/:classCode/:studentEmail',function(req,res){
+  var classCode = req.params.classCode
+  var studentEmail = req.params.studentEmail
+
+  res.render(path.join(__dirname+'/app/teacherPortal/chatPageTeacher.ejs'), {code: classCode, email: studentEmail})
 });
+
 
 router.get('/serverdown',function(req,res){
 
