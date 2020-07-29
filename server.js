@@ -108,6 +108,7 @@ router.get('/teacher/chats/:classCode/:studentEmail',function(req,res){
   var classCode = req.params.classCode
   var studentEmail = req.params.studentEmail
 
+
   res.render(path.join(__dirname+'/app/teacherPortal/chatPageTeacher.ejs'), {code: classCode, email: studentEmail})
 });
 
