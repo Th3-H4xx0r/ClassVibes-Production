@@ -2080,8 +2080,9 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
               <div class="row" style="margin-left: 5px;">
                 <h5>${user}</h5>
                 <div style="width: 80%;"></div>
-                <p>${formattedTime}</p>
               </div>
+              <p>${formattedTime}</p>
+
               <p style="width: 100%;">${message}</p>
             </div>
           </div>
@@ -2121,8 +2122,9 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
                     <div class="row" style="margin-left: 5px;">
                       <h5>${user}</h5>
                       <div style="width: 80%;"></div>
-                      <p>${formattedTime}</p>
                     </div>
+                    <p>${formattedTime}</p>
+
                     <p style="width: 100%;">${message}</p>
                   </div>
                 </div>
