@@ -614,7 +614,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         snap.forEach(doc => {
           var data = doc.data();
   
-          var studentReaction = data['reaction']
+          var studentReaction = data['status']
   
           var date = data['date']
   
@@ -624,11 +624,11 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
   
           var reactionKey = 0;
   
-          if(studentReaction == 'good'){
+          if(studentReaction == 'doing great'){
             reactionKey = 3
-          } else if (studentReaction == 'meh') {
+          } else if (studentReaction == 'need help') {
             reactionKey = 2
-          } else if (studentReaction == 'needs help'){
+          } else if (studentReaction == 'frustrated'){
             reactionKey = 1
           }
   
@@ -1350,7 +1350,7 @@ function getStudentData(code) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
     
-          var reaction = data["reaction"];
+          var reaction = data["status"];
           var studentName = data["name"];
           var studentEmail = data["email"];
           classInfoList.push([studentName, reaction, studentEmail])
@@ -1484,18 +1484,18 @@ function getStudentData(code) {
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
     
-            if (studentReaction == "good") {
+            if (studentReaction == "doing great") {
               document.getElementById("face").outerHTML = happy;
               $(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
     
-            } else if (studentReaction == "meh") {
+            } else if (studentReaction == "need help") {
               document.getElementById("face").outerHTML = meh;
               $(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
     
     
-            } else if (studentReaction == "needs help") {
+            } else if (studentReaction == "frustrated") {
     
               document.getElementById("face").outerHTML = sad;
     
@@ -1613,9 +1613,9 @@ function getEditData(code) {
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
     var course = data['Course']
-    var teacherNote = data['teachersNote']
-    var description = data['courseDescription']
-    var inactiveDays = data['max days inactive']
+    var teacherNote = data['teachersNote'] != undefined ? data['teachersNote'] : "Not Set"
+    var description = data['courseDescription'] != undefined ? data['courseDescription'] : "Not Set"
+    var inactiveDays = data['max days inactive'] != NaN ?  data['max days inactive'] : "Not Set"
     output += `
 
     <h6>Edit Class Name</h6>
