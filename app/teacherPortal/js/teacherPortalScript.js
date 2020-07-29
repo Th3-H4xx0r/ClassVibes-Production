@@ -1,4 +1,4 @@
-function getTeacherAccountStatus(pageType, classCode = "null") {
+function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
 
   var email = localStorage.getItem('email');
 
@@ -109,8 +109,14 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
 
             }
 
+            else if(pageType == "chat-page-teacher"){
+              getProfileInfo();
+              getClassDataDropdown();
+              getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
+            }
+
             else {
-              getClassData();
+              //getClassData();
               getProfileInfo();
             }
 
@@ -178,10 +184,17 @@ function getTeacherAccountStatus(pageType, classCode = "null") {
             getStudentRequests();
           }
 
-          else {
-            getClassData();
+          else if(pageType == "chat-page-teacher"){
             getProfileInfo();
             getClassDataDropdown();
+            getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
+
+          }
+
+          else {
+            //getClassData();
+            //getProfileInfo();
+            //getClassDataDropdown();
           }
 
           //ACCOUNT NOT ACTIVE
@@ -1372,7 +1385,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
-          <a href = '/teacher/chats/${studentEmail}?class=${code}'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
           </div>
          
           </td>
@@ -1386,9 +1399,10 @@ function getStudentData(code) {
           <td><h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1></td>
           <td>2011/04/25</td>
           <td>
+          <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
-          <button type="button" class="btn btn-primary" href = 'chats/${studentEmail}?class=${code}' style = "height: 50px; margin-right: 20px; margin-top: 15px">Chat</button>
-  
+          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          </div>
           </td>
           </tr>
           `;
@@ -1399,7 +1413,13 @@ function getStudentData(code) {
           <td>${studentEmail}</td>
           <td><h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1></td>
           <td>2011/04/25</td>
-          <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
+          <td>
+          <div class = 'row' style = 'margin-left: 10px'>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          </div>
+          </td>
+          </tr>
           `;
     
             frustrated_column_face = `
@@ -1408,7 +1428,13 @@ function getStudentData(code) {
           <td>${studentEmail}</td>
           <td><h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1></td>
           <td>2011/04/25</td>
-          <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
+          <td>
+          <div class = 'row' style = 'margin-left: 10px'>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          </div>          
+          </td>
+          </tr>
       </div>
           `;
     
@@ -2015,3 +2041,139 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
        }, 1000)
     }
 }
+
+var classCodeChat = 'NONE'
+
+function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
+  console.log("Getting messages")
+
+  classCodeChat = classCode
+
+  var lastID = '';
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
+
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').get().then(snap => {
+        snap.forEach(doc => {
+          var data = doc.data();
+    
+          lastID = doc.id
+    
+          var message = data.message;
+          var time = data.timestamp;
+    
+          var user = data.user
+    
+          var formattedTime = new Date(time).toLocaleString()
+    
+          console.log(formattedTime)
+    
+          console.log(data)
+    
+          var messageHTML = `
+          <div class="message-component" style="margin-top: 50px">
+          <div class="row">
+            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+            <div class="col">
+              <div class="row" style="margin-left: 5px;">
+                <h5>${user}</h5>
+                <div style="width: 80%;"></div>
+                <p>${formattedTime}</p>
+              </div>
+              <p style="width: 100%;">${message}</p>
+            </div>
+          </div>
+          <hr>
+        </div>
+        `
+    
+          $(messageHTML).appendTo('#message-components')
+    
+          
+        })
+    
+      }).then(() => {
+        scrollSmoothToBottom()
+    
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+            snap.forEach(doc => {
+              var data = doc.data();
+    
+              if (doc.id != lastID){
+                var message = data.message;
+                var time = data.timestamp;
+          
+                var user = data.user
+    
+                var formattedTime = new Date(time).toLocaleString()
+    
+                console.log(formattedTime)
+          
+                console.log(data)
+          
+                var messageHTML = `
+                <div class="message-component" style="margin-top: 50px">
+                <div class="row">
+                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+                  <div class="col">
+                    <div class="row" style="margin-left: 5px;">
+                      <h5>${user}</h5>
+                      <div style="width: 80%;"></div>
+                      <p>${formattedTime}</p>
+                    </div>
+                    <p style="width: 100%;">${message}</p>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              `
+          
+                $(messageHTML).appendTo('#message-components')
+              }
+      
+            })
+    
+            scrollSmoothToBottom()
+          })
+    
+      })
+    }
+  });
+
+
+} 
+
+function sendMessage_ChatPage_teacher(classCode, studentEmail){
+  console.log("Message queued")
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
+      var name = user['displayName'];
+
+      var message = document.getElementById('message-input').value
+    
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).doc().set({
+          "message": message,
+          "user": name,
+          "timestamp": new Date().getTime()
+    
+      }).then(() => {
+        console.log("Message sent")
+        document.getElementById('message-input').value = '';
+    
+      })
+    }
+    });
+} 
+
+function scrollSmoothToBottom() {
+  console.log("scrolling")
+  var div = document.getElementById('message-components');
+  $(div).animate({
+    scrollTop: div.scrollHeight - div.clientHeight
+  }, 500);
+}
+
+

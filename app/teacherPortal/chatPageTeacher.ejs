@@ -24,15 +24,12 @@
 
 
     <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/teachercss/sb-admin-2.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../js/studentDashboard.js"></script>
+    <script src="/teacherjs/teacherPortalScript.js"></script>
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
     <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -64,6 +61,8 @@
    var username = 'PLACEHOLDER'
    var email = "TEST EMAIL"
    var classCode = '<%= code %>'
+   var studentEmail = '<%= email %>'
+
 
    console.log("Getting")
 
@@ -82,12 +81,7 @@
 
       username = user.displayName
 
-      //getStudentClasses(email);
-      //getStudentStatus(email);
-
-      //getAnnouncementForClass(classCode);
-
-      //getClassDataClassesPage(classCode)
+      getTeacherAccountStatus('chat-page-teacher', "null", {code: classCode, student: studentEmail});
 
     } else {
       console.log("user Signed out");
@@ -246,7 +240,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../../../">
           <div class="sidebar-brand-icon">
             <img src="/img/classvibelogo.png" alt="" style="width: 50px;">
           </div>
@@ -256,68 +250,60 @@
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
   
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-          <a class="nav-link" href="/student/dashboard">
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="/teacher/dashboard">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
-        </li>
-  
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Quick Access
-        </div>
-  
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item active">
-          <a class="nav-link collapsed" href="" data-toggle="collapse"
-            data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Interface
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fas fa-stream"></i>
             <span>Classes</span>
-          </a>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded" id="classesListSideBar">
-              <h6 class="collapse-header">MY CLASSES</h6>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded" id="classesOp">
+                <h6 class="collapse-header">Your Classes:</h6>
+
             </div>
-          </div>
-        </li>
-  
-        <!-- Nav Item - Add Class -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="/student/add">
-            <i class="fas fa-fw fas fa-plus-square"></i>
-            <span>Add Class</span>
-          </a>
-        </li>
-  
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="/student/announcements">
-            <i class="fas fa-fw fas fa-bullhorn"></i>
-            <span>Announcements</span>
-          </a>
-        </li>
-        
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Information
         </div>
-  
-        <!-- Nav Item - Mettings -->
-        <li class="nav-item">
-          <a class="nav-link" href="/student/meetings">
-            <i class="fas fa-fw fas fa-phone-square-alt"></i>
-            <span>Meetings</span>
-          </a>
-        </li>
+    </li>
 
+    <li class="nav-item">
+        <a class="nav-link" href="/teacher/create-class" data-target="#collapseUtilities" aria-expanded="true"
+          aria-controls="collapseUtilities">
+          <i class="fas fa-plus-square"></i>
+          <span>Create Class</span>
+        </a>
+      </li>
 
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="/teacher/meetings" data-target="#collapseUtilities" aria-expanded="true"
+          aria-controls="collapseUtilities">
+          <i class="fas fa-fw fas fa-phone-square-alt"></i>
+          <span>Meetings</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/teacher/announcements" data-target="#collapseUtilities" aria-expanded="true"
+          aria-controls="collapseUtilities">
+          <i class="fa fa-bullhorn"></i>
+          <span>Annoucements</span>
+        </a>
+      </li>
   
         <!-- Nav Item - Chat -->
 
@@ -411,58 +397,28 @@
                     
 
                     <!-- Page Heading -->
-                    <div id="className"></div>
+                    <div id="className"><h1>Chat Name</h1></div>
 
 
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-
-                        <li class="nav-item">
-                            <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Course Info</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" id="meetings-tab" data-toggle="tab" href="#meetings" role="tab" aria-controls="meetings" aria-selected="false">Meetings</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" id="announcements-tab" data-toggle="tab" href="#announcements" role="tab" aria-controls="announcements" aria-selected="false">Announcements</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" id = "chatTab" onclick='getMessagesForChat_Classes_page("<%= code %>")'>Chat</a>
-                          </li>
-                       
-                      </ul>
-
-                      <div class="tab-content" id="myTabContent">
-
-                        <!-- COURSE INFO TAB -->
-                        <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="profile-tab">
-                            <div id="info-pannel" style="margin-top: 20px;">
-                            </div>
-                        </div>
-
-                        <!-- CHAT TAB -->
-                        <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                          <div class="message-components" style="height: 600px; overflow-x: hidden; overflow-y: scroll; padding-left: 40px;" id = 'message-components'>
+                        <!-- CHAT -->
+                          <div class="message-components" style="height: 675px; overflow-x: hidden; overflow-y: scroll; padding-left: 40px;" id = 'message-components'>
                             
                             
                           </div>
                           
                           <div style="height: 30px;"></div>
                           <div class="input-group mb-3" >
-                            <form  onsubmit="event.preventDefault(); sendMessage_Classes_page('<%= code %>')" style="width: 90%;">
+                            <form  onsubmit="event.preventDefault(); sendMessage_ChatPage_teacher('<%= code %>', '<%= email %>')" style="width: 90%;">
                               <input class="form-control" role="textbox"  placeholder="Message ..." aria-label="Message ..." aria-describedby="basic-addon2" id = "message-input"  contenteditable></input>
                             </form>
 
                             <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true" onclick = 'sendMessage_Classes_page("<%= code %>")' id = "sendMessagebutton"></i>
+                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true" onclick = "sendMessage_ChatPage_teacher('<%= code %>', '<%= email %>')" id = "sendMessagebutton"></i>
                           
                               </span>
                             </div>
                             
                           </div>
-                        </div>
 
                         <style>
                           .avatar {
@@ -472,17 +428,6 @@
                               border-radius: 60%;
                             }
                         </style>
-
-                        <!-- MEETINGS TAB -->
-                        <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
-                            <div class="row" id="meetingsList" style="margin-left: 20px;"></div>
-                        </div>
-
-                        <!-- ANNOUNCEMENTS TAB -->
-                        <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
-                            <div id="classAnnouncement" style="margin-top: 30px;"></div>
-                        </div>
-                      </div>
 
                 </div>
 
@@ -537,14 +482,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/teacherjs/sb-admin-2.min.js"></script>
-
-    <script src="/teacherjs/datatables-demo.js"></script>
-
-    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-
-    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-
 
 </body>
 
