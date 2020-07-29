@@ -1071,7 +1071,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
     var classCode = classData["code"];
 
-    var className = "loading"
+    var className = "%&--PlaceHolder--&%"
 
     var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
