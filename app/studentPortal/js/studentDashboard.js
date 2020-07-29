@@ -1375,13 +1375,15 @@ function sendMessage_Classes_page(classCode){
     if (user) {
       var email = user.email;
       var name = user['displayName'];
+      var date = new Date()
 
       var message = document.getElementById('message-input').value
     
       firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).doc().set({
           "message": message,
           "user": name,
-          "timestamp": new Date().getTime()
+          "timestamp": date,
+          "sent type": "student"
     
       }).then(() => {
         console.log("Message sent")
