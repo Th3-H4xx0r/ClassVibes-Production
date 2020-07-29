@@ -1350,9 +1350,9 @@ function getStudentData(code) {
         for (var i = 0; i <= classInfoList.length; i++) {
           let descriptionOutput = "";
           classInfoData = classInfoList[i];
-          var happy = '<h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1>';
-          var meh = '<h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1>';
-          var sad = '<h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1>'
+          var happy = '<h1 class="icon-hover" style = "font-size: 70px;"  style="color: green;">&#128513;</h1>';
+          var meh = '<h1  class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1>';
+          var sad = '<h1  class="icon-hover" style = "font-size: 70px;">&#128545;</h1>'
     
           if (classInfoData != null || classInfoData != undefined) {
             console.log("works")
@@ -1367,10 +1367,10 @@ function getStudentData(code) {
           <tr role = "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><div id = "face"></div></td>
+          <td><center><div id = "face"></center></div></td>
           <td>2011/04/25</td>
           <td>
-          <div class = 'row'>
+          <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Chat</button>
 
@@ -1384,7 +1384,6 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td>Some Comment</td>
           <td><h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1></td>
           <td>2011/04/25</td>
           <td>
@@ -1399,7 +1398,6 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td>Some Comment</td>
           <td><h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1></td>
           <td>2011/04/25</td>
           <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
@@ -1409,7 +1407,6 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td>Some Comment</td>
           <td><h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1></td>
           <td>2011/04/25</td>
           <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button></td></tr>
