@@ -2275,6 +2275,7 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).doc().set({
           "message": message,
           "user": name,
+          "sent type": "teacher",
           "timestamp": new Date()
     
       }).then(() => {
