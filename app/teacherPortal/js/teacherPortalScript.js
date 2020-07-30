@@ -949,6 +949,12 @@ function storeClassforChart(code) {
   localStorage.setItem("codeForChart", code);
 }
 
+$("#customSwitch1").bootstrapSwitch({
+  onSwitchChange: function(e, state) { 
+    alert(state);
+  }
+});
+
 function writeAnnouncement() {
   var numberClass = document.getElementById("numberClass").value;
   console.log("NUMBER CLASS" + numberClass);
@@ -956,6 +962,12 @@ function writeAnnouncement() {
   var messageText = document.getElementById("messageText").value;
   var dateNow = new Date();
   var formattedDate = dateNow.toLocaleString();
+
+  $("#customSwitch1").bootstrapSwitch({
+    onSwitchChange: function(e, state) { 
+      alert(state);
+    }
+  });
 
   firebase.firestore().collection("Classes").doc(numberClass).collection("Announcements").doc().set({
     "title": messageTitle,
@@ -978,10 +990,10 @@ function getMeetings() {
       var data1 = snapshot.data();
       var classForMeeting = data1["Course"]
 
-      var date = data1["Date"];
-      var title = data1["Title"];
+      var date = data1["date and time"];
+      var title = data1["title"];
       var message = data1["message"]
-      var length = data1["len"]
+      var length = data1["length"]
 
       output = `
       <section class="resume" style="margin-left: 0px;">
@@ -1114,6 +1126,7 @@ function showSendAnnouncementModal(){
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Message:</label>
         <textarea class="form-control" id="messageText"></textarea>
+        <div style="height: 40px"></div>
       </div>
       <center>
         <div style="height: 30px;"></div>
@@ -1155,12 +1168,12 @@ function getMeetingForClass(code) {
         doc.forEach(snapshot => {
           index  = index + 1
           var data = snapshot.data();
-          var classForMeeting = data["Class"]
-          var date = data["Date"];
-          var title = data["Title"];
+          var classForMeeting = data["class id"]
+          var date = data["date and time"];
+          var title = data["title"];
           var message = data["message"]
-          var length = data["len"]
-          var recipient = data["Recipient"]
+          var length = data["length"]
+          var recipient = data["recipient"]
 
           var meetingID = snapshot.id
 
@@ -1528,24 +1541,24 @@ function schedualMeeting(emailStudent, course, code, index) {
   var formattedDate = dateNow.toLocaleString();
 
   firebase.firestore().collection('UserData').doc(emailStudent).collection("Meetings").doc().set({
-    "Title": meetingTitle,
-    "Date": meetingDate,
-    "Class": code,
+    "title": meetingTitle,
+    "date and time": meetingDate,
+    "class id": code,
     "Course": course,
-    "Timestamp": dateNow.toString(),
+    "timestamp": dateNow.toString(),
     "message" : meetingMessage,
-    "Recipient": emailStudent,
-    "len" : len
+    "recipient": emailStudent,
+    "length" : len
   }).then(() => {
     firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
-      "Title": meetingTitle,
-      "Date": meetingDate,
-      "Class": code,
+      "title": meetingTitle,
+      "date and time": meetingDate,
+      "class id": code,
       "Course": course,
-      "Timestamp": dateNow.toString(),
+      "timestamp": dateNow.toString(),
       "message" : meetingMessage,
-      "Recipient": emailStudent,
-      "len" : len
+      "recipient": emailStudent,
+      "length" : len
     }).then(() => {
       window.location.reload()
     });
