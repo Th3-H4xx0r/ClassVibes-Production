@@ -959,11 +959,6 @@ function writeAnnouncement() {
   var dateNow = new Date();
   var formattedDate = dateNow.toLocaleString();
 
-  $("#customSwitch1").bootstrapSwitch({
-    onSwitchChange: function(e, state) { 
-      alert(state);
-    }
-  });
 
   firebase.firestore().collection("Classes").doc(numberClass).collection("Announcements").doc().set({
     "title": messageTitle,
