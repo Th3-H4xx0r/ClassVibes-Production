@@ -36,7 +36,7 @@
     integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="/vendor/jquery.easing.min.js"></script>
+  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
   <script src="js/studentDashboard.js"></script>
@@ -90,8 +90,6 @@
       //getStudentStatus(email);
       getMeetings(email, 'dashboard');
 
-      getAnnouncements(email, 'dashboard');
-
     } else {
       console.log("user Signed out");
       
@@ -132,19 +130,19 @@
         Quick Access
       </div>
 
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="" data-toggle="collapse"
-          data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fas fa-stream"></i>
-          <span>Classes</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded" id="classesListSideBar">
-            <h6 class="collapse-header">MY CLASSES</h6>
-          </div>
-        </div>
-      </li>
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="" data-toggle="collapse"
+                  data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                  <i class="fas fa-fw fas fa-stream"></i>
+                  <span>Classes</span>
+              </a>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded" id="classesListSideBar">
+                      <h6 class="collapse-header">MY CLASSES</h6>
+                  </div>
+              </div>
+          </li>
 
       <!-- Nav Item - Add Class -->
       <li class="nav-item">
@@ -458,15 +456,15 @@
   </div>
 
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="/vendor/jquery/jquery.min.js"></script>
+        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+        <!-- Core plugin JavaScript-->
+        <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+    
+        <!-- Custom scripts for all pages-->
+        <script src="js/sb-admin-2.min.js"></script>
 
 </body>
 

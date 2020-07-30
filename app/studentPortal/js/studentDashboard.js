@@ -1005,6 +1005,72 @@ function getMeetings(email, pageType) {
     });
   }
 
+
+  if(pageType == "class-page"){
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").get().then(function (doc) {
+  
+      var meetingsCount = 0;
+  
+      doc.forEach(snapshot => {
+  
+        meetingsCount += 1;
+  
+        var meetingsData = snapshot.data();
+  
+        var classForMeeting = meetingsData["Course"];
+        var date = meetingsData["Date"];
+        var title = meetingsData["Title"];
+
+        output = `
+          <div class="col-xl-12 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" style = 'overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 1;
+                  max-width: 25ch;
+                  -webkit-box-orient: vertical;'>${title}</div>
+                  <h6 style = 'color: gray; font-weight: 700; margin-top: 10px'>${date}</h6>
+                </div>
+                <div class="col-auto">
+  
+                  <i class="fas fa-microphone-alt fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          `;
+  
+        $(output).appendTo("#meetingsList");
+      });
+    
+  
+      if (meetingsCount == 0) {
+        outputError = `
+        <div class="d-flex justify-content-center">
+        <section>
+        <img src = "/student/img/undraw_Booked_j7rj.svg" width="50%">
+  
+        <h2 style="margin-top: 2%;">No Scheduled Meetings</h2>
+        <p>You're all caught up</p>
+        </section>
+        </div>          
+        `;
+  
+        $(outputError).appendTo("#meetingsList");
+      } else {
+  
+      }
+  
+    });
+  }
+
   /*
 
   var _ref = firebase.database().ref().child("UserData").child(name).child("Meetings");
