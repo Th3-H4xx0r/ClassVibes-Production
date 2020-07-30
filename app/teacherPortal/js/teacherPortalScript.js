@@ -1037,6 +1037,40 @@ function getAnnouncementForClass(code) {
       var announcementId = snapshot.id
       console.log("THING:" + announcementId)
 
+      var studentReactionsData = data['Student Reactions']
+
+      var studentReactions = {
+        "doing great": 0,
+        "need help": 0,
+        "frustrated": 0
+      }
+
+      if(studentReactionsData != {} && studentReactionsData != undefined){
+
+        for (student in studentReactionsData)  {
+
+          var studentReaction = studentReactionsData[student]
+
+          var reaction = studentReaction['reaction']
+
+
+          if(reaction == "doing great"){
+            studentReactions['doing great'] = studentReactions['doing great'] + 1
+          }
+
+          if(reaction == "need help"){
+            studentReactions['need help'] = studentReactions['need help'] + 1
+          }
+
+
+          if(reaction == "frustrated"){
+            studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+          }
+          
+        }                  
+      }
+
+
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-success" style = 'height: max-content'>
@@ -1055,6 +1089,10 @@ function getAnnouncementForClass(code) {
                         -webkit-box-orient: vertical;'>${message}</p>
                         <h3><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
 
+                        <div class="chart-container" style="position: relative; height:100px; width:100px">
+                        <canvas id="announcementChart${snapshot.id}"></canvas>
+                    </div>
+
 
                       </div>
                     </div>
@@ -1063,6 +1101,44 @@ function getAnnouncementForClass(code) {
       `
       
       $(output).appendTo('#classAnnouncement')
+
+      // Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+
+// Pie Chart Example
+var ctx = document.getElementById(`announcementChart${snapshot.id}`);
+new Chart(ctx, {
+type: 'doughnut',
+data: {
+labels: ["Doing Great", "Needs Help", "Frustrated"],
+datasets: [{
+data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+hoverBorderColor: "rgba(234, 236, 244, 1)",
+}],
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+tooltips: {
+backgroundColor: "rgb(255,255,255)",
+bodyFontColor: "#858796",
+borderColor: '#dddfeb',
+borderWidth: 1,
+xPadding: 10,
+yPadding: 5,
+displayColors: false,
+caretPadding: 2,
+},
+legend: {
+display: false
+},
+cutoutPercentage: 60,
+},
+});
+
     })
 
     if(index == 0){
@@ -1983,14 +2059,47 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 announcementsCount += 1;
   
   
-                var title = annoucementData["Title"];
-                var message = annoucementData["Message"];
-                var date = annoucementData['Date'];
-  
+                var title = annoucementData["title"];
+                var message = annoucementData["message"];
+                var date = annoucementData['timestamp'];
+
+                var studentReactionsData = annoucementData['Student Reactions']
+
+                var studentReactions = {
+                  "doing great": 0,
+                  "need help": 0,
+                  "frustrated": 0
+                }
+
+                if(studentReactionsData != {} && studentReactionsData != undefined){
+
+                  for (student in studentReactionsData)  {
+
+                    var studentReaction = studentReactionsData[student]
+
+                    var reaction = studentReaction['reaction']
+
+
+                    if(reaction == "doing great"){
+                      studentReactions['doing great'] = studentReactions['doing great'] + 1
+                    }
+
+                    if(reaction == "need help"){
+                      studentReactions['need help'] = studentReactions['need help'] + 1
+                    }
+
+
+                    if(reaction == "frustrated"){
+                      studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+                    }
+                    
+                  }                  
+                }
+
                 var nameClass = classnamesList[i];
   
                 outputAnnouncements = `
-                <div class="col-xl-6 col-md-6 mb-4">
+                <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -2000,11 +2109,13 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                         <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
 
                         <p style = 'color: gray'>${message}</p>
-  
-                        <div class="h6 mb-0" style = "color: #a2a39b">${date}</div>
+
+                        
                       </div>
                       <div class="col-auto">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <div class="chart-container" style="position: relative; height:100px; width:100px">
+                        <canvas id="announcementChart${snapshot.id}"></canvas>
+                    </div>
                       </div>
                     </div>
                   </div>
@@ -2012,8 +2123,48 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
               </div>
             </div>
                 `;
-  
-                  $(outputAnnouncements).appendTo("#annoucementsSection");
+
+                $(outputAnnouncements).appendTo("#annoucementsSection");
+
+                console.log(studentReactions)
+
+  // Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+
+// Pie Chart Example
+var ctx = document.getElementById(`announcementChart${snapshot.id}`);
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ["Doing Great", "Needs Help", "Frustrated"],
+    datasets: [{
+      data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+      backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+      hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+      hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 10,
+      yPadding: 5,
+      displayColors: false,
+      caretPadding: 2,
+    },
+    legend: {
+      display: false
+    },
+    cutoutPercentage: 60,
+  },
+});
+                  
               }
             });
           });
