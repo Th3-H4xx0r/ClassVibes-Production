@@ -153,12 +153,12 @@ async function getAnnouncementForClass(code, email) {
     var announcementId = doc.id
     console.log("THING:" + announcementId)
 
-    var myReaction = "doing great"
+    var myReaction = "nonet"
 
     var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').doc(email).get().then(snap => {
         var data = snap.data();
 
-        var reaction = "doing great"
+        var reaction = "none"
 
         if(data != undefined && data != null){
           reaction = data['reaction']
@@ -173,16 +173,11 @@ async function getAnnouncementForClass(code, email) {
           myReaction = 'doing great'
         }
 
-        else if(reaction == "need help"){
-          myReaction = 'need help'        
-        }
-
-
         else if(reaction == "frustrated"){
           myReaction = 'frustrated'
         }
         else {
-          myReaction = 'doing great'
+          myReaction = 'none'
         }
 
     }).then(() => {
@@ -223,7 +218,17 @@ async function getAnnouncementForClass(code, email) {
   
         document.getElementById(`announceReactionSection${doc.id}`).innerHTML = announcementReactionSectionHTML
         
-      }else if(myReaction == "frustrated"){
+      }else if(myReaction == "none"){
+        var announcementReactionSectionHTML = `
+        <a onclick="updateAnnouncementReaction( '${doc.id}', '${code}', 'doing great', '${email}')" href="javascript:;"><i class="far fa-thumbs-up" style="font-size: 50px; color: lightslategray;"></i></a>
+              
+        <a onclick="updateAnnouncementReaction('${doc.id}', '${code}', 'frustrated', '${email}')" href="javascript:;"><i class="far fa-thumbs-down" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+        `
+  
+        document.getElementById(`announceReactionSection${doc.id}`).innerHTML = announcementReactionSectionHTML
+      }
+      
+      else if(myReaction == "frustrated"){
         var announcementReactionSectionHTML = `
         <a onclick="updateAnnouncementReaction( '${doc.id}', '${code}', 'doing great', '${email}')" href="javascript:;"><i class="far fa-thumbs-up" style="font-size: 50px; color: lightslategray;"></i></a>
               
