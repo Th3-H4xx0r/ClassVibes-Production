@@ -309,7 +309,9 @@ function leaveClass(code){
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete();
+      firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
+        window.location.reload()
+      });
     }
   });
 }
