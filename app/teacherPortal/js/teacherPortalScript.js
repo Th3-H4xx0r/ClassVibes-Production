@@ -1209,7 +1209,7 @@ function getMeetingForClass(code) {
 
       document.getElementById('meetingsListforClassPage').innerHTML = '';
 
-      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
+      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('class id', '==', code).orderBy('timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
           index  = index + 1
           var data = snapshot.data();
@@ -1265,7 +1265,7 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
   firebase.firestore().collection('UserData').doc(teacherEmail).collection('Meetings').doc(teacherMeetingID).delete().then(() => {
 
   //Delete for Student
-  firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('Class', '==', meetingClass).where('Date', '==', date).where('Title', '==', title).get().then(snap => {
+  firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('class id', '==', meetingClass).where('date and time', '==', date).where('title', '==', title).get().then(snap => {
     snap.forEach(doc => {
       console.log(doc.data())
       doc.ref.delete()

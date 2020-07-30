@@ -963,7 +963,7 @@ function getMeetings(email, pageType) {
 
   //GETS MEETINGS FOR MEETINGS PAGE
   if(pageType == "meetingsPage"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').get().then(function (doc) {
 
       var meetingsCount = 0;
   
@@ -974,8 +974,8 @@ function getMeetings(email, pageType) {
         var meetingsData = snapshot.data();
   
         var classForMeeting = meetingsData["Course"];
-        var date = meetingsData["Date"];
-        var title = meetingsData["Title"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
   
   
         output = `
@@ -1023,7 +1023,7 @@ function getMeetings(email, pageType) {
   //GETS MEETINGS FOR DASHBOARD PAGE SECTION 
 
   if(pageType == "dashboard"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").limitToLast(3).get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp").limitToLast(3).get().then(function (doc) {
 
   
       var meetingsCount = 0;
@@ -1035,8 +1035,8 @@ function getMeetings(email, pageType) {
         var meetingsData = snapshot.data();
   
         var classForMeeting = meetingsData["Course"];
-        var date = meetingsData["Date"];
-        var title = meetingsData["Title"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
 
         output = `
           <div class="col-xl-12 col-md-6 mb-4">
@@ -1088,7 +1088,7 @@ function getMeetings(email, pageType) {
 
 
   if(pageType == "class-page"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').get().then(function (doc) {
   
       var meetingsCount = 0;
   
@@ -1099,8 +1099,8 @@ function getMeetings(email, pageType) {
         var meetingsData = snapshot.data();
   
         var classForMeeting = meetingsData["Course"];
-        var date = meetingsData["Date"];
-        var title = meetingsData["Title"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
 
         output = `
           <div class="col-xl-12 col-md-6 mb-4">
