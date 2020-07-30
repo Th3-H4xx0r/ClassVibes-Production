@@ -477,18 +477,27 @@ async function getStudentClasses(studentUsername, pageType) {
         $(output).appendTo("#classesRowDisplay");
 
         if (pageType == "student-joinClass") {
-          document.getElementById('loadingIndicator').style.display = "none";
+          if(document.getElementById('loadingIndicator') != null){
+            document.getElementById('loadingIndicator').style.display = "none";
+
+          }
 
           document.getElementById('classesSection-description').style.display = "initial";
 
           document.getElementById('noClasses-Section').style.display = "none";
 
         } else {
-          document.getElementById('loadingIndicator').style.display = "none";
+          if(document.getElementById('loadingIndicator') != null){
+            document.getElementById('loadingIndicator').style.display = "none";
+          }
 
-          document.getElementById('dashboardSection-content').style.display = "initial";
+          if(document.getElementById('dashboardSection-content') != null){
+            document.getElementById('dashboardSection-content').style.display = "initial";
+          }
 
-          document.getElementById('noClassesSection').style.display = "none";
+          if(document.getElementById('noClassesSection') != null){
+            document.getElementById('noClassesSection').style.display = "none";
+          }
         }
 
       });
