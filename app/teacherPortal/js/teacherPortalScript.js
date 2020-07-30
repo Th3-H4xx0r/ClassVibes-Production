@@ -1022,55 +1022,48 @@ function getMeetings() {
   });
 }
 
-function getAnnouncementForClass(code) {
-  var _ref = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
-  
-  _ref.get().then(function(doc) {
-    var index = 0;
+async function getAnnouncementForClass(code) {
+  var index = 0;
 
-    doc.forEach(snapshot => {
-      index = index + 1
-      var data = snapshot.data()
-      var date = data["timestamp"]
-      var message = data["message"]
-      var title = data["title"]
-      var announcementId = snapshot.id
-      console.log("THING:" + announcementId)
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
+  let announcementRefGet = await announcementRef.get();
+  for(const doc of announcementRefGet.docs){
 
-      var studentReactionsData = data['Student Reactions']
+    index = index + 1
+    var data = doc.data()
+    var date = data["timestamp"]
+    var message = data["message"]
+    var title = data["title"]
+    var announcementId = doc.id
+    console.log("THING:" + announcementId)
 
-      var studentReactions = {
-        "doing great": 0,
-        "need help": 0,
-        "frustrated": 0
-      }
+    var studentReactions = {
+      "doing great": 0,
+      "need help": 0,
+      "frustrated": 0
+    }
 
-      if(studentReactionsData != {} && studentReactionsData != undefined){
+    var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
+      snap.forEach((document) => {
+        var data = document.data();
 
-        for (student in studentReactionsData)  {
+        var reaction = data['reaction']
 
-          var studentReaction = studentReactionsData[student]
+        if(reaction == "doing great"){
+          studentReactions['doing great'] = studentReactions['doing great'] + 1
+        }
 
-          var reaction = studentReaction['reaction']
-
-
-          if(reaction == "doing great"){
-            studentReactions['doing great'] = studentReactions['doing great'] + 1
-          }
-
-          if(reaction == "need help"){
-            studentReactions['need help'] = studentReactions['need help'] + 1
-          }
+        if(reaction == "need help"){
+          studentReactions['need help'] = studentReactions['need help'] + 1
+        }
 
 
-          if(reaction == "frustrated"){
-            studentReactions['frustrated'] = studentReactions['frustrated'] + 1
-          }
-          
-        }                  
-      }
+        if(reaction == "frustrated"){
+          studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+        }
+      })
 
-
+    }).then(() => {
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card shadow h-100 py-2">
@@ -1088,7 +1081,7 @@ function getAnnouncementForClass(code) {
                       </div>
                       <div class="col-auto">
                       <div class="chart-container" style="position: relative; height:100px; width:100px">
-                        <canvas id="announcementChart${snapshot.id}"></canvas>
+                        <canvas id="announcementChart${doc.id}"></canvas>
                     </div>
                       </div>
                     </div>
@@ -1106,7 +1099,7 @@ Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,Bli
 Chart.defaults.global.defaultFontColor = '#858796';
 
 // Pie Chart Example
-var ctx = document.getElementById(`announcementChart${snapshot.id}`);
+var ctx = document.getElementById(`announcementChart${doc.id}`);
 new Chart(ctx, {
 type: 'doughnut',
 data: {
@@ -1137,28 +1130,9 @@ display: false
 cutoutPercentage: 60,
 },
 });
-
-    })
-
-    if(index == 0){
-
-      document.getElementById('send_announcement_top_classPage').style.display = 'none'
-      var noAnnouncementsHTML = `
-      <div class="d-flex justify-content-center" style="margin-top: 10%;">
-      <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
-  </div>
-  <center style="margin-top: 1%;">
-      <h2>No Announcements</h2>
-      <p>Click Send Announcement to create a announcement</p>
-
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Send Announcement</button>
-
-  </center>
-      `;
-
-      document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML
+    });
     }
-  })
+
 }
 
 function showSendAnnouncementModal(){
