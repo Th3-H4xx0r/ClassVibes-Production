@@ -1053,7 +1053,7 @@ function getMeetings(email, pageType) {
   
       if (meetingsCount == 0) {
         outputError = `
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center" style = 'margin-left: 15%; margin-top: 10%' align = 'center'>
         <section>
         <img src = "/student/img/undraw_Booked_j7rj.svg" width="50%">
   
