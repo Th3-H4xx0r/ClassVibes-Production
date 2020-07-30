@@ -82,12 +82,16 @@
 
       username = user.displayName
 
-      getStudentClasses(email);
+      //getStudentClasses(email);
       //getStudentStatus(email);
 
-      getAnnouncementForClass(classCode);
+      updateAddClasesDropdown(email, "")
+
+      getAnnouncementForClass(classCode, email);
 
       getClassDataClassesPage(classCode)
+
+      getMeetings(email, 'class-page')
 
     } else {
       console.log("user Signed out");
@@ -475,7 +479,7 @@
 
                         <!-- MEETINGS TAB -->
                         <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
-                            <div class="row" id="meetingsList" style="margin-left: 20px;"></div>
+                            <div class="row" id="meetingsList" style="margin-left: 10px; margin-top: 30px"></div>
                         </div>
 
                         <!-- ANNOUNCEMENTS TAB -->

@@ -177,6 +177,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
           else if(pageType == "announcementsTeacher"){
             getProfileInfo();
             getAnnouncements(email);
+            getClassDataDropdown();
           }
 
           else if(pageType == "student-requests"){
@@ -614,7 +615,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         snap.forEach(doc => {
           var data = doc.data();
   
-          var studentReaction = data['reaction']
+          var studentReaction = data['status']
   
           var date = data['date']
   
@@ -624,11 +625,11 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
   
           var reactionKey = 0;
   
-          if(studentReaction == 'good'){
+          if(studentReaction == 'doing great'){
             reactionKey = 3
-          } else if (studentReaction == 'meh') {
+          } else if (studentReaction == 'need help') {
             reactionKey = 2
-          } else if (studentReaction == 'needs help'){
+          } else if (studentReaction == 'frustrated'){
             reactionKey = 1
           }
   
@@ -1033,68 +1034,117 @@ function getMeetings() {
   });
 }
 
-function getAnnouncementForClass(code) {
-  var _ref = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
-  
-  _ref.get().then(function(doc) {
-    var index = 0;
+async function getAnnouncementForClass(code) {
+  var index = 0;
 
-    doc.forEach(snapshot => {
-      index = index + 1
-      var data = snapshot.data()
-      var date = data["timestamp"]
-      var message = data["message"]
-      var title = data["title"]
-      var announcementId = snapshot.id
-      console.log("THING:" + announcementId)
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
+  let announcementRefGet = await announcementRef.get();
+  for(const doc of announcementRefGet.docs){
 
+    index = index + 1
+    var data = doc.data()
+    var date = data["timestamp"]
+    var message = data["message"]
+    var title = data["title"]
+    var announcementId = doc.id
+    console.log("THING:" + announcementId)
+
+    var studentReactions = {
+      "doing great": 0,
+      "need help": 0,
+      "frustrated": 0
+    }
+
+    var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
+      snap.forEach((document) => {
+        var data = document.data();
+
+        var reaction = data['reaction']
+
+        if(reaction == "doing great"){
+          studentReactions['doing great'] = studentReactions['doing great'] + 1
+        }
+
+        if(reaction == "need help"){
+          studentReactions['need help'] = studentReactions['need help'] + 1
+        }
+
+
+        if(reaction == "frustrated"){
+          studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+        }
+      })
+
+    }).then(() => {
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-left-success" style = 'height: max-content'>
-                      <div class="card-body">
-                        <h4 class="badge badge-info">${date}</h4>
+                <div class="card shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
 
-                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; /* number of lines to show /
-                        -webkit-box-orient: vertical;''>${title}</h5>
+                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
 
-                        <p style = '   overflow: hidden;
-                        text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; / number of lines to show */
-                        -webkit-box-orient: vertical;'>${message}</p>
-                        <h3><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
+                        <p style = 'color: gray'>${message}</p>
 
+                        <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
 
+                        
+                      </div>
+                      <div class="col-auto">
+                      <div class="chart-container" style="position: relative; height:100px; width:100px">
+                        <canvas id="announcementChart${doc.id}"></canvas>
+                    </div>
                       </div>
                     </div>
-
-                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
       `
       
       $(output).appendTo('#classAnnouncement')
-    })
 
-    if(index == 0){
+      // Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
 
-      document.getElementById('send_announcement_top_classPage').style.display = 'none'
-      var noAnnouncementsHTML = `
-      <div class="d-flex justify-content-center" style="margin-top: 10%;">
-      <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
-  </div>
-  <center style="margin-top: 1%;">
-      <h2>No Announcements</h2>
-      <p>Click Send Announcement to create a announcement</p>
-
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Send Announcement</button>
-
-  </center>
-      `;
-
-      document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML
+// Pie Chart Example
+var ctx = document.getElementById(`announcementChart${doc.id}`);
+new Chart(ctx, {
+type: 'doughnut',
+data: {
+labels: ["Doing Great", "Needs Help", "Frustrated"],
+datasets: [{
+data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+hoverBorderColor: "rgba(234, 236, 244, 1)",
+}],
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+tooltips: {
+backgroundColor: "rgb(255,255,255)",
+bodyFontColor: "#858796",
+borderColor: '#dddfeb',
+borderWidth: 1,
+xPadding: 10,
+yPadding: 5,
+displayColors: false,
+caretPadding: 2,
+},
+legend: {
+display: false
+},
+cutoutPercentage: 60,
+},
+});
+    });
     }
-  })
+
 }
 
 function showSendAnnouncementModal(){
@@ -1363,7 +1413,7 @@ function getStudentData(code) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
     
-          var reaction = data["reaction"];
+          var reaction = data["status"];
           var studentName = data["name"];
           var studentEmail = data["email"];
           classInfoList.push([studentName, reaction, studentEmail])
@@ -1497,18 +1547,18 @@ function getStudentData(code) {
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
     
-            if (studentReaction == "good") {
+            if (studentReaction == "doing great") {
               document.getElementById("face").outerHTML = happy;
               $(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
     
-            } else if (studentReaction == "meh") {
+            } else if (studentReaction == "need help") {
               document.getElementById("face").outerHTML = meh;
               $(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
     
     
-            } else if (studentReaction == "needs help") {
+            } else if (studentReaction == "frustrated") {
     
               document.getElementById("face").outerHTML = sad;
     
@@ -1626,9 +1676,9 @@ function getEditData(code) {
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
     var course = data['Course']
-    var teacherNote = data['teachersNote']
-    var description = data['courseDescription']
-    var inactiveDays = data['max days inactive']
+    var teacherNote = data['teachersNote'] != undefined ? data['teachersNote'] : "Not Set"
+    var description = data['courseDescription'] != undefined ? data['courseDescription'] : "Not Set"
+    var inactiveDays = data['max days inactive'] != NaN ?  data['max days inactive'] : "Not Set"
     output += `
 
     <h6>Edit Class Name</h6>
@@ -1995,14 +2045,47 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 announcementsCount += 1;
   
   
-                var title = annoucementData["Title"];
-                var message = annoucementData["Message"];
-                var date = annoucementData['Date'];
-  
+                var title = annoucementData["title"];
+                var message = annoucementData["message"];
+                var date = annoucementData['timestamp'];
+
+                var studentReactionsData = annoucementData['Student Reactions']
+
+                var studentReactions = {
+                  "doing great": 0,
+                  "need help": 0,
+                  "frustrated": 0
+                }
+
+                if(studentReactionsData != {} && studentReactionsData != undefined){
+
+                  for (student in studentReactionsData)  {
+
+                    var studentReaction = studentReactionsData[student]
+
+                    var reaction = studentReaction['reaction']
+
+
+                    if(reaction == "doing great"){
+                      studentReactions['doing great'] = studentReactions['doing great'] + 1
+                    }
+
+                    if(reaction == "need help"){
+                      studentReactions['need help'] = studentReactions['need help'] + 1
+                    }
+
+
+                    if(reaction == "frustrated"){
+                      studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+                    }
+                    
+                  }                  
+                }
+
                 var nameClass = classnamesList[i];
   
                 outputAnnouncements = `
-                <div class="col-xl-6 col-md-6 mb-4">
+                <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -2012,11 +2095,13 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                         <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
 
                         <p style = 'color: gray'>${message}</p>
-  
-                        <div class="h6 mb-0" style = "color: #a2a39b">${date}</div>
+
+                        
                       </div>
                       <div class="col-auto">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                      <div class="chart-container" style="position: relative; height:100px; width:100px">
+                        <canvas id="announcementChart${snapshot.id}"></canvas>
+                    </div>
                       </div>
                     </div>
                   </div>
@@ -2024,8 +2109,48 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
               </div>
             </div>
                 `;
-  
-                  $(outputAnnouncements).appendTo("#annoucementsSection");
+
+                $(outputAnnouncements).appendTo("#annoucementsSection");
+
+                console.log(studentReactions)
+
+  // Set new default font family and font color to mimic Bootstrap's default styling
+Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#858796';
+
+// Pie Chart Example
+var ctx = document.getElementById(`announcementChart${snapshot.id}`);
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    labels: ["Doing Great", "Needs Help", "Frustrated"],
+    datasets: [{
+      data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+      backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+      hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+      hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: '#dddfeb',
+      borderWidth: 1,
+      xPadding: 10,
+      yPadding: 5,
+      displayColors: false,
+      caretPadding: 2,
+    },
+    legend: {
+      display: false
+    },
+    cutoutPercentage: 60,
+  },
+});
+                  
               }
             });
           });

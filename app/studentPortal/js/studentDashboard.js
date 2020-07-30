@@ -136,47 +136,102 @@ function getGrayStudentStatus(email, classCode){
 
 }
 
-function getAnnouncementForClass(code) {
-  var announcementCount = 0;
+async function getAnnouncementForClass(code, email) {
+  var index = 0;
 
-  firebase.firestore().collection('Classes').doc(code).collection('Announcements').get().then(function(doc) {
-    doc.forEach(snapshot => {
-      announcementCount = announcementCount + 1
-      var data = snapshot.data()
-      var date = data["date"]
-      var message = data["message"]
-      var title = data["title"]
+  document.getElementById('classAnnouncement').innerHTML = ``
 
-      var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
+  let announcementRefGet = await announcementRef.get();
+  for(const doc of announcementRefGet.docs){
 
+    index = index + 1
+    var data = doc.data()
+    var date = data["timestamp"]
+    var message = data["message"]
+    var title = data["title"]
+    var announcementId = doc.id
+    console.log("THING:" + announcementId)
+
+    var myReaction = "doing great"
+
+    var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').doc(email).get().then(snap => {
+        var data = snap.data();
+
+        var reaction = data['reaction']
+
+        console.log(reaction)
+
+
+        if(reaction == "doing great"){
+          myReaction = 'doing great'
+        }
+
+        else if(reaction == "need help"){
+          myReaction = 'need help'        
+        }
+
+
+        else if(reaction == "frustrated"){
+          myReaction = 'frustrated'
+        }
+        else {
+          myReaction = 'doing great'
+        }
+
+    }).then(() => {
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-left-success" style = 'height: max-content'>
-                      <div class="card-body">
+                <div class="card shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
 
-                        <h4 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis; margin-top: 10px;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; /* number of lines to show /
-                        -webkit-box-orient: vertical;''>${title}</h4>
+                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
 
-                        <p style = '   overflow: hidden;
-                        text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; / number of lines to show */
-                        -webkit-box-orient: vertical;'>${message}</p>
-
-                        <h3 style = 'font-size: 15px'>${formattedDate}</h3>
+                        <p style = 'color: gray'>${message}</p>
+                        
+                      </div>
+                      <div class="col-auto">
+                      <div class = 'row' style = 'margin-right: 20px' id = "announceReactionSection${doc.id}">
+        
+                      </div>
                       </div>
                     </div>
-
-                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
       `
-
+      
       $(output).appendTo('#classAnnouncement')
+      
+      console.log(myReaction)
+      if(myReaction == "doing great"){
+        var announcementReactionSectionHTML = `
+        <a onclick="updateAnnouncementReaction( '${doc.id}', '${code}', 'doing great', '${email}')" href="javascript:;"><i class="fas fa-thumbs-up" style="font-size: 50px; color: lightslategray;"></i></a>
+              
+        <a onclick="updateAnnouncementReaction('${doc.id}', '${code}', 'frustrated', '${email}')" href="javascript:;"><i class="far fa-thumbs-down" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+        `
+  
+        document.getElementById(`announceReactionSection${doc.id}`).innerHTML = announcementReactionSectionHTML
+        
+      }else if(myReaction == "frustrated"){
+        var announcementReactionSectionHTML = `
+        <a onclick="updateAnnouncementReaction( '${doc.id}', '${code}', 'doing great', '${email}')" href="javascript:;"><i class="far fa-thumbs-up" style="font-size: 50px; color: lightslategray;"></i></a>
+              
+        <a onclick="updateAnnouncementReaction('${doc.id}', '${code}', 'frustrated', '${email}')" href="javascript:;"><i class="fas fa-thumbs-down" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+        `
+  
+        document.getElementById(`announceReactionSection${doc.id}`).innerHTML = announcementReactionSectionHTML
+      }
+     
     })
 
-  }).then(() => {
-      if(announcementCount == 0){
+
+    }
+      if(index == 0){
         var noAnnouncementsHTML = `
         <div class="d-flex justify-content-center" style="margin-top: 10%;">
         <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
@@ -190,7 +245,14 @@ function getAnnouncementForClass(code) {
 
         document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML;
       }
-    })
+}
+
+function updateAnnouncementReaction(announcementID, classCode, reaction, email){
+  firebase.firestore().collection("Classes").doc(classCode).collection("Announcements").doc(announcementID).collection('Student Reactions').doc(email).set({
+      "reaction": reaction
+  }).then(() => {
+    getAnnouncementForClass(classCode, email)
+  })
 }
 
 function getClassDataClassesPage(code){
@@ -303,7 +365,15 @@ function toggleLeaveClassPopup(className, classCode){
 }
 
 function leaveClass(code){
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
 
+      firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
+        window.location.href = "/student/dashboard";
+      });
+    }
+  });
 }
 
 // FIRESTORE MIGRATED FULLY
@@ -477,18 +547,27 @@ async function getStudentClasses(studentUsername, pageType) {
         $(output).appendTo("#classesRowDisplay");
 
         if (pageType == "student-joinClass") {
-          document.getElementById('loadingIndicator').style.display = "none";
+          if(document.getElementById('loadingIndicator') != null){
+            document.getElementById('loadingIndicator').style.display = "none";
+
+          }
 
           document.getElementById('classesSection-description').style.display = "initial";
 
           document.getElementById('noClasses-Section').style.display = "none";
 
         } else {
-          document.getElementById('loadingIndicator').style.display = "none";
+          if(document.getElementById('loadingIndicator') != null){
+            document.getElementById('loadingIndicator').style.display = "none";
+          }
 
-          document.getElementById('dashboardSection-content').style.display = "initial";
+          if(document.getElementById('dashboardSection-content') != null){
+            document.getElementById('dashboardSection-content').style.display = "initial";
+          }
 
-          document.getElementById('noClassesSection').style.display = "none";
+          if(document.getElementById('noClassesSection') != null){
+            document.getElementById('noClassesSection').style.display = "none";
+          }
         }
 
       });
@@ -996,6 +1075,72 @@ function getMeetings(email, pageType) {
     });
   }
 
+
+  if(pageType == "class-page"){
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").get().then(function (doc) {
+  
+      var meetingsCount = 0;
+  
+      doc.forEach(snapshot => {
+  
+        meetingsCount += 1;
+  
+        var meetingsData = snapshot.data();
+  
+        var classForMeeting = meetingsData["Course"];
+        var date = meetingsData["Date"];
+        var title = meetingsData["Title"];
+
+        output = `
+          <div class="col-xl-12 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" style = 'overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 1;
+                  max-width: 25ch;
+                  -webkit-box-orient: vertical;'>${title}</div>
+                  <h6 style = 'color: gray; font-weight: 700; margin-top: 10px'>${date}</h6>
+                </div>
+                <div class="col-auto">
+  
+                  <i class="fas fa-microphone-alt fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          `;
+  
+        $(output).appendTo("#meetingsList");
+      });
+    
+  
+      if (meetingsCount == 0) {
+        outputError = `
+        <div class="d-flex justify-content-center" style = 'margin-left: 15%; margin-top: 7%' align = 'center'>
+        <section>
+        <img src = "/student/img/undraw_Booked_j7rj.svg" width="45%">
+  
+        <h2 style="margin-top: 2%;">No Scheduled Meetings</h2>
+        <p>You're all caught up</p>
+        </section>
+        </div>          
+        `;
+  
+        $(outputError).appendTo("#meetingsList");
+      } else {
+  
+      }
+  
+    });
+  }
+
   /*
 
   var _ref = firebase.database().ref().child("UserData").child(name).child("Meetings");
@@ -1071,7 +1216,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
     var classCode = classData["code"];
 
-    var className = "loading"
+    var className = "%&--PlaceHolder--&%"
 
     var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
