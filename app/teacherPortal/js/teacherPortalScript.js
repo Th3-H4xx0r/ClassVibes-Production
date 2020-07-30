@@ -1073,31 +1073,30 @@ function getAnnouncementForClass(code) {
 
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-left-success" style = 'height: max-content'>
-                      <div class="card-body">
-                        <h4 class="badge badge-info">${date}</h4>
+                <div class="card shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
 
-                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; /* number of lines to show /
-                        -webkit-box-orient: vertical;''>${title}</h5>
+                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
 
-                        <p style = '   overflow: hidden;
-                        text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; / number of lines to show */
-                        -webkit-box-orient: vertical;'>${message}</p>
-                        <h3><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
+                        <p style = 'color: gray'>${message}</p>
 
-                        <div class="chart-container" style="position: relative; height:100px; width:100px">
+                        <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
+
+                        
+                      </div>
+                      <div class="col-auto">
+                      <div class="chart-container" style="position: relative; height:100px; width:100px">
                         <canvas id="announcementChart${snapshot.id}"></canvas>
                     </div>
-
-
                       </div>
                     </div>
-
-                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
       `
       
       $(output).appendTo('#classAnnouncement')
