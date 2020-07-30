@@ -1,5 +1,3 @@
-const e = require("express");
-
 function encrypt(message){
   var AES_KEY = `
       MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC7EiRUS/MhtKsEGNIq6zGsoWhE
