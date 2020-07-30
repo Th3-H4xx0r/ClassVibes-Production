@@ -158,9 +158,15 @@ async function getAnnouncementForClass(code, email) {
     var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').doc(email).get().then(snap => {
         var data = snap.data();
 
-        var reaction = data['reaction']
+        var reaction = "doing great"
 
-        console.log(reaction)
+        if(data != undefined && data != null){
+          reaction = data['reaction']
+
+          console.log(reaction)
+        }
+
+
 
 
         if(reaction == "doing great"){

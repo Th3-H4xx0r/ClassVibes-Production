@@ -921,7 +921,7 @@ function getClassData() {
               </div>
             </a>
             `
-            
+
           $(output5).appendTo("#topClassesSection");
           $(output2).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
