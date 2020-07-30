@@ -1817,13 +1817,16 @@ function getChartData(code) {
 
         //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
 
-        var studentsReactionLists = [0,0,0];
+        var studentsReactionLists = [0,0,0, 0];
 
         doc.forEach(snapshot => {
           index = index + 1
             var data1 = snapshot.data();
 
             var reaction = data1["status"];
+            var date = data1["date"];
+            var timestamp = new Date(date).getTime();
+            
 
             if(reaction == "doing great"){
               studentsReactionLists[0] = studentsReactionLists[0] + 1;
@@ -1836,6 +1839,10 @@ function getChartData(code) {
             if(reaction == "frustrated"){
               studentsReactionLists[2] = studentsReactionLists[2] + 1;
             }
+
+            
+
+
         });
         setTimeout(function(){
 
@@ -1859,11 +1866,11 @@ function getChartData(code) {
   var myPieChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ["Doing Great", "Needs Help", "Frustrated"],
+      labels: ["Doing Great", "Needs Help", "Frustrated", "Inactive"],
       datasets: [{
         data: studentsReactionLists,
-        backgroundColor: ['#4feb34', '#ebe834', '#eb0c00'],
-        hoverBackgroundColor: ['#15b809', '#c2cc00', '#cc0011'],
+        backgroundColor: ['#4feb34', '#ebe834', '#eb0c00', '#808080'],
+        hoverBackgroundColor: ['#15b809', '#c2cc00', '#cc0011', '#808080'],
         hoverBorderColor: "rgba(234, 236, 244, 1)",
       }],
     },
