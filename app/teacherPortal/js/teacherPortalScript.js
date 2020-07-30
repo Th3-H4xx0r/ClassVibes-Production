@@ -1135,6 +1135,24 @@ cutoutPercentage: 60,
     });
     }
 
+    if(index == 0){
+      var noAnnouncementsHTML = ` 
+      
+      <center>
+      <img src="/teacher/img/undraw_popular_7nrh.svg" width="20%">  
+    
+      <h2 style="margin-top: 3%;">No Announcements</h2>
+      <p>You're all caught up</p>
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style = 'margin-bottom: 20px; margin-left: 20px;'>Send Announcement</button>
+
+    </center>
+      `;
+
+      document.getElementById('send_announcement_top_classPage').style.display = "none"
+    document.getElementById("classAnnouncement").innerHTML = noAnnouncementsHTML;
+    }
+
 }
 
 function showSendAnnouncementModal(){
