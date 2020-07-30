@@ -921,7 +921,7 @@ function getClassData() {
               </div>
             </a>
             `
-            
+
           $(output5).appendTo("#topClassesSection");
           $(output2).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
@@ -950,11 +950,6 @@ function storeClassforChart(code) {
   localStorage.setItem("codeForChart", code);
 }
 
-$("#customSwitch1").bootstrapSwitch({
-  onSwitchChange: function(e, state) { 
-    alert(state);
-  }
-});
 
 function writeAnnouncement() {
   var numberClass = document.getElementById("numberClass").value;
@@ -1115,7 +1110,7 @@ var ctx = document.getElementById(`announcementChart${doc.id}`);
 new Chart(ctx, {
 type: 'doughnut',
 data: {
-labels: ["Doing Great", "Needs Help", "Frustrated"],
+labels: ["Liked", "Needs Help", "Disliked"],
 datasets: [{
 data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
 backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
@@ -2120,44 +2115,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 $(outputAnnouncements).appendTo("#annoucementsSection");
 
                 console.log(studentReactions)
-
-  // Set new default font family and font color to mimic Bootstrap's default styling
-Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = '#858796';
-
-// Pie Chart Example
-var ctx = document.getElementById(`announcementChart${snapshot.id}`);
-new Chart(ctx, {
-  type: 'doughnut',
-  data: {
-    labels: ["Doing Great", "Needs Help", "Frustrated"],
-    datasets: [{
-      data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
-      backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
-      hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
-      hoverBorderColor: "rgba(234, 236, 244, 1)",
-    }],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    tooltips: {
-      backgroundColor: "rgb(255,255,255)",
-      bodyFontColor: "#858796",
-      borderColor: '#dddfeb',
-      borderWidth: 1,
-      xPadding: 10,
-      yPadding: 5,
-      displayColors: false,
-      caretPadding: 2,
-    },
-    legend: {
-      display: false
-    },
-    cutoutPercentage: 60,
-  },
-});
-                  
+          
               }
             });
           });
