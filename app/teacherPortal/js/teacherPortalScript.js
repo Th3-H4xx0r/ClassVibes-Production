@@ -1453,7 +1453,7 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1></td>
+          <td><center>${happy}</center></td>
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
@@ -1468,7 +1468,7 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1></td>
+          <td><center>${meh}</center></td>
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
@@ -1483,7 +1483,7 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1></td>
+          <td><center>${sad}</center></td>
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
