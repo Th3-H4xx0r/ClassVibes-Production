@@ -1812,100 +1812,100 @@ function getChartData(code) {
 
 
       firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
-        var data = doc.dat();
+        var data = doc.data();
         maxdays = data["max days inactive"]
 
-      }).then({
+      }).then(() => {
+        firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
 
+          //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
+  
+          var studentsReactionLists = [0,0,0,0];
+  
+          doc.forEach(snapshot => {
+            index = index + 1
+              var data1 = snapshot.data();
+  
+              var reaction = data1["status"];
+              var date = data1["date"];
+             
+              
+  
+              if(reaction == "doing great"){
+                studentsReactionLists[0] = studentsReactionLists[0] + 1;
+              }
+      
+              if(reaction == "need help"){
+                studentsReactionLists[1] = studentsReactionLists[1] + 1;
+              }
+      
+              if(reaction == "frustrated"){
+                studentsReactionLists[2] = studentsReactionLists[2] + 1;
+              }
+  
+              
+  
+  
+          });
+          setTimeout(function(){
+  
+            if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0){
+  
+              var noStudentsHTML = `
+              <center style = 'margin-top: 10%'>
+                <img src = 'img/undraw_empty_xct9.svg' width = "50%" />
+                <h3 style = 'margin-top: 10px'>No Students</h3>
+              </center>
+              `;
+  
+              document.getElementById(`chartPie${code}`).innerHTML = noStudentsHTML;
+            } else {
+    // Set new default font family and font color to mimic Bootstrap's default styling
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
+    
+    // Pie Chart Example
+    var ctx = document.getElementById(`myPieChart${code}`);
+    var myPieChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ["Doing Great", "Needs Help", "Frustrated", "Inactive"],
+        datasets: [{
+          data: studentsReactionLists,
+          backgroundColor: ['#4feb34', '#ebe834', '#eb0c00', '#808080'],
+          hoverBackgroundColor: ['#15b809', '#c2cc00', '#cc0011', '#808080'],
+          hoverBorderColor: "rgba(234, 236, 244, 1)",
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        tooltips: {
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false,
+          caretPadding: 10,
+        },
+        legend: {
+          display: false
+        },
+        cutoutPercentage: 80,
+      },
+    });
+            }
+      
+          
+         }, 700);
+      });
       });
 
 
 
 
-      firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
 
-        //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
-
-        var studentsReactionLists = [0,0,0,0];
-
-        doc.forEach(snapshot => {
-          index = index + 1
-            var data1 = snapshot.data();
-
-            var reaction = data1["status"];
-            var date = data1["date"];
-           
-            
-
-            if(reaction == "doing great"){
-              studentsReactionLists[0] = studentsReactionLists[0] + 1;
-            }
-    
-            if(reaction == "need help"){
-              studentsReactionLists[1] = studentsReactionLists[1] + 1;
-            }
-    
-            if(reaction == "frustrated"){
-              studentsReactionLists[2] = studentsReactionLists[2] + 1;
-            }
-
-            
-
-
-        });
-        setTimeout(function(){
-
-          if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0){
-
-            var noStudentsHTML = `
-            <center style = 'margin-top: 10%'>
-              <img src = 'img/undraw_empty_xct9.svg' width = "50%" />
-              <h3 style = 'margin-top: 10px'>No Students</h3>
-            </center>
-            `;
-
-            document.getElementById(`chartPie${code}`).innerHTML = noStudentsHTML;
-          } else {
-  // Set new default font family and font color to mimic Bootstrap's default styling
-  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-  Chart.defaults.global.defaultFontColor = '#858796';
-  
-  // Pie Chart Example
-  var ctx = document.getElementById(`myPieChart${code}`);
-  var myPieChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ["Doing Great", "Needs Help", "Frustrated", "Inactive"],
-      datasets: [{
-        data: studentsReactionLists,
-        backgroundColor: ['#4feb34', '#ebe834', '#eb0c00', '#808080'],
-        hoverBackgroundColor: ['#15b809', '#c2cc00', '#cc0011', '#808080'],
-        hoverBorderColor: "rgba(234, 236, 244, 1)",
-      }],
-    },
-    options: {
-      maintainAspectRatio: false,
-      tooltips: {
-        backgroundColor: "rgb(255,255,255)",
-        bodyFontColor: "#858796",
-        borderColor: '#dddfeb',
-        borderWidth: 1,
-        xPadding: 15,
-        yPadding: 15,
-        displayColors: false,
-        caretPadding: 10,
-      },
-      legend: {
-        display: false
-      },
-      cutoutPercentage: 80,
-    },
-  });
-          }
-    
-        
-       }, 700);
-    });
 }
 
 function storeGraphReactionsCode(code, event = "none"){
