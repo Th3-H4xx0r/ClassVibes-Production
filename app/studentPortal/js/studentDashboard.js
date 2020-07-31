@@ -472,28 +472,28 @@ async function getStudentClasses(studentUsername, pageType) {
           
           <a onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
 
-          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
 
 
           `
         } else if (reaction == "need help"){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
 
           <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
 
           `
         } else if (reaction == "frustrated"){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
 
-          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
 
           <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
 
@@ -808,6 +808,7 @@ function addClassToStudentData(classCode) {
           'name': name,
           'email': email,
           'date': new Date(),
+          'status': 'doing great'
         });
     
       }).then(() => {
@@ -823,8 +824,6 @@ function addClassToStudentData(classCode) {
 //FIRESTORE MIGRATED FULLY
 async function updateAddClasesDropdown(studentUsername, pageType) {
 
-  let output = "";
-
   classesList = [];
 
   var classCodesList = []
@@ -837,17 +836,21 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
     var classCode = classData["code"];
 
-    var className = "loading"
+    var className = ""
 
     var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
   
       if(data != null && data != undefined){
           className = data['class name'];
+      } else {
+        className = undefined
       }
     }).then(() => {
-      classesList.push(className);
-      classCodesList.push(classCode)
+      if(className != undefined){
+        classesList.push(className);
+        classCodesList.push(classCode)
+      }
     })
   }
 
@@ -865,6 +868,7 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
     classesList.forEach(function (item, index) {
 
           if(pageType == 'class-page'){
+            console.log(classCodesList[index])
             output2 = `
             <a href = "${classCodesList[index]}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
             `;
@@ -963,7 +967,7 @@ function getMeetings(email, pageType) {
 
   //GETS MEETINGS FOR MEETINGS PAGE
   if(pageType == "meetingsPage"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').get().then(function (doc) {
 
       var meetingsCount = 0;
   
@@ -974,8 +978,8 @@ function getMeetings(email, pageType) {
         var meetingsData = snapshot.data();
   
         var classForMeeting = meetingsData["Course"];
-        var date = meetingsData["Date"];
-        var title = meetingsData["Title"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
   
   
         output = `
@@ -1023,7 +1027,7 @@ function getMeetings(email, pageType) {
   //GETS MEETINGS FOR DASHBOARD PAGE SECTION 
 
   if(pageType == "dashboard"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").limitToLast(3).get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp").limitToLast(3).get().then(function (doc) {
 
   
       var meetingsCount = 0;
@@ -1035,8 +1039,8 @@ function getMeetings(email, pageType) {
         var meetingsData = snapshot.data();
   
         var classForMeeting = meetingsData["Course"];
-        var date = meetingsData["Date"];
-        var title = meetingsData["Title"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
 
         output = `
           <div class="col-xl-12 col-md-6 mb-4">
@@ -1088,7 +1092,7 @@ function getMeetings(email, pageType) {
 
 
   if(pageType == "class-page"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("Date").get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').get().then(function (doc) {
   
       var meetingsCount = 0;
   
@@ -1099,8 +1103,8 @@ function getMeetings(email, pageType) {
         var meetingsData = snapshot.data();
   
         var classForMeeting = meetingsData["Course"];
-        var date = meetingsData["Date"];
-        var title = meetingsData["Title"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
 
         output = `
           <div class="col-xl-12 col-md-6 mb-4">

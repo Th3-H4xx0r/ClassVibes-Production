@@ -88,7 +88,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               getEditData(classCode);
               getAnnouncementForClass(classCode);
               getMeetingForClass(classCode);
-              showSendAnnouncementModal();
+              showSendAnnouncementModal(classCode);
             }
 
             else if (pageType == 'dashboard') {
@@ -159,7 +159,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
             getEditData(classCode);
             getAnnouncementForClass(classCode);
             getMeetingForClass(classCode);
-            showSendAnnouncementModal();
+            showSendAnnouncementModal(classCode);
 
           }
           else if (pageType == 'dashboard') {
@@ -951,21 +951,13 @@ function storeClassforChart(code) {
 }
 
 
-function writeAnnouncement() {
-  var numberClass = document.getElementById("numberClass").value;
-  console.log("NUMBER CLASS" + numberClass);
+function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
   var dateNow = new Date();
   var formattedDate = dateNow.toLocaleString();
 
-  $("#customSwitch1").bootstrapSwitch({
-    onSwitchChange: function(e, state) { 
-      alert(state);
-    }
-  });
-
-  firebase.firestore().collection("Classes").doc(numberClass).collection("Announcements").doc().set({
+  firebase.firestore().collection("Classes").doc(code).collection("Announcements").doc().set({
     "title": messageTitle,
     "message": messageText,
     "date": dateNow,
@@ -1140,9 +1132,27 @@ cutoutPercentage: 60,
     });
     }
 
+    if(index == 0){
+      var noAnnouncementsHTML = ` 
+      
+      <center>
+      <img src="/teacher/img/undraw_popular_7nrh.svg" width="20%">  
+    
+      <h2 style="margin-top: 3%;">No Announcements</h2>
+      <p>You're all caught up</p>
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style = 'margin-bottom: 20px; margin-left: 20px;'>Send Announcement</button>
+
+    </center>
+      `;
+
+      document.getElementById('send_announcement_top_classPage').style.display = "none"
+    document.getElementById("classAnnouncement").innerHTML = noAnnouncementsHTML;
+    }
+
 }
 
-function showSendAnnouncementModal(){
+function showSendAnnouncementModal(code){
   var modalHTML = `
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -1156,14 +1166,6 @@ function showSendAnnouncementModal(){
       </div>
       <div class="modal-body">
         <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
-              <label for="message-text" class="col-form-label">Class Number:</label>
-              <input class="form-control" id="numberClass" type="number"></input>
-            </div>
-          </div>
-      </div>
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Title:</label>
         <input class="form-control" id="messageTitle" maxlength="100"></input>
@@ -1171,13 +1173,10 @@ function showSendAnnouncementModal(){
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Message:</label>
         <textarea class="form-control" id="messageText"></textarea>
-        <div style="height: 40px"></div>
       </div>
       <center>
-        <div style="height: 30px;"></div>
-        <button class="btn btn-primary" onclick="writeAnnouncement()" data-dismiss="modal" style="width: 200px;">Send
+        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" data-dismiss="modal" style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
           Announcement</button>
-          <div style="height: 30px;"></div>
       </center>
       </form>
      
@@ -1209,7 +1208,7 @@ function getMeetingForClass(code) {
 
       document.getElementById('meetingsListforClassPage').innerHTML = '';
 
-      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('Class', '==', code).orderBy('Timestamp', "desc").get().then(function(doc) {
+      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('class id', '==', code).orderBy('timestamp', "desc").get().then(function(doc) {
         doc.forEach(snapshot => {
           index  = index + 1
           var data = snapshot.data();
@@ -1265,7 +1264,7 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
   firebase.firestore().collection('UserData').doc(teacherEmail).collection('Meetings').doc(teacherMeetingID).delete().then(() => {
 
   //Delete for Student
-  firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('Class', '==', meetingClass).where('Date', '==', date).where('Title', '==', title).get().then(snap => {
+  firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('class id', '==', meetingClass).where('date and time', '==', date).where('title', '==', title).get().then(snap => {
     snap.forEach(doc => {
       console.log(doc.data())
       doc.ref.delete()
@@ -1411,7 +1410,8 @@ function getStudentData(code) {
           var reaction = data["status"];
           var studentName = data["name"];
           var studentEmail = data["email"];
-          classInfoList.push([studentName, reaction, studentEmail])
+          var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
+          classInfoList.push([studentName, reaction, studentEmail,dateReported])
           console.log(classInfoList)
     
         });
@@ -1421,9 +1421,9 @@ function getStudentData(code) {
         for (var i = 0; i <= classInfoList.length; i++) {
           let descriptionOutput = "";
           classInfoData = classInfoList[i];
-          var happy = '<h1 class="icon-hover" style = "font-size: 70px;"  style="color: green;">&#128513;</h1>';
-          var meh = '<h1  class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1>';
-          var sad = '<h1  class="icon-hover" style = "font-size: 70px;">&#128545;</h1>'
+          var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
+          var meh = '<i class="fas fa-meh" style="font-size: 70px; color: #f6c23e;"></i>';
+          var sad = '<i class="fas fa-frown" style="font-size: 70px; color: #e74a3b;"></i>'
     
           if (classInfoData != null || classInfoData != undefined) {
             console.log("works")
@@ -1432,6 +1432,8 @@ function getStudentData(code) {
             var studentReaction = classInfoData[1];
     
             var studentEmail = classInfoData[2];
+
+            var studentReportedDate = classInfoData[3]
             console.log(classInfoData)
     
             descriptionOutput2 = `
@@ -1439,7 +1441,7 @@ function getStudentData(code) {
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td><center><div id = "face"></center></div></td>
-          <td>2011/04/25</td>
+          <td>${studentReportedDate}</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
@@ -1454,7 +1456,7 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><h1 class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: green;">&#128513;</h1></td>
+          <td><center>${happy}</center></td>
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
@@ -1469,7 +1471,7 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><h1  class="icon-hover" style = "margin-right: 20px; margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1></td>
+          <td><center>${meh}</center></td>
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
@@ -1484,7 +1486,7 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><h1  class="icon-hover" style = "margin-right: 20px; font-size: 70px;">&#128545;</h1></td>
+          <td><center>${sad}</center></td>
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
@@ -2274,6 +2276,7 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).doc().set({
           "message": message,
           "user": name,
+          "sent type": "teacher",
           "timestamp": new Date()
     
       }).then(() => {
