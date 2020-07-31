@@ -866,6 +866,7 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
     classesList.forEach(function (item, index) {
 
           if(pageType == 'class-page'){
+            console.log(classCodesList[index])
             output2 = `
             <a href = "${classCodesList[index]}" class="collapse-item" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${item}</a>
             `;
