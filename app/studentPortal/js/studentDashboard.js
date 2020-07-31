@@ -824,8 +824,6 @@ function addClassToStudentData(classCode) {
 //FIRESTORE MIGRATED FULLY
 async function updateAddClasesDropdown(studentUsername, pageType) {
 
-  let output = "";
-
   classesList = [];
 
   var classCodesList = []
@@ -838,17 +836,21 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
     var classCode = classData["code"];
 
-    var className = "loading"
+    var className = ""
 
     var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
   
       if(data != null && data != undefined){
           className = data['class name'];
+      } else {
+        className = undefined
       }
     }).then(() => {
-      classesList.push(className);
-      classCodesList.push(classCode)
+      if(className != undefined){
+        classesList.push(className);
+        classCodesList.push(classCode)
+      }
     })
   }
 
