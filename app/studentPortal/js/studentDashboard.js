@@ -808,6 +808,7 @@ function addClassToStudentData(classCode) {
           'name': name,
           'email': email,
           'date': new Date(),
+          'status': 'doing great'
         });
     
       }).then(() => {
