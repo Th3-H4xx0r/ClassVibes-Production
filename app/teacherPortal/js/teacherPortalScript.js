@@ -1806,13 +1806,25 @@ function getChartData(code) {
   //console.log("GETTING PIE CHART DEMO");
 
   var index = 0;
+  var maxdays = 0
+
+
+      firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
+        var data = doc.dat();
+        maxdays = data["max days inactive"]
+
+      }).then({
+
+      });
+
+
 
 
       firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
 
         //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
 
-        var studentsReactionLists = [0,0,0, 0];
+        var studentsReactionLists = [0,0,0,0];
 
         doc.forEach(snapshot => {
           index = index + 1
@@ -1820,7 +1832,7 @@ function getChartData(code) {
 
             var reaction = data1["status"];
             var date = data1["date"];
-            var timestamp = new Date(date).getTime();
+           
             
 
             if(reaction == "doing great"){
