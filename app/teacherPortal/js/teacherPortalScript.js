@@ -1420,9 +1420,9 @@ function getStudentData(code) {
         for (var i = 0; i <= classInfoList.length; i++) {
           let descriptionOutput = "";
           classInfoData = classInfoList[i];
-          var happy = '<h1 class="icon-hover" style = "font-size: 70px;"  style="color: green;">&#128513;</h1>';
-          var meh = '<h1  class="icon-hover" style = "margin-left: 20px; font-size: 70px;"  style="color: yellow;">&#128533;</h1>';
-          var sad = '<h1  class="icon-hover" style = "font-size: 70px;">&#128545;</h1>'
+          var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
+          var meh = '<i class="fas fa-meh" style="font-size: 70px; color: #f6c23e;"></i>';
+          var sad = '<i class="fas fa-frown" style="font-size: 70px; color: #e74a3b;"></i>'
     
           if (classInfoData != null || classInfoData != undefined) {
             console.log("works")
