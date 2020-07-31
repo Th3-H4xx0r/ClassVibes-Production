@@ -1410,7 +1410,8 @@ function getStudentData(code) {
           var reaction = data["status"];
           var studentName = data["name"];
           var studentEmail = data["email"];
-          classInfoList.push([studentName, reaction, studentEmail])
+          var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
+          classInfoList.push([studentName, reaction, studentEmail,dateReported])
           console.log(classInfoList)
     
         });
@@ -1431,6 +1432,8 @@ function getStudentData(code) {
             var studentReaction = classInfoData[1];
     
             var studentEmail = classInfoData[2];
+
+            var studentReportedDate = classInfoData[3]
             console.log(classInfoData)
     
             descriptionOutput2 = `
@@ -1438,7 +1441,7 @@ function getStudentData(code) {
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td><center><div id = "face"></center></div></td>
-          <td>2011/04/25</td>
+          <td>${studentReportedDate}</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
