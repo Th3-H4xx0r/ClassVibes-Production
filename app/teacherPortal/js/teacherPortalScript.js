@@ -88,7 +88,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               getEditData(classCode);
               getAnnouncementForClass(classCode);
               getMeetingForClass(classCode);
-              showSendAnnouncementModal();
+              showSendAnnouncementModal(classCode);
             }
 
             else if (pageType == 'dashboard') {
@@ -159,7 +159,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
             getEditData(classCode);
             getAnnouncementForClass(classCode);
             getMeetingForClass(classCode);
-            showSendAnnouncementModal();
+            showSendAnnouncementModal(classCode);
 
           }
           else if (pageType == 'dashboard') {
@@ -951,16 +951,13 @@ function storeClassforChart(code) {
 }
 
 
-function writeAnnouncement() {
-  var numberClass = document.getElementById("numberClass").value;
-  console.log("NUMBER CLASS" + numberClass);
+function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
   var dateNow = new Date();
   var formattedDate = dateNow.toLocaleString();
 
-
-  firebase.firestore().collection("Classes").doc(numberClass).collection("Announcements").doc().set({
+  firebase.firestore().collection("Classes").doc(code).collection("Announcements").doc().set({
     "title": messageTitle,
     "message": messageText,
     "date": dateNow,
@@ -1155,7 +1152,7 @@ cutoutPercentage: 60,
 
 }
 
-function showSendAnnouncementModal(){
+function showSendAnnouncementModal(code){
   var modalHTML = `
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -1169,14 +1166,6 @@ function showSendAnnouncementModal(){
       </div>
       <div class="modal-body">
         <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
-              <label for="message-text" class="col-form-label">Class Number:</label>
-              <input class="form-control" id="numberClass" type="number"></input>
-            </div>
-          </div>
-      </div>
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Title:</label>
         <input class="form-control" id="messageTitle" maxlength="100"></input>
@@ -1184,13 +1173,10 @@ function showSendAnnouncementModal(){
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Message:</label>
         <textarea class="form-control" id="messageText"></textarea>
-        <div style="height: 40px"></div>
       </div>
       <center>
-        <div style="height: 30px;"></div>
-        <button class="btn btn-primary" onclick="writeAnnouncement()" data-dismiss="modal" style="width: 200px;">Send
+        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" data-dismiss="modal" style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
           Announcement</button>
-          <div style="height: 30px;"></div>
       </center>
       </form>
      
