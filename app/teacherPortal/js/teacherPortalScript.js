@@ -956,15 +956,16 @@ function writeAnnouncement(code) {
   var messageText = document.getElementById("messageText").value;
   var dateNow = new Date();
   var formattedDate = dateNow.toLocaleString();
-
+  sendRealtimeAnnouncement(code, messageTitle, messageText)
+  
   firebase.firestore().collection("Classes").doc(code).collection("Announcements").doc().set({
     "title": messageTitle,
     "message": messageText,
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
-    sendRealtimeAnnouncement(code, messageTitle, messageText)
-    //window.location.reload()
+    
+    window.location.reload()
   });
 }
 
