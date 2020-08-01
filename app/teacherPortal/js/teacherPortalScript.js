@@ -1810,6 +1810,8 @@ function getChartData(code) {
   var index = 0;
   var maxdays = 0
 
+  var today = Math.floor(Date.now()/1000);
+
 
       firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
         var data = doc.data();
@@ -1824,27 +1826,29 @@ function getChartData(code) {
   
           doc.forEach(snapshot => {
             index = index + 1
-              var data1 = snapshot.data();
-              var today = Math.floor(Date.now()/1000);
-
-              var reaction = data1["status"];
-              var date = data1["date"];
-              var timestamp = new Date(date.seconds*1000).getTime();
-
+              var data = snapshot.data();
               
-                var result = new Date(timestamp);
-                var test = result.setDate(result.getDate() + maxdays);
+              var reaction = data["status"];
+              var date = data["date"];
+
+              console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
+
+              var studentTimeUpdateTimeStamp = new Date(date.seconds)
+
+            
+                var exceedDate = date.seconds + (maxdays * 86400);
               
 
-              
-              console.log('student last updated:' + timestamp)
-              console.log( 'today:' + today)
-              console.log('update by:' + test)
+              console.log('///////////////////////////////////////////')
+              console.log('Class:' + code)
+              console.log('student last updated:' + studentTimeUpdateTimeStamp.valueOf())
+              console.log('today:' + today)
+              console.log('update by:' + exceedDate)
               console.log('maxdays' + maxdays)
               
 
               
-              if(test < maxdays) {
+              if(exceedDate > today) {
                 if(reaction == "doing great"){
                   studentsReactionLists[0] = studentsReactionLists[0] + 1;
                 
@@ -1867,14 +1871,14 @@ function getChartData(code) {
 
               }
               
-  
+              console.log('///////////////////////////////////////////')
               
   
   
           });
           setTimeout(function(){
   
-            if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0){
+            if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0 && studentsReactionLists[3] == 0){
   
               var noStudentsHTML = `
               <center style = 'margin-top: 10%'>
