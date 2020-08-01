@@ -1840,40 +1840,33 @@ function getChartData(code) {
               console.log('student last updated:' + timestamp)
               console.log( 'today:' + today)
               console.log('update by:' + test)
-              console.log('maxdays:' + maxdays)
+              console.log('maxdays' + maxdays)
               
 
               
-  
-              if(reaction == "doing great"){
-                if(test < maxdays) {
+              if(test < maxdays) {
+                if(reaction == "doing great"){
                   studentsReactionLists[0] = studentsReactionLists[0] + 1;
-                } else {
-                  console.log("gray time")
-                  studentsReactionLists[3] = studentsReactionLists[3] + 1;
-
-                }
+                
               }
       
-              if(reaction == "need help"){
-                if (test < maxdays) {
+                if(reaction == "need help"){
                   studentsReactionLists[1] = studentsReactionLists[1] + 1;
-                } else {
-                  console.log("gray time")
-                  studentsReactionLists[3] = studentsReactionLists[3] + 1;
-
-                }
+                
               }
       
-              if(reaction == "frustrated"){
-                if(test < maxdays) {
+                if(reaction == "frustrated"){
+                
                   studentsReactionLists[2] = studentsReactionLists[2] + 1;
-                } else {
-                  console.log("gray time")
-                  studentsReactionLists[3] = studentsReactionLists[3] + 1;
-
-                }
+                
               }
+
+              } else {
+                console.log("Gray Time")
+                studentsReactionLists[3] = studentsReactionLists[3] + 1;
+
+              }
+              
   
               
   
