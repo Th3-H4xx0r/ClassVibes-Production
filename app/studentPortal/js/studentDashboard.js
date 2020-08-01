@@ -1563,3 +1563,9 @@ function scrollSmoothToBottom() {
 }
 
 
+function getAnnouncementNotification() {
+  firebase.firestore().collection('Classes').doc(code).collection('Announcements').onSnapshot(function(doc) {
+    
+  })
+}
+

@@ -1,3 +1,5 @@
+
+
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
 
   var email = localStorage.getItem('email');
@@ -955,6 +957,7 @@ function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
   var dateNow = new Date();
+
   var formattedDate = dateNow.toLocaleString();
 
   firebase.firestore().collection("Classes").doc(code).collection("Announcements").doc().set({
@@ -963,8 +966,52 @@ function writeAnnouncement(code) {
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
-    window.location.reload()
   });
+
+  firebase.firestore().collection('Classes').doc(code).collection('Students').get().then(function (doc) {
+    doc.forEach(snapshot => {
+      var data = snapshot.data();
+      var email = data["email"]
+
+      sendEmail(email)
+
+
+
+
+
+
+
+      
+
+
+    })
+  })
+}
+
+async function sendEmail(email) {
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'xeondevelopers.us@gmail.com',
+      pass: 'tm#xeon123'
+    }
+  });
+  
+  let mailOptions = {
+    from: 'xeondevelopers.us@gmail.com',
+    to: email,
+    subject: 'Sending Email using Node.js',
+    text: 'That was easy!'
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+
 }
 
 function getMeetings() {
@@ -2324,5 +2371,6 @@ function scrollSmoothToBottom() {
     scrollTop: div.scrollHeight - div.clientHeight
   }, 500);
 }
+
 
 
