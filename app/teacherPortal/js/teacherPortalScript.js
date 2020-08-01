@@ -963,7 +963,8 @@ function writeAnnouncement(code) {
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
-    window.location.reload()
+    sendRealtimeAnnouncement(code, messageTitle, messageText)
+    //window.location.reload()
   });
 }
 
@@ -1836,17 +1837,15 @@ function getChartData(code) {
               var studentTimeUpdateTimeStamp = new Date(date.seconds)
 
             
-                var exceedDate = date.seconds + (maxdays * 86400);
-              
+                var exceedDate = date.seconds + (maxdays * 86400); 
 
-              console.log('///////////////////////////////////////////')
-              console.log('Class:' + code)
-              console.log('student last updated:' + studentTimeUpdateTimeStamp.valueOf())
-              console.log('today:' + today)
-              console.log('update by:' + exceedDate)
-              console.log('maxdays' + maxdays)
+              //console.log('///////////////////////////////////////////')
+              //console.log('Class:' + code)
+              //console.log('student last updated:' + studentTimeUpdateTimeStamp.valueOf())
+              //console.log('today:' + today)
+              //console.log('update by:' + exceedDate)
+              //console.log('maxdays' + maxdays)
               
-
               
               if(exceedDate > today) {
                 if(reaction == "doing great"){
