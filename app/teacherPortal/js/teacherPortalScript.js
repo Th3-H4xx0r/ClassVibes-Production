@@ -1825,22 +1825,54 @@ function getChartData(code) {
           doc.forEach(snapshot => {
             index = index + 1
               var data1 = snapshot.data();
-  
+              var today = Math.floor(Date.now()/1000);
+
               var reaction = data1["status"];
               var date = data1["date"];
-             
+              var timestamp = new Date(date.seconds*1000).getTime();
+
+              
+                var result = new Date(timestamp);
+                var test = result.setDate(result.getDate() + maxdays);
+              
+
+              
+              console.log('student last updated:' + timestamp)
+              console.log( 'today:' + today)
+              console.log('update by:' + test)
+              console.log('maxdays:' + maxdays)
+              
+
               
   
               if(reaction == "doing great"){
-                studentsReactionLists[0] = studentsReactionLists[0] + 1;
+                if(test < maxdays) {
+                  studentsReactionLists[0] = studentsReactionLists[0] + 1;
+                } else {
+                  console.log("gray time")
+                  studentsReactionLists[3] = studentsReactionLists[3] + 1;
+
+                }
               }
       
               if(reaction == "need help"){
-                studentsReactionLists[1] = studentsReactionLists[1] + 1;
+                if (test < maxdays) {
+                  studentsReactionLists[1] = studentsReactionLists[1] + 1;
+                } else {
+                  console.log("gray time")
+                  studentsReactionLists[3] = studentsReactionLists[3] + 1;
+
+                }
               }
       
               if(reaction == "frustrated"){
-                studentsReactionLists[2] = studentsReactionLists[2] + 1;
+                if(test < maxdays) {
+                  studentsReactionLists[2] = studentsReactionLists[2] + 1;
+                } else {
+                  console.log("gray time")
+                  studentsReactionLists[3] = studentsReactionLists[3] + 1;
+
+                }
               }
   
               
