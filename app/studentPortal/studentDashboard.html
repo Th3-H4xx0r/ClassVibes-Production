@@ -30,6 +30,8 @@
   <script src="https://cstatic.classvibes.net/init.js"></script>
   <script src="/app/app_config.js"></script>
 
+  <script src="/js/realtimeUpdates.js"></script>
+
   <!--BOOTSTRAP-->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"
@@ -61,6 +63,8 @@
   <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-firestore.js"></script>
 
   <link href='css/loader.css' rel="stylesheet">
+
+  <script src="/js/realtimeUpdates.js"></script>
   
   <style>
     html{
@@ -72,6 +76,10 @@
 
 <body id="page-top">
 
+  <section id="toast-show-container" style="position: absolute; top: 2rem; right: 1rem; z-index: 99999999;">
+
+  </section>
+
   <script>
     $(document).ready(function () {
       initializeFirebase();
@@ -80,7 +88,6 @@
       getLiveSeverAlerts();
       getServerStatus();
       checkUserAuthStatus();
-
 
       firebase.auth().onAuthStateChanged(user => {
     if (user) {

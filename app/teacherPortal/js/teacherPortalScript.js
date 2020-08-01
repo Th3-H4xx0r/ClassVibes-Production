@@ -959,13 +959,16 @@ function writeAnnouncement(code) {
   var dateNow = new Date();
 
   var formattedDate = dateNow.toLocaleString();
-
+  sendRealtimeAnnouncement(code, messageTitle, messageText)
+  
   firebase.firestore().collection("Classes").doc(code).collection("Announcements").doc().set({
     "title": messageTitle,
     "message": messageText,
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
+    
+    window.location.reload()
   });
 
   firebase.firestore().collection('Classes').doc(code).collection('Students').get().then(function (doc) {
@@ -1883,17 +1886,15 @@ function getChartData(code) {
               var studentTimeUpdateTimeStamp = new Date(date.seconds)
 
             
-                var exceedDate = date.seconds + (maxdays * 86400);
-              
+                var exceedDate = date.seconds + (maxdays * 86400); 
 
-              console.log('///////////////////////////////////////////')
-              console.log('Class:' + code)
-              console.log('student last updated:' + studentTimeUpdateTimeStamp.valueOf())
-              console.log('today:' + today)
-              console.log('update by:' + exceedDate)
-              console.log('maxdays' + maxdays)
+              //console.log('///////////////////////////////////////////')
+              //console.log('Class:' + code)
+              //console.log('student last updated:' + studentTimeUpdateTimeStamp.valueOf())
+              //console.log('today:' + today)
+              //console.log('update by:' + exceedDate)
+              //console.log('maxdays' + maxdays)
               
-
               
               if(exceedDate > today) {
                 if(reaction == "doing great"){

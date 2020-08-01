@@ -419,6 +419,8 @@ async function getStudentClasses(studentUsername, pageType) {
 
     reactionsList[classCode] = reaction
 
+    getRealtimeAnnouncements(classCode);
+
     var className = "loading"
 
     console.log(classData['status'])
@@ -837,6 +839,8 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
     var classCode = classData["code"];
 
     var className = ""
+
+    getRealtimeAnnouncements(classCode);
 
     var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
