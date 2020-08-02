@@ -12,7 +12,7 @@ function getRealtimeAnnouncements(code){
         console.log( data)
 
         var announcementHTML = `
-        <a href = '/student/classes/${data.code}'><div class="toast" role="alert" data-autohide="false" aria-live="assertive" aria-atomic="true" style = 'width: 300px' data-delay="10000" id = 'announcementToast${data.code}'>
+        <a href = '/student/classes/${data.code}' style = 'text-decoration: none; color: black'><div class="toast" role="alert" data-autohide="false" aria-live="assertive" aria-atomic="true" style = 'width: 300px' data-delay="10000" id = 'announcementToast${data.code}'>
   <div class="toast-header">
     <strong class="mr-auto">${data.title}</strong>
     <small></small>
