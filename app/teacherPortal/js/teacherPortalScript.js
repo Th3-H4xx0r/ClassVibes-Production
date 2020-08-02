@@ -88,7 +88,6 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               getEditData(classCode);
               getAnnouncementForClass(classCode);
               getMeetingForClass(classCode);
-              showSendAnnouncementModal(classCode);
             }
 
             else if (pageType == 'dashboard') {
@@ -159,7 +158,6 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
             getEditData(classCode);
             getAnnouncementForClass(classCode);
             getMeetingForClass(classCode);
-            showSendAnnouncementModal(classCode);
 
           }
           else if (pageType == 'dashboard') {
@@ -963,7 +961,7 @@ function sendRealtimeAnnouncement(code, title, message){
   }
 
 
-async function writeAnnouncement(code) {
+async function writeAnnouncement(code, className) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
   var button = document.getElementById('sendAnnouncementButton')
@@ -977,7 +975,7 @@ async function writeAnnouncement(code) {
   <span class="sr-only"> Sending Announcement...</span>
 </button>
   `
-  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
+  var socket = io.connect('ws://localhost:3121', {transports: ['polling']});
 
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
@@ -995,7 +993,7 @@ async function writeAnnouncement(code) {
   }).then(async () => {
     
 
-    await socket.emit('send-announcement-emails-to-students', {"code": code});
+    socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className});
     
   }).then(() => {
     //window.location.reload()
@@ -1077,7 +1075,6 @@ async function getAnnouncementForClass(code) {
     var message = data["message"]
     var title = data["title"]
     var announcementId = doc.id
-    console.log("THING:" + announcementId)
 
     var studentReactions = {
       "doing great": 0,
@@ -1195,7 +1192,7 @@ cutoutPercentage: 60,
 
 }
 
-function showSendAnnouncementModal(code){
+function showSendAnnouncementModal(code, className){
   var modalHTML = `
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -1218,7 +1215,7 @@ function showSendAnnouncementModal(code){
         <textarea class="form-control" id="messageText"></textarea>
       </div>
       <center>
-        <button class="btn btn-primary" onclick="writeAnnouncement('${code}'); event.preventDefault();" id = 'sendAnnouncementButton' style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
+        <button class="btn btn-primary" onclick="writeAnnouncement('${code}', '${className}'); event.preventDefault();" id = 'sendAnnouncementButton' style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
           Announcement</button>
       </center>
       </form>
@@ -1714,6 +1711,8 @@ function getEditData(code) {
   }).then((data) => {
     var className = data['class name'];
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
+
+    showSendAnnouncementModal(code, className);
 
     var course = data['Course']
     var teacherNote = data['teachersNote'] != undefined ? data['teachersNote'] : "Not Set"
