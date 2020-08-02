@@ -964,7 +964,7 @@ function sendRealtimeAnnouncement(code, title, message){
   }
 
 
-function writeAnnouncement(code) {
+async function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
   var button = document.getElementById('sendAnnouncementButton')
@@ -980,7 +980,7 @@ function writeAnnouncement(code) {
   `
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
-  var socket = io.connect('https://localhost:3121', {transports: ['polling']});
+  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
 
   socket.on('connect', function(data) {
     console.log("Connected to Email Server - Sender:" + data)
@@ -993,11 +993,15 @@ function writeAnnouncement(code) {
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
-
+    await socket.emit('send-announcement-emails-to-students', {"code": code});
     
   }).then(() => {
     //window.location.reload()
-    $('#exampleModal').modal('toggle')
+    socket.on('send-announcement-emails-to-students-COMPLETE', function(data){
+      console.log(data)
+      $('#exampleModal').modal('toggle')
+    })
+    
   });
 }
 
