@@ -1,7 +1,7 @@
 
 
 function getRealtimeAnnouncements(code){
-   var socket = io.connect('https://api.classvibes.net',{secure: true, rejectUnauthorized: false});
+   var socket = io.connect('https://api.classvibes.net', {});
 
   socket.on('connect', function(data) {
     console.log("Connected to realitme - Reciever:")
@@ -48,7 +48,7 @@ function getRealtimeAnnouncements(code){
 }
 
 function sendRealtimeAnnouncement(code, title, message){
-    var socket = io.connect('https://api.classvibes.net',{secure: true, rejectUnauthorized: false});
+var socket = io.connect('https://api.classvibes.net', {});
 
     socket.on('connect', function(data) {
         console.log("Connected to realitme - Sender:" + data)
