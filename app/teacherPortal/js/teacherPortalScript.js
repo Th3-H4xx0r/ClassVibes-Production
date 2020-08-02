@@ -1004,6 +1004,7 @@ function writeAnnouncement(code) {
     
   }).then(() => {
     //window.location.reload()
+    $('#exampleModal').modal('toggle')
   });
 }
 
@@ -1217,7 +1218,7 @@ function showSendAnnouncementModal(code){
         <textarea class="form-control" id="messageText"></textarea>
       </div>
       <center>
-        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" data-dismiss="modal" style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
+        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
           Announcement</button>
       </center>
       </form>
