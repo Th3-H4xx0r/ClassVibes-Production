@@ -960,6 +960,13 @@ function writeAnnouncement(code) {
 
   var formattedDate = dateNow.toLocaleString();
   sendRealtimeAnnouncement(code, messageTitle, messageText)
+
+  var socket = io.connect('ws://localhost:3121',{secure: true, rejectUnauthorized: false});
+
+  socket.on('connect', function(data) {
+    console.log("Connected to Email Server - Sender:" + data)
+    
+});
   
   firebase.firestore().collection("Classes").doc(code).collection("Announcements").doc().set({
     "title": messageTitle,
@@ -967,55 +974,25 @@ function writeAnnouncement(code) {
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
-    
-    window.location.reload()
-  });
+    firebase.firestore().collection('Classes').doc(code).collection('Students').get().then(function (doc) {
+      doc.forEach(snapshot => {
+        var data = snapshot.data();
+        var email = data["email"]
 
-  firebase.firestore().collection('Classes').doc(code).collection('Students').get().then(function (doc) {
-    doc.forEach(snapshot => {
-      var data = snapshot.data();
-      var email = data["email"]
-
-      sendEmail(email)
-
-
-
-
-
-
-
-      
-
-
+        socket.emit('send-email-to-student', {"email": "krishnatechpranav@gmail.com"});
+  
+      })
     })
-  })
-}
-
-async function sendEmail(email) {
-  let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'xeondevelopers.us@gmail.com',
-      pass: 'tm#xeon123'
-    }
-  });
-  
-  let mailOptions = {
-    from: 'xeondevelopers.us@gmail.com',
-    to: email,
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-  };
-  
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
+    
+    
+  }).then(() => {
+    //window.location.reload()
   });
 
+
 }
+
+
 
 function getMeetings() {
   var name = localStorage.getItem("email");
