@@ -952,6 +952,19 @@ function storeClassforChart(code) {
   localStorage.setItem("codeForChart", code);
 }
 
+function sendRealtimeAnnouncement(code, title, message){
+  var socket = io.connect('https://api.classvibes.net', {});
+  
+      socket.on('connect', function(data) {
+          console.log("Connected to realitme - Sender:" + data)
+  
+          socket.emit('join-class-room', code.toString());
+  
+          socket.emit('send-announcement-to-class-realtime', {"code": code, "title": "New Announcement", "message": message});
+          
+      });
+  }
+  
 
 function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
