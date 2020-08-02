@@ -1,7 +1,8 @@
 
 
 function getRealtimeAnnouncements(code){
-   var socket = io.connect('https://api.classvibes.net', {});
+   var socket = io.connect('https://api.classvibes.net');
+   console.log("HERE/////")
 
   socket.on('connect', function(data) {
     console.log("Connected to realitme - Reciever:")
@@ -11,7 +12,7 @@ function getRealtimeAnnouncements(code){
         console.log( data)
 
         var announcementHTML = `
-        <div class="toast" role="alert" data-autohide="false" aria-live="assertive" aria-atomic="true" style = 'width: 300px' data-delay="10000" id = 'announcementToast${data.code}'>
+        <a href = '/student/classes/${data.code}'><div class="toast" role="alert" data-autohide="false" aria-live="assertive" aria-atomic="true" style = 'width: 300px' data-delay="10000" id = 'announcementToast${data.code}'>
   <div class="toast-header">
     <strong class="mr-auto">${data.title}</strong>
     <small></small>
@@ -24,7 +25,7 @@ function getRealtimeAnnouncements(code){
     overflow: hidden;
     text-overflow: ellipsis;'>${data.message}</p>
   </div>
-</div>
+</div></a>
         `;
 
 

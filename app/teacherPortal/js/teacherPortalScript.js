@@ -1,5 +1,3 @@
-
-
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
 
   var email = localStorage.getItem('email');
@@ -997,12 +995,9 @@ function writeAnnouncement(code) {
       })
     })
     
-    
   }).then(() => {
     //window.location.reload()
   });
-
-
 }
 
 
@@ -2320,15 +2315,11 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
               }
       
             })
-    
             scrollSmoothToBottom()
           })
-    
       })
     }
   });
-
-
 } 
 
 function sendMessage_ChatPage_teacher(classCode, studentEmail){
@@ -2349,7 +2340,6 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       }).then(() => {
         console.log("Message sent")
         document.getElementById('message-input').value = '';
-    
       })
     }
     });
