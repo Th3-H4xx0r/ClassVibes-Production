@@ -2,8 +2,7 @@
 
 function getRealtimeAnnouncements(code){
    var socket = io.connect('https://api.classvibes.net');
-   console.log("HERE/////")
-
+   
   socket.on('connect', function(data) {
     console.log("Connected to realitme - Reciever:")
     socket.emit('join-class-room', {code: code.toString()});
