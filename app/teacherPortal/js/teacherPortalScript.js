@@ -967,7 +967,7 @@ function sendRealtimeAnnouncement(code, title, message){
 function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
-  var button = document.getElementById('')
+  var button = document.getElementById('sendAnnouncementButton')
   var dateNow = new Date();
 
   var formattedDate = dateNow.toLocaleString();
@@ -1218,7 +1218,7 @@ function showSendAnnouncementModal(code){
         <textarea class="form-control" id="messageText"></textarea>
       </div>
       <center>
-        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
+        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" id = 'sendAnnouncementButton' style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
           Announcement</button>
       </center>
       </form>
