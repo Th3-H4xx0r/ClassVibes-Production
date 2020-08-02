@@ -1007,10 +1007,6 @@ async function writeAnnouncement(code, className) {
 }
 
 
-
-
-
-
 function getMeetings() {
   var name = localStorage.getItem("email");
 
@@ -1065,10 +1061,142 @@ function getMeetings() {
   });
 }
 
+var lastItemGlobalAnnouncements = ''
+
+async function getAnnouncementForClass_Pagenation(code, lastElement) {
+  var index = 0;
+
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').startAfter(lastElement).limit(4)
+  let announcementRefGet = await announcementRef.get();
+  for(const doc of announcementRefGet.docs){
+
+    if(lastItemGlobalAnnouncements != lastElement){
+      index = index + 1
+      var data = doc.data()
+      var date = data["timestamp"]
+      var message = data["message"]
+      var title = data["title"]
+      var announcementId = doc.id
+
+      lastItemGlobalAnnouncements = lastElement
+  
+      
+      lastItem = date
+  
+      var studentReactions = {
+        "doing great": 0,
+        "need help": 0,
+        "frustrated": 0
+      }
+  
+      var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
+        snap.forEach((document) => {
+          var data = document.data();
+  
+          var reaction = data['reaction']
+  
+          if(reaction == "doing great"){
+            studentReactions['doing great'] = studentReactions['doing great'] + 1
+          }
+  
+          if(reaction == "need help"){
+            studentReactions['need help'] = studentReactions['need help'] + 1
+          }
+  
+  
+          if(reaction == "frustrated"){
+            studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+          }
+        })
+  
+      }).then(() => {
+        output = `
+        <div class="col-xl-12 col-md-6 mb-4">
+                  <div class="card shadow h-100 py-2">
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+  
+                          <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+  
+                          <p style = 'color: gray'>${message}</p>
+  
+                          <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
+  
+                          
+                        </div>
+                        <div class="col-auto">
+                        <div class="chart-container" style="position: relative; height:100px; width:100px">
+                          <canvas id="announcementChart${doc.id}"></canvas>
+                      </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+        `
+        
+        $(output).appendTo('#classAnnouncement')
+  
+        // Set new default font family and font color to mimic Bootstrap's default styling
+  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  Chart.defaults.global.defaultFontColor = '#858796';
+  
+  // Pie Chart Example
+  var ctx = document.getElementById(`announcementChart${doc.id}`);
+  new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+  labels: ["Liked", "Needs Help", "Disliked"],
+  datasets: [{
+  data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+  backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+  hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+  hoverBorderColor: "rgba(234, 236, 244, 1)",
+  }],
+  },
+  options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  tooltips: {
+  backgroundColor: "rgb(255,255,255)",
+  bodyFontColor: "#858796",
+  borderColor: '#dddfeb',
+  borderWidth: 1,
+  xPadding: 10,
+  yPadding: 5,
+  displayColors: false,
+  caretPadding: 2,
+  },
+  legend: {
+  display: false
+  },
+  cutoutPercentage: 60,
+  },
+  });
+      });
+    }
+
+    }
+}
+
 async function getAnnouncementForClass(code) {
   var index = 0;
 
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
+  var lastItem = '';
+
+  $('#classAnnouncement').on('scroll', function() { 
+    if ($(this).scrollTop() + 
+        $(this).innerHeight() >=  
+        $(this)[0].scrollHeight) { 
+
+          getAnnouncementForClass_Pagenation(code, lastItem)
+    } 
+  });
+
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').limit(4)
   let announcementRefGet = await announcementRef.get();
   for(const doc of announcementRefGet.docs){
 
@@ -1078,6 +1206,9 @@ async function getAnnouncementForClass(code) {
     var message = data["message"]
     var title = data["title"]
     var announcementId = doc.id
+
+    
+    lastItem = date
 
     var studentReactions = {
       "doing great": 0,
