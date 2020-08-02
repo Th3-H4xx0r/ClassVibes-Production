@@ -1008,6 +1008,9 @@ async function writeAnnouncement(code, className) {
 
 
 
+
+
+
 function getMeetings() {
   var name = localStorage.getItem("email");
 
