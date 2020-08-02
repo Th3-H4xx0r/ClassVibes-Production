@@ -951,7 +951,6 @@ function storeClassforChart(code) {
 }
 
 function sendRealtimeAnnouncement(code, title, message){
-  var socket = io.connect('https://api.classvibes.net', {});
   
       socket.on('connect', function(data) {
           console.log("Connected to realitme - Sender:" + data)
@@ -978,9 +977,10 @@ async function writeAnnouncement(code) {
   <span class="sr-only"> Sending Announcement...</span>
 </button>
   `
+  var socket = io.connect('ws://localhost:3121', {transports: ['polling']});
+
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
-  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
 
   socket.on('connect', function(data) {
     console.log("Connected to Email Server - Sender:" + data)
@@ -993,15 +993,18 @@ async function writeAnnouncement(code) {
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(async () => {
+    
+
     await socket.emit('send-announcement-emails-to-students', {"code": code});
     
   }).then(() => {
     //window.location.reload()
-    socket.on('send-announcement-emails-to-students-COMPLETE', function(data){
-      console.log(data)
-      //$('#exampleModal').modal('toggle')
-    })
-    
+    setTimeout(function(){ 
+        console.log('Completed')
+        $('#exampleModal').modal('toggle')
+
+     }, 4000);
+
   });
 }
 
