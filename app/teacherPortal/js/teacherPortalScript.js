@@ -964,7 +964,7 @@ function sendRealtimeAnnouncement(code, title, message){
           
       });
   }
-  
+
 
 function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
@@ -974,7 +974,7 @@ function writeAnnouncement(code) {
   var formattedDate = dateNow.toLocaleString();
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
-  var socket = io.connect('ws://api.classvibes.net',{secure: true, rejectUnauthorized: false});
+  var socket = io.connect('https://api.classvibes.net',{secure: true, rejectUnauthorized: false});
 
   socket.on('connect', function(data) {
     console.log("Connected to Email Server - Sender:" + data)
