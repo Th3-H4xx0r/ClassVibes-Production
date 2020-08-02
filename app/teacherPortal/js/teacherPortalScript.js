@@ -967,12 +967,20 @@ function sendRealtimeAnnouncement(code, title, message){
 function writeAnnouncement(code) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
+  var button = document.getElementById('')
   var dateNow = new Date();
 
   var formattedDate = dateNow.toLocaleString();
+
+  button.innerHTML = `
+  <button class="btn btn-primary" type="button" disabled>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="sr-only"> Sending Announcement...</span>
+</button>
+  `
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
-  var socket = io.connect('https://api.classvibes.net',{secure: true, rejectUnauthorized: false});
+  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
 
   socket.on('connect', function(data) {
     console.log("Connected to Email Server - Sender:" + data)
@@ -991,7 +999,6 @@ function writeAnnouncement(code) {
         var email = data["email"]
 
         socket.emit('send-email-to-student', {"email": "krishnatechpranav@gmail.com"});
-  
       })
     })
     
