@@ -992,14 +992,14 @@ async function writeAnnouncement(code) {
     "message": messageText,
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
-  }).then(() => {
+  }).then(async () => {
     await socket.emit('send-announcement-emails-to-students', {"code": code});
     
   }).then(() => {
     //window.location.reload()
     socket.on('send-announcement-emails-to-students-COMPLETE', function(data){
       console.log(data)
-      $('#exampleModal').modal('toggle')
+      //$('#exampleModal').modal('toggle')
     })
     
   });
@@ -1205,7 +1205,7 @@ function showSendAnnouncementModal(code){
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form onsubmit="event.preventDefault();">
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Title:</label>
         <input class="form-control" id="messageTitle" maxlength="100"></input>
@@ -1215,7 +1215,7 @@ function showSendAnnouncementModal(code){
         <textarea class="form-control" id="messageText"></textarea>
       </div>
       <center>
-        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" id = 'sendAnnouncementButton' style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
+        <button class="btn btn-primary" onclick="writeAnnouncement('${code}'); event.preventDefault();" id = 'sendAnnouncementButton' style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
           Announcement</button>
       </center>
       </form>
