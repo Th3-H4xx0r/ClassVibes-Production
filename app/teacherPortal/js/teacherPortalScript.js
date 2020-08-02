@@ -980,7 +980,7 @@ function writeAnnouncement(code) {
   `
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
-  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
+  var socket = io.connect('https://localhost:3121', {transports: ['polling']});
 
   socket.on('connect', function(data) {
     console.log("Connected to Email Server - Sender:" + data)
@@ -993,14 +993,7 @@ function writeAnnouncement(code) {
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(() => {
-    firebase.firestore().collection('Classes').doc(code).collection('Students').get().then(function (doc) {
-      doc.forEach(snapshot => {
-        var data = snapshot.data();
-        var email = data["email"]
 
-        socket.emit('send-email-to-student', {"email": "krishnatechpranav@gmail.com"});
-      })
-    })
     
   }).then(() => {
     //window.location.reload()
