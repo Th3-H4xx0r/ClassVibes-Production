@@ -966,12 +966,15 @@ function getStudentStatus(studentEmail) {
 
 }
 
+
+var  meetingsList_PageNation_MainPageList = []
+
 //FIRESTORE MIGRATED FULLY
-function getMeetings(email, pageType) {
+function getMeetings(email, pageType, lastElement) {
 
   //GETS MEETINGS FOR MEETINGS PAGE
   if(pageType == "meetingsPage"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').limit(5).get().then(function (doc) {
 
       var meetingsCount = 0;
   
@@ -984,6 +987,10 @@ function getMeetings(email, pageType) {
         var classForMeeting = meetingsData["Course"];
         var date = meetingsData["date and time"];
         var title = meetingsData["title"];
+        lastElement = meetingsData['timestamp']
+        meetingsList_PageNation_MainPageList.push(snapshot.id)
+
+
   
   
         output = `
@@ -1024,79 +1031,24 @@ function getMeetings(email, pageType) {
         document.getElementById("no-meetings-section").style.display = "none";
       }
   
+    }).then(() => {
+      $('#meetingsList-main-page').on('scroll', function() { 
+        if ($(this).scrollTop() + 
+            $(this).innerHeight() >=  
+            $(this)[0].scrollHeight) { 
+    
+              getMeetings_pageNation(studentEmail, "meetingsPage", lastElement)
+        } 
+      });
     });
   } 
   
   
-  //GETS MEETINGS FOR DASHBOARD PAGE SECTION 
 
-  if(pageType == "dashboard"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp").limitToLast(3).get().then(function (doc) {
-
-  
-      var meetingsCount = 0;
-  
-      doc.forEach(snapshot => {
-  
-        meetingsCount += 1;
-  
-        var meetingsData = snapshot.data();
-  
-        var classForMeeting = meetingsData["Course"];
-        var date = meetingsData["date and time"];
-        var title = meetingsData["title"];
-
-        output = `
-          <div class="col-xl-12 col-md-6 mb-4">
-          <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-              <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800" style = 'overflow: hidden;
-                  text-overflow: ellipsis;
-                  display: -webkit-box;
-                  -webkit-line-clamp: 1;
-                  max-width: 25ch;
-                  -webkit-box-orient: vertical;'>${title}</div>
-                  <h6 style = 'color: gray; font-weight: 700; margin-top: 10px'>${date}</h6>
-                </div>
-                <div class="col-auto">
-  
-                  <i class="fas fa-microphone-alt fa-2x text-gray-300"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-          `;
-  
-        $(output).appendTo("#meetingsList");
-      });
-    
-  
-      if (meetingsCount == 0) {
-        outputError = `
-        <center>
-        <img src = "img/undraw_Booked_j7rj.svg" width="70%">
-  
-        <h2 style="margin-top: 2%;">No Scheduled Meetings</h2>
-        <p>You're all caught up</p>
-      </center>
-          `;
-  
-        $(outputError).appendTo("#meetingsList");
-      } else {
-  
-      }
-  
-    });
-  }
 
 
   if(pageType == "class-page"){
-    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').get().then(function (doc) {
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').limit(5).get().then(function (doc) {
   
       var meetingsCount = 0;
   
@@ -1109,6 +1061,9 @@ function getMeetings(email, pageType) {
         var classForMeeting = meetingsData["Course"];
         var date = meetingsData["date and time"];
         var title = meetingsData["title"];
+        lastElement = meetingsData['timestamp']
+        meetingsList_PageNation_MainPageList.push(snapshot.id)
+
 
         output = `
           <div class="col-xl-12 col-md-6 mb-4">
@@ -1157,63 +1112,180 @@ function getMeetings(email, pageType) {
   
       }
   
+    }).then(() => {
+      $('#meetingsList').on('scroll', function() { 
+        if ($(this).scrollTop() + 
+            $(this).innerHeight() >=  
+            $(this)[0].scrollHeight) { 
+    
+              getMeetings_pageNation(studentEmail, "class-page", lastElement)
+        } 
+      });
     });
   }
 
-  /*
 
-  var _ref = firebase.database().ref().child("UserData").child(name).child("Meetings");
+}
+
+function getMeetings_pageNation(email, pageType, lastElement) {
+
+  //GETS MEETINGS FOR MEETINGS PAGE
+  if(pageType == "meetingsPage"){
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').limit(5).startAfter(lastElement).get().then(function (doc) {
+
+      var meetingsCount = 0;
+  
+      doc.forEach(snapshot => {
+  
+        meetingsCount += 1;
+  
+        var meetingsData = snapshot.data();
+  
+        var classForMeeting = meetingsData["Course"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
+        lastElement = meetingsData['timestamp']
 
 
-  _ref.once('value').then(function (snapshot) {
+        meetingsList_PageNation_MainPageList.push(snapshot.id)
 
-    console.log("MEETINGS:" + snapshot.val());
-
-    if (snapshot.val() != null) {
-      snapshot.forEach((child) => {
-        var classForMeeting = child.child("Course").val();
-        var date = child.child("Date").val();
-        var title = child.child("Title").val();
-
-        console.log(child.val());
-
+  
+  
         output = `
-        <div class="col-xl-5 col-md-6 mb-4" style = "min-width: 400px">
-        <div class="card border-left-primary shadow h-100 py-2">
-          <div class="card-body">
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">${title}</div>
-              </div>
-              <div class="col-auto">
-                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+          <div class="col-xl-12 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">${title}</div>
+                  <h6 style = 'color: gray; font-weight: 700'>${date}</h6>
+                </div>
+                <div class="col-auto">
+  
+                  <i class="fas fa-microphone-alt fa-2x text-gray-300"></i>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-        `;
-
-        $(output).appendTo("#meetingsList");
-
-
+          `;
+  
+        $(output).appendTo("#meetingsList-main-page");
       });
+  
 
-    } else {
-      console.log("NONE");
-      outputError = `
-        <h1>No Scheduled Meetings</h1>
+  
+      if (meetingsCount == 0) {
+  
+       document.getElementById("loadingIndicator").style.display = "none";
+       document.getElementById("all-meetings-widget").style.display = "none";
+       document.getElementById("no-meetings-section").style.display = "initial";
+
+      } else {
+        document.getElementById("loadingIndicator").style.display = "none";
+        document.getElementById("all-meetings-widget").style.display = "initial";
+        document.getElementById("no-meetings-section").style.display = "none";
+      }
+  
+    }).then(() => {
+      $('#meetingsList-main-page').on('scroll', function() { 
+        if ($(this).scrollTop() + 
+            $(this).innerHeight() >=  
+            $(this)[0].scrollHeight) { 
+    
+              getMeetings_pageNation(studentEmail, "meetingsPage", lastElement)
+        } 
+      });
+    });
+  } 
+  
+  
+
+
+
+  if(pageType == "class-page"){
+    firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').limit(5).startAfter(lastElement).get().then(function (doc) {
+  
+      var meetingsCount = 0;
+  
+      doc.forEach(snapshot => {
+  
+        meetingsCount += 1;
+  
+        var meetingsData = snapshot.data();
+  
+        var classForMeeting = meetingsData["Course"];
+        var date = meetingsData["date and time"];
+        var title = meetingsData["title"];
+        lastElement = meetingsData['timestamp']
+        meetingsList_PageNation_MainPageList.push(snapshot.id)
+
+
+        output = `
+          <div class="col-xl-12 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" style = 'overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 1;
+                  max-width: 25ch;
+                  -webkit-box-orient: vertical;'>${title}</div>
+                  <h6 style = 'color: gray; font-weight: 700; margin-top: 10px'>${date}</h6>
+                </div>
+                <div class="col-auto">
+  
+                  <i class="fas fa-microphone-alt fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          `;
+  
+        $(output).appendTo("#meetingsList");
+      });
+    
+  
+      if (meetingsCount == 0) {
+        outputError = `
+        <div class="d-flex justify-content-center" style = 'margin-left: 15%; margin-top: 7%' align = 'center'>
+        <section>
+        <img src = "/student/img/undraw_Booked_j7rj.svg" width="45%">
+  
+        <h2 style="margin-top: 2%;">No Scheduled Meetings</h2>
+        <p>You're all caught up</p>
+        </section>
+        </div>          
         `;
+  
+        $(outputError).appendTo("#meetingsList");
+      } else {
+  
+      }
+  
+    }).then(() => {
+      $('#meetingsList').on('scroll', function() { 
+        if ($(this).scrollTop() + 
+            $(this).innerHeight() >=  
+            $(this)[0].scrollHeight) { 
+    
+              getMeetings_pageNation(studentEmail, "class-page", lastElement)
+        } 
+      });
+    });
+  }
 
-      $(outputError).appendTo("#meetingsList");
-    }
 
-  });
-
-  */
 }
+
+
 
 async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
