@@ -1,253 +1,259 @@
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
+  
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email
 
-  var email = localStorage.getItem('email');
-
-  firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
-    var data = doc.data();
-
-    var in_a_district = data['District Code'] != undefined ? data['District Code'] : null;
-
-    console.log("DISTRICT: " + in_a_district);
-
-    var pendingSchoolRequestName = data["Pending School Request Name"];
-
-    var pendingRequestID = data["Pending Request ID"];
-
-    var pendingDistrictRequestID = data["Pending District Request"];
-
-    if (pendingSchoolRequestName) {
-
-      var waitingRequestHTML = `
-      <center style="margin-top: 23%;">
-      <i class="far fa-check-circle" style = "font-size: 80px; color: green"></i>
-
-      <h2 style="margin-top: 2%;">Request Sent</h2>
-
-      <p>You have successfully sent a request to join ${pendingSchoolRequestName}</p>
-
-      <button class="btn-screen danger" onclick = "cancelTeacherRequest('${pendingRequestID}', '${pendingDistrictRequestID}', '${email}')">Cancel</button>
-    </center>
-      `;
-
-      $('#main-body-page-teacher').html(waitingRequestHTML);
-    } else {
-      //IN A DISTRICT
-      if (in_a_district != null && in_a_district != undefined) {
-        firebase.firestore().collection('Districts').doc(in_a_district).get().then(function (doc) {
-
-          console.log('Executing 1');
-
-          var data = doc.data()["Status"];
-
-          console.log("STATUS:" + data);
-
-          //DISTRICT IS NOT ACTIVATED
-          if (data != "Activated") {
-
-            var activateDistrictHTML = `
+      firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
+        var data = doc.data();
+    
+        var in_a_district = data['District Code'] != undefined ? data['District Code'] : null;
+    
+        console.log("DISTRICT: " + in_a_district);
+    
+        var pendingSchoolRequestName = data["Pending School Request Name"];
+    
+        var pendingRequestID = data["Pending Request ID"];
+    
+        var pendingDistrictRequestID = data["Pending District Request"];
+    
+        if (pendingSchoolRequestName) {
+    
+          var waitingRequestHTML = `
           <center style="margin-top: 23%;">
-          <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
-
-          <h2 style="margin-top: 2%;">District Not Active</h2>
-
-          <p>If this is an error, contact you district admin for more info.</p>
+          <i class="far fa-check-circle" style = "font-size: 80px; color: green"></i>
+    
+          <h2 style="margin-top: 2%;">Request Sent</h2>
+    
+          <p>You have successfully sent a request to join ${pendingSchoolRequestName}</p>
+    
+          <button class="btn-screen danger" onclick = "cancelTeacherRequest('${pendingRequestID}', '${pendingDistrictRequestID}', '${email}')">Cancel</button>
         </center>
           `;
-
-            document.getElementById('loader-icon').style.display = 'none';
-
-            $('#main-body-page-teacher').html(activateDistrictHTML);
-          } else {
-
-            console.log('Executing 2');
-
-            if(document.getElementById('loader-icon') != null){
-              document.getElementById('loader-icon').style.display = 'none';
-            }
-
-            if (pageType == 'meetings-page') {
-              document.getElementById('main-page-content-meetings-page').style.display = "initial";
-              getProfileInfo();
-              //getClassData();
-              getClassDataDropdown();
-              getMeetings();
-            }
-            else if (pageType == "") {
-            }
-
-            else if(pageType == 'create-class'){
-              getProfileInfo();
-              getClassDataDropdown();
-            }
-
-            else if (pageType == 'class-page') {
-              getProfileInfo();
-              //getClassData();
-              getClassDataDropdown()
-              getStudentData(classCode);
-              getEditData(classCode);
-              getAnnouncementForClass(classCode);
-              getMeetingForClass(classCode);
-            }
-
-            else if (pageType == 'dashboard') {
-              getProfileInfo();
-              getClassData();
-              //getWeekStudentAverageReactions_ALL_CLASSES()
-            }
-
-            else if(pageType == "student-requests"){
-              getProfileInfo();
-              getStudentRequests();
-            }
-
-            else if(pageType == "announcementsTeacher"){
-              getProfileInfo();
-              getClassDataDropdown();
-              getAnnouncements(email);
-
-            }
-
-            else if(pageType == "chat-page-teacher"){
-              getProfileInfo();
-              getClassDataDropdown();
-              getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
-            }
-
-            else {
-              //getClassData();
-              getProfileInfo();
-            }
-
-          }
-        });
-
-      }
-      //NOT IN A DISTRICT
-      else {
-        var accountStatus = data['account status'];
-
-        //ACCOUNT ACTIVE
-        if (accountStatus == "Activated") {
-
-          if (document.getElementById('loader-icon') != null) {
-            document.getElementById('loader-icon').style.display = 'none';
-
-          }
-
-          if (document.getElementById('dashboard-section') != null) {
-            document.getElementById('dashboard-section').style.display = 'none';
-          }
-
-
-          if (pageType == 'meetings-page') {
-            document.getElementById('main-page-content-meetings-page').style.display = "initial";
-            getProfileInfo();
-            //getClassData();
-            getClassDataDropdown();
-            getMeetings();
-          }
-          else if (pageType == "") {
-            getClassDataDropdown();
-          }
-          else if (pageType == 'class-page') {
-            getProfileInfo();
-            //getClassData();
-            getClassDataDropdown();
-            getStudentData(classCode);
-            getEditData(classCode);
-            getAnnouncementForClass(classCode);
-            getMeetingForClass(classCode);
-
-          }
-          else if (pageType == 'dashboard') {
-            console.log("executing");
-            getProfileInfo();
-            getClassData();
-            //getWeekStudentAverageReactions_ALL_CLASSES()
-          }
-
-          else if(pageType == 'create-class'){
-            getProfileInfo();
-            getClassDataDropdown();
-          }
-
-          else if(pageType == "announcementsTeacher"){
-            getProfileInfo();
-            getAnnouncements(email);
-            getClassDataDropdown();
-          }
-
-          else if(pageType == "student-requests"){
-            getProfileInfo();
-            getStudentRequests();
-          }
-
-          else if(pageType == "chat-page-teacher"){
-            getProfileInfo();
-            getClassDataDropdown();
-            getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
-
-          }
-
-          else {
-            //getClassData();
-            //getProfileInfo();
-            //getClassDataDropdown();
-          }
-
-          //ACCOUNT NOT ACTIVE
+    
+          $('#main-body-page-teacher').html(waitingRequestHTML);
         } else {
-          var activateDistrictHTML = `
-        
-        <center style="margin-top: 20%;">
-        <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
-
-        <h2 style="margin-top: 2%;">Account Not Activated</h2>
-
-        <p>If you are a solo teacher please contact <a href="mailto:sales@classvibes.net">sales@classvibes.net</a>
-          <br> to activate your account.</p>
-
-        <h5>Or</h5>
-
-          <div id = "district-join-input">
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-6 my-4 my-md-0 mw-100 navbar-search">
-              <div class="input-group">
-                  <input type="text" class="form-control bg-light border-3 small" placeholder="District code.." aria-label="Search" aria-describedby="basic-addon2" id="searchInputDistrict">
-                  <div class="input-group-append">
-                      <button class="btn btn-primary" type="button" onclick="checkIfDistrictCodeExists()">
-                          Join
-                      </button>
+          //IN A DISTRICT
+          if (in_a_district != null && in_a_district != undefined) {
+            firebase.firestore().collection('Districts').doc(in_a_district).get().then(function (doc) {
+    
+              console.log('Executing 1');
+    
+              var data = doc.data()["Status"];
+    
+              console.log("STATUS:" + data);
+    
+              //DISTRICT IS NOT ACTIVATED
+              if (data != "Activated") {
+    
+                var activateDistrictHTML = `
+              <center style="margin-top: 23%;">
+              <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
+    
+              <h2 style="margin-top: 2%;">District Not Active</h2>
+    
+              <p>If this is an error, contact you district admin for more info.</p>
+            </center>
+              `;
+    
+                document.getElementById('loader-icon').style.display = 'none';
+    
+                $('#main-body-page-teacher').html(activateDistrictHTML);
+              } else {
+    
+                console.log('Executing 2');
+    
+                if(document.getElementById('loader-icon') != null){
+                  document.getElementById('loader-icon').style.display = 'none';
+                }
+    
+                if (pageType == 'meetings-page') {
+                  document.getElementById('main-page-content-meetings-page').style.display = "initial";
+                  getProfileInfo();
+                  //getClassData();
+                  getClassDataDropdown();
+                  getMeetings();
+                }
+                else if (pageType == "") {
+                }
+    
+                else if(pageType == 'create-class'){
+                  getProfileInfo();
+                  getClassDataDropdown();
+                }
+    
+                else if (pageType == 'class-page') {
+                  getProfileInfo();
+                  //getClassData();
+                  getClassDataDropdown()
+                  getStudentData(classCode);
+                  getEditData(classCode);
+                  getAnnouncementForClass(classCode);
+                  getMeetingForClass(classCode);
+                }
+    
+                else if (pageType == 'dashboard') {
+                  getProfileInfo();
+                  getClassData();
+                  //getWeekStudentAverageReactions_ALL_CLASSES()
+                }
+    
+                else if(pageType == "student-requests"){
+                  getProfileInfo();
+                  getStudentRequests();
+                }
+    
+                else if(pageType == "announcementsTeacher"){
+                  getProfileInfo();
+                  getClassDataDropdown();
+                  getAnnouncements(email);
+    
+                }
+    
+                else if(pageType == "chat-page-teacher"){
+                  getProfileInfo();
+                  getClassDataDropdown();
+                  getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
+                }
+    
+                else {
+                  //getClassData();
+                  getProfileInfo();
+                }
+    
+              }
+            });
+    
+          }
+          //NOT IN A DISTRICT
+          else {
+            var accountStatus = data['account status'];
+    
+            //ACCOUNT ACTIVE
+            if (accountStatus == "Activated") {
+    
+              if (document.getElementById('loader-icon') != null) {
+                document.getElementById('loader-icon').style.display = 'none';
+    
+              }
+    
+              if (document.getElementById('dashboard-section') != null) {
+                document.getElementById('dashboard-section').style.display = 'none';
+              }
+    
+    
+              if (pageType == 'meetings-page') {
+                document.getElementById('main-page-content-meetings-page').style.display = "initial";
+                getProfileInfo();
+                //getClassData();
+                getClassDataDropdown();
+                getMeetings();
+              }
+              else if (pageType == "") {
+                getClassDataDropdown();
+              }
+              else if (pageType == 'class-page') {
+                getProfileInfo();
+                //getClassData();
+                getClassDataDropdown();
+                getStudentData(classCode);
+                getEditData(classCode);
+                getAnnouncementForClass(classCode);
+                getMeetingForClass(classCode);
+    
+              }
+              else if (pageType == 'dashboard') {
+                console.log("executing");
+                getProfileInfo();
+                getClassData();
+                //getWeekStudentAverageReactions_ALL_CLASSES()
+              }
+    
+              else if(pageType == 'create-class'){
+                getProfileInfo();
+                getClassDataDropdown();
+              }
+    
+              else if(pageType == "announcementsTeacher"){
+                getProfileInfo();
+                getAnnouncements(email);
+                getClassDataDropdown();
+              }
+    
+              else if(pageType == "student-requests"){
+                getProfileInfo();
+                getStudentRequests();
+              }
+    
+              else if(pageType == "chat-page-teacher"){
+                getProfileInfo();
+                getClassDataDropdown();
+                getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
+    
+              }
+    
+              else {
+                //getClassData();
+                //getProfileInfo();
+                //getClassDataDropdown();
+              }
+    
+              //ACCOUNT NOT ACTIVE
+            } else {
+              var activateDistrictHTML = `
+            
+            <center style="margin-top: 20%;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
+    
+            <h2 style="margin-top: 2%;">Account Not Activated</h2>
+    
+            <p>If you are a solo teacher please contact <a href="mailto:sales@classvibes.net">sales@classvibes.net</a>
+              <br> to activate your account.</p>
+    
+            <h5>Or</h5>
+    
+              <div id = "district-join-input">
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-6 my-4 my-md-0 mw-100 navbar-search">
+                  <div class="input-group">
+                      <input type="text" class="form-control bg-light border-3 small" placeholder="District code.." aria-label="Search" aria-describedby="basic-addon2" id="searchInputDistrict">
+                      <div class="input-group-append">
+                          <button class="btn btn-primary" type="button" onclick="checkIfDistrictCodeExists()">
+                              Join
+                          </button>
+                      </div>
                   </div>
+              </form>
               </div>
-          </form>
-          </div>
-
-        <div id = "school-join-input" style="display: none;">
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-6 my-4 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-                <input type="text" class="form-control bg-light border-3 small" placeholder="School Code..." aria-label="Search" aria-describedby="basic-addon2" id="searchInputSchool">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" onclick="checkIfSchoolCodeExists()">
-                        Join
-                    </button>
+    
+            <div id = "school-join-input" style="display: none;">
+              <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-6 my-4 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <input type="text" class="form-control bg-light border-3 small" placeholder="School Code..." aria-label="Search" aria-describedby="basic-addon2" id="searchInputSchool">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="checkIfSchoolCodeExists()">
+                            Join
+                        </button>
+                    </div>
                 </div>
+            </form>
             </div>
-        </form>
-        </div>
-
-      <div id = "joinSchool-district-err">
-
-      </div>
-
-      </center>
-       `;
-          document.getElementById('loader-icon').style.display = 'none';
-          $('#main-body-page-teacher').html(activateDistrictHTML);
+    
+          <div id = "joinSchool-district-err">
+    
+          </div>
+    
+          </center>
+           `;
+              document.getElementById('loader-icon').style.display = 'none';
+              $('#main-body-page-teacher').html(activateDistrictHTML);
+            }
+          }
         }
-      }
+      });
     }
   });
+
+
 }
 
 function getStudentRequests(){
