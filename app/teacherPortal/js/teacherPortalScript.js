@@ -2187,7 +2187,7 @@ function getChartData(code) {
   var index = 0;
   var maxdays = 0
 
-  var unreadMessages = 0
+
 
   var today = Math.floor(Date.now()/1000);
 
@@ -2198,6 +2198,8 @@ function getChartData(code) {
 
       }).then(() => {
         firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
+
+          var unreadMessages = 0
 
           //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
   
