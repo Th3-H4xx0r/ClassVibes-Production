@@ -1012,7 +1012,7 @@ function getMeetings() {
 
   var index = 0;
 
-  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('').get().then(function (doc) {
+  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').get().then(function (doc) {
     doc.forEach(snapshot => {
       index = index + 1
       var data1 = snapshot.data();
