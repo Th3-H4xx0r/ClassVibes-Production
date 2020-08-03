@@ -52,12 +52,16 @@
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-firestore.js"></script>
-  <script src="/js/realtimeUpdates.js"></script>
+  <script src="/Js/realtimeUpdates.js"></script>
 
 </head>
 
 <body id="page-top">
 
+  <section id="toast-show-container" style="position: absolute; top: 2rem; right: 1rem; z-index: 99999999;">
+
+  </section>
+  
   <script>
     $(document).ready(function () {
       initializeFirebase();

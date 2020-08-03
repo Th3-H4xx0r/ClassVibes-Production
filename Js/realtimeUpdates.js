@@ -1,7 +1,7 @@
 
 
 function getRealtimeAnnouncements(code){
-   var socket = io.connect('https://api.classvibes.net',{secure: true, rejectUnauthorized: false});
+   var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
 
   socket.on('connect', function(data) {
     console.log("Connected to realitme - Reciever:")
@@ -19,11 +19,11 @@ function getRealtimeAnnouncements(code){
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="toast-body" style = 'background-color: white'>
+  <a href = '/student/classes/${data.code}' style = 'text-decoration: none; color: black'> <div class="toast-body" style = 'background-color: white'>
     <p style = 'max-width: 35ch; white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;'>${data.message}</p>
-  </div>
+  </div></a>
 </div>
         `;
 
@@ -45,17 +45,4 @@ function getRealtimeAnnouncements(code){
       */
 });
 
-}
-
-function sendRealtimeAnnouncement(code, title, message){
-    var socket = io.connect('https://api.classvibes.net',{secure: true, rejectUnauthorized: false});
-
-    socket.on('connect', function(data) {
-        console.log("Connected to realitme - Sender:" + data)
-
-        socket.emit('join-class-room', code.toString());
-
-        socket.emit('send-announcement-to-class-realtime', {"code": code, "title": "New Announcement", "message": message});
-        
-    });
 }

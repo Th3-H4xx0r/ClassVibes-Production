@@ -1,5 +1,3 @@
-
-
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
 
   var email = localStorage.getItem('email');
@@ -90,7 +88,6 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               getEditData(classCode);
               getAnnouncementForClass(classCode);
               getMeetingForClass(classCode);
-              showSendAnnouncementModal(classCode);
             }
 
             else if (pageType == 'dashboard') {
@@ -161,7 +158,6 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
             getEditData(classCode);
             getAnnouncementForClass(classCode);
             getMeetingForClass(classCode);
-            showSendAnnouncementModal(classCode);
 
           }
           else if (pageType == 'dashboard') {
@@ -952,16 +948,37 @@ function storeClassforChart(code) {
   localStorage.setItem("codeForChart", code);
 }
 
+function sendRealtimeAnnouncement(code, title, message){
+  
+      socket.on('connect', function(data) {
+          console.log("Connected to realitme - Sender:" + data)
+  
+          socket.emit('join-class-room', code.toString());
+  
+          socket.emit('send-announcement-to-class-realtime', {"code": code, "title": "New Announcement", "message": message});
+          
+      });
+  }
 
-function writeAnnouncement(code) {
+
+async function writeAnnouncement(code, className) {
   var messageTitle = document.getElementById("messageTitle").value;
   var messageText = document.getElementById("messageText").value;
+  var button = document.getElementById('sendAnnouncementButton')
   var dateNow = new Date();
 
   var formattedDate = dateNow.toLocaleString();
+
+  button.innerHTML = `
+  <button class="btn btn-primary" type="button" disabled>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="sr-only"> Sending Announcement...</span>
+</button>
+  `
+  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
+
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
-  var socket = io.connect('ws://localhost:3121',{secure: true, rejectUnauthorized: false});
 
   socket.on('connect', function(data) {
     console.log("Connected to Email Server - Sender:" + data)
@@ -973,25 +990,21 @@ function writeAnnouncement(code) {
     "message": messageText,
     "date": dateNow,
     "timestamp": dateNow.toLocaleString().toString(),
-  }).then(() => {
-    firebase.firestore().collection('Classes').doc(code).collection('Students').get().then(function (doc) {
-      doc.forEach(snapshot => {
-        var data = snapshot.data();
-        var email = data["email"]
-
-        socket.emit('send-email-to-student', {"email": email});
-  
-      })
-    })
+  }).then(async () => {
     
+
+    socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className});
     
   }).then(() => {
     //window.location.reload()
+    setTimeout(function(){ 
+        console.log('Completed')
+        $('#exampleModal').modal('toggle')
+
+     }, 4000);
+
   });
-
-
 }
-
 
 
 function getMeetings() {
@@ -1048,10 +1061,142 @@ function getMeetings() {
   });
 }
 
+var lastItemGlobalAnnouncements = ''
+
+async function getAnnouncementForClass_Pagenation(code, lastElement) {
+  var index = 0;
+
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').startAfter(lastElement).limit(4)
+  let announcementRefGet = await announcementRef.get();
+  for(const doc of announcementRefGet.docs){
+
+    if(lastItemGlobalAnnouncements != lastElement){
+      index = index + 1
+      var data = doc.data()
+      var date = data["timestamp"]
+      var message = data["message"]
+      var title = data["title"]
+      var announcementId = doc.id
+
+      lastItemGlobalAnnouncements = lastElement
+  
+      
+      lastItem = date
+  
+      var studentReactions = {
+        "doing great": 0,
+        "need help": 0,
+        "frustrated": 0
+      }
+  
+      var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
+        snap.forEach((document) => {
+          var data = document.data();
+  
+          var reaction = data['reaction']
+  
+          if(reaction == "doing great"){
+            studentReactions['doing great'] = studentReactions['doing great'] + 1
+          }
+  
+          if(reaction == "need help"){
+            studentReactions['need help'] = studentReactions['need help'] + 1
+          }
+  
+  
+          if(reaction == "frustrated"){
+            studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+          }
+        })
+  
+      }).then(() => {
+        output = `
+        <div class="col-xl-12 col-md-6 mb-4">
+                  <div class="card shadow h-100 py-2">
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+  
+                          <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+  
+                          <p style = 'color: gray'>${message}</p>
+  
+                          <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
+  
+                          
+                        </div>
+                        <div class="col-auto">
+                        <div class="chart-container" style="position: relative; height:100px; width:100px">
+                          <canvas id="announcementChart${doc.id}"></canvas>
+                      </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+        `
+        
+        $(output).appendTo('#classAnnouncement')
+  
+        // Set new default font family and font color to mimic Bootstrap's default styling
+  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  Chart.defaults.global.defaultFontColor = '#858796';
+  
+  // Pie Chart Example
+  var ctx = document.getElementById(`announcementChart${doc.id}`);
+  new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+  labels: ["Liked", "Needs Help", "Disliked"],
+  datasets: [{
+  data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+  backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+  hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+  hoverBorderColor: "rgba(234, 236, 244, 1)",
+  }],
+  },
+  options: {
+  responsive: true,
+  maintainAspectRatio: false,
+  tooltips: {
+  backgroundColor: "rgb(255,255,255)",
+  bodyFontColor: "#858796",
+  borderColor: '#dddfeb',
+  borderWidth: 1,
+  xPadding: 10,
+  yPadding: 5,
+  displayColors: false,
+  caretPadding: 2,
+  },
+  legend: {
+  display: false
+  },
+  cutoutPercentage: 60,
+  },
+  });
+      });
+    }
+
+    }
+}
+
 async function getAnnouncementForClass(code) {
   var index = 0;
 
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
+  var lastItem = '';
+
+  $('#classAnnouncement').on('scroll', function() { 
+    if ($(this).scrollTop() + 
+        $(this).innerHeight() >=  
+        $(this)[0].scrollHeight) { 
+
+          getAnnouncementForClass_Pagenation(code, lastItem)
+    } 
+  });
+
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').limit(4)
   let announcementRefGet = await announcementRef.get();
   for(const doc of announcementRefGet.docs){
 
@@ -1061,7 +1206,9 @@ async function getAnnouncementForClass(code) {
     var message = data["message"]
     var title = data["title"]
     var announcementId = doc.id
-    console.log("THING:" + announcementId)
+
+    
+    lastItem = date
 
     var studentReactions = {
       "doing great": 0,
@@ -1179,7 +1326,7 @@ cutoutPercentage: 60,
 
 }
 
-function showSendAnnouncementModal(code){
+function showSendAnnouncementModal(code, className){
   var modalHTML = `
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
@@ -1192,7 +1339,7 @@ function showSendAnnouncementModal(code){
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form onsubmit="event.preventDefault();">
       <div class="form-group" style="padding-left: 10px; padding-right: 10px;">
         <label for="message-text" class="col-form-label">Title:</label>
         <input class="form-control" id="messageTitle" maxlength="100"></input>
@@ -1202,7 +1349,7 @@ function showSendAnnouncementModal(code){
         <textarea class="form-control" id="messageText"></textarea>
       </div>
       <center>
-        <button class="btn btn-primary" onclick="writeAnnouncement('${code}')" data-dismiss="modal" style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
+        <button class="btn btn-primary" onclick="writeAnnouncement('${code}', '${className}'); event.preventDefault();" id = 'sendAnnouncementButton' style="width: 200px; margin-top: 10px; margin-bottom: 5px">Send
           Announcement</button>
       </center>
       </form>
@@ -1698,6 +1845,8 @@ function getEditData(code) {
   }).then((data) => {
     var className = data['class name'];
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
+
+    showSendAnnouncementModal(code, className);
 
     var course = data['Course']
     var teacherNote = data['teachersNote'] != undefined ? data['teachersNote'] : "Not Set"
@@ -2307,15 +2456,11 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
               }
       
             })
-    
             scrollSmoothToBottom()
           })
-    
       })
     }
   });
-
-
 } 
 
 function sendMessage_ChatPage_teacher(classCode, studentEmail){
@@ -2336,7 +2481,6 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       }).then(() => {
         console.log("Message sent")
         document.getElementById('message-input').value = '';
-    
       })
     }
     });
