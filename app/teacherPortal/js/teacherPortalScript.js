@@ -2469,21 +2469,16 @@ var chatList_PageNation_MainPageList = []
 
 
 function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElement){
-  console.log("Getting messages")
 
   classCodeChat = classCode
-
-  var lastID = '';
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limit(10).startAfter(lastElement).get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(10).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
-    
-          lastID = doc.id
     
           var message = data.message;
           var time = data.timestamp;
