@@ -71,7 +71,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   document.getElementById('main-page-content-meetings-page').style.display = "initial";
                   getProfileInfo();
                   //getClassData();
-                  getClassDataDropdown();
+                  getClassDataDropdown(email);
                   getMeetings();
                 }
                 else if (pageType == "") {
@@ -79,13 +79,13 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
                 else if(pageType == 'create-class'){
                   getProfileInfo();
-                  getClassDataDropdown();
+                  getClassDataDropdown(email);
                 }
     
                 else if (pageType == 'class-page') {
                   getProfileInfo();
                   //getClassData();
-                  getClassDataDropdown()
+                  getClassDataDropdown(email)
                   getStudentData(classCode);
                   getEditData(classCode);
                   getAnnouncementForClass(classCode);
@@ -94,7 +94,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
                 else if (pageType == 'dashboard') {
                   getProfileInfo();
-                  getClassData();
+                  getClassData(email);
                   //getWeekStudentAverageReactions_ALL_CLASSES()
                 }
     
@@ -105,14 +105,14 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
                 else if(pageType == "announcementsTeacher"){
                   getProfileInfo();
-                  getClassDataDropdown();
+                  getClassDataDropdown(email);
                   getAnnouncements(email);
     
                 }
     
                 else if(pageType == "chat-page-teacher"){
                   getProfileInfo();
-                  getClassDataDropdown();
+                  getClassDataDropdown(email);
                   getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
                 }
     
@@ -146,16 +146,16 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 document.getElementById('main-page-content-meetings-page').style.display = "initial";
                 getProfileInfo();
                 //getClassData();
-                getClassDataDropdown();
+                getClassDataDropdown(email);
                 getMeetings();
               }
               else if (pageType == "") {
-                getClassDataDropdown();
+                getClassDataDropdown(email);
               }
               else if (pageType == 'class-page') {
                 getProfileInfo();
                 //getClassData();
-                getClassDataDropdown();
+                getClassDataDropdown(email);
                 getStudentData(classCode);
                 getEditData(classCode);
                 getAnnouncementForClass(classCode);
@@ -165,19 +165,19 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               else if (pageType == 'dashboard') {
                 console.log("executing");
                 getProfileInfo();
-                getClassData();
+                getClassData(email);
                 //getWeekStudentAverageReactions_ALL_CLASSES()
               }
     
               else if(pageType == 'create-class'){
                 getProfileInfo();
-                getClassDataDropdown();
+                getClassDataDropdown(email);
               }
     
               else if(pageType == "announcementsTeacher"){
                 getProfileInfo();
                 getAnnouncements(email);
-                getClassDataDropdown();
+                getClassDataDropdown(email);
               }
     
               else if(pageType == "student-requests"){
@@ -187,7 +187,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
               else if(pageType == "chat-page-teacher"){
                 getProfileInfo();
-                getClassDataDropdown();
+                getClassDataDropdown(email);
                 getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
     
               }
@@ -831,8 +831,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     
 }
 
-function getClassData() {
-  var emailRef = localStorage.getItem("email")
+function getClassData(emailRef) {
   var classesList = [];
 
   var no_classes_HTML = `
@@ -1643,8 +1642,7 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
 }
 
 
-function getClassDataDropdown() {
-  var emailRef = localStorage.getItem("email")
+function getClassDataDropdown(emailRef) {
   var classesList = [];
 
   firebase.firestore().collection('UserData').doc(emailRef).collection("Classes").get().then(function (doc) {
