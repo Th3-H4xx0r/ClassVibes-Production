@@ -2461,8 +2461,10 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 }
 
 var classCodeChat = 'NONE'
+var chatList_PageNation_MainPageList = []
 
-function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
+
+function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail){
   console.log("Getting messages")
 
   classCodeChat = classCode
@@ -2473,7 +2475,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limit(10).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
     
@@ -2483,6 +2485,10 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           var time = data.timestamp;
     
           var user = data.user
+
+          lastElement = data['timestamp']
+          chatList_PageNation_MainPageList.push(doc.id)
+
     
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
@@ -2556,6 +2562,128 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
             })
             scrollSmoothToBottom()
           })
+      }).then(() => {
+        $('##message-components').on('scroll', function() { 
+          if ($(this).scrollTop() + 
+              $(this).innerHeight() >=  
+              $(this)[0].scrollHeight) { 
+      
+                getMessagesForChat_chatPage_teacher_pageNation(lastelement)
+
+          } 
+        });
+      });
+    }
+  });
+} 
+
+function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
+  console.log("Getting messages")
+
+  classCodeChat = classCode
+
+  var lastID = '';
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
+
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limit(10).get().then(snap => {
+        snap.forEach(doc => {
+          var data = doc.data();
+    
+          lastID = doc.id
+    
+          var message = data.message;
+          var time = data.timestamp;
+    
+          var user = data.user
+
+          lastElement = data['timestamp']
+          chatList_PageNation_MainPageList.push(doc.id)
+
+
+          var formattedTime = new Date(time.seconds * 1000).toLocaleString()
+    
+          console.log(formattedTime)
+    
+          console.log(data)
+    
+          var messageHTML = `
+          <div class="message-component" style="margin-top: 50px">
+          <div class="row">
+            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+            <div class="col">
+              <div class="row" style="margin-left: 5px;">
+                <h5>${user}</h5>
+                <div style="width: 80%;"></div>
+              </div>
+              <p>${formattedTime}</p>
+
+              <p style="width: 100%;">${message}</p>
+            </div>
+          </div>
+          <hr>
+        </div>
+        `
+    
+          $(messageHTML).appendTo('#message-components')
+    
+          
+        })
+    
+      }).then(() => {
+        scrollSmoothToBottom()
+    
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+            snap.forEach(doc => {
+              var data = doc.data();
+    
+              if (doc.id != lastID){
+                var message = data.message;
+                var time = data.timestamp;
+          
+                var user = data.user
+    
+                var formattedTime = new Date(time.seconds * 1000).toLocaleString()
+    
+                console.log(formattedTime)
+          
+                console.log(data)
+          
+                var messageHTML = `
+                <div class="message-component" style="margin-top: 50px">
+                <div class="row">
+                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
+                  <div class="col">
+                    <div class="row" style="margin-left: 5px;">
+                      <h5>${user}</h5>
+                      <div style="width: 80%;"></div>
+                    </div>
+                    <p>${formattedTime}</p>
+
+                    <p style="width: 100%;">${message}</p>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              `
+          
+                $(messageHTML).appendTo('#message-components')
+              }
+      
+            })
+            scrollSmoothToBottom()
+          })
+
+          $('##message-components').on('scroll', function() { 
+            if ($(this).scrollTop() + 
+                $(this).innerHeight() >=  
+                $(this)[0].scrollHeight) { 
+        
+                  getMessagesForChat_chatPage_teacher_pageNation(lastelement)
+            } 
+          });
       })
     }
   });
