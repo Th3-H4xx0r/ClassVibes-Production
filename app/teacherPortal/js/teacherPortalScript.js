@@ -1056,7 +1056,7 @@ function getMeetings_pageNation(lastElement) {
   
         $(output).appendTo("#meetingsList");
       }
-
+ 
  
     })
   }).then(() => {
