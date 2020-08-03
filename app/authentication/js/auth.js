@@ -44,7 +44,7 @@ function facebookLoginStudent() {
                 if (accountType != null) {
                     if (accountType == "Student") {
 
-                        localStorage.setItem("email", email);
+                        //localStorage.setItem("email", email);
 
                         window.location = "/student/dashboard";
                     } else {
@@ -114,7 +114,7 @@ function facebookLoginDistrict() {
                 if (accountType == "District") {
                     console.log('Login Success');
 
-                    localStorage.setItem("email", email);
+                    //localStorage.setItem("email", email);
                     window.location = "districtDashboard.html";
                 } else {
 
@@ -182,9 +182,9 @@ function facebookLoginTeacher() {
                 if (accountType == "Teacher") {
 
                     console.log('Login Success');
-                    localStorage.setItem("photo", profilePic);
-                    localStorage.setItem("email", email);
-                    localStorage.setItem("name", name3);
+                    //localStorage.setItem("photo", profilePic);
+                    //localStorage.setItem("email", email);
+                    //localStorage.setItem("name", name3);
 
                     window.location = "teacher/dashboard";
                 } else {
@@ -255,9 +255,7 @@ googleSignInStudent = () => {
                 if (accountType == "Student") {
                     console.log('Login Success');
 
-                    localStorage.setItem("photo", profilePic);
-                    localStorage.setItem("email", email);
-                    localStorage.setItem("name", name3);
+                    window.localStorage.setItem("clientType", '35TK-KSMY-C7NR-2CEF');
 
                     window.location = "/student/dashboard";
 
@@ -308,7 +306,7 @@ googleSignInTeacher = () => {
         firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
 
-            localStorage.setItem("email", email);
+           // localStorage.setItem("email", email);
 
 
             console.log("data from doc : ", doc.data());
@@ -322,14 +320,7 @@ googleSignInTeacher = () => {
                     if (accountType == "Teacher" || accountType == 'Solo Teacher') {
                         console.log('Login Success');
 
-                        localStorage.setItem("photo", profilePic);
-
-                        localStorage.setItem("email", email);
-                        localStorage.setItem("name", name3);
-
-                        var emailDisplay = localStorage.getItem("email");
-
-                        console.log("Email:" + email + ":" + emailDisplay);
+                        window.localStorage.setItem("clientType", '9HX4-5H7Y-4CEH-UKPT');
 
                         window.location = "teacher/dashboard";
                     } else {
@@ -404,7 +395,7 @@ googleSignInDistrict = () => {
             if (accountType != null) {
                 if (accountType == "District") {
                     console.log('Login Success');
-                    localStorage.setItem("email", email);
+                    //localStorage.setItem("email", email);
                     window.location = "../districtDashboard.html";
                 } else {
 
@@ -860,19 +851,10 @@ function loginWithEmailStudent() {
 
                 if (accountType != null) {
                     if (accountType == "Student") {
-
-                        getProfileName(email);
-
-                        setTimeout(function(){
                         
-                            window.localStorage.setItem("email", email.toString());
+                            window.localStorage.setItem("clientType", '35TK-KSMY-C7NR-2CEF');
 
-                            console.log(email);
-    
                             window.location = "/student/dashboard";
-                       }, 500); 
-
-
 
                     } else {
 
@@ -940,15 +922,9 @@ function loginWithEmailTeacher() {
 
                     if (accountType != null) {
                         if (accountType == "Teacher" || accountType == 'Solo Teacher') {
-                            getProfileName(email);
-                            //localStorage.setItem("photo", profilePic);
+                            window.localStorage.setItem("clientType", '9HX4-5H7Y-4CEH-UKPT');
 
-                            setTimeout(function(){
-
-                                localStorage.setItem("email", email);
-                                //localStorage.setItem("name", name3);
-                                window.location = "teacher/dashboard";
-                           }, 500); 
+                             window.location = "teacher/dashboard";
 
 
                         } else {
@@ -1024,15 +1000,8 @@ function loginWithEmailDistrict() {
 
                 if (accountType != null) {
                     if (accountType == "District") {
-                        getProfileName(email);
-
-                        setTimeout(() => { 
-
-
-                            localStorage.setItem("email", email);
 
                             window.location = "districtDashboard.html";
-                         }, 500)
 
 
                     } else {
@@ -1063,14 +1032,4 @@ function loginWithEmailDistrict() {
         }
     });
 
-}
-
-function getProfileName(email){
-    firebase.firestore().collection("UserData").doc(email).get().then(function (doc) {
-        var data = doc.data();
-
-        var name = data["display name"];
-
-        localStorage.setItem("name", name);
-    });
 }

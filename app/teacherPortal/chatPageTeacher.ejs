@@ -70,7 +70,7 @@
       setVersionFooter();
       getLiveSeverAlerts();
     getServerStatus();
-      checkUserAuthStatus();
+    checkUserAuthStatus('teacher');
       firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;

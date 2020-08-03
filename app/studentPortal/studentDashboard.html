@@ -85,7 +85,7 @@
       setVersionFooter();
       getLiveSeverAlerts();
       getServerStatus();
-      checkUserAuthStatus();
+      checkUserAuthStatus('student');
 
       firebase.auth().onAuthStateChanged(user => {
     if (user) {
