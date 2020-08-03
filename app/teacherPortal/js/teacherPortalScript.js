@@ -1006,13 +1006,14 @@ async function writeAnnouncement(code, className) {
   });
 }
 
+var meetingsList_PageNation_MainPageList = []
 
-function getMeetings() {
+function getMeetings_pageNation(lastElement) {
   var name = localStorage.getItem("email");
 
   var index = 0;
 
-  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').get().then(function (doc) {
+  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').limit(4).startAfter(lastElement).get().then(function (doc) {
     doc.forEach(snapshot => {
       index = index + 1
       var data1 = snapshot.data();
@@ -1022,6 +1023,72 @@ function getMeetings() {
       var title = data1["title"];
       var message = data1["message"]
       var length = data1["length"]
+
+      lastElement = data['timestamp']
+
+      if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
+
+        meetingsList_PageNation_MainPageList.push(snapshot.id)
+
+        output = `
+        <section class="resume" style="margin-left: 0px;">
+          <div class="row">
+          <div class="col-lg-6" data-aos="fade-up">
+                <h3 class="resume-title">${date} </h3>
+  
+                <h3 class="resume-title" style="width: 500px">${classForMeeting}</h3>
+                <div class="resume-item pb-0">
+                  <h4 style="width: 500px">${title}</h4>
+                  <h5>${length}</h5>
+                  <p style="width: 100%">
+                    ${message}
+  
+                  </p>
+                </div>
+  
+          </div>
+        </section>
+          `;
+  
+        $(output).appendTo("#meetingsList");
+      }
+
+ 
+    })
+  }).then(() => {
+    $('#meetingsList').on('scroll', function() { 
+      if ($(this).scrollTop() + 
+          $(this).innerHeight() >=  
+          $(this)[0].scrollHeight) { 
+  
+            getMeetings_pageNation(lastElement)
+      } 
+    });
+  });
+}
+
+
+function getMeetings() {
+  var name = localStorage.getItem("email");
+
+  var index = 0;
+
+  var lastElement = ''
+
+  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').limit(4).get().then(function (doc) {
+    doc.forEach(snapshot => {
+      index = index + 1
+      var data1 = snapshot.data();
+      var classForMeeting = data1["Course"]
+
+      var date = data1["date and time"];
+      var title = data1["title"];
+      var message = data1["message"]
+      var length = data1["length"]
+
+      lastElement = snapshot.id
+
+      meetingsList_PageNation_MainPageList.push(snapshot.id)
 
       output = `
       <section class="resume" style="margin-left: 0px;">
@@ -1057,6 +1124,15 @@ function getMeetings() {
 
     if (index == 0) {
       document.getElementById('main-body-page-teacher').innerHTML = noMeetingsHTML;
+    } else {
+      $('#meetingsList').on('scroll', function() { 
+        if ($(this).scrollTop() + 
+            $(this).innerHeight() >=  
+            $(this)[0].scrollHeight) { 
+    
+              getMeetings_pageNation(lastElement)
+        } 
+      });
     }
   });
 }
