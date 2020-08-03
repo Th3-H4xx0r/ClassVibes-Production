@@ -979,7 +979,7 @@ function writeAnnouncement(code) {
         var data = snapshot.data();
         var email = data["email"]
 
-        socket.emit('send-email-to-student', {"email": "krishnatechpranav@gmail.com"});
+        socket.emit('send-email-to-student', {"email": email});
   
       })
     })
