@@ -2468,7 +2468,7 @@ var classCodeChat = 'NONE'
 var chatList_PageNation_MainPageList = []
 
 
-function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail){
+function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElement){
   console.log("Getting messages")
 
   classCodeChat = classCode
@@ -2572,7 +2572,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail)
               $(this).innerHeight() >=  
               $(this)[0].scrollHeight) { 
       
-                getMessagesForChat_chatPage_teacher_pageNation(lastelement)
+                getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElement)
 
           } 
         });
@@ -2581,7 +2581,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail)
   });
 } 
 
-function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
+function getMessagesForChat_chatPage_teacher(classCode, studentEmail, lastElement){
   console.log("Getting messages")
 
   classCodeChat = classCode
@@ -2680,14 +2680,24 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
             scrollSmoothToBottom()
           })
 
-          $('##message-components').on('scroll', function() { 
-            if ($(this).scrollTop() + 
-                $(this).innerHeight() >=  
-                $(this)[0].scrollHeight) { 
+        //   $('#message-components').on('scroll', function() {
+        //     var scrollTop = $(this).scrollTop();
         
-                  getMessagesForChat_chatPage_teacher_pageNation(lastelement)
-            } 
-          });
+        //         var topDistance = $(this).offset().top;
+        
+        //         if ( (topDistance) < scrollTop ) {
+        //             alert( $(this).text() + ' was scrolled to the top' );
+        //         }
+            
+        // });
+
+          // $('#message-components').on('scroll', function() { 
+          //   if ($(this).scrollTop() + 
+          //       $(this).innerHeight() >=  
+          //       $(this)[0].scrollHeight) { 
+        
+          //       } 
+          // });
       })
     }
   });
