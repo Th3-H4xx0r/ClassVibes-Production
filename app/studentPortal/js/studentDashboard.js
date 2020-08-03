@@ -1314,9 +1314,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
             });
           });
         }
-  
       }
-  
       setTimeout(() => {
   //IF there is no annonucements
   
@@ -1403,7 +1401,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
       setTimeout(() => {
   //IF there is no annonucements
-  
   if (announcementsCount == 0) {
 
       document.getElementById("loadingIndicator").style.display = "none";
@@ -1411,7 +1408,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       document.getElementById("announcementsSection-section").style.display = "none";
       
       document.getElementById("no-Announcements-section").style.display = "initial";
-  
   } else {
 
       document.getElementById("loadingIndicator").style.display = "none";
@@ -1423,7 +1419,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
        }, 1000)
     }
 }
-
 
 var classCodeChat = 'NONE'
 
@@ -1441,9 +1436,8 @@ function getMessagesForChat_Classes_page(classCode){
       firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
-    
+  
           lastID = doc.id
-    
           var message = data.message;
           var time = data.timestamp;
     
@@ -1474,10 +1468,7 @@ function getMessagesForChat_Classes_page(classCode){
           <hr>
         </div>
         `
-    
           $(messageHTML).appendTo('#message-components')
-    
-          
         })
     
       }).then(() => {
@@ -1517,20 +1508,16 @@ function getMessagesForChat_Classes_page(classCode){
                 <hr>
               </div>
               `
-          
                 $(messageHTML).appendTo('#message-components')
               }
       
             })
-    
             scrollSmoothToBottom()
           })
     
       })
     }
   });
-
-
 } 
 
 function sendMessage_Classes_page(classCode){
