@@ -2478,7 +2478,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(5).startAt(lastElement).get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
 
           var data = doc.data();
@@ -2490,10 +2490,8 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
 
           lastElementPageNation = data['timestamp']
 
-          console.log(chatList_PageNation_MainPageList.includes(doc.id))
 
           if(chatList_PageNation_MainPageList.includes(doc.id) != true){
-            console.log("getting page nation")
             chatList_PageNation_MainPageList.push(doc.id)
     
             var formattedTime = new Date(time.seconds * 1000).toLocaleString()
@@ -2528,14 +2526,12 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
         })
     
       }).then(() => {
-        $('#message-components').on('scroll', function() { 
-          if ($(this).scrollTop() + 
-              $(this).innerHeight() >=  
-              $(this)[0].scrollHeight) { 
-      
-                getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElementPageNation)
-
-          } 
+        $('#message-components').on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          if (scrollTop <= 0) {
+            //alert('top reached');
+           getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElementPageNation)
+          }
         });
       });
     }
@@ -2543,7 +2539,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
 } 
 
 function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
-  console.log("Getting messages")
 
   classCodeChat = classCode
 
@@ -2618,26 +2613,21 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     
           firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
-              console.log('getting snashpt realtime')
+
               var data = doc.data();
     
               if (messagesListIDs.includes(doc.id) != true){
-                console.log('getting snashpt realtime')
+
                 var message = data.message;
                 var time = data.timestamp;
 
                 messagesListIDs.push(doc.id)
                 
-                console.log(message)
 
                 var user = data.user
     
                 var formattedTime = new Date(time.seconds * 1000).toLocaleString()
-    
-                console.log(formattedTime)
-          
-                console.log(data)
-          
+
                 var messageHTML = `
                 <div class="message-component" style="margin-top: 50px">
                 <div class="row">
