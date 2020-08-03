@@ -913,6 +913,7 @@ function getClassData(emailRef) {
             <a href="classes/${classCode}" style = 'text-decoration: none'>
             <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
                 <div class="card-body">
+                <h2><span id = 'unreadMessages${classCode}'></span></h2>
                   <div class="chart-pie pt-4 pb-2" id = "chartPie${classCode}">
                     <canvas id="myPieChart${classCode}"></canvas>
                   </div>
@@ -2186,6 +2187,8 @@ function getChartData(code) {
   var index = 0;
   var maxdays = 0
 
+  var unreadMessages = 0
+
   var today = Math.floor(Date.now()/1000);
 
 
@@ -2206,6 +2209,16 @@ function getChartData(code) {
               
               var reaction = data["status"];
               var date = data["date"];
+
+              console.log(data["teacher unread"])
+
+              if(unreadMessages != undefined){
+                unreadMessages = unreadMessages + data["teacher unread"];
+              } else {
+                unreadMessages = unreadMessages + (data["teacher unread"] != undefined ? data["teacher unread"]: 0);
+              }
+
+              
 
               console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
 
@@ -2300,11 +2313,15 @@ function getChartData(code) {
     });
             }
       
-          
+            console.log("UNREAD : " + unreadMessages)
+
+            var unreadMessagesHTML = unreadMessages != undefined ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>` : ''
+            unreadMessagesHTML = unreadMessages != 0 ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>` : ''
+    
+            document.getElementById(`unreadMessages${code}`).innerHTML = unreadMessagesHTML
          }, 700);
       });
-      });
-
+      })
 
 
 
