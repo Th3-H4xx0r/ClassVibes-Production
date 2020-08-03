@@ -1752,6 +1752,7 @@ function createClass() {
 
 function getStudentData(code) {
 
+
   var classInfoList = [];
   console.log(classInfoList);
 
@@ -1770,8 +1771,12 @@ function getStudentData(code) {
           var reaction = data["status"];
           var studentName = data["name"];
           var studentEmail = data["email"];
+
+          var unread = data['teacher unread']
+
+          console.log(unread)
           var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
-          classInfoList.push([studentName, reaction, studentEmail,dateReported])
+          classInfoList.push([studentName, reaction, studentEmail,dateReported, unread])
           console.log(classInfoList)
     
         });
@@ -1793,7 +1798,16 @@ function getStudentData(code) {
     
             var studentEmail = classInfoData[2];
 
+            var unreadMessages = classInfoData[4]
+
             var studentReportedDate = classInfoData[3]
+
+            
+
+            var unreadMessagesHTML = unreadMessages != undefined ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
+            unreadMessagesHTML = unreadMessages != 0 ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
+
+            
             console.log(classInfoData)
     
             descriptionOutput2 = `
@@ -1805,7 +1819,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
           </div>
          
           </td>
@@ -1821,7 +1835,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>
           </td>
           </tr>
@@ -1836,7 +1850,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>
           </td>
           </tr>
@@ -1851,7 +1865,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>          
           </td>
           </tr>
@@ -2543,6 +2557,11 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
 } 
 
 function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
+  
+  firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
+    'teacher unread': 0
+  })
+
 
   classCodeChat = classCode
 
