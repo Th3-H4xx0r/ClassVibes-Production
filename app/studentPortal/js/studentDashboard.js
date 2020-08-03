@@ -258,7 +258,7 @@ async function getAnnouncementForClass(code, email) {
       }
 }
 
-async function getAnnouncementForClass_pageNation(code, email) {
+async function getAnnouncementForClass(code, email) {
   var index = 0;
 
   document.getElementById('classAnnouncement').innerHTML = ``
@@ -547,7 +547,7 @@ async function getStudentClasses(studentUsername, pageType) {
 
     console.log(classData['status'])
 
-    var x = await firebase.firestore().collection('Classes').doc(classCode).onSnapshot().then(snap => {
+    var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
       var data = snap.data();
   
       if(data != null && data != undefined){
