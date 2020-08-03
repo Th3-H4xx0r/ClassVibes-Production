@@ -1813,7 +1813,7 @@ function getStudentData(code) {
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td><center>${happy}</center></td>
-          <td>2011/04/25</td>
+          <td>${studentReportedDate}</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
@@ -1828,7 +1828,7 @@ function getStudentData(code) {
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td><center>${meh}</center></td>
-          <td>2011/04/25</td>
+          <td>${studentReportedDate}</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
@@ -1843,7 +1843,7 @@ function getStudentData(code) {
           <td>${studentName}</td>
           <td>${studentEmail}</td>
           <td><center>${sad}</center></td>
-          <td>2011/04/25</td>
+          <td>${studentReportedDate}</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
