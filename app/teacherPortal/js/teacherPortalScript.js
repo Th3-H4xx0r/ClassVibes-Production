@@ -996,11 +996,11 @@ async function writeAnnouncement(code, className) {
     socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className});
     
   }).then(() => {
-    //window.location.reload()
+
     setTimeout(function(){ 
         console.log('Completed')
         $('#exampleModal').modal('toggle')
-
+        window.location.reload()
      }, 4000);
 
   });
@@ -1012,7 +1012,7 @@ function getMeetings() {
 
   var index = 0;
 
-  firebase.firestore().collection('UserData').doc(name).collection("Meetings").get().then(function (doc) {
+  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('').get().then(function (doc) {
     doc.forEach(snapshot => {
       index = index + 1
       var data1 = snapshot.data();
@@ -1066,11 +1066,22 @@ var lastItemGlobalAnnouncements = ''
 async function getAnnouncementForClass_Pagenation(code, lastElement) {
   var index = 0;
 
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').startAfter(lastElement).limit(4)
+  $('#classAnnouncement').on('scroll', function() { 
+    if ($(this).scrollTop() + 
+        $(this).innerHeight() >=  
+        $(this)[0].scrollHeight) { 
+
+          getAnnouncementForClass_Pagenation(code, lastElement)
+    } 
+  });
+
+  if(lastItemGlobalAnnouncements != lastElement){
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').startAfter(lastElement).limit(2)
   let announcementRefGet = await announcementRef.get();
   for(const doc of announcementRefGet.docs){
 
-    if(lastItemGlobalAnnouncements != lastElement){
+    console.log("Getting p[age")
+
       index = index + 1
       var data = doc.data()
       var date = data["timestamp"]
@@ -1078,108 +1089,109 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
       var title = data["title"]
       var announcementId = doc.id
 
-      lastItemGlobalAnnouncements = lastElement
-  
-      
-      lastItem = date
-  
-      var studentReactions = {
-        "doing great": 0,
-        "need help": 0,
-        "frustrated": 0
-      }
-  
-      var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
-        snap.forEach((document) => {
-          var data = document.data();
-  
-          var reaction = data['reaction']
-  
-          if(reaction == "doing great"){
-            studentReactions['doing great'] = studentReactions['doing great'] + 1
-          }
-  
-          if(reaction == "need help"){
-            studentReactions['need help'] = studentReactions['need help'] + 1
-          }
-  
-  
-          if(reaction == "frustrated"){
-            studentReactions['frustrated'] = studentReactions['frustrated'] + 1
-          }
-        })
-  
-      }).then(() => {
-        output = `
-        <div class="col-xl-12 col-md-6 mb-4">
-                  <div class="card shadow h-100 py-2">
-                    <div class="card-body">
-                      <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-  
-                          <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
-  
-                          <p style = 'color: gray'>${message}</p>
-  
-                          <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
-  
-                          
+      if(globalGetAnnouncements_AnnouncementsPage_pageNationList.includes(doc.id) != true){
+        globalGetAnnouncements_AnnouncementsPage_pageNationList.push(doc.id)
+        var studentReactions = {
+          "doing great": 0,
+          "need help": 0,
+          "frustrated": 0
+        }
+    
+        var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
+          snap.forEach((document) => {
+            var data = document.data();
+    
+            var reaction = data['reaction']
+    
+            if(reaction == "doing great"){
+              studentReactions['doing great'] = studentReactions['doing great'] + 1
+            }
+    
+            if(reaction == "need help"){
+              studentReactions['need help'] = studentReactions['need help'] + 1
+            }
+    
+    
+            if(reaction == "frustrated"){
+              studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+            }
+          })
+    
+        }).then(() => {
+          output = `
+          <div class="col-xl-12 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                      <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-2">
+    
+                            <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+    
+                            <p style = 'color: gray'>${message}</p>
+    
+                            <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
+    
+                            
+                          </div>
+                          <div class="col-auto">
+                          <div class="chart-container" style="position: relative; height:100px; width:100px">
+                            <canvas id="announcementChart${doc.id}"></canvas>
                         </div>
-                        <div class="col-auto">
-                        <div class="chart-container" style="position: relative; height:100px; width:100px">
-                          <canvas id="announcementChart${doc.id}"></canvas>
-                      </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            
-        `
-        
-        $(output).appendTo('#classAnnouncement')
+              
+          `
+          
+          $(output).appendTo('#classAnnouncement')
   
-        // Set new default font family and font color to mimic Bootstrap's default styling
-  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-  Chart.defaults.global.defaultFontColor = '#858796';
-  
-  // Pie Chart Example
-  var ctx = document.getElementById(`announcementChart${doc.id}`);
-  new Chart(ctx, {
-  type: 'doughnut',
-  data: {
-  labels: ["Liked", "Needs Help", "Disliked"],
-  datasets: [{
-  data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
-  backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
-  hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
-  hoverBorderColor: "rgba(234, 236, 244, 1)",
-  }],
-  },
-  options: {
-  responsive: true,
-  maintainAspectRatio: false,
-  tooltips: {
-  backgroundColor: "rgb(255,255,255)",
-  bodyFontColor: "#858796",
-  borderColor: '#dddfeb',
-  borderWidth: 1,
-  xPadding: 10,
-  yPadding: 5,
-  displayColors: false,
-  caretPadding: 2,
-  },
-  legend: {
-  display: false
-  },
-  cutoutPercentage: 60,
-  },
-  });
-      });
-    }
+          
+    
+          // Set new default font family and font color to mimic Bootstrap's default styling
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
+    
+    // Pie Chart Example
+    var ctx = document.getElementById(`announcementChart${doc.id}`);
+    new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+    labels: ["Liked", "Needs Help", "Disliked"],
+    datasets: [{
+    data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+    backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+    hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+    hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+    },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+    backgroundColor: "rgb(255,255,255)",
+    bodyFontColor: "#858796",
+    borderColor: '#dddfeb',
+    borderWidth: 1,
+    xPadding: 10,
+    yPadding: 5,
+    displayColors: false,
+    caretPadding: 2,
+    },
+    legend: {
+    display: false
+    },
+    cutoutPercentage: 60,
+    },
+    });
+        });
+      }
+
 
     }
+  }
 }
 
 async function getAnnouncementForClass(code) {
@@ -1192,7 +1204,7 @@ async function getAnnouncementForClass(code) {
         $(this).innerHeight() >=  
         $(this)[0].scrollHeight) { 
 
-          getAnnouncementForClass_Pagenation(code, lastItem)
+        getAnnouncementForClass_Pagenation(code, lastItem)
     } 
   });
 
@@ -1372,6 +1384,82 @@ function deleteAnnouncement(id, classCode){
   })
 }
 
+var lastElement_Get_meetings_classLIST = []
+
+function getMeetingForClass_Pagenation(code, lastElement) {
+
+
+  $('#meetingsListforClassPage').on('scroll', function() { 
+    if ($(this).scrollTop() + 
+        $(this).innerHeight() >=  
+        $(this)[0].scrollHeight) { 
+
+          getMeetingForClass_Pagenation(code, lastElement)
+    } 
+  });
+
+
+  //if(lastElement_Get_meetings_class == lastElement){
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        var name = user.displayName;
+        var email = user.email;
+  
+        var index = 0;
+  
+        firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('class id', '==', code).orderBy('timestamp', "desc").limit(4).startAt(lastElement).get().then(function(doc) {
+          doc.forEach(snapshot => {
+            index  = index + 1
+            var data = snapshot.data();
+            var classForMeeting = data["class id"]
+            var date = data["date and time"];
+            var title = data["title"];
+            var message = data["message"]
+            var length = data["length"]
+            var recipient = data["recipient"]
+
+            lastElement = data['timestamp']
+
+            if(lastElement_Get_meetings_classLIST.includes(snapshot.id) != true){
+
+              lastElement_Get_meetings_classLIST.push(snapshot.id)
+          
+              var meetingID = snapshot.id
+  
+              output = `
+              <section class="resume" style="margin-left: 20px;">
+                <div class="row">
+                <div class="col-lg-6" data-aos="fade-up">
+                      <h3 class="resume-title">${date} </h3>
+                      <div class="resume-item pb-0">
+                        <h4 style="width: 500px">${title}</h4>
+                        <h5>${length}</h5>
+                        <p style="width: 100%">
+                          ${message}
+                        </p>
+                        <button type="button" class="btn btn-outline-danger" onclick = "cancelMeeting('${meetingID}', '${recipient}', '${classForMeeting}', '${message}', '${title}', '${email}', '${date}')">Cancel</button>
+                      </div>
+    
+                </div>
+              </section>
+                `;
+    
+                $(output).appendTo("#meetingsListforClassPage")
+
+                
+            }
+
+          })
+        }).then(() => {
+          
+        })
+      }
+    })
+  //}
+
+}
+
+
 function getMeetingForClass(code) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -1380,9 +1468,20 @@ function getMeetingForClass(code) {
 
       var index = 0;
 
+      var lastElement = ''
+
+      $('#meetingsListforClassPage').on('scroll', function() { 
+        if ($(this).scrollTop() + 
+            $(this).innerHeight() >=  
+            $(this)[0].scrollHeight) { 
+    
+              getMeetingForClass_Pagenation(code, lastElement)
+        } 
+      });
+
       document.getElementById('meetingsListforClassPage').innerHTML = '';
 
-      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('class id', '==', code).orderBy('timestamp', "desc").get().then(function(doc) {
+      firebase.firestore().collection('UserData').doc(email).collection('Meetings').where('class id', '==', code).orderBy('timestamp', "desc").limit(4).get().then(function(doc) {
         doc.forEach(snapshot => {
           index  = index + 1
           var data = snapshot.data();
@@ -1392,6 +1491,11 @@ function getMeetingForClass(code) {
           var message = data["message"]
           var length = data["length"]
           var recipient = data["recipient"]
+
+          lastElement = data['timestamp']
+
+
+          lastElement_Get_meetings_classLIST.push(snapshot.id)
 
           var meetingID = snapshot.id
 
@@ -1513,9 +1617,9 @@ function createClass() {
       var className = document.getElementById("className").value;
       var course = document.getElementById("course").value;
       var teacher = document.getElementById("teacher").value;
-      var classImg = document.getElementById("imageInput").value;
+      //var classImg = document.getElementById("imageInput").value;
       var courseDescription = document.getElementById("courseDescription").value;
-      var courseVideo = localStorage.getItem("videoLink");
+      //var courseVideo = localStorage.getItem("videoLink");
       var teachersNote = document.getElementById("teachersNote").value;
       var classCreator = localStorage.getItem("email")
       var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
@@ -1528,9 +1632,7 @@ function createClass() {
           "class name": className,
           "Course": course,
           "teacher": teacher,
-          "classImg": classImg,
           "courseDescription": courseDescription,
-          "courseVideo": courseVideo,
           "teachersNote": teachersNote,
           "max days inactive": maxInactiveDays,
           "teacher email" : email,
@@ -1543,9 +1645,9 @@ function createClass() {
           "class name": className,
           "Course": course,
           "teacher": teacher,
-          "classImg": classImg,
+          //"classImg": classImg,
           "courseDescription": courseDescription,
-          "courseVideo": courseVideo,
+          //"courseVideo": courseVideo,
           "teachersNote": teachersNote,
           "teacher email" : email,
           "max days inactive": maxInactiveDays,
@@ -1618,7 +1720,7 @@ function getStudentData(code) {
           <td>${studentReportedDate}</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
           <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
           </div>
          
@@ -1634,7 +1736,7 @@ function getStudentData(code) {
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
           <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>
           </td>
@@ -1649,7 +1751,7 @@ function getStudentData(code) {
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
           <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>
           </td>
@@ -1664,7 +1766,7 @@ function getStudentData(code) {
           <td>2011/04/25</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedual Meeting</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
           <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>          
           </td>
@@ -1677,7 +1779,7 @@ function getStudentData(code) {
           <div class="modal-dialog" role="document">
               <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel${i}">Schedual Meeting</h5>
+                  <h5 class="modal-title" id="exampleModalLabel${i}">Schedule Meeting</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                   </button>
@@ -2119,6 +2221,10 @@ function storeGraphReactionsCode(code, event = "none"){
   }
 }
 
+var globalGetAnnouncements_AnnouncementsPage_pageNationList = []
+
+
+
 async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
   document.getElementById("loadingIndicator").style.display = "initial";
@@ -2153,105 +2259,18 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
     })
   }
 
-    if(pageType == 'dashboard'){
 
+        
       var announcementsCount = 0;
+
+
 
       for (let i = 0; i <= classesListCodes.length; i++) {
         var classcode = classesListCodes[i];
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy("Timestamp").limitToLast(3).get().then(function (doc) {
-  
-  
-            doc.forEach(snapshot => {
-  
-              var annoucementData = snapshot.data();
-  
-              if (annoucementData != undefined && annoucementData != null) {
-                outputAnnouncements = "";
-  
-                announcementsCount += 1;
-
-  
-                var title = annoucementData["Title"];
-                var message = annoucementData["Message"];
-                var date = annoucementData['Date'];
-
-  
-                var nameClass = classnamesList[i];
-  
-                outputDashboard = `
-
-                <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-left-success" style = 'height: max-content'>
-                      <div class="card-body">
-                        <h4 class="badge badge-info">${nameClass}</h4>
-
-                        <h5 style = 'font-weight: 700; margin: 2px; style = 'overflow: hidden; text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; /* number of lines to show */
-                        -webkit-box-orient: vertical;''>${title}</h5>
-
-                        <p style = '   overflow: hidden;
-                        text-overflow: ellipsis;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 1; /* number of lines to show */
-                        -webkit-box-orient: vertical;'>${message}</p>
-
-                        
-                      </div>
-                    </div>
-
-                    </div>
-                `;
-
-                $(outputDashboard).appendTo("#AnnouncementsPageSection");
-  
-              }
-            });
-          });
-        }
-  
-      }
-  
-      setTimeout(() => {
-  //IF there is no annonucements
-  
-  if (announcementsCount == 0) {
-  
-    var noAnnouncementsHTML = ` 
-      
-    <center>
-    <img src="img/undraw_work_chat_erdt.svg" width="73%">
-  
-    <h2 style="margin-top: 3%;">No Announcements</h2>
-    <p>You're all caught up</p>
-  </center>
-    `;
-  document.getElementById("AnnouncementsPageSection").innerHTML = noAnnouncementsHTML;
-  
-  } else {
-  
-  }
-       }, 1000)
-    } 
-    
-    
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    else {
-      var announcementsCount = 0;
-
-      for (let i = 0; i <= classesListCodes.length; i++) {
-        var classcode = classesListCodes[i];
-  
-        if (classcode != undefined && classcode != null) {
-  
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('timestamp', 'desc').get().then(function (doc) {
   
   
             doc.forEach(snapshot => {
@@ -2267,6 +2286,9 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                 var title = annoucementData["title"];
                 var message = annoucementData["message"];
                 var date = annoucementData['timestamp'];
+
+
+                lastElement = date
 
                 var studentReactionsData = annoucementData['Student Reactions']
 
@@ -2359,7 +2381,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       document.getElementById("no-Announcements-section").style.display = "none";
   }
        }, 1000)
-    }
+
 }
 
 var classCodeChat = 'NONE'
