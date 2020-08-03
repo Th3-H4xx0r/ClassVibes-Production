@@ -1599,6 +1599,7 @@ function sendMessage_Classes_page(classCode){
       var email = user.email;
       var name = user['displayName'];
       var date = new Date()
+      const increment = firebase.firestore.FieldValue.increment(1);
 
       var message = document.getElementById('message-input').value
     
@@ -1610,6 +1611,11 @@ function sendMessage_Classes_page(classCode){
     
       }).then(() => {
         console.log("Message sent")
+
+        firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).update({
+          "teacher unread": increment,
+      })
+
         document.getElementById('message-input').value = '';
     
       })

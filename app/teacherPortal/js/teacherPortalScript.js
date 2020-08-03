@@ -2688,6 +2688,8 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       var email = user.email;
       var name = user['displayName'];
 
+      const increment = firebase.firestore.FieldValue.increment(1);
+
       var message = document.getElementById('message-input').value
     
       firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').doc().set({
@@ -2697,6 +2699,11 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
           "timestamp": new Date()
     
       }).then(() => {
+
+        firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).update({
+          "student unread": increment,
+      })
+
         console.log("Message sent")
         document.getElementById('message-input').value = '';
       })
