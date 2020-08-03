@@ -2567,7 +2567,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
             scrollSmoothToBottom()
           })
       }).then(() => {
-        $('##message-components').on('scroll', function() { 
+        $('#message-components').on('scroll', function() { 
           if ($(this).scrollTop() + 
               $(this).innerHeight() >=  
               $(this)[0].scrollHeight) { 
@@ -2581,7 +2581,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
   });
 } 
 
-function getMessagesForChat_chatPage_teacher(classCode, studentEmail, lastElement){
+function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
   console.log("Getting messages")
 
   classCodeChat = classCode
@@ -2638,6 +2638,15 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail, lastElemen
     
       }).then(() => {
         scrollSmoothToBottom()
+
+        $('#message-components').on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          if (scrollTop <= 0) {
+           alert('top reached');
+          }
+        });
+
+
     
           firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
@@ -2679,6 +2688,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail, lastElemen
             })
             scrollSmoothToBottom()
           })
+
 
         //   $('#message-components').on('scroll', function() {
         //     var scrollTop = $(this).scrollTop();
@@ -2733,6 +2743,3 @@ function scrollSmoothToBottom() {
     scrollTop: div.scrollHeight - div.clientHeight
   }, 500);
 }
-
-
-

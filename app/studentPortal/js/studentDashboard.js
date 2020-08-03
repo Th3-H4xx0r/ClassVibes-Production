@@ -1552,11 +1552,3 @@ function scrollSmoothToBottom() {
     scrollTop: div.scrollHeight - div.clientHeight
   }, 500);
 }
-
-
-function getAnnouncementNotification() {
-  firebase.firestore().collection('Classes').doc(code).collection('Announcements').onSnapshot(function(doc) {
-    
-  })
-}
-
