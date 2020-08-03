@@ -1631,9 +1631,9 @@ function sendMessage_Classes_page(classCode){
       }).then(() => {
         console.log("Message sent")
 
-        //firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(classCode).update({
-          //"teacher unread": increment,
-      //})
+        firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(email).update({
+          "teacher unread": increment,
+      })
 
         document.getElementById('message-input').value = '';
     
