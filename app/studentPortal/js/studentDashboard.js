@@ -527,6 +527,8 @@ async function getStudentClasses(studentUsername, pageType) {
 
   var reactionsList = {}
 
+  var unreadList = []
+
   var index = 0;
 
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
@@ -538,6 +540,10 @@ async function getStudentClasses(studentUsername, pageType) {
     var classCode = classData["code"];
 
     var reaction = classData["status"];
+
+    var unreadMessages = classData['student unread']
+
+    console.log("UNDREAD: " + unreadMessages)
 
     reactionsList[classCode] = reaction
 
@@ -557,6 +563,7 @@ async function getStudentClasses(studentUsername, pageType) {
       
       classesList.push(className);
       classCodes[className] = classCode;
+      unreadList.push(unreadMessages)
     })
   }
 
@@ -580,7 +587,12 @@ async function getStudentClasses(studentUsername, pageType) {
 
         await getGrayStudentStatus(studentUsername, classCode)
 
-        localStorage.setItem("selectedClassDropdown", classCode);
+        //localStorage.setItem("selectedClassDropdown", classCode);
+
+        var unreadMessages = unreadList[index]
+
+        var unreadMessagesHTML = unreadMessages != undefined ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 95%; top: -10px'>${unreadMessages}</span><h2></h2>` : ''
+        unreadMessagesHTML = unreadMessages != 0 ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 95%; top: -10px'>${unreadMessages}</span><h2></h2>` : ''
 
 
         index = index + 1
@@ -639,6 +651,9 @@ async function getStudentClasses(studentUsername, pageType) {
         <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
         <div class="card bg-white text-black shadow">
           <div class="card-body">
+
+          ${unreadMessagesHTML}
+
             <div style="display: inline;">
               <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
               
@@ -1627,7 +1642,11 @@ function getMessagesForChat_Classes_page(classCode){
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').get().then(snap => {
+      firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(classCode).update({
+        "student unread": 0,
+    })
+
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
   
@@ -1668,7 +1687,7 @@ function getMessagesForChat_Classes_page(classCode){
       }).then(() => {
         scrollSmoothToBottom()
     
-          firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
               var data = doc.data();
     
@@ -1721,10 +1740,11 @@ function sendMessage_Classes_page(classCode){
       var email = user.email;
       var name = user['displayName'];
       var date = new Date()
+      const increment = firebase.firestore.FieldValue.increment(1);
 
       var message = document.getElementById('message-input').value
     
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).doc().set({
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').doc().set({
           "message": message,
           "user": name,
           "timestamp": date,
@@ -1732,6 +1752,11 @@ function sendMessage_Classes_page(classCode){
     
       }).then(() => {
         console.log("Message sent")
+
+        firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(email).update({
+          "teacher unread": increment,
+      })
+
         document.getElementById('message-input').value = '';
     
       })

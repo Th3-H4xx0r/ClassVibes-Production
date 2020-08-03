@@ -1752,6 +1752,7 @@ function createClass() {
 
 function getStudentData(code) {
 
+
   var classInfoList = [];
   console.log(classInfoList);
 
@@ -1770,8 +1771,12 @@ function getStudentData(code) {
           var reaction = data["status"];
           var studentName = data["name"];
           var studentEmail = data["email"];
+
+          var unread = data['teacher unread']
+
+          console.log(unread)
           var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
-          classInfoList.push([studentName, reaction, studentEmail,dateReported])
+          classInfoList.push([studentName, reaction, studentEmail,dateReported, unread])
           console.log(classInfoList)
     
         });
@@ -1793,7 +1798,16 @@ function getStudentData(code) {
     
             var studentEmail = classInfoData[2];
 
+            var unreadMessages = classInfoData[4]
+
             var studentReportedDate = classInfoData[3]
+
+            
+
+            var unreadMessagesHTML = unreadMessages != undefined ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
+            unreadMessagesHTML = unreadMessages != 0 ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
+
+            
             console.log(classInfoData)
     
             descriptionOutput2 = `
@@ -1805,7 +1819,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
           </div>
          
           </td>
@@ -1821,7 +1835,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>
           </td>
           </tr>
@@ -1836,7 +1850,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>
           </td>
           </tr>
@@ -1851,7 +1865,7 @@ function getStudentData(code) {
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'><i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
           </div>          
           </td>
           </tr>
@@ -2482,7 +2496,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
 
           var data = doc.data();
@@ -2543,6 +2557,11 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
 } 
 
 function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
+  
+  firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
+    'teacher unread': 0
+  })
+
 
   classCodeChat = classCode
 
@@ -2556,7 +2575,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(10).get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(10).get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
     
@@ -2615,7 +2634,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
 
     
-          firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
 
               var data = doc.data();
@@ -2688,15 +2707,22 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       var email = user.email;
       var name = user['displayName'];
 
+      const increment = firebase.firestore.FieldValue.increment(1);
+
       var message = document.getElementById('message-input').value
     
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).doc().set({
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').doc().set({
           "message": message,
           "user": name,
           "sent type": "teacher",
           "timestamp": new Date()
     
       }).then(() => {
+
+        firebase.firestore().collection('UserData').doc(studentEmail).collection('Classes').doc(classCode).update({
+          "student unread": increment,
+      })
+
         console.log("Message sent")
         document.getElementById('message-input').value = '';
       })
