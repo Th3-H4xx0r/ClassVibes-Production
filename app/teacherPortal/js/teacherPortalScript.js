@@ -2604,7 +2604,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         $('#message-components').on('scroll', function() {
           var scrollTop = $(this).scrollTop();
           if (scrollTop <= 0) {
-           alert('top reached');
+            //alert('top reached');
            getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElement)
           }
         });
