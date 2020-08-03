@@ -2472,12 +2472,15 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
 
   classCodeChat = classCode
 
+  var lastElementPageNation = ''
+
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(10).startAfter(lastElement).get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(5).startAt(lastElement).get().then(snap => {
         snap.forEach(doc => {
+
           var data = doc.data();
     
           var message = data.message;
@@ -2485,16 +2488,19 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     
           var user = data.user
 
-          lastElement = data['timestamp']
+          lastElementPageNation = data['timestamp']
+
+          console.log(chatList_PageNation_MainPageList.includes(doc.id))
 
           if(chatList_PageNation_MainPageList.includes(doc.id) != true){
+            console.log("getting page nation")
             chatList_PageNation_MainPageList.push(doc.id)
     
             var formattedTime = new Date(time.seconds * 1000).toLocaleString()
       
-            console.log(formattedTime)
+            //console.log(formattedTime)
       
-            console.log(data)
+            //console.log(data)
       
             var messageHTML = `
             <div class="message-component" style="margin-top: 50px">
@@ -2527,7 +2533,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
               $(this).innerHeight() >=  
               $(this)[0].scrollHeight) { 
       
-                getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElement)
+                getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail, lastElementPageNation)
 
           } 
         });
@@ -2543,7 +2549,9 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
   var lastElement = '';
 
-  var lastID = ''
+  var lastID = []
+
+  var messagesListIDs = []
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -2553,10 +2561,10 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         snap.forEach(doc => {
           var data = doc.data();
     
-          lastID = doc.id
-    
           var message = data.message;
           var time = data.timestamp;
+
+         // console.log(message)
     
           var user = data.user
 
@@ -2566,9 +2574,9 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
-          console.log(formattedTime)
+          //console.log(formattedTime)
     
-          console.log(data)
+          //console.log(data)
     
           var messageHTML = `
           <div class="message-component" style="margin-top: 50px">
@@ -2589,6 +2597,8 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         `
     
           $('#message-components').prepend(messageHTML)
+
+          messagesListIDs.push(doc.id)
     
           
         })
@@ -2610,14 +2620,16 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
             snap.forEach(doc => {
               console.log('getting snashpt realtime')
               var data = doc.data();
-
-              console.log(doc.id, lastID)
     
-              if (doc.id != lastID){
+              if (messagesListIDs.includes(doc.id) != true){
                 console.log('getting snashpt realtime')
                 var message = data.message;
                 var time = data.timestamp;
-          
+
+                messagesListIDs.push(doc.id)
+                
+                console.log(message)
+
                 var user = data.user
     
                 var formattedTime = new Date(time.seconds * 1000).toLocaleString()
