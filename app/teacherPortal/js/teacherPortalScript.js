@@ -2482,7 +2482,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
 
           var data = doc.data();
@@ -2556,7 +2556,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp', 'desc').limit(10).get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(10).get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
     
@@ -2615,7 +2615,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
 
     
-          firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
 
               var data = doc.data();
@@ -2690,7 +2690,7 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
 
       var message = document.getElementById('message-input').value
     
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(studentEmail).doc().set({
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').doc().set({
           "message": message,
           "user": name,
           "sent type": "teacher",

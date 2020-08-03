@@ -1505,7 +1505,7 @@ function getMessagesForChat_Classes_page(classCode){
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
   
@@ -1546,7 +1546,7 @@ function getMessagesForChat_Classes_page(classCode){
       }).then(() => {
         scrollSmoothToBottom()
     
-          firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
               var data = doc.data();
     
@@ -1602,7 +1602,7 @@ function sendMessage_Classes_page(classCode){
 
       var message = document.getElementById('message-input').value
     
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection(email).doc().set({
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').doc().set({
           "message": message,
           "user": name,
           "timestamp": date,
