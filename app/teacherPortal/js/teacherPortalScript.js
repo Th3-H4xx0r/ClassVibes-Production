@@ -2700,7 +2700,7 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
     
       }).then(() => {
 
-        firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).update({
+        firebase.firestore().collection('UserData').doc(studentEmail).collection('Classes').doc(classCode).update({
           "student unread": increment,
       })
 
