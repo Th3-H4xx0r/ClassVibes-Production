@@ -1009,11 +1009,14 @@ async function writeAnnouncement(code, className) {
 var meetingsList_PageNation_MainPageList = []
 
 function getMeetings_pageNation(lastElement) {
+  console.log("geeting page nation")
   var name = localStorage.getItem("email");
 
   var index = 0;
 
-  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').limit(4).startAfter(lastElement).get().then(function (doc) {
+  console.log(lastElement)
+
+  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').startAfter(lastElement).limit(4).get().then(function (doc) {
     doc.forEach(snapshot => {
       index = index + 1
       var data1 = snapshot.data();
@@ -1024,7 +1027,8 @@ function getMeetings_pageNation(lastElement) {
       var message = data1["message"]
       var length = data1["length"]
 
-      lastElement = data['timestamp']
+      lastElement = data1['timestamp']
+      console.log(meetingsList_PageNation_MainPageList)
 
       if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
 
@@ -1086,7 +1090,7 @@ function getMeetings() {
       var message = data1["message"]
       var length = data1["length"]
 
-      lastElement = snapshot.id
+      lastElement = data1['timestamp']
 
       meetingsList_PageNation_MainPageList.push(snapshot.id)
 
