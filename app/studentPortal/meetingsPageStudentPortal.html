@@ -277,6 +277,36 @@ crossorigin="anonymous"></script>
             </div>
           </section>
 
+          <style>
+
+            /* CHROMEBOOKS */
+            @media only screen and (min-height: 768px) {
+              
+              #meetingsList-main-page{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 38rem;
+              }
+            
+              .sticky-footer{
+                display: none;
+              }
+            }
+            
+            /* REGULAR LAPTOPS */
+            @media only screen and (min-width: 1600px) {
+              .sticky-footer{
+                display: initial;
+              }
+            
+              #meetingsList-main-page{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 42rem;
+              }
+            }
+                      </style>
+
 
            <!--LOADING PAGE-->
            <section id="loadingIndicator">
