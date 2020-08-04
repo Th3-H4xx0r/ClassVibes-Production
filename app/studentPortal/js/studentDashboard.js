@@ -1601,37 +1601,131 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
 }
 
 var classCodeChat = 'NONE'
+var chatList_PageNation_MainPageList = []
 
-function getMessagesForChat_Classes_page(classCode){
-  //console.log("Getting messages")
+function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElement){
 
   classCodeChat = classCode
 
-  var lastID = '';
+  var lastElementPageNation = ''
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(classCode).update({
-        "student unread": 0,
-    })
-
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
+
           var data = doc.data();
-  
-          lastID = doc.id
+    
           var message = data.message;
           var time = data.timestamp;
     
           var user = data.user
+
+          var type = data['sent type']
+
+          lastElementPageNation = data['timestamp']
+
+
+          if(chatList_PageNation_MainPageList.includes(doc.id) != true){
+            chatList_PageNation_MainPageList.push(doc.id)
     
+            var formattedTime = new Date(time.seconds * 1000).toLocaleString()
+      
+            //console.log(formattedTime)
+      
+            //console.log(data)
+      
+            var newMessageUI = `
+        
+
+            <div>
+    
+            <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 700px"  >
+              <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+              <p style="color: white">${message}</p>
+            </div>
+            </div>
+            `
+    
+      var otherMessage = `
+    
+      <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+      <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+      <p style="color: white">${message}</p>
+    </div>
+      `
+    
+      if(type == "teacher") {
+        $('#message-components').prepend(otherMessage)
+    
+      } else {
+        $('#message-components').prepend(newMessageUI)
+    
+      }
+        
+          }
+
+    
+          
+        })
+    
+      }).then(() => {
+        $('#message-components').on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          if (scrollTop <= 0) {
+            //alert('top reached');
+            getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElementPageNation)
+          }
+        });
+      });
+    }
+  });
+} 
+
+function getMessagesForChat_Classes_page(classCode, studentEmail){
+  
+  firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
+    'teacher unread': 0
+  })
+
+
+  classCodeChat = classCode
+
+  var lastElement = '';
+
+  var lastID = []
+
+  var messagesListIDs = []
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
+
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(10).get().then(snap => {
+        snap.forEach(doc => {
+          var data = doc.data();
+    
+          var message = data.message;
+          var time = data.timestamp;
+
+          var type = data['sent type']
+
+         // console.log(message)
+    
+          var user = data.user
+
+          lastElement = data['timestamp']
+          chatList_PageNation_MainPageList.push(doc.id)
+
+
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
           //console.log(formattedTime)
     
           //console.log(data)
+          /*
     
           var messageHTML = `
           <div class="message-component" style="margin-top: 50px">
@@ -1643,66 +1737,140 @@ function getMessagesForChat_Classes_page(classCode){
                 <div style="width: 80%;"></div>
               </div>
               <p>${formattedTime}</p>
-              <div>
-              <p>${message}</p>
-              </div>
-              
+
+              <p style="width: 100%;">${message}</p>
             </div>
           </div>
           <hr>
         </div>
         `
-          $(messageHTML).appendTo('#message-components')
+        */
+
+        var newMessageUI = `
+        
+
+        <div>
+
+        <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 700px"  >
+          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+          <p style="color: white">${message}</p>
+        </div>
+        </div>
+        `
+
+  var otherMessage = `
+
+  <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+  <p style="color: white">${message}</p>
+</div>
+  `
+
+  if(type == "teacher") {
+    $('#message-components').prepend(otherMessage)
+
+  } else {
+    $('#message-components').prepend(newMessageUI)
+
+  }
+    
+          //$('#message-components').prepend(messageHTML)
+
+          messagesListIDs.push(doc.id)
+    
+          
         })
     
       }).then(() => {
         scrollSmoothToBottom()
+
+        $('#message-components').on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          if (scrollTop <= 0) {
+            //alert('top reached');
+            getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElement)
+          }
+        });
+
+
     
-          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
+
               var data = doc.data();
     
-              if (doc.id != lastID){
+              if (messagesListIDs.includes(doc.id) != true){
+
                 var message = data.message;
                 var time = data.timestamp;
-          
+
+                messagesListIDs.push(doc.id)
+                
+
                 var user = data.user
+
+                var type = data['sent type']
     
                 var formattedTime = new Date(time.seconds * 1000).toLocaleString()
-    
-                //console.log(formattedTime)
-          
-                //console.log(data)
-          
-                var messageHTML = `
-                <div class="message-component" style="margin-top: 50px">
-                <div class="row">
-                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-                  <div class="col">
-                    <div class="row" style="margin-left: 5px;">
-                      <h5>${user}</h5>
-                      <div style="width: 80%;"></div>
-                    </div>
-                    <p>${formattedTime}</p>
-                    <div>
-                      <p>${message}</p>
-                      </div>
-                  </div>
+
+                var newMessageUI = `
+        
+
+                <div>
+        
+                <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 700px"  >
+                  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+                  <p style="color: white">${message}</p>
                 </div>
-                <hr>
-              </div>
-              `
-                $(messageHTML).appendTo('#message-components')
+                </div>
+                `
+        
+          var otherMessage = `
+        
+          <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+          <p style="color: white">${message}</p>
+        </div>
+          `
+        
+          if(type == "teacher") {
+            $(otherMessage).appendTo( '#message-components')
+        
+          } else {
+            $(newMessageUI).appendTo( '#message-components')
+        
+          }
+          
               }
       
             })
             scrollSmoothToBottom()
           })
-    
+
+
+        //   $('#message-components').on('scroll', function() {
+        //     var scrollTop = $(this).scrollTop();
+        
+        //         var topDistance = $(this).offset().top;
+        
+        //         if ( (topDistance) < scrollTop ) {
+        //             alert( $(this).text() + ' was scrolled to the top' );
+        //         }
+            
+        // });
+
+          // $('#message-components').on('scroll', function() { 
+          //   if ($(this).scrollTop() + 
+          //       $(this).innerHeight() >=  
+          //       $(this)[0].scrollHeight) { 
+        
+          //       } 
+          // });
       })
     }
   });
 } 
+
 
 function sendMessage_Classes_page(classCode){
   //console.log("Message queued")
