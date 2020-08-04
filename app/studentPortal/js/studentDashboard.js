@@ -1237,14 +1237,14 @@ function getMeetings(email, pageType, lastElement) {
   
       if (meetingsCount == 0) {
         outputError = `
-        <div class="d-flex justify-content-center" style = 'margin-left: 15%; margin-top: 7%' align = 'center'>
+        <center style = 'margin-left: 5%; margin-top: 7%' align = 'center'>
         <section>
         <img src = "/student/img/undraw_Booked_j7rj.svg" width="45%">
   
         <h2 style="margin-top: 2%;">No Scheduled Meetings</h2>
         <p>You're all caught up</p>
         </section>
-        </div>          
+        </center>          
         `;
   
         $(outputError).appendTo("#meetingsList");

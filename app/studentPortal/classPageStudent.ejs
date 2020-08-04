@@ -88,6 +88,8 @@
 
       getMeetings(email, 'class-page')
 
+      getClassDataClassesPage("<%= code %>")
+
       getMessagesForChat_Classes_page("<%= code %>")
 
     } else {
@@ -479,11 +481,18 @@
                               overflow-x: hidden; 
                               overflow-y: scroll;
                               padding-left: 15px;
-                              height: 30rem;
+                              height: 29rem;
                             }
                           
                             .sticky-footer{
                               display: none;
+                            }
+
+                            #classAnnouncement{
+                              overflow-x: hidden; 
+                              overflow-y: scroll;
+                              padding-left: 15px;
+                              height: 33rem;
                             }
                           }
                           
@@ -496,6 +505,13 @@
                             #message-components{
                               overflow-x: hidden; 
                               overflow-y: scroll;
+                              height: 39rem;
+                            }
+
+                            #classAnnouncement{
+                              overflow-x: hidden; 
+                              overflow-y: scroll;
+                              padding-left: 15px;
                               height: 42rem;
                             }
                           }
