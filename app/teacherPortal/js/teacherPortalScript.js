@@ -2521,6 +2521,8 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     
           var message = data.message;
           var time = data.timestamp;
+          var type = data["sent type"]
+
     
           var user = data.user
 
@@ -2554,7 +2556,35 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
           </div>
           `
       
-            $('#message-components').prepend(messageHTML)
+          var newMessageUI = `
+        
+
+          <div>
+
+          <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px "  >
+            <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+            <p style="color: white">${message}</p>
+          </div>
+          </div>
+          `
+
+    var otherMessage = `
+
+    <div class="message-component container" style="margin-top: 50px; float: left; background-color: #00ddff; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+    <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+    <p style="color: white">${message}</p>
+  </div>
+    `
+
+    if(type == "student") {
+      $('#message-components').prepend(otherMessage)
+
+
+    } else {
+      $('#message-components').prepend(newMessageUI)
+
+    }
+
           }
 
     
@@ -2599,6 +2629,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     
           var message = data.message;
           var time = data.timestamp;
+          var type = data["sent type"]
 
          // console.log(message)
     
@@ -2631,8 +2662,36 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           <hr>
         </div>
         `
+
+        var newMessageUI = `
+        
+
+              <div>
+
+              <div class="message-component container" style="margin-top: 50px; float: right; background-color: #0cacc4; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px "  >
+                <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+                <p style="color: white">${message}</p>
+              </div>
+              </div>
+              `
+
+        var otherMessage = `
+
+        <div class="message-component container" style="margin-top: 50px; float: left; background-color: #00ddff; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+        <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+        <p style="color: white">${message}</p>
+      </div>
+        `
+
+        if(type == "student") {
+          $('#message-components').prepend(otherMessage)
+
+
+        } else {
+          $('#message-components').prepend(newMessageUI)
+
+        }
     
-          $('#message-components').prepend(messageHTML)
 
           messagesListIDs.push(doc.id)
     
@@ -2661,6 +2720,8 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
                 var message = data.message;
                 var time = data.timestamp;
+                var type = data["sent type"]
+
 
                 messagesListIDs.push(doc.id)
                 
@@ -2686,8 +2747,25 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
                 <hr>
               </div>
               `
-          
-                $(messageHTML).appendTo('#message-components')
+
+              var newMessageUI = `
+              <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px "  >
+                <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+                <p style="color: white">${message}</p>
+              </div>
+              `
+
+              var otherMessage = `
+        <div class="message-component container" style="margin-top: 50px; float: left; background-color: #00ddff; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+        <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+        <p style="color: white">${message}</p>
+      </div>
+        `
+
+        
+          $('#message-components').appendTo(newMessageUI)
+
+        
               }
       
             })
