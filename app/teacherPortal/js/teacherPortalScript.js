@@ -1719,9 +1719,7 @@ function createClass() {
       var className = document.getElementById("className").value;
       var course = document.getElementById("course").value;
       var teacher = document.getElementById("teacher").value;
-      //var classImg = document.getElementById("imageInput").value;
       var courseDescription = document.getElementById("courseDescription").value;
-      //var courseVideo = localStorage.getItem("videoLink");
       var teachersNote = document.getElementById("teachersNote").value;
       var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
       var maxInactiveDays = Number(maxInactiveDaysInput)
