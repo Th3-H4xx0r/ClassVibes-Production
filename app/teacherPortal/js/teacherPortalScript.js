@@ -1665,10 +1665,13 @@ function getClassDataDropdown(emailRef) {
     doc.forEach(snapshot => {
       var data1 = snapshot.data();
 
-      var classCode = data1["class code"];
-      var className = data1["class name"];
+      if(data != undefined){
+        var classCode = data1["class code"];
+        var className = data1["class name"];
 
-      classesList.push([classCode, className])
+        classesList.push([classCode, className])
+      }
+
     });
 
   }).then(function () {
@@ -2214,7 +2217,14 @@ function getChartData(code) {
 
       firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
         var data = doc.data();
-        maxdays = data["max days inactive"]
+
+        if( data != undefined){
+          if(data["max days inactive"]){
+          maxdays = data["max days inactive"] 
+          }
+        }
+        
+
 
       }).then(() => {
         firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
