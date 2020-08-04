@@ -827,7 +827,7 @@ function checkIfClassCodeExists(addType) {
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var classCode = doc.data();
 
-      var allowJoin = classCode['allow join']
+      var allowJoin = classCode['allow join'] != undefined ? classCode['allow join'] : true
 
       if (classCode != null) {
         if(allowJoin == true){
