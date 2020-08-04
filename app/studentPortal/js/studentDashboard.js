@@ -1110,7 +1110,9 @@ function getStudentStatus(studentEmail) {
 var  meetingsList_PageNation_MainPageList = []
 
 //FIRESTORE MIGRATED FULLY
-function getMeetings(email, pageType, lastElement) {
+function getMeetings(email, pageType) {
+
+  var lastElement = ''
 
   //GETS MEETINGS FOR MEETINGS PAGE
   if(pageType == "meetingsPage"){
@@ -1129,9 +1131,6 @@ function getMeetings(email, pageType, lastElement) {
         var title = meetingsData["title"];
         lastElement = meetingsData['timestamp']
         meetingsList_PageNation_MainPageList.push(snapshot.id)
-
-
-  
   
         output = `
           <div class="col-xl-12 col-md-6 mb-4">
@@ -1177,16 +1176,13 @@ function getMeetings(email, pageType, lastElement) {
             $(this).innerHeight() >=  
             $(this)[0].scrollHeight) { 
     
-              getMeetings_pageNation(studentEmail, "meetingsPage", lastElement)
+              getMeetings_pageNation(email, "meetingsPage", lastElement)
         } 
       });
     });
   } 
   
   
-
-
-
   if(pageType == "class-page"){
     firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').limit(5).get().then(function (doc) {
   
@@ -1258,7 +1254,7 @@ function getMeetings(email, pageType, lastElement) {
             $(this).innerHeight() >=  
             $(this)[0].scrollHeight) { 
     
-              getMeetings_pageNation(studentEmail, "class-page", lastElement)
+              getMeetings_pageNation(email, "class-page", lastElement)
         } 
       });
     });
@@ -1273,11 +1269,8 @@ function getMeetings_pageNation(email, pageType, lastElement) {
   if(pageType == "meetingsPage"){
     firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').limit(5).startAfter(lastElement).get().then(function (doc) {
 
-      var meetingsCount = 0;
   
       doc.forEach(snapshot => {
-  
-        meetingsCount += 1;
   
         var meetingsData = snapshot.data();
   
@@ -1286,9 +1279,8 @@ function getMeetings_pageNation(email, pageType, lastElement) {
         var title = meetingsData["title"];
         lastElement = meetingsData['timestamp']
 
-
-        meetingsList_PageNation_MainPageList.push(snapshot.id)
-
+        if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
+          meetingsList_PageNation_MainPageList.push(snapshot.id)
   
   
         output = `
@@ -1313,21 +1305,10 @@ function getMeetings_pageNation(email, pageType, lastElement) {
           `;
   
         $(output).appendTo("#meetingsList-main-page");
+
+        }
       });
   
-
-  
-      if (meetingsCount == 0) {
-  
-       document.getElementById("loadingIndicator").style.display = "none";
-       document.getElementById("all-meetings-widget").style.display = "none";
-       document.getElementById("no-meetings-section").style.display = "initial";
-
-      } else {
-        document.getElementById("loadingIndicator").style.display = "none";
-        document.getElementById("all-meetings-widget").style.display = "initial";
-        document.getElementById("no-meetings-section").style.display = "none";
-      }
   
     }).then(() => {
       $('#meetingsList-main-page').on('scroll', function() { 
@@ -1335,7 +1316,7 @@ function getMeetings_pageNation(email, pageType, lastElement) {
             $(this).innerHeight() >=  
             $(this)[0].scrollHeight) { 
     
-              getMeetings_pageNation(studentEmail, "meetingsPage", lastElement)
+              getMeetings_pageNation(email, "meetingsPage", lastElement)
         } 
       });
     });
@@ -1348,67 +1329,54 @@ function getMeetings_pageNation(email, pageType, lastElement) {
   if(pageType == "class-page"){
     firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy("timestamp", 'desc').limit(5).startAfter(lastElement).get().then(function (doc) {
   
-      var meetingsCount = 0;
-  
+      
       doc.forEach(snapshot => {
-  
-        meetingsCount += 1;
-  
+    
         var meetingsData = snapshot.data();
   
         var classForMeeting = meetingsData["Course"];
         var date = meetingsData["date and time"];
         var title = meetingsData["title"];
         lastElement = meetingsData['timestamp']
-        meetingsList_PageNation_MainPageList.push(snapshot.id)
+
+        if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
+          meetingsList_PageNation_MainPageList.push(snapshot.id)
 
 
-        output = `
-          <div class="col-xl-12 col-md-6 mb-4">
-          <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-              <div class="row no-gutters align-items-center">
-                <div class="col mr-2">
-                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800" style = 'overflow: hidden;
-                  text-overflow: ellipsis;
-                  display: -webkit-box;
-                  -webkit-line-clamp: 1;
-                  max-width: 25ch;
-                  -webkit-box-orient: vertical;'>${title}</div>
-                  <h6 style = 'color: gray; font-weight: 700; margin-top: 10px'>${date}</h6>
-                </div>
-                <div class="col-auto">
-  
-                  <i class="fas fa-microphone-alt fa-2x text-gray-300"></i>
+          output = `
+            <div class="col-xl-12 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">${classForMeeting}</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800" style = 'overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    max-width: 25ch;
+                    -webkit-box-orient: vertical;'>${title}</div>
+                    <h6 style = 'color: gray; font-weight: 700; margin-top: 10px'>${date}</h6>
+                  </div>
+                  <div class="col-auto">
+    
+                    <i class="fas fa-microphone-alt fa-2x text-gray-300"></i>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-          `;
+            `;
   
-        $(output).appendTo("#meetingsList");
+  
+    
+          $(output).appendTo("#meetingsList");
+        }
+     
       });
     
-  
-      if (meetingsCount == 0) {
-        outputError = `
-        <div class="d-flex justify-content-center" style = 'margin-left: 15%; margin-top: 7%' align = 'center'>
-        <section>
-        <img src = "/student/img/undraw_Booked_j7rj.svg" width="45%">
-  
-        <h2 style="margin-top: 2%;">No Scheduled Meetings</h2>
-        <p>You're all caught up</p>
-        </section>
-        </div>          
-        `;
-  
-        $(outputError).appendTo("#meetingsList");
-      } else {
-  
-      }
+
   
     }).then(() => {
       $('#meetingsList').on('scroll', function() { 
@@ -1416,7 +1384,7 @@ function getMeetings_pageNation(email, pageType, lastElement) {
             $(this).innerHeight() >=  
             $(this)[0].scrollHeight) { 
     
-              getMeetings_pageNation(studentEmail, "class-page", lastElement)
+              getMeetings_pageNation(email, "class-page", lastElement)
         } 
       });
     });
