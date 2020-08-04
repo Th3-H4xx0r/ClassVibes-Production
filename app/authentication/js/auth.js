@@ -275,7 +275,7 @@ googleSignInStudent = () => {
     
                     errorHTML = `<div class="alert alert-danger" role="alert" 
                        style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                            <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                            <strong>Oops! </strong> This account is not yet registered. <a href = "signup">Sign Up</a>
                       </div>`;
     
                     document.getElementById('signupError').innerHTML = errorHTML;
@@ -284,7 +284,7 @@ googleSignInStudent = () => {
             } else {
                 errorHTML = `<div class="alert alert-danger" role="alert" 
                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> Google login failed.
+                 <strong>Oops! </strong> Google login failed. This account might not be registered yet. <a href = "signup">Sign Up</a>
            </div>`;
 
                document.getElementById('signupError').innerHTML = errorHTML;
