@@ -591,9 +591,12 @@ async function getStudentClasses(studentUsername, pageType) {
 
         var unreadMessages = unreadList[index]
 
-        var unreadMessagesHTML = unreadMessages != undefined ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 95%; top: -10px'>${unreadMessages}</span><h2></h2>` : ''
-        unreadMessagesHTML = unreadMessages != 0 ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 95%; top: -10px'>${unreadMessages}</span><h2></h2>` : ''
+        var unreadMessagesHTML = ''
 
+
+        if(unreadMessages != undefined && unreadMessages != null && unreadMessages != 0){
+          unreadMessagesHTML = `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 95%; top: -10px'>${unreadMessages}</span><h2></h2>`
+        }
 
         index = index + 1
       

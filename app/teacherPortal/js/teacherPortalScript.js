@@ -1015,30 +1015,10 @@ async function writeAnnouncement(code, className) {
 var meetingsList_PageNation_MainPageList = []
 
 function getMeetings_pageNation(lastElement) {
-  console.log("geeting page nation")
-  var name = localStorage.getItem("email");
 
-  var index = 0;
-
-  console.log(lastElement)
-
-  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').startAfter(lastElement).limit(4).get().then(function (doc) {
-    doc.forEach(snapshot => {
-      index = index + 1
-      var data1 = snapshot.data();
-      var classForMeeting = data1["Course"]
-
-      var date = data1["date and time"];
-      var title = data1["title"];
-      var message = data1["message"]
-      var length = data1["length"]
-
-      lastElement = data1['timestamp']
-      console.log(meetingsList_PageNation_MainPageList)
-
-      if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
-
-        meetingsList_PageNation_MainPageList.push(snapshot.id)
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
 
         output = `
         <section class="resume" style="margin-left: 0px;">
@@ -1075,76 +1055,87 @@ function getMeetings_pageNation(lastElement) {
       } 
     });
   });
+
 }
 
 
 function getMeetings() {
-  var name = localStorage.getItem("email");
-
-  var index = 0;
-
-  var lastElement = ''
-
-  firebase.firestore().collection('UserData').doc(name).collection("Meetings").orderBy('timestamp', 'desc').limit(4).get().then(function (doc) {
-    doc.forEach(snapshot => {
-      index = index + 1
-      var data1 = snapshot.data();
-      var classForMeeting = data1["Course"]
-
-      var date = data1["date and time"];
-      var title = data1["title"];
-      var message = data1["message"]
-      var length = data1["length"]
-
-      lastElement = data1['timestamp']
-
-      meetingsList_PageNation_MainPageList.push(snapshot.id)
-
-      output = `
-      <section class="resume" style="margin-left: 0px;">
-        <div class="row">
-        <div class="col-lg-6" data-aos="fade-up">
-              <h3 class="resume-title">${date} </h3>
-
-              <h3 class="resume-title" style="width: 500px">${classForMeeting}</h3>
-              <div class="resume-item pb-0">
-                <h4 style="width: 500px">${title}</h4>
-                <h5>${length}</h5>
-                <p style="width: 100%">
-                  ${message}
-
-                </p>
-              </div>
-
-        </div>
-      </section>
-        `;
-
-      $(output).appendTo("#meetingsList");
-    })
-  }).then(() => {
-    var noMeetingsHTML = `
-    <center style="margin-top: 15%;">
-    <img src = 'img/undraw_checking_boxes_2ibd.svg' width="25%"/>
   
-    <h1 style="margin-top: 20px;">No Meetings</h1>
-    <p>You do not have any scheduled meetings yet, go <br> to <strong> Sidebar > Classes > Class</strong> to schedule <br> meetings with your students</p>
-    </center>
-    `;
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
 
-    if (index == 0) {
-      document.getElementById('main-body-page-teacher').innerHTML = noMeetingsHTML;
-    } else {
-      $('#meetingsList').on('scroll', function() { 
-        if ($(this).scrollTop() + 
-            $(this).innerHeight() >=  
-            $(this)[0].scrollHeight) { 
+      var index = 0;
+
+      var lastElement = ''
     
-              getMeetings_pageNation(lastElement)
-        } 
+      firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy('timestamp', 'desc').limit(4).get().then(function (doc) {
+        doc.forEach(snapshot => {
+          index = index + 1
+          var data1 = snapshot.data();
+          var classForMeeting = data1["Course"]
+    
+          var date = data1["date and time"];
+          var title = data1["title"];
+          var message = data1["message"]
+          var length = data1["length"]
+    
+          lastElement = data1['timestamp']
+    
+          meetingsList_PageNation_MainPageList.push(snapshot.id)
+    
+          output = `
+          <section class="resume" style="margin-left: 0px;">
+            <div class="row">
+            <div class="col-lg-6" data-aos="fade-up">
+                  <h3 class="resume-title">${date} </h3>
+    
+                  <h3 class="resume-title" style="width: 500px">${classForMeeting}</h3>
+                  <div class="resume-item pb-0">
+                    <h4 style="width: 500px">${title}</h4>
+                    <h5>${length}</h5>
+                    <p style="width: 100%">
+                      ${message}
+    
+                    </p>
+                  </div>
+    
+            </div>
+          </section>
+            `;
+    
+          $(output).appendTo("#meetingsList");
+        })
+      }).then(() => {
+        var noMeetingsHTML = `
+        <center style="margin-top: 15%;">
+        <img src = 'img/undraw_checking_boxes_2ibd.svg' width="25%"/>
+      
+        <h1 style="margin-top: 20px;">No Meetings</h1>
+        <p>You do not have any scheduled meetings yet, go <br> to <strong> Sidebar > Classes > Class</strong> to schedule <br> meetings with your students</p>
+        </center>
+        `;
+    
+        if (index == 0) {
+          document.getElementById('main-body-page-teacher').innerHTML = noMeetingsHTML;
+        } else {
+          $('#meetingsList').on('scroll', function() { 
+            if ($(this).scrollTop() + 
+                $(this).innerHeight() >=  
+                $(this)[0].scrollHeight) { 
+        
+                  getMeetings_pageNation(lastElement)
+            } 
+          });
+        }
       });
+
     }
-  });
+  })
+
+
+
+
 }
 
 var lastItemGlobalAnnouncements = ''
@@ -1702,9 +1693,7 @@ function createClass() {
       var className = document.getElementById("className").value;
       var course = document.getElementById("course").value;
       var teacher = document.getElementById("teacher").value;
-      //var classImg = document.getElementById("imageInput").value;
       var courseDescription = document.getElementById("courseDescription").value;
-      //var courseVideo = localStorage.getItem("videoLink");
       var teachersNote = document.getElementById("teachersNote").value;
       var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
       var maxInactiveDays = Number(maxInactiveDaysInput)
@@ -1803,10 +1792,11 @@ function getStudentData(code) {
             var studentReportedDate = classInfoData[3]
 
             
+            var unreadMessagesHTML = ''
 
-            var unreadMessagesHTML = unreadMessages != undefined ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
-            unreadMessagesHTML = unreadMessages != 0 ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
-
+            if(unreadMessages && unreadMessages != undefined && unreadMessages != 0){
+              unreadMessagesHTML =  `<span class = 'badge badge-warning'>${unreadMessages}</span>`
+            }
             
             console.log(classInfoData)
     
@@ -1953,37 +1943,44 @@ function getStudentData(code) {
 function schedualMeeting(emailStudent, course, code, index) {
   console.log("schedual meeting")
 
-  var nameLocal = localStorage.getItem("email");
-  var meetingTitle = document.getElementById("title1" + index).value;
-  var meetingDate = document.getElementById("date" + index).value;
-  var meetingMessage = document.getElementById("message" + index).value;
-  var len = document.getElementById("len" + index).value;
-  var dateNow = new Date();
-  var formattedDate = dateNow.toLocaleString();
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var teacherEmail = user.email;
 
-  firebase.firestore().collection('UserData').doc(emailStudent).collection("Meetings").doc().set({
-    "title": meetingTitle,
-    "date and time": meetingDate,
-    "class id": code,
-    "Course": course,
-    "timestamp": dateNow.toString(),
-    "message" : meetingMessage,
-    "recipient": emailStudent,
-    "length" : len
-  }).then(() => {
-    firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
-      "title": meetingTitle,
-      "date and time": meetingDate,
-      "class id": code,
-      "Course": course,
-      "timestamp": dateNow.toString(),
-      "message" : meetingMessage,
-      "recipient": emailStudent,
-      "length" : len
-    }).then(() => {
-      window.location.reload()
-    });
-  });
+      var meetingTitle = document.getElementById("title1" + index).value;
+      var meetingDate = document.getElementById("date" + index).value;
+      var meetingMessage = document.getElementById("message" + index).value;
+      var len = document.getElementById("len" + index).value;
+      var dateNow = new Date();
+      var formattedDate = dateNow.toLocaleString();
+    
+      firebase.firestore().collection('UserData').doc(emailStudent).collection("Meetings").doc().set({
+        "title": meetingTitle,
+        "date and time": meetingDate,
+        "class id": code,
+        "Course": course,
+        "timestamp": dateNow.toString(),
+        "message" : meetingMessage,
+        "recipient": emailStudent,
+        "length" : len
+      }).then(() => {
+        firebase.firestore().collection('UserData').doc(teacherEmail).collection("Meetings").doc().set({
+          "title": meetingTitle,
+          "date and time": meetingDate,
+          "class id": code,
+          "Course": course,
+          "timestamp": dateNow.toString(),
+          "message" : meetingMessage,
+          "recipient": emailStudent,
+          "length" : len
+        }).then(() => {
+          window.location.reload()
+        });
+      });
+    } 
+  })
+
+ 
 
 
 
@@ -2213,14 +2210,14 @@ function getChartData(code) {
 
               console.log(data["teacher unread"])
 
-              if(unreadMessages != undefined){
+              if(data["teacher unread"] != undefined && data["teacher unread"] != null && data["teacher unread"] != NaN){
                 unreadMessages = unreadMessages + data["teacher unread"];
+                //
               } else {
-                unreadMessages = unreadMessages + (data["teacher unread"] != undefined ? data["teacher unread"]: 0);
+                unreadMessages = unreadMessages + 0
               }
 
-              
-
+            
               console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
 
               var studentTimeUpdateTimeStamp = new Date(date.seconds)
@@ -2316,8 +2313,12 @@ function getChartData(code) {
       
             console.log("UNREAD : " + unreadMessages)
 
-            var unreadMessagesHTML = unreadMessages != undefined ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>` : ''
-            unreadMessagesHTML = unreadMessages != 0 ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>` : ''
+            var unreadMessagesHTML = ''
+
+            if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
+              var unreadMessagesHTML =  `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
+
+            }
     
             document.getElementById(`unreadMessages${code}`).innerHTML = unreadMessagesHTML
          }, 700);
