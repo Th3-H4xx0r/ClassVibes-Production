@@ -511,7 +511,7 @@ function getProfileInfo() {
           outputPic = `<img class="img-profile rounded-circle" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">`;
       }
     
-      $(outputPic).appendTo("#profilePic")
+      $("#profilePic").html( outputPic)
 
       if(name != null && name != undefined){
         document.getElementById("displayName").innerHTML = name
