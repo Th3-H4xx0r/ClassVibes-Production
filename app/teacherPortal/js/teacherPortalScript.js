@@ -2317,7 +2317,7 @@ function getChartData(code) {
 
             var unreadMessagesHTML = ''
 
-            if(unreadMessages != undefined && unreadMessages != null && unreadMessages != 0){
+            if(unreadMessages != undefined && unreadMessages != null && unreadMessages != 0 && unreadMessages != NaN){
               var unreadMessagesHTML =  `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
 
             }
