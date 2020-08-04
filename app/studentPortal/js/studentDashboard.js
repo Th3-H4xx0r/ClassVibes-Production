@@ -456,7 +456,7 @@ function getClassDataClassesPage(code){
       <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${className}', '${code}')">Leave Class</button>
       `;
   
-      document.getElementById('info-pannel').innerHTML = courseInfoHTML;
+      //document.getElementById('info-pannel').innerHTML = courseInfoHTML;
     })
 
 
