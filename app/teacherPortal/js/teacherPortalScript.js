@@ -960,7 +960,7 @@ function sendRealtimeAnnouncement(code, title, message){
   
           socket.emit('join-class-room', code.toString());
   
-          socket.emit('send-announcement-to-class-realtime', {"code": code, "title": "New Announcement", "message": message});
+          socket.emit('send-announcement-to-class-realtime', {"code": code, "title": title, "message": message});
           
   }
 
