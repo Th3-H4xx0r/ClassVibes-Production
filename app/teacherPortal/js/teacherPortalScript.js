@@ -1706,13 +1706,12 @@ function createClass() {
       var courseDescription = document.getElementById("courseDescription").value;
       //var courseVideo = localStorage.getItem("videoLink");
       var teachersNote = document.getElementById("teachersNote").value;
-      var classCreator = localStorage.getItem("email")
       var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
       var maxInactiveDays = Number(maxInactiveDaysInput)
 
       if(maxInactiveDays <= 14){
     
-        firebase.firestore().collection("UserData").doc(classCreator).collection("Classes").doc(code).set({
+        firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
           "class code": code,
           "class name": className,
           "Course": course,
