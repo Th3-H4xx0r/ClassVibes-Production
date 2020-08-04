@@ -457,9 +457,8 @@
 
             
                           
-                          <div style="height: 30px;"></div>
                           <div class="input-group mb-3" >
-                            <form  onsubmit="event.preventDefault(); sendMessage_Classes_page('<%= code %>')" style="width: 90%;">
+                            <form  onsubmit="event.preventDefault(); sendMessage_Classes_page('<%= code %>')" style="width: 95%; margin-left: 1%;">
                               <input class="form-control" role="textbox"  placeholder="Message ..." aria-label="Message ..." aria-describedby="basic-addon2" id = "message-input"  contenteditable></input>
                             </form>
 
@@ -510,14 +509,21 @@
                             #message-components{
                               overflow-x: hidden; 
                               overflow-y: scroll;
-                              height: 39rem;
+                              height: 36rem;
                             }
+
+                            #meetingsList{
+                              overflow-x: hidden; 
+                              overflow-y: scroll;
+                              height: 37rem;
+                            }
+                          
 
                             #classAnnouncement{
                               overflow-x: hidden; 
                               overflow-y: scroll;
                               padding-left: 15px;
-                              height: 42rem;
+                              height: 37rem;
                             }
                           }
                                     </style>
@@ -553,7 +559,13 @@
     <!-- End of Main Content -->
 
     <!-- Footer -->
-    
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto" id = "footer-version-code">
+          <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
+        </div>
+      </div>
+    </footer>
     <!-- End of Footer -->
 
     </div>
