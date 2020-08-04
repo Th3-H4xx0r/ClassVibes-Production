@@ -2668,19 +2668,20 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
         <div>
 
-        <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 700px"  >
-          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-          <p style="color: white">${message}</p>
+        <div class="message-component" style=" float: right; width: 100%"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; ">${message}</p></div>
         </div>
         </div>
         `
 
   var otherMessage = `
 
-  <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
-  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-  <p style="color: white">${message}</p>
-</div>
+  <div>
+
+        <div class="message-component" style= " float: left; min-width: 900px"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+        </div>
+        </div>
   `
 
   if(type == "student") {
@@ -2734,19 +2735,20 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         
 
                 <div>
-        
-                <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 700px"  >
-                  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-                  <p style="color: white">${message}</p>
-                </div>
-                </div>
+
+        <div class="message-component" style=" float: right; width: 100%"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+        </div>
+        </div>
                 `
         
           var otherMessage = `
         
-          <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
-          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-          <p style="color: white">${message}</p>
+          <div>
+
+        <div class="message-component" style= " float: left; min-width: 900px"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+        </div>
         </div>
           `
         
