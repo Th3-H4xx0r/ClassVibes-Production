@@ -828,7 +828,12 @@ function checkIfClassCodeExists(addType) {
       var classCode = doc.data();
 
       try {
-        var allowJoin = classCode['allow join'] != undefined ? classCode['allow join'] : true
+        var allowJoin = true
+
+        
+        if(classCode['allow join'] != undefined){
+          allowJoin = classCode['allow join']
+        }
 
         if (classCode != null) {
           if(allowJoin == true){
@@ -876,7 +881,7 @@ function checkIfClassCodeExists(addType) {
         error.innerHTML = `
         <div class="alert alert-success" role="alert" style="width: 310px;">
         Failed to join class
-       </div>
+       </div>`
       }
 
 
