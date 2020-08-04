@@ -1803,10 +1803,11 @@ function getStudentData(code) {
             var studentReportedDate = classInfoData[3]
 
             
+            var unreadMessagesHTML = ''
 
-            var unreadMessagesHTML = unreadMessages != undefined ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
-            unreadMessagesHTML = unreadMessages != 0 ? `<span class = 'badge badge-warning'>${unreadMessages}</span>` : ''
-
+            if(unreadMessages && unreadMessages != undefined && unreadMessages != 0){
+              unreadMessagesHTML =  `<span class = 'badge badge-warning'>${unreadMessages}</span>`
+            }
             
             console.log(classInfoData)
     
