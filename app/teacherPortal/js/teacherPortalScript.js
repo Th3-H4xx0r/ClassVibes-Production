@@ -2213,7 +2213,7 @@ function getChartData(code) {
 
               console.log(data["teacher unread"])
 
-              if(unreadMessages != undefined && unreadMessages != null){
+              if(data["teacher unread"] != undefined && data["teacher unread"] != null){
                 unreadMessages = unreadMessages + data["teacher unread"];
               } else {
                 unreadMessages = unreadMessages + data["teacher unread"]
