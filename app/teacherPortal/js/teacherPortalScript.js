@@ -2213,8 +2213,9 @@ function getChartData(code) {
 
               console.log(data["teacher unread"])
 
-              if(data["teacher unread"] != undefined && data["teacher unread"] != null){
+              if(data["teacher unread"] != undefined && data["teacher unread"] != null && data["teacher unread"] != NaN){
                 unreadMessages = unreadMessages + data["teacher unread"];
+                //
               } else {
                 unreadMessages = unreadMessages + data["teacher unread"]
               }
