@@ -828,11 +828,13 @@ function checkIfClassCodeExists(addType) {
       var classCode = doc.data();
 
       try {
-        var allowJoin = true
+        var allowJoin = classCode['allow join']
 
         
-        if(classCode['allow join'] != undefined){
+        if(allowJoin != undefined){
           allowJoin = classCode['allow join']
+        } else {
+          allowJoin = true
         }
 
         if (classCode != null) {
@@ -879,8 +881,8 @@ function checkIfClassCodeExists(addType) {
         }
       } catch(e){
         error.innerHTML = `
-        <div class="alert alert-success" role="alert" style="width: 310px;">
-        Failed to join class
+        <div class="alert alert-danger" role="alert" style="width: 310px;">
+        Failed to join class. Internal error
        </div>`
       }
 
