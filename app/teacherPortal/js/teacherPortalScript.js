@@ -2213,14 +2213,13 @@ function getChartData(code) {
 
               console.log(data["teacher unread"])
 
-              if(unreadMessages != undefined){
+              if(unreadMessages != undefined && unreadMessages != null){
                 unreadMessages = unreadMessages + data["teacher unread"];
               } else {
-                unreadMessages = unreadMessages + (data["teacher unread"] != undefined ? data["teacher unread"]: 0);
+                unreadMessages = unreadMessages + data["teacher unread"]
               }
 
-              
-
+            
               console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
 
               var studentTimeUpdateTimeStamp = new Date(date.seconds)
