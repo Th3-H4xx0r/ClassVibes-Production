@@ -1635,7 +1635,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
 var classCodeChat = 'NONE'
 
 function getMessagesForChat_Classes_page(classCode){
-  console.log("Getting messages")
+  //console.log("Getting messages")
 
   classCodeChat = classCode
 
@@ -1661,9 +1661,9 @@ function getMessagesForChat_Classes_page(classCode){
     
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
-          console.log(formattedTime)
+          //console.log(formattedTime)
     
-          console.log(data)
+          //console.log(data)
     
           var messageHTML = `
           <div class="message-component" style="margin-top: 50px">
@@ -1702,9 +1702,9 @@ function getMessagesForChat_Classes_page(classCode){
     
                 var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
-                console.log(formattedTime)
+                //console.log(formattedTime)
           
-                console.log(data)
+                //console.log(data)
           
                 var messageHTML = `
                 <div class="message-component" style="margin-top: 50px">
@@ -1737,7 +1737,7 @@ function getMessagesForChat_Classes_page(classCode){
 } 
 
 function sendMessage_Classes_page(classCode){
-  console.log("Message queued")
+  //console.log("Message queued")
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
@@ -1754,7 +1754,7 @@ function sendMessage_Classes_page(classCode){
           "sent type": "student"
     
       }).then(() => {
-        console.log("Message sent")
+        //console.log("Message sent")
 
         firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(email).update({
           "teacher unread": increment,
