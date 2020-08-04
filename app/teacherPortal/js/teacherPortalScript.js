@@ -2627,6 +2627,8 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           var message = data.message;
           var time = data.timestamp;
 
+          var type = data['sent type']
+
          // console.log(message)
     
           var user = data.user
@@ -2640,6 +2642,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           //console.log(formattedTime)
     
           //console.log(data)
+          /*
     
           var messageHTML = `
           <div class="message-component" style="margin-top: 50px">
@@ -2658,8 +2661,37 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           <hr>
         </div>
         `
+        */
+
+        var newMessageUI = `
+        
+
+        <div>
+
+        <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 600px"  >
+          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+          <p style="color: white">${message}</p>
+        </div>
+        </div>
+        `
+
+  var otherMessage = `
+
+  <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+  <p style="color: white">${message}</p>
+</div>
+  `
+
+  if(type == "student") {
+    $('#message-components').prepend(otherMessage)
+
+  } else {
+    $('#message-components').prepend(newMessageUI)
+
+  }
     
-          $('#message-components').prepend(messageHTML)
+          //$('#message-components').prepend(messageHTML)
 
           messagesListIDs.push(doc.id)
     
@@ -2693,28 +2725,39 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
                 
 
                 var user = data.user
+
+                var type = data['sent type']
     
                 var formattedTime = new Date(time.seconds * 1000).toLocaleString()
 
-                var messageHTML = `
-                <div class="message-component" style="margin-top: 50px">
-                <div class="row">
-                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-                  <div class="col">
-                    <div class="row" style="margin-left: 5px;">
-                      <h5>${user}</h5>
-                      <div style="width: 80%;"></div>
-                    </div>
-                    <p>${formattedTime}</p>
+                var newMessageUI = `
+        
 
-                    <p style="width: 100%;">${message}</p>
-                  </div>
+                <div>
+        
+                <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 600px"  >
+                  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+                  <p style="color: white">${message}</p>
                 </div>
-                <hr>
-              </div>
-              `
+                </div>
+                `
+        
+          var otherMessage = `
+        
+          <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+          <p style="color: white">${message}</p>
+        </div>
+          `
+        
+          if(type == "student") {
+            $(otherMessage).appendTo( '#message-components')
+        
+          } else {
+            $(newMessageUI).appendTo( '#message-components')
+        
+          }
           
-                $(messageHTML).appendTo('#message-components')
               }
       
             })
