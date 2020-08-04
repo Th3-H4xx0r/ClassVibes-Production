@@ -880,6 +880,7 @@ function checkIfClassCodeExists(addType) {
   
         }
       } catch(e){
+        console.log(e)
         error.innerHTML = `
         <div class="alert alert-danger" role="alert" style="width: 310px;">
         Failed to join class. Internal error
