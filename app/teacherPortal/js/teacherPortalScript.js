@@ -1020,40 +1020,66 @@ function getMeetings_pageNation(lastElement) {
     if (user) {
       var email = user.email;
 
-        output = `
-        <section class="resume" style="margin-left: 0px;">
-          <div class="row">
-          <div class="col-lg-6" data-aos="fade-up">
-                <h3 class="resume-title">${date} </h3>
-  
-                <h3 class="resume-title" style="width: 500px">${classForMeeting}</h3>
-                <div class="resume-item pb-0">
-                  <h4 style="width: 500px">${title}</h4>
-                  <h5>${length}</h5>
-                  <p style="width: 100%">
-                    ${message}
-  
-                  </p>
-                </div>
-  
-          </div>
-        </section>
-          `;
-  
-        $(output).appendTo("#meetingsList");
-      }
- 
- 
-    })
-  }).then(() => {
-    $('#meetingsList').on('scroll', function() { 
-      if ($(this).scrollTop() + 
-          $(this).innerHeight() >=  
-          $(this)[0].scrollHeight) { 
-  
-            getMeetings_pageNation(lastElement)
-      } 
-    });
+      console.log("geeting page nation")
+
+      var index = 0;
+    
+      console.log(lastElement)
+    
+      firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy('timestamp', 'desc').startAfter(lastElement).limit(4).get().then(function (doc) {
+        doc.forEach(snapshot => {
+          index = index + 1
+          var data1 = snapshot.data();
+          var classForMeeting = data1["Course"]
+    
+          var date = data1["date and time"];
+          var title = data1["title"];
+          var message = data1["message"]
+          var length = data1["length"]
+    
+          lastElement = data1['timestamp']
+          console.log(meetingsList_PageNation_MainPageList)
+    
+          if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
+    
+            meetingsList_PageNation_MainPageList.push(snapshot.id)
+    
+            output = `
+            <section class="resume" style="margin-left: 0px;">
+              <div class="row">
+              <div class="col-lg-6" data-aos="fade-up">
+                    <h3 class="resume-title">${date} </h3>
+      
+                    <h3 class="resume-title" style="width: 500px">${classForMeeting}</h3>
+                    <div class="resume-item pb-0">
+                      <h4 style="width: 500px">${title}</h4>
+                      <h5>${length}</h5>
+                      <p style="width: 100%">
+                        ${message}
+      
+                      </p>
+                    </div>
+      
+              </div>
+            </section>
+              `;
+      
+            $(output).appendTo("#meetingsList");
+          }
+    
+     
+        })
+      }).then(() => {
+        $('#meetingsList').on('scroll', function() { 
+          if ($(this).scrollTop() + 
+              $(this).innerHeight() >=  
+              $(this)[0].scrollHeight) { 
+      
+                getMeetings_pageNation(lastElement)
+          } 
+        });
+      });
+    }
   });
 
 }
@@ -2522,8 +2548,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     
           var message = data.message;
           var time = data.timestamp;
-          var type = data["sent type"]
-
     
           var user = data.user
 
@@ -2557,35 +2581,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
           </div>
           `
       
-          var newMessageUI = `
-        
-
-          <div>
-
-          <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px "  >
-            <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-            <p style="color: white">${message}</p>
-          </div>
-          </div>
-          `
-
-    var otherMessage = `
-
-    <div class="message-component container" style="margin-top: 50px; float: left; background-color: #00ddff; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
-    <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-    <p style="color: white">${message}</p>
-  </div>
-    `
-
-    if(type == "student") {
-      $('#message-components').prepend(otherMessage)
-
-
-    } else {
-      $('#message-components').prepend(newMessageUI)
-
-    }
-
+            $('#message-components').prepend(messageHTML)
           }
 
     
@@ -2630,7 +2626,8 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     
           var message = data.message;
           var time = data.timestamp;
-          var type = data["sent type"]
+
+          var type = data['sent type']
 
          // console.log(message)
     
@@ -2645,6 +2642,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           //console.log(formattedTime)
     
           //console.log(data)
+          /*
     
           var messageHTML = `
           <div class="message-component" style="margin-top: 50px">
@@ -2663,36 +2661,37 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           <hr>
         </div>
         `
+        */
 
         var newMessageUI = `
         
 
-              <div>
+        <div>
 
-              <div class="message-component container" style="margin-top: 50px; float: right; background-color: #0cacc4; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px "  >
-                <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-                <p style="color: white">${message}</p>
-              </div>
-              </div>
-              `
-
-        var otherMessage = `
-
-        <div class="message-component container" style="margin-top: 50px; float: left; background-color: #00ddff; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
-        <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-        <p style="color: white">${message}</p>
-      </div>
+        <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 600px"  >
+          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+          <p style="color: white">${message}</p>
+        </div>
+        </div>
         `
 
-        if(type == "student") {
-          $('#message-components').prepend(otherMessage)
+  var otherMessage = `
 
+  <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+  <p style="color: white">${message}</p>
+</div>
+  `
 
-        } else {
-          $('#message-components').prepend(newMessageUI)
+  if(type == "student") {
+    $('#message-components').prepend(otherMessage)
 
-        }
+  } else {
+    $('#message-components').prepend(newMessageUI)
+
+  }
     
+          //$('#message-components').prepend(messageHTML)
 
           messagesListIDs.push(doc.id)
     
@@ -2721,52 +2720,44 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
                 var message = data.message;
                 var time = data.timestamp;
-                var type = data["sent type"]
-
 
                 messagesListIDs.push(doc.id)
                 
 
                 var user = data.user
+
+                var type = data['sent type']
     
                 var formattedTime = new Date(time.seconds * 1000).toLocaleString()
 
-                var messageHTML = `
-                <div class="message-component" style="margin-top: 50px">
-                <div class="row">
-                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-                  <div class="col">
-                    <div class="row" style="margin-left: 5px;">
-                      <h5>${user}</h5>
-                      <div style="width: 80%;"></div>
-                    </div>
-                    <p>${formattedTime}</p>
+                var newMessageUI = `
+        
 
-                    <p style="width: 100%;">${message}</p>
-                  </div>
+                <div>
+        
+                <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px; width: 600px"  >
+                  <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+                  <p style="color: white">${message}</p>
                 </div>
-                <hr>
-              </div>
-              `
-
-              var newMessageUI = `
-              <div class="message-component container" style="margin-top: 50px; float: right; background-color: #00ddff; border-radius: 20px 20px 0px 20px; margin-right: 30px; margin-bottom: 20px "  >
-                <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-                <p style="color: white">${message}</p>
-              </div>
-              `
-
-              var otherMessage = `
-        <div class="message-component container" style="margin-top: 50px; float: left; background-color: #00ddff; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
-        <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
-        <p style="color: white">${message}</p>
-      </div>
-        `
-
+                </div>
+                `
         
-          $('#message-components').appendTo(newMessageUI)
-
+          var otherMessage = `
         
+          <div class="message-component container" style="margin-top: 50px; float: left; background-color: #DCDCDC; border-radius: 20px 20px 20px 0px; margin-right: 30px; margin-bottom: 20px "  >
+          <p style="color: white; margin-top: 10px"><strong>${user}</strong></p>
+          <p style="color: white">${message}</p>
+        </div>
+          `
+        
+          if(type == "student") {
+            $(otherMessage).appendTo( '#message-components')
+        
+          } else {
+            $(newMessageUI).appendTo( '#message-components')
+        
+          }
+          
               }
       
             })
