@@ -941,7 +941,6 @@ function getClassData(emailRef) {
   }).then(function () {
     if (document.getElementById('dashboard-section') != null) {
       document.getElementById('dashboard-section').style.display = "initial";
-      //getChartData(classCode);
     }
   })
 }
@@ -2342,7 +2341,7 @@ function getChartData(code) {
             var unreadMessagesHTML = ''
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
-              var unreadMessagesHTML =  `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
+              var unreadMessagesHTML =  `<h2><span class="badge badge-warning" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
 
             }
     
