@@ -247,38 +247,49 @@ googleSignInStudent = () => {
 
             console.log("data from doc : ", doc.data());
 
-            var accountType = doc.data()['account type'];
+            var data = doc.data();
 
-            console.log("Document data:", doc.data()["account type"]);
+            if(data != undefined){
 
-            if (accountType != null) {
-                if (accountType == "Student") {
-                    console.log('Login Success');
+                var accountType = data['account type']
 
-                    window.localStorage.setItem("clientType", '35TK-KSMY-C7NR-2CEF');
-
-                    window.location = "/student/dashboard";
-
+                if (accountType != undefined) {
+                    if (accountType == "Student") {
+                        console.log('Login Success');
+    
+                        window.localStorage.setItem("clientType", '35TK-KSMY-C7NR-2CEF');
+    
+                        window.location = "/student/dashboard";
+    
+                    } else {
+    
+                        errorHTML = `<div class="alert alert-danger" role="alert" 
+                         style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                          <strong>Oops! </strong> This account was signed up as a ${accountType} account. You do not have sufficient permissions.
+                    </div>`;
+    
+                        document.getElementById('signupError').innerHTML = errorHTML;
+    
+                    }
                 } else {
-
+    
                     errorHTML = `<div class="alert alert-danger" role="alert" 
-                     style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                      <strong>Oops! </strong> This account was signed up as a ${accountType} account. You do not have sufficient permissions.
-                </div>`;
-
+                       style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                            <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                      </div>`;
+    
                     document.getElementById('signupError').innerHTML = errorHTML;
-
+    
                 }
             } else {
-
                 errorHTML = `<div class="alert alert-danger" role="alert" 
-                   style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                        <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
-                  </div>`;
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                 <strong>Oops! </strong> Google login failed.
+           </div>`;
 
-                document.getElementById('signupError').innerHTML = errorHTML;
-
+               document.getElementById('signupError').innerHTML = errorHTML;
             }
+
         }).catch(function (error) {
             console.log("Error getting document:", error);
         });
