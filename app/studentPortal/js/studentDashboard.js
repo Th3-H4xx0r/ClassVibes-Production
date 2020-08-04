@@ -827,50 +827,59 @@ function checkIfClassCodeExists(addType) {
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var classCode = doc.data();
 
-      var allowJoin = classCode['allow join'] != undefined ? classCode['allow join'] : true
+      try {
+        var allowJoin = classCode['allow join'] != undefined ? classCode['allow join'] : true
 
-      if (classCode != null) {
-        if(allowJoin == true){
-          exists = true;
+        if (classCode != null) {
+          if(allowJoin == true){
+            exists = true;
+          } else {
+            error.innerHTML = `
+            <div class="alert alert-danger" role="alert" style="width: 310px;">
+            This class isn't currently accepting students
+           </div>
+           `;
+          }
+          
+  
         } else {
-          error.innerHTML = `
-          <div class="alert alert-danger" role="alert" style="width: 310px;">
-          This class isn't currently accepting students
-         </div>
-         `;
+          exists = false;
         }
-        
-
-      } else {
-        exists = false;
-      }
-
-      if (exists == false) {
+  
+        if (exists == false) {
+          error.innerHTML = `
+        <div class="alert alert-danger" role="alert" style="width: 310px;">
+        Class code doesn't exist
+       </div>
+       `;
+        }
+  
+        if (exists == "enrolledInClass") {
+          error.innerHTML = `
+       <div class="alert alert-danger" role="alert" style="width: 310px;">
+       You are already enrolled in this class
+      </div>
+      `;
+        }
+  
+        if (exists == true) {
+          error.innerHTML = `
+        <div class="alert alert-success" role="alert" style="width: 310px;">
+        You have joined this class
+       </div>
+       `;
+  
+          addClassToStudentData(code);
+  
+        }
+      } catch(e){
         error.innerHTML = `
-      <div class="alert alert-danger" role="alert" style="width: 310px;">
-      Class code doesn't exist
-     </div>
-     `;
+        <div class="alert alert-success" role="alert" style="width: 310px;">
+        Failed to join class
+       </div>
       }
 
-      if (exists == "enrolledInClass") {
-        error.innerHTML = `
-     <div class="alert alert-danger" role="alert" style="width: 310px;">
-     You are already enrolled in this class
-    </div>
-    `;
-      }
 
-      if (exists == true) {
-        error.innerHTML = `
-      <div class="alert alert-success" role="alert" style="width: 310px;">
-      You have joined this class
-     </div>
-     `;
-
-        addClassToStudentData(code);
-
-      }
 
 
     });
