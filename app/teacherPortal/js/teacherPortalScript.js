@@ -2214,10 +2214,10 @@ function getChartData(code) {
               console.log(data["teacher unread"])
 
               if(data["teacher unread"] != undefined && data["teacher unread"] != null && data["teacher unread"] != NaN){
-                unreadMessages = unreadMessages + 0;
+                unreadMessages = unreadMessages + data["teacher unread"];
                 //
               } else {
-                unreadMessages = unreadMessages + data["teacher unread"]
+                unreadMessages = unreadMessages + 0
               }
 
             
@@ -2318,7 +2318,7 @@ function getChartData(code) {
 
             var unreadMessagesHTML = ''
 
-            if(unreadMessages, unreadMessages != 0){
+            if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
               var unreadMessagesHTML =  `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
 
             }
