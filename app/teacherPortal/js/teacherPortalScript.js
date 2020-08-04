@@ -954,15 +954,14 @@ function storeClassforChart(code) {
 }
 
 function sendRealtimeAnnouncement(code, title, message){
+
+  console.log("Senindg realtime announcement")
   
-      socket.on('connect', function(data) {
-          console.log("Connected to realitme - Sender:" + data)
   
           socket.emit('join-class-room', code.toString());
   
           socket.emit('send-announcement-to-class-realtime', {"code": code, "title": "New Announcement", "message": message});
           
-      });
   }
 
 
