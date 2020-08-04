@@ -1954,37 +1954,44 @@ function getStudentData(code) {
 function schedualMeeting(emailStudent, course, code, index) {
   console.log("schedual meeting")
 
-  var nameLocal = localStorage.getItem("email");
-  var meetingTitle = document.getElementById("title1" + index).value;
-  var meetingDate = document.getElementById("date" + index).value;
-  var meetingMessage = document.getElementById("message" + index).value;
-  var len = document.getElementById("len" + index).value;
-  var dateNow = new Date();
-  var formattedDate = dateNow.toLocaleString();
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var teacherEmail = user.email;
 
-  firebase.firestore().collection('UserData').doc(emailStudent).collection("Meetings").doc().set({
-    "title": meetingTitle,
-    "date and time": meetingDate,
-    "class id": code,
-    "Course": course,
-    "timestamp": dateNow.toString(),
-    "message" : meetingMessage,
-    "recipient": emailStudent,
-    "length" : len
-  }).then(() => {
-    firebase.firestore().collection('UserData').doc(nameLocal).collection("Meetings").doc().set({
-      "title": meetingTitle,
-      "date and time": meetingDate,
-      "class id": code,
-      "Course": course,
-      "timestamp": dateNow.toString(),
-      "message" : meetingMessage,
-      "recipient": emailStudent,
-      "length" : len
-    }).then(() => {
-      window.location.reload()
-    });
-  });
+      var meetingTitle = document.getElementById("title1" + index).value;
+      var meetingDate = document.getElementById("date" + index).value;
+      var meetingMessage = document.getElementById("message" + index).value;
+      var len = document.getElementById("len" + index).value;
+      var dateNow = new Date();
+      var formattedDate = dateNow.toLocaleString();
+    
+      firebase.firestore().collection('UserData').doc(emailStudent).collection("Meetings").doc().set({
+        "title": meetingTitle,
+        "date and time": meetingDate,
+        "class id": code,
+        "Course": course,
+        "timestamp": dateNow.toString(),
+        "message" : meetingMessage,
+        "recipient": emailStudent,
+        "length" : len
+      }).then(() => {
+        firebase.firestore().collection('UserData').doc(teacherEmail).collection("Meetings").doc().set({
+          "title": meetingTitle,
+          "date and time": meetingDate,
+          "class id": code,
+          "Course": course,
+          "timestamp": dateNow.toString(),
+          "message" : meetingMessage,
+          "recipient": emailStudent,
+          "length" : len
+        }).then(() => {
+          window.location.reload()
+        });
+      });
+    } 
+  })
+
+ 
 
 
 
