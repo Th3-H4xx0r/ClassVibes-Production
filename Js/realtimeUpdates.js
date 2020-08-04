@@ -13,7 +13,7 @@ function getRealtimeAnnouncements(code){
         var announcementHTML = `
         <div class="toast" role="alert" data-autohide="false" aria-live="assertive" aria-atomic="true" style = 'width: 300px' data-delay="10000" id = 'announcementToast${data.code}'>
   <div class="toast-header">
-    <strong class="mr-auto">${data.title}</strong>
+    <strong class="mr-auto">New Announcement</strong>
     <small></small>
     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -22,8 +22,10 @@ function getRealtimeAnnouncements(code){
   <a href = '/student/classes/${data.code}' style = 'text-decoration: none; color: black'> <div class="toast-body" style = 'background-color: white'>
     <p style = 'max-width: 35ch; white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;'>${data.message}</p>
-  </div></a>
+    text-overflow: ellipsis;'>${data.title}</p>
+  </div>
+  
+  </a>
 </div>
         `;
 
