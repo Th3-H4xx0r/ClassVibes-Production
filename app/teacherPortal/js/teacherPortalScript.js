@@ -2316,8 +2316,12 @@ function getChartData(code) {
       
             console.log("UNREAD : " + unreadMessages)
 
-            var unreadMessagesHTML = unreadMessages != undefined ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>` : ''
-            unreadMessagesHTML = unreadMessages != 0 ? `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>` : ''
+            var unreadMessagesHTML = ''
+
+            if(unreadMessages != undefined && unreadMessages != null && unreadMessages !+ 0){
+              var unreadMessagesHTML =  `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
+
+            }
     
             document.getElementById(`unreadMessages${code}`).innerHTML = unreadMessagesHTML
          }, 700);
