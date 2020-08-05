@@ -979,7 +979,7 @@ async function writeAnnouncement(code, className) {
   <span class="sr-only"> Sending Announcement...</span>
 </button>
   `
-  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
+  var socket = io.connect('ws://localhost:3121', {transports: ['polling']});
 
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
@@ -996,8 +996,13 @@ async function writeAnnouncement(code, className) {
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(async () => {
     
+    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+      socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
 
-    socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className});
+    }).catch(function(error) {
+      // Handle error
+    });
+
     
   }).then(() => {
 
