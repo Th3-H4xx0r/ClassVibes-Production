@@ -71,6 +71,7 @@
       getLiveSeverAlerts();
       checkUserAuthStatus('teacher');
       getTeacherAccountStatus('class-page', classCode);
+      getGraphPopupData(classCode)
     });
   </script>
 
@@ -245,10 +246,120 @@
                                 
                                     <!-- Begin Page Content -->
                                     <div class="container-fluid">
+
+         
+
+
+<script>
+    // When the user clicks on div, open the popup
+    function myFunction() {
+      var popup = document.getElementById("myPopup");
+      popup.classList.toggle("show");
+    }
+    </script>
+
+<div class="fixed_button">
+    <div class="popup" onclick="myFunction()">
+        <button type="button" class="btn btn-primary" style="width: 200px;">View Graph</button>
+
+        <span class="popuptext" id="myPopup">
+    
+            <a href=`classes/${classCode}` style = 'text-decoration: none'>
+                <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
+                    <div class="card-body">
+                      <div class="chart-pie pt-4 pb-2" id = "chartPie${classCode}">
+                        <canvas id="`myPieChart<%= code %>"></canvas>
+                      </div>
+                      <div style="height: 30px"></div>
+                      <center><h5 class="card-title" id = 'classNameLabel'></h5>
+                      </center>
+    
+                    </div>
+                  </div>
+                </a>
+        </span>
+      </div>
+</div>
+
+
+
+    
+  
+
+  <style>
+
+.fixed_button{
+position: fixed;
+bottom: 8%;
+left: 89%;
+z-index: 99;
+
+ }
+
+    /* Popup container - can be anything you want */
+    .popup {
+      position: absolute;
+      display: inline-block;
+      cursor: pointer;
+      z-index: 999999;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      
+    }
+    
+    /* The actual popup */
+    .popup .popuptext {
+      visibility: hidden;
+      width: 160px;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px 0;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -23rem;
+    }
+    
+    /* Popup arrow */
+    .popup .popuptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+    }
+    
+    /* Toggle this class - hide and show the popup */
+    .popup .show {
+      visibility: visible;
+      -webkit-animation: fadeIn 1s;
+      animation: fadeIn 1s;
+    }
+    
+    /* Add animation (fade in the popup) */
+    @-webkit-keyframes fadeIn {
+      from {opacity: 0;} 
+      to {opacity: 1;}
+    }
+    
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity:1 ;}
+    }
+    </style>
+
         
                                         <!-- Page Heading -->
         
                                         <!-- DataTales Example -->
+ 
+
                                         <div class="card shadow mb-4">
                                             <div class="card-header py-3">
                                                 <h6 class="m-0 font-weight-bold text-primary">Students</h6>
@@ -283,121 +394,126 @@
         
                                             </div>
                                             <div class="card-body">
-        
-                                                <section id="allStudentsTable">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered" id="dataTable" width="100%"
-                                                            cellspacing="0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Email</th>
-                                                                    <th>Mood</th>
-                                                                    <th>Reported</th>
-                                                                    <th>Actions</th>
-        
-                                                                </tr>
-                                                            </thead>
-        
-                                                            <tbody id="studentTable">
-        
-                                                            </tbody>
-        
-                                                        </table>
-                                                    </div>
-                                                </section>
-        
-                                                <section id="doing-good-table-section" style="display: none;">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered" id="dataTable" width="100%"
-                                                            cellspacing="0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Email</th>
-                                                                    <th>Mood</th>
-                                                                    <th>Reported</th>
-                                                                    <th>Actions</th>
-        
-                                                                </tr>
-                                                            </thead>
-        
-                                                            <tbody id="studentTable-doing-good">
 
-                                                            </tbody>
+                                                
+                                                    <section>
+                                                        <section id="allStudentsTable">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                                    cellspacing="0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Name</th>
+                                                                    
+                                                                            <th>Mood</th>
+                                                                            <th>Reported</th>
+                                                                            <th>Actions</th>
+                
+                                                                        </tr>
+                                                                    </thead>
+                
+                                                                    <tbody id="studentTable">
+                
+                                                                    </tbody>
+                
+                                                                </table>
+                                                            </div>
+                                                        </section>
+                
+                                                        <section id="doing-good-table-section" style="display: none;">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                                    cellspacing="0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Name</th>
+                                                                         
+                                                                            <th>Mood</th>
+                                                                            <th>Reported</th>
+                                                                            <th>Actions</th>
+                
+                                                                        </tr>
+                                                                    </thead>
+                
+                                                                    <tbody id="studentTable-doing-good">
         
-                                                        </table>
-                                                    </div>
-                                                </section>
+                                                                    </tbody>
+                
+                                                                </table>
+                                                            </div>
+                                                        </section>
+                
+                                                        <section id="meh-table-section" style="display: none;">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                                    cellspacing="0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Name</th>
+                                                                            <th>Mood</th>
+                                                                            <th>Reported</th>
+                                                                            <th>Actions</th>
+                
+                                                                        </tr>
+                                                                    </thead>
+                
+                                                                    <tbody id="studentTable-meh">
+                
+                                                                    </tbody>
+                
+                                                                </table>
+                                                            </div>
+                                                        </section>
+                
+                                                        <section id="frustrated-table-section" style="display: none;">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                                    cellspacing="0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Name</th>
+                                                                  
+                                                                            <th>Mood</th>
+                                                                            <th>Reported</th>
+                                                                            <th>Actions</th>
+                
+                                                                        </tr>
+                                                                    </thead>
+                
+                                                                    <tbody id="studentTable-frustrated">
+                
+                                                                    </tbody>
+                
+                                                                </table>
+                                                            </div>
+                                                        </section>
         
-                                                <section id="meh-table-section" style="display: none;">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered" id="dataTable" width="100%"
-                                                            cellspacing="0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Email</th>
-                                                                    <th>Mood</th>
-                                                                    <th>Reported</th>
-                                                                    <th>Actions</th>
+                                                        <section id="inactive-table-section" style="display: none;">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                                    cellspacing="0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Name</th>
+                                                                          
+                                                                            <th>Mood</th>
+                                                                            <th>Reported</th>
+                                                                            <th>Actions</th>
+                
+                                                                        </tr>
+                                                                    </thead>
+                
+                                                                    <tbody id="studentTable-inactive">
+                
+                                                                    </tbody>
+                
+                                                                </table>
+                                                            </div>
+                                                        </section>
+                                                    </section>
+                                            
         
-                                                                </tr>
-                                                            </thead>
-        
-                                                            <tbody id="studentTable-meh">
-        
-                                                            </tbody>
-        
-                                                        </table>
-                                                    </div>
-                                                </section>
-        
-                                                <section id="frustrated-table-section" style="display: none;">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered" id="dataTable" width="100%"
-                                                            cellspacing="0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Email</th>
-                                                                    <th>Mood</th>
-                                                                    <th>Reported</th>
-                                                                    <th>Actions</th>
-        
-                                                                </tr>
-                                                            </thead>
-        
-                                                            <tbody id="studentTable-frustrated">
-        
-                                                            </tbody>
-        
-                                                        </table>
-                                                    </div>
-                                                </section>
-
-                                                <section id="inactive-table-section" style="display: none;">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-bordered" id="dataTable" width="100%"
-                                                            cellspacing="0">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Name</th>
-                                                                    <th>Email</th>
-                                                                    <th>Mood</th>
-                                                                    <th>Reported</th>
-                                                                    <th>Actions</th>
-        
-                                                                </tr>
-                                                            </thead>
-        
-                                                            <tbody id="studentTable-inactive">
-        
-                                                            </tbody>
-        
-                                                        </table>
-                                                    </div>
-                                                </section>
+                                        
         
                                                 <div id="outputModel"></div>
         
@@ -451,7 +567,9 @@
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto" id = "footer-version-code">
-            <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
+            <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span> 
+
+            
           </div>
         </div>
       </footer>

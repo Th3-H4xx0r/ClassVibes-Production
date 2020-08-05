@@ -159,8 +159,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 getStudentData(classCode);
                 getEditData(classCode);
                 getAnnouncementForClass(classCode);
-                getMeetingForClass(classCode);
-    
+                getMeetingForClass(classCode);    
               }
               else if (pageType == 'dashboard') {
                 //console.log("executing");
@@ -829,6 +828,22 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     });
   })
     
+}
+
+function getGraphPopupData(code){
+  firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
+
+      var data = doc.data();
+
+      var classCode = data["class code"];
+
+      var className = data["class name"];
+
+      document.getElementById('classNameLabel').innerHTML = ` ${className}<span class = 'badge badge-primary'>${classCode}</span>`
+
+      getChartData(code)
+    });
+
 }
 
 function getClassData(emailRef) {
@@ -1846,7 +1861,7 @@ function getStudentData(code) {
             descriptionOutput2 = `
           <tr role = "row" class = "odd">
           <td>${studentName}</td>
-          <td>${studentEmail}</td>
+          
           <td><center><div id = "face"></center></div></td>
           <td>${studentReportedDate}</td>
           <td>
@@ -1862,7 +1877,6 @@ function getStudentData(code) {
             happy_face_Column = `
           <tr "row" class = "odd">
           <td>${studentName}</td>
-          <td>${studentEmail}</td>
           <td><center>${happy}</center></td>
           <td>${studentReportedDate}</td>
           <td>
@@ -1877,7 +1891,6 @@ function getStudentData(code) {
             meh_colum_face = `
           <tr "row" class = "odd">
           <td>${studentName}</td>
-          <td>${studentEmail}</td>
           <td><center>${meh}</center></td>
           <td>${studentReportedDate}</td>
           <td>
@@ -1892,7 +1905,6 @@ function getStudentData(code) {
             frustrated_column_face = `
           <tr "row" class = "odd">
           <td>${studentName}</td>
-          <td>${studentEmail}</td>
           <td><center>${sad}</center></td>
           <td>${studentReportedDate}</td>
           <td>
@@ -1908,7 +1920,6 @@ function getStudentData(code) {
           inactive_column_face = `
           <tr "row" class = "odd">
           <td>${studentName}</td>
-          <td>${studentEmail}</td>
           <td><center id = 'inactive_face'>Loading</center></td>
           <td>${studentReportedDate}</td>
           <td>
@@ -2343,21 +2354,6 @@ function getChartData(code) {
               //console.log('update by:' + exceedDate)
               //console.log('maxdays' + maxdays)
 
-              inactive_column_face = `
-          <tr "row" class = "odd">
-          <td>${studentName}</td>
-          <td>${studentEmail}</td>
-          <td><center>${sad}</center></td>
-          <td>${studentReportedDate}</td>
-          <td>
-          <div class = 'row' style = 'margin-left: 10px'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
-          </div>          
-          </td>
-          </tr>
-      </div>
-          `
 
           var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
           var meh = '<i class="fas fa-meh" style="font-size: 70px; color: #f6c23e;"></i>';
@@ -2386,10 +2382,10 @@ function getChartData(code) {
                 //console.log("Gray Time")
                 studentsReactionLists[3] = studentsReactionLists[3] + 1;
 
-                document.getElementById("face").outerHTML = inactive;
+                //document.getElementById("face").outerHTML = inactive;
     
                 //$(descriptionOutput2).appendTo("#studentsListFrustrated");
-                $(inactive_column_face).appendTo("#studentTable-inactive");
+               
 
               }
               
