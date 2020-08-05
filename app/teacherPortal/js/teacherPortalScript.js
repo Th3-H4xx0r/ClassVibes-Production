@@ -1979,7 +1979,7 @@ function getStudentData(code) {
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
     
-            if (studentReaction == "doing great") {
+        if (studentReaction == "doing great") {
               //$(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
 
