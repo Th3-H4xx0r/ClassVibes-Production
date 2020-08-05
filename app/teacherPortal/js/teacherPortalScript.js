@@ -1665,7 +1665,7 @@ function getClassDataDropdown(emailRef) {
     doc.forEach(snapshot => {
       var data1 = snapshot.data();
 
-      if(data != undefined){
+      if(data1 != undefined){
         var classCode = data1["class code"];
         var className = data1["class name"];
 
