@@ -1770,13 +1770,17 @@ function getStudentData(code) {
 
   var classInfoList = [];
   console.log(classInfoList);
+  var maxdays = 0
+
 
   var className = '';
+  var today = Math.floor(Date.now()/1000);
 
   firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var data = doc.data();
 
       className = data["class name"];
+      maxdays = data["max days inactive"]
 
     }).then(() => {
       firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
@@ -1786,8 +1790,16 @@ function getStudentData(code) {
           var reaction = data["status"];
           var studentName = data["name"];
           var studentEmail = data["email"];
+          var unread = data['teacher unread'];
+          var date = data["date"];
+          maxdays = data["max days inactive"]
+          var exceedDate = date.seconds + (maxdays * 86400);
+          localStorage.setItem("exceeddate", exceedDate)
 
-          var unread = data['teacher unread']
+
+
+
+
 
           console.log(unread)
           var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
@@ -1795,15 +1807,19 @@ function getStudentData(code) {
           console.log(classInfoList)
     
         });
+
     
         document.getElementById("studentTable").innerHTML = "";
     
         for (var i = 0; i <= classInfoList.length; i++) {
+          var exceedDate = localStorage.getItem("exceeddate")
+
           let descriptionOutput = "";
           classInfoData = classInfoList[i];
           var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
           var meh = '<i class="fas fa-meh" style="font-size: 70px; color: #f6c23e;"></i>';
           var sad = '<i class="fas fa-frown" style="font-size: 70px; color: #e74a3b;"></i>'
+          var inactive = '<i class="fas fa-meh" style="font-size: 70px; color: #b5b0a3;"></i>'
     
           if (classInfoData != null || classInfoData != undefined) {
             console.log("works")
@@ -1887,6 +1903,22 @@ function getStudentData(code) {
           </tr>
       </div>
           `;
+
+          inactive_column_face = `
+          <tr "row" class = "odd">
+          <td>${studentName}</td>
+          <td>${studentEmail}</td>
+          <td><center>${sad}</center></td>
+          <td>${studentReportedDate}</td>
+          <td>
+          <div class = 'row' style = 'margin-left: 10px'>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          </div>          
+          </td>
+          </tr>
+      </div>
+          `
     
             outputModel = `
           <div class="modal fade" id="exampleModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel${i}" aria-hidden="true">
@@ -1931,17 +1963,20 @@ function getStudentData(code) {
           </div>
           </div>
           `
+
+          var today = Math.floor(Date.now()/1000);
+
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
     
             if (studentReaction == "doing great") {
               document.getElementById("face").outerHTML = happy;
-              $(descriptionOutput2).appendTo("#studentsListGreat");
+              //$(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
     
             } else if (studentReaction == "need help") {
               document.getElementById("face").outerHTML = meh;
-              $(descriptionOutput2).appendTo("#studentsListHelp");
+              //$(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
     
     
@@ -1949,9 +1984,15 @@ function getStudentData(code) {
     
               document.getElementById("face").outerHTML = sad;
     
-              $(descriptionOutput2).appendTo("#studentsListFrustrated");
+              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
               $(frustrated_column_face).appendTo("#studentTable-frustrated");
     
+            } else if(exceedDate < today){
+              document.getElementById("face").outerHTML = inactive;
+    
+              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
+              $(inactive_column_face).appendTo("#studentTable-inactive");
+
             } else {
               document.getElementById("face").outerHTML = happy;
     
@@ -2018,6 +2059,8 @@ function showGreat() {
   document.getElementById("doing-good-table-section").style.display = "initial";
   document.getElementById("meh-table-section").style.display = "none";
   document.getElementById("frustrated-table-section").style.display = "none";
+  document.getElementById("inactive-table-section").style.display = "none";
+
 
 }
 
@@ -2028,6 +2071,8 @@ function showHelp() {
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "initial";
   document.getElementById("frustrated-table-section").style.display = "none";
+  document.getElementById("inactive-table-section").style.display = "none";
+
 }
 
 function showFrustrated() {
@@ -2036,6 +2081,19 @@ function showFrustrated() {
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "none";
   document.getElementById("frustrated-table-section").style.display = "initial";
+  document.getElementById("inactive-table-section").style.display = "none";
+
+}
+
+function showInactive() {
+
+  document.getElementById('studentTable').style.display = "none";
+  document.getElementById('allStudentsTable').style.display = "none";
+  document.getElementById("doing-good-table-section").style.display = "none";
+  document.getElementById("meh-table-section").style.display = "none";
+  document.getElementById("frustrated-table-section").style.display = "none";
+  document.getElementById("inactive-table-section").style.display = "initial";
+
 }
 
 function showAll() {
@@ -2737,7 +2795,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
                 <div>
 
         <div class="message-component" style=" float: right; width: 100%"  >
-          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+          <div class="row"><div class="container" style="max-width: 700px"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; max-width: 600px ">${message}</p></div>
         </div>
         </div>
                 `
@@ -2747,7 +2805,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           <div>
 
         <div class="message-component" style= " float: left; min-width: 900px"  >
-          <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+          <div class="row"><div class="container" style=" max-width: 700px"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
         </div>
         </div>
           `
