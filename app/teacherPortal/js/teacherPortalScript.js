@@ -1790,18 +1790,15 @@ function getStudentData(code) {
           var studentEmail = data["email"];
           var unread = data['teacher unread'];
           var date = data["date"];
-          maxdays = data["max days inactive"]
+
           var exceedDate = date.seconds + (maxdays * 86400);
-          localStorage.setItem("exceeddate", exceedDate)
 
-
-
-
+          console.log(exceedDate)
 
 
           //console.log(unread)
           var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
-          classInfoList.push([studentName, reaction, studentEmail,dateReported, unread])
+          classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
           //console.log(classInfoList)
     
         });
@@ -1810,15 +1807,17 @@ function getStudentData(code) {
         document.getElementById("studentTable").innerHTML = "";
     
         for (var i = 0; i <= classInfoList.length; i++) {
-          var exceedDate = localStorage.getItem("exceeddate")
-
           let descriptionOutput = "";
           classInfoData = classInfoList[i];
           var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
           var meh = '<i class="fas fa-meh" style="font-size: 70px; color: #f6c23e;"></i>';
           var sad = '<i class="fas fa-frown" style="font-size: 70px; color: #e74a3b;"></i>'
-          var inactive = '<i class="fas fa-meh" style="font-size: 70px; color: #b5b0a3;"></i>'
-    
+
+          var inactive_happy = '<i class="fas fa-smile" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_meh = '<i class="fas fa-meh" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_sad = '<i class="fas fa-frown" style="font-size: 70px; color: #b5b0a3;"></i>'
+
+
           if (classInfoData != null || classInfoData != undefined) {
             //console.log("works")
             var studentName = classInfoData[0];
@@ -1830,6 +1829,10 @@ function getStudentData(code) {
             var unreadMessages = classInfoData[4]
 
             var studentReportedDate = classInfoData[3]
+
+            var exceedDate = classInfoData[5]
+
+            console.log(exceedDate)
 
             
             var unreadMessagesHTML = ''
@@ -1906,7 +1909,7 @@ function getStudentData(code) {
           <tr "row" class = "odd">
           <td>${studentName}</td>
           <td>${studentEmail}</td>
-          <td><center>${sad}</center></td>
+          <td><center id = 'inactive_face'>Loading</center></td>
           <td>${studentReportedDate}</td>
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
@@ -1964,63 +1967,72 @@ function getStudentData(code) {
 
           var today = Math.floor(Date.now()/1000);
 
+          console.log(exceedDate, today)
+
+          if(today > exceedDate) {
+            console.log('INACTIVE STUDENT: ' + studentEmail )
+
+          } 
+
+          console.log("Reaction:" + studentReaction  + ": " + studentEmail)
+
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
     
             if (studentReaction == "doing great") {
-              document.getElementById("face").outerHTML = happy;
               //$(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
 
-              if(exceedDate < today) {
-                document.getElementById("face").outerHTML = inactive;
-    
-              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
-              $(inactive_column_face).appendTo("#studentTable-inactive");
+              if(today > exceedDate) {
+                $(inactive_column_face).appendTo("#studentTable-inactive");
+
+                document.getElementById("face").outerHTML = inactive_happy;
+                document.getElementById("inactive_face").outerHTML = inactive_happy;
+            
+
+              } else {
+                document.getElementById("face").outerHTML = happy;
 
               }
     
             } else if (studentReaction == "need help") {
-              document.getElementById("face").outerHTML = meh;
+              
               //$(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
 
-              if(exceedDate < today) {
-                document.getElementById("face").outerHTML = inactive;
-    
-              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
-              $(inactive_column_face).appendTo("#studentTable-inactive");
+              if(today > exceedDate) {
 
+                $(inactive_column_face).appendTo("#studentTable-inactive");
+
+                document.getElementById("face").outerHTML = inactive_meh;
+                document.getElementById("inactive_face").outerHTML = inactive_meh;
+    
+              
+
+              } else {
+                document.getElementById("face").outerHTML = meh
               }
     
     
             } else if (studentReaction == "frustrated") {
     
-              document.getElementById("face").outerHTML = sad;
-    
-              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
               $(frustrated_column_face).appendTo("#studentTable-frustrated");
 
-              if(exceedDate < today) {
-                document.getElementById("face").outerHTML = inactive;
-    
-              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
-              $(inactive_column_face).appendTo("#studentTable-inactive");
+              if(today > exceedDate) {
+                $(inactive_column_face).appendTo("#studentTable-inactive");
+                document.getElementById("face").outerHTML = inactive_sad;
+                document.getElementById("inactive_face").outerHTML = inactive_sad;
+                
 
+              } else {
+                document.getElementById("face").outerHTML = sad;
               }
     
             }  else {
-              document.getElementById("face").outerHTML = happy;
-    
               $(happy_face_Column).appendTo("#studentsListGreat");
+              document.getElementById("face").outerHTML = happy;
+              
 
-              if(exceedDate < today) {
-                document.getElementById("face").outerHTML = inactive;
-    
-              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
-              $(inactive_column_face).appendTo("#studentTable-inactive");
-
-              }
             }
           }
         }
