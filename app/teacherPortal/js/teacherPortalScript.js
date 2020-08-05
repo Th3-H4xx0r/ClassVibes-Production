@@ -1724,9 +1724,7 @@ function createClass() {
       var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
       var className = document.getElementById("className").value;
       var course = document.getElementById("course").value;
-      var teacher = document.getElementById("teacher").value;
       var courseDescription = document.getElementById("courseDescription").value;
-      var teachersNote = document.getElementById("teachersNote").value;
       var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
       var maxInactiveDays = Number(maxInactiveDaysInput)
 
@@ -1736,9 +1734,7 @@ function createClass() {
           "class code": code,
           "class name": className,
           "Course": course,
-          "teacher": teacher,
           "courseDescription": courseDescription,
-          "teachersNote": teachersNote,
           "max days inactive": maxInactiveDays,
           "teacher email" : email,
           "allow join": true
@@ -1749,11 +1745,7 @@ function createClass() {
           "class code": code,
           "class name": className,
           "Course": course,
-          "teacher": teacher,
-          //"classImg": classImg,
           "courseDescription": courseDescription,
-          //"courseVideo": courseVideo,
-          "teachersNote": teachersNote,
           "teacher email" : email,
           "max days inactive": maxInactiveDays,
           "allow join": true
