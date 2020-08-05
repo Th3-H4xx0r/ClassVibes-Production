@@ -1971,11 +1971,27 @@ function getStudentData(code) {
               document.getElementById("face").outerHTML = happy;
               //$(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
+
+              if(exceedDate < today) {
+                document.getElementById("face").outerHTML = inactive;
+    
+              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
+              $(inactive_column_face).appendTo("#studentTable-inactive");
+
+              }
     
             } else if (studentReaction == "need help") {
               document.getElementById("face").outerHTML = meh;
               //$(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
+
+              if(exceedDate < today) {
+                document.getElementById("face").outerHTML = inactive;
+    
+              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
+              $(inactive_column_face).appendTo("#studentTable-inactive");
+
+              }
     
     
             } else if (studentReaction == "frustrated") {
@@ -1984,17 +2000,27 @@ function getStudentData(code) {
     
               //$(descriptionOutput2).appendTo("#studentsListFrustrated");
               $(frustrated_column_face).appendTo("#studentTable-frustrated");
-    
-            } else if(exceedDate < today){
-              document.getElementById("face").outerHTML = inactive;
+
+              if(exceedDate < today) {
+                document.getElementById("face").outerHTML = inactive;
     
               //$(descriptionOutput2).appendTo("#studentsListFrustrated");
               $(inactive_column_face).appendTo("#studentTable-inactive");
 
-            } else {
+              }
+    
+            }  else {
               document.getElementById("face").outerHTML = happy;
     
               $(happy_face_Column).appendTo("#studentsListGreat");
+
+              if(exceedDate < today) {
+                document.getElementById("face").outerHTML = inactive;
+    
+              //$(descriptionOutput2).appendTo("#studentsListFrustrated");
+              $(inactive_column_face).appendTo("#studentTable-inactive");
+
+              }
             }
           }
         }
@@ -2304,6 +2330,27 @@ function getChartData(code) {
               //console.log('today:' + today)
               //console.log('update by:' + exceedDate)
               //console.log('maxdays' + maxdays)
+
+              inactive_column_face = `
+          <tr "row" class = "odd">
+          <td>${studentName}</td>
+          <td>${studentEmail}</td>
+          <td><center>${sad}</center></td>
+          <td>${studentReportedDate}</td>
+          <td>
+          <div class = 'row' style = 'margin-left: 10px'>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
+          </div>          
+          </td>
+          </tr>
+      </div>
+          `
+
+          var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
+          var meh = '<i class="fas fa-meh" style="font-size: 70px; color: #f6c23e;"></i>';
+          var sad = '<i class="fas fa-frown" style="font-size: 70px; color: #e74a3b;"></i>'
+          var inactive = '<i class="fas fa-meh" style="font-size: 70px; color: #b5b0a3;"></i>'
               
               
               if(exceedDate > today) {
@@ -2326,6 +2373,11 @@ function getChartData(code) {
               } else {
                 //console.log("Gray Time")
                 studentsReactionLists[3] = studentsReactionLists[3] + 1;
+
+                document.getElementById("face").outerHTML = inactive;
+    
+                //$(descriptionOutput2).appendTo("#studentsListFrustrated");
+                $(inactive_column_face).appendTo("#studentTable-inactive");
 
               }
               
