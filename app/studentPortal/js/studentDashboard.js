@@ -1712,7 +1712,7 @@ function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElem
 function getMessagesForChat_Classes_page(classCode, studentEmail){
   
   firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
-    'teacher unread': 0
+    'student unread': 0
   })
 
 
