@@ -2173,7 +2173,7 @@ function getEditData(code) {
     <span class="input-group-text">Days</span>
     <span class="input-group-text">1-14</span>
   </div>
-  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" placeholder = ${inactiveDays}>
+  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" value="${inactiveDays}">
 </div>
 
 <p style = "color: red; font-weight: 700" id = "error-feedback-edit-class"></p>
