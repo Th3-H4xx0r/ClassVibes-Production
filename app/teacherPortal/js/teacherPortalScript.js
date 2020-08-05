@@ -2128,7 +2128,6 @@ function getEditData(code) {
     showSendAnnouncementModal(code, className);
 
     var course = data['Course']
-    var teacherNote = data['teachersNote'] != undefined ? data['teachersNote'] : "Not Set"
     var description = data['courseDescription'] != undefined ? data['courseDescription'] : "Not Set"
     var inactiveDays = data['max days inactive'] != NaN ?  data['max days inactive'] : "Not Set"
     output += `
@@ -2167,18 +2166,6 @@ function getEditData(code) {
   <input type="text" class="form-control" value="${description}" aria-label="Username" aria-describedby="basic-addon1" name="editDescription" id="editDescription">
 </div>
 
-<h6>Edit Teacher's Note</h6>
-
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">
-    <i class="fa fa-pencil" aria-hidden="true" onclick = "editTitle()"></i>
-    </span>
-  </div>
-
-  <input type="text" class="form-control" value="${teacherNote}" aria-label="Username" aria-describedby="basic-addon1" name="editTeacherNote" id="editTeacherNote">
-</div>
-
 <h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
 
 <div class="input-group mb-3">
@@ -2207,13 +2194,12 @@ function updateDetails(code) {
   var newName = document.getElementById('editName').value;
   var newCourse = document.getElementById('editCourse').value;
   var newDescription = document.getElementById('editDescription').value;
-  var teachersNote = document.getElementById('editTeacherNote').value;
   var maxDays = document.getElementById('maxDays').value;
   let maxDaysNum = parseInt(maxDays);
 
-  console.log(newName, newCourse, newDescription, maxDays, teachersNote)
+  console.log(newName, newCourse, newDescription, maxDays)
 
-  if(newName, newCourse, newDescription, maxDaysNum, teachersNote != null && newName, newCourse, newDescription, maxDaysNum, teachersNote != ""){
+  if(newName, newCourse, newDescription, maxDaysNum != null && newName, newCourse, newDescription, maxDaysNum != ""){
 
     if(maxDaysNum > 14){
       var feedbackError = document.getElementById('error-feedback-edit-class');
@@ -2228,7 +2214,6 @@ function updateDetails(code) {
         "class name": newName,
         "Course": newCourse,
         "courseDescription": newDescription,
-        "teachersNote": teachersNote,
         "max days inactive": maxDaysNum,
     
       }).then(() => {
@@ -2236,7 +2221,6 @@ function updateDetails(code) {
           "class name": newName,
         "Course": newCourse,
         "courseDescription": newDescription,
-        "teachersNote": teachersNote,
         "max days inactive": maxDaysNum,
     
     
