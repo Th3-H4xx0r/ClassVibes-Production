@@ -595,7 +595,7 @@ async function getStudentClasses(studentUsername, pageType) {
 
 
         if(unreadMessages != undefined && unreadMessages != null && unreadMessages != 0){
-          unreadMessagesHTML = `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 95%; top: -10px'>${unreadMessages}</span><h2></h2>`
+          unreadMessagesHTML = `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 92%; top: -10px'>${unreadMessages}</span><h2></h2>`
         }
 
         index = index + 1
@@ -609,7 +609,7 @@ async function getStudentClasses(studentUsername, pageType) {
         if(reaction == 'doing great'){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classCode}'></i></a>
 
           <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
 
@@ -661,7 +661,7 @@ async function getStudentClasses(studentUsername, pageType) {
               <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
               
               <section>
-                <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
+                <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;" id = 'reactionsSection${classCode}'>
                      ${buttonsGrid}
 
                 </div>
@@ -675,8 +675,6 @@ async function getStudentClasses(studentUsername, pageType) {
     </div>
             `;
 
-
-            
 
             if(pageType == 'class-page'){
               output2 = `
@@ -759,8 +757,6 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var studentEmail = user.email;
-
-
       //var classSelected = localStorage.getItem("selectedClassDropdown");
 
       firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
@@ -777,21 +773,76 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
             status: reaction,
             "date": new Date()
           });
-        
           firebase.firestore().collection("UserData").doc(studentEmail).update({
             status: reaction
           }).then(() => {
-            getStudentClasses(studentUsername, pageType)
+            //getStudentClasses(studentUsername, pageType)
+            updateClassReaction(classSelected, studentEmail, pageType)
           });
         });
       });
-    
-
-    
       //getStudentStatus(studentEmail);
     }
   })
+}
 
+function updateClassReaction(classCode, studentEmail, pageType){
+
+  var buttonsGrid = ``
+
+  firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(studentEmail).get().then(doc => {
+    var data = doc.data()
+
+    if(data){
+      var reaction = data['status']
+
+      if(reaction == 'doing great'){
+        buttonsGrid = `
+          <a onclick = "updateReaction('doing great', '${classCode}', '${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classCode}'></i></a>
+
+          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+          `
+
+      } else if(reaction == 'need help'){
+       buttonsGrid = `
+          
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+
+          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+
+          `
+      } else if(reaction == 'frustrated'){
+        buttonsGrid = `
+          
+        <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+
+        <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+
+        <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
+
+        `
+      } else {
+        buttonsGrid = `
+          
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+
+          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+
+          `
+      }
+
+      document.getElementById(`reactionsSection${classCode}`).innerHTML = buttonsGrid
+    } else {
+
+    }
+  })
 }
 
 function reloadPage() {
