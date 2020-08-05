@@ -822,22 +822,32 @@ function checkIfClassCodeExists(addType) {
 
     var exists = false;
 
+    var allowJoin = false
+
     // var _ref = firebase.database().ref().child("Classes").child(code).child("Code");
 
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var classCode = doc.data();
 
       try {
-        var allowJoin = classCode['allow join']
 
-        
+        if(classCode != undefined){
+          exists = true
+
+          var allowJoin = classCode['allow join']
+
+                  
         if(allowJoin != undefined){
           allowJoin = classCode['allow join']
         } else {
           allowJoin = true
         }
 
-        if (classCode != null) {
+        } else {
+          exists = false
+        }
+
+
           if(allowJoin == true){
             exists = true;
           } else {
@@ -848,10 +858,6 @@ function checkIfClassCodeExists(addType) {
            `;
           }
           
-  
-        } else {
-          exists = false;
-        }
   
         if (exists == false) {
           error.innerHTML = `
