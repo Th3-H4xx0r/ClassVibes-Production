@@ -9,7 +9,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
         var in_a_district = data['District Code'] != undefined ? data['District Code'] : null;
     
-        console.log("DISTRICT: " + in_a_district);
+        //console.log("DISTRICT: " + in_a_district);
     
         var pendingSchoolRequestName = data["Pending School Request Name"];
     
@@ -37,11 +37,11 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
           if (in_a_district != null && in_a_district != undefined) {
             firebase.firestore().collection('Districts').doc(in_a_district).get().then(function (doc) {
     
-              console.log('Executing 1');
+              //console.log('Executing 1');
     
               var data = doc.data()["Status"];
     
-              console.log("STATUS:" + data);
+              //console.log("STATUS:" + data);
     
               //DISTRICT IS NOT ACTIVATED
               if (data != "Activated") {
@@ -61,7 +61,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 $('#main-body-page-teacher').html(activateDistrictHTML);
               } else {
     
-                console.log('Executing 2');
+                //console.log('Executing 2');
     
                 if(document.getElementById('loader-icon') != null){
                   document.getElementById('loader-icon').style.display = 'none';
@@ -163,7 +163,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
               }
               else if (pageType == 'dashboard') {
-                console.log("executing");
+                //console.log("executing");
                 getProfileInfo();
                 getClassData(email);
                 //getWeekStudentAverageReactions_ALL_CLASSES()
@@ -300,7 +300,7 @@ function getStudentRequests(){
 
       if (classData != null || classData != undefined) {
 
-        console.log("works");
+        //console.log("works");
         var className1 = classData[1];
         var classCode = classData[0];
 
@@ -312,7 +312,7 @@ function getStudentRequests(){
 
               var className = className1
               totalIndex += 1
-                console.log(doc.data());
+                //console.log(doc.data());
       
                 var data = doc.data();
       
@@ -324,7 +324,7 @@ function getStudentRequests(){
       
                 var requestDocID = doc.id;
       
-                console.log(className1);
+                //console.log(className1);
       
                 var output = `
                 <div class="col-xl-12 col-md-6 mb-4">
@@ -529,7 +529,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 
   var code = localStorage.getItem("graphClassCode") != null ? localStorage.getItem("graphClassCode") : "none";
 
-  console.log(code)
+  //console.log(code)
 
   var getNewData = false;
 
@@ -637,7 +637,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
             reactionKey = 1
           }
   
-          console.log(reactionDay)
+          //console.log(reactionDay)
   
           if(reactionDay == 1){
             monTotal.push(reactionKey)
@@ -955,7 +955,7 @@ function storeClassforChart(code) {
 
 function sendRealtimeAnnouncement(code, title, message){
 
-  console.log("Senindg realtime announcement")
+  //console.log("Senindg realtime announcement")
   
   
           socket.emit('join-class-room', code.toString());
@@ -985,7 +985,7 @@ async function writeAnnouncement(code, className) {
 
 
   socket.on('connect', function(data) {
-    console.log("Connected to Email Server - Sender:" + data)
+    //console.log("Connected to Email Server - Sender:" + data)
     
 });
   
@@ -1023,11 +1023,11 @@ function getMeetings_pageNation(lastElement) {
     if (user) {
       var email = user.email;
 
-      console.log("geeting page nation")
+      //console.log("geeting page nation")
 
       var index = 0;
     
-      console.log(lastElement)
+      //console.log(lastElement)
     
       firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy('timestamp', 'desc').startAfter(lastElement).limit(4).get().then(function (doc) {
         doc.forEach(snapshot => {
@@ -1041,7 +1041,7 @@ function getMeetings_pageNation(lastElement) {
           var length = data1["length"]
     
           lastElement = data1['timestamp']
-          console.log(meetingsList_PageNation_MainPageList)
+          //console.log(meetingsList_PageNation_MainPageList)
     
           if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
     
@@ -1689,7 +1689,7 @@ function getClassDataDropdown(emailRef) {
 
       if (classData != null || classData != undefined) {
 
-        console.log("works");
+        //console.log("works");
         var className = classData[1];
         var classCode = classData[0];
 
@@ -1767,7 +1767,7 @@ function getStudentData(code) {
 
 
   var classInfoList = [];
-  console.log(classInfoList);
+  //console.log(classInfoList);
   var maxdays = 0
 
 
@@ -1799,10 +1799,10 @@ function getStudentData(code) {
 
 
 
-          console.log(unread)
+          //console.log(unread)
           var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
           classInfoList.push([studentName, reaction, studentEmail,dateReported, unread])
-          console.log(classInfoList)
+          //console.log(classInfoList)
     
         });
 
@@ -1820,7 +1820,7 @@ function getStudentData(code) {
           var inactive = '<i class="fas fa-meh" style="font-size: 70px; color: #b5b0a3;"></i>'
     
           if (classInfoData != null || classInfoData != undefined) {
-            console.log("works")
+            //console.log("works")
             var studentName = classInfoData[0];
     
             var studentReaction = classInfoData[1];
@@ -1838,7 +1838,7 @@ function getStudentData(code) {
               unreadMessagesHTML =  `<span class = 'badge badge-warning'>${unreadMessages}</span>`
             }
             
-            console.log(classInfoData)
+            //console.log(classInfoData)
     
             descriptionOutput2 = `
           <tr role = "row" class = "odd">
@@ -2189,7 +2189,7 @@ function updateDetails(code) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
-      console.log(email)
+      //console.log(email)
 
   var newName = document.getElementById('editName').value;
   var newCourse = document.getElementById('editCourse').value;
@@ -2197,7 +2197,7 @@ function updateDetails(code) {
   var maxDays = document.getElementById('maxDays').value;
   let maxDaysNum = parseInt(maxDays);
 
-  console.log(newName, newCourse, newDescription, maxDays)
+  //console.log(newName, newCourse, newDescription, maxDays)
 
   if(newName, newCourse, newDescription, maxDaysNum != null && newName, newCourse, newDescription, maxDaysNum != ""){
 
@@ -2232,7 +2232,7 @@ function updateDetails(code) {
     }
 
   } else {
-    console.log("Feilds blank")
+    //console.log("Feilds blank")
     var feedbackError = document.getElementById('error-feedback-edit-class');
 
     feedbackError.innerHTML = 'You cannot leave any fields blank'
@@ -2281,7 +2281,7 @@ function getChartData(code) {
               var reaction = data["status"];
               var date = data["date"];
 
-              console.log(data["teacher unread"])
+              //console.log(data["teacher unread"])
 
               if(data["teacher unread"] != undefined && data["teacher unread"] != null && data["teacher unread"] != NaN){
                 unreadMessages = unreadMessages + data["teacher unread"];
@@ -2291,7 +2291,7 @@ function getChartData(code) {
               }
 
             
-              console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
+              //console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
 
               var studentTimeUpdateTimeStamp = new Date(date.seconds)
 
@@ -2324,12 +2324,12 @@ function getChartData(code) {
               }
 
               } else {
-                console.log("Gray Time")
+                //console.log("Gray Time")
                 studentsReactionLists[3] = studentsReactionLists[3] + 1;
 
               }
               
-              console.log('///////////////////////////////////////////')
+              //console.log('///////////////////////////////////////////')
               
   
   
@@ -2384,7 +2384,7 @@ function getChartData(code) {
     });
             }
       
-            console.log("UNREAD : " + unreadMessages)
+            //console.log("UNREAD : " + unreadMessages)
 
             var unreadMessagesHTML = ''
 
@@ -2543,7 +2543,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
                 $(outputAnnouncements).appendTo("#annoucementsSection");
 
-                console.log(studentReactions)
+                //console.log(studentReactions)
           
               }
             });
@@ -2856,7 +2856,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 } 
 
 function sendMessage_ChatPage_teacher(classCode, studentEmail){
-  console.log("Message queued")
+  //console.log("Message queued")
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
@@ -2886,7 +2886,7 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
 } 
 
 function scrollSmoothToBottom() {
-  console.log("scrolling")
+  //console.log("scrolling")
   var div = document.getElementById('message-components');
   $(div).animate({
     scrollTop: div.scrollHeight - div.clientHeight
