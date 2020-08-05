@@ -511,7 +511,7 @@ function getProfileInfo() {
           outputPic = `<img class="img-profile rounded-circle" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">`;
       }
     
-      $(outputPic).appendTo("#profilePic")
+      $("#profilePic").html( outputPic)
 
       if(name != null && name != undefined){
         document.getElementById("displayName").innerHTML = name
@@ -941,7 +941,6 @@ function getClassData(emailRef) {
   }).then(function () {
     if (document.getElementById('dashboard-section') != null) {
       document.getElementById('dashboard-section').style.display = "initial";
-      //getChartData(classCode);
     }
   })
 }
@@ -955,15 +954,14 @@ function storeClassforChart(code) {
 }
 
 function sendRealtimeAnnouncement(code, title, message){
+
+  console.log("Senindg realtime announcement")
   
-      socket.on('connect', function(data) {
-          console.log("Connected to realitme - Sender:" + data)
   
           socket.emit('join-class-room', code.toString());
   
-          socket.emit('send-announcement-to-class-realtime', {"code": code, "title": "New Announcement", "message": message});
+          socket.emit('send-announcement-to-class-realtime', {"code": code, "title": title, "message": message});
           
-      });
   }
 
 
@@ -998,8 +996,13 @@ async function writeAnnouncement(code, className) {
     "timestamp": dateNow.toLocaleString().toString(),
   }).then(async () => {
     
+    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+      socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
 
-    socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className});
+    }).catch(function(error) {
+      // Handle error
+    });
+
     
   }).then(() => {
 
@@ -1667,10 +1670,13 @@ function getClassDataDropdown(emailRef) {
     doc.forEach(snapshot => {
       var data1 = snapshot.data();
 
-      var classCode = data1["class code"];
-      var className = data1["class name"];
+      if(data1 != undefined){
+        var classCode = data1["class code"];
+        var className = data1["class name"];
 
-      classesList.push([classCode, className])
+        classesList.push([classCode, className])
+      }
+
     });
 
   }).then(function () {
@@ -2274,7 +2280,14 @@ function getChartData(code) {
 
       firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
         var data = doc.data();
-        maxdays = data["max days inactive"]
+
+        if( data != undefined){
+          if(data["max days inactive"]){
+          maxdays = data["max days inactive"] 
+          }
+        }
+        
+
 
       }).then(() => {
         firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
@@ -2400,7 +2413,7 @@ function getChartData(code) {
             var unreadMessagesHTML = ''
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
-              var unreadMessagesHTML =  `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
+              var unreadMessagesHTML =  `<h2><span class="badge badge-warning" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
 
             }
     
@@ -2609,6 +2622,8 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     
           var user = data.user
 
+          var type = data['sent type']
+
           lastElementPageNation = data['timestamp']
 
 
@@ -2621,25 +2636,35 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
       
             //console.log(data)
       
-            var messageHTML = `
-            <div class="message-component" style="margin-top: 50px">
-            <div class="row">
-              <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-              <div class="col">
-                <div class="row" style="margin-left: 5px;">
-                  <h5>${user}</h5>
-                  <div style="width: 80%;"></div>
-                </div>
-                <p>${formattedTime}</p>
-  
-                <p style="width: 100%;">${message}</p>
-              </div>
-            </div>
-            <hr>
-          </div>
-          `
-      
-            $('#message-components').prepend(messageHTML)
+            var newMessageUI = `
+        
+
+        <div>
+
+        <div class="message-component" style=" float: right; width: 100%"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
+        </div>
+        </div>
+        `
+
+  var otherMessage = `
+
+ 
+  <div>
+
+  <div class="message-component" style= " float: left; min-width: 1200px"  >
+    <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
+  </div>
+  </div>
+  `
+
+  if(type == "student") {
+    $('#message-components').prepend(otherMessage)
+
+  } else {
+    $('#message-components').prepend(newMessageUI)
+
+  }
           }
 
     
@@ -2727,19 +2752,25 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         <div>
 
         <div class="message-component" style=" float: right; width: 100%"  >
-          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
         </div>
         </div>
         `
 
   var otherMessage = `
 
+ 
   <div>
 
-        <div class="message-component" style= " float: left; min-width: 900px"  >
-          <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
-        </div>
-        </div>
+  <div class="message-component" style= " float: left; min-width: 1200px"  >
+    <div class="row">
+    <div class="container" style="width: 100%"></div>
+    
+    <p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p>
+    
+    </div>
+  </div>
+  </div>
   `
 
   if(type == "student") {
@@ -2791,21 +2822,21 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
                 var newMessageUI = `
         
-
                 <div>
 
         <div class="message-component" style=" float: right; width: 100%"  >
-          <div class="row"><div class="container" style="max-width: 700px"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; max-width: 600px ">${message}</p></div>
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
         </div>
         </div>
                 `
         
           var otherMessage = `
         
+          
           <div>
 
-        <div class="message-component" style= " float: left; min-width: 900px"  >
-          <div class="row"><div class="container" style=" max-width: 700px"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+        <div class="message-component" style= " float: left; min-width: 1200px" >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
         </div>
         </div>
           `

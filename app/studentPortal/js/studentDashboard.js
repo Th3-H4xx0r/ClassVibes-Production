@@ -595,7 +595,7 @@ async function getStudentClasses(studentUsername, pageType) {
 
 
         if(unreadMessages != undefined && unreadMessages != null && unreadMessages != 0){
-          unreadMessagesHTML = `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 95%; top: -10px'>${unreadMessages}</span><h2></h2>`
+          unreadMessagesHTML = `<h2><span class="badge badge-primary" style = 'position: absolute; margin-left: 92%; top: -10px'>${unreadMessages}</span><h2></h2>`
         }
 
         index = index + 1
@@ -609,7 +609,7 @@ async function getStudentClasses(studentUsername, pageType) {
         if(reaction == 'doing great'){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+          <a onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classCode}'></i></a>
 
           <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
 
@@ -661,7 +661,7 @@ async function getStudentClasses(studentUsername, pageType) {
               <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
               
               <section>
-                <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
+                <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;" id = 'reactionsSection${classCode}'>
                      ${buttonsGrid}
 
                 </div>
@@ -675,8 +675,6 @@ async function getStudentClasses(studentUsername, pageType) {
     </div>
             `;
 
-
-            
 
             if(pageType == 'class-page'){
               output2 = `
@@ -759,8 +757,6 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var studentEmail = user.email;
-
-
       //var classSelected = localStorage.getItem("selectedClassDropdown");
 
       firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
@@ -777,21 +773,76 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
             status: reaction,
             "date": new Date()
           });
-        
           firebase.firestore().collection("UserData").doc(studentEmail).update({
             status: reaction
           }).then(() => {
-            getStudentClasses(studentUsername, pageType)
+            //getStudentClasses(studentUsername, pageType)
+            updateClassReaction(classSelected, studentEmail, pageType)
           });
         });
       });
-    
-
-    
       //getStudentStatus(studentEmail);
     }
   })
+}
 
+function updateClassReaction(classCode, studentEmail, pageType){
+
+  var buttonsGrid = ``
+
+  firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(studentEmail).get().then(doc => {
+    var data = doc.data()
+
+    if(data){
+      var reaction = data['status']
+
+      if(reaction == 'doing great'){
+        buttonsGrid = `
+          <a onclick = "updateReaction('doing great', '${classCode}', '${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classCode}'></i></a>
+
+          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+          `
+
+      } else if(reaction == 'need help'){
+       buttonsGrid = `
+          
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+
+          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+
+          `
+      } else if(reaction == 'frustrated'){
+        buttonsGrid = `
+          
+        <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+
+        <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+
+        <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
+
+        `
+      } else {
+        buttonsGrid = `
+          
+          <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+
+          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+
+          `
+      }
+
+      document.getElementById(`reactionsSection${classCode}`).innerHTML = buttonsGrid
+    } else {
+
+    }
+  })
 }
 
 function reloadPage() {
@@ -822,55 +873,78 @@ function checkIfClassCodeExists(addType) {
 
     var exists = false;
 
+    var allowJoin = false
+
     // var _ref = firebase.database().ref().child("Classes").child(code).child("Code");
 
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var classCode = doc.data();
 
-      var allowJoin = classCode['allow join']
+      try {
 
-      if (classCode != null) {
-        if(allowJoin == true){
-          exists = true;
+        if(classCode != undefined){
+          exists = true
+
+          var allowJoin = classCode['allow join']
+
+                  
+        if(allowJoin != undefined){
+          allowJoin = classCode['allow join']
         } else {
-          error.innerHTML = `
-          <div class="alert alert-danger" role="alert" style="width: 310px;">
-          This class isn't currently accepting students
-         </div>
-         `;
+          allowJoin = true
         }
-        
 
-      } else {
-        exists = false;
-      }
+        } else {
+          exists = false
+        }
 
-      if (exists == false) {
+
+          if(allowJoin == true){
+            exists = true;
+          } else {
+            error.innerHTML = `
+            <div class="alert alert-danger" role="alert" style="width: 310px;">
+            This class isn't currently accepting students
+           </div>
+           `;
+          }
+          
+  
+        if (exists == false) {
+          error.innerHTML = `
+        <div class="alert alert-danger" role="alert" style="width: 310px;">
+        Class code doesn't exist
+       </div>
+       `;
+        }
+  
+        if (exists == "enrolledInClass") {
+          error.innerHTML = `
+       <div class="alert alert-danger" role="alert" style="width: 310px;">
+       You are already enrolled in this class
+      </div>
+      `;
+        }
+  
+        if (exists == true) {
+          error.innerHTML = `
+        <div class="alert alert-success" role="alert" style="width: 310px;">
+        You have joined this class
+       </div>
+       `;
+  
+          addClassToStudentData(code);
+  
+        }
+      } catch(e){
+        console.log(e)
         error.innerHTML = `
-      <div class="alert alert-danger" role="alert" style="width: 310px;">
-      Class code doesn't exist
-     </div>
-     `;
+        <div class="alert alert-danger" role="alert" style="width: 310px;">
+        Failed to join class. Internal error
+       </div>`
       }
 
-      if (exists == "enrolledInClass") {
-        error.innerHTML = `
-     <div class="alert alert-danger" role="alert" style="width: 310px;">
-     You are already enrolled in this class
-    </div>
-    `;
-      }
 
-      if (exists == true) {
-        error.innerHTML = `
-      <div class="alert alert-success" role="alert" style="width: 310px;">
-      You have joined this class
-     </div>
-     `;
-
-        addClassToStudentData(code);
-
-      }
 
 
     });
@@ -1601,37 +1675,133 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
 }
 
 var classCodeChat = 'NONE'
+var chatList_PageNation_MainPageList = []
 
-function getMessagesForChat_Classes_page(classCode){
-  //console.log("Getting messages")
+function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElement){
 
   classCodeChat = classCode
 
-  var lastID = '';
+  var lastElementPageNation = ''
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(classCode).update({
-        "student unread": 0,
-    })
-
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').get().then(snap => {
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
+
           var data = doc.data();
-  
-          lastID = doc.id
+    
           var message = data.message;
           var time = data.timestamp;
     
           var user = data.user
+
+          var type = data['sent type']
+
+          lastElementPageNation = data['timestamp']
+
+
+          if(chatList_PageNation_MainPageList.includes(doc.id) != true){
+            chatList_PageNation_MainPageList.push(doc.id)
     
+            var formattedTime = new Date(time.seconds * 1000).toLocaleString()
+      
+            //console.log(formattedTime)
+      
+            //console.log(data)
+      
+            var newMessageUI = `
+        
+
+          
+            <div>
+
+            <div class="message-component" style=" float: right; width: 100%"  >
+              <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+            </div>
+            </div>
+            `
+    
+      var otherMessage = `
+    
+      <div>
+
+        <div class="message-component" style= " float: left; min-width: 900px"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+        </div>
+        </div>
+      `
+    
+      if(type == "teacher") {
+        $('#message-components').prepend(otherMessage)
+    
+      } else {
+        $('#message-components').prepend(newMessageUI)
+    
+      }
+        
+          }
+
+    
+          
+        })
+    
+      }).then(() => {
+        $('#message-components').on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          if (scrollTop <= 0) {
+            //alert('top reached');
+            getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElementPageNation)
+          }
+        });
+      });
+    }
+  });
+} 
+
+function getMessagesForChat_Classes_page(classCode, studentEmail){
+  
+  firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
+    'student unread': 0
+  })
+
+
+  classCodeChat = classCode
+
+  var lastElement = '';
+
+  var lastID = []
+
+  var messagesListIDs = []
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
+
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(10).get().then(snap => {
+        snap.forEach(doc => {
+          var data = doc.data();
+    
+          var message = data.message;
+          var time = data.timestamp;
+
+          var type = data['sent type']
+
+         // console.log(message)
+    
+          var user = data.user
+
+          lastElement = data['timestamp']
+          chatList_PageNation_MainPageList.push(doc.id)
+
+
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
           //console.log(formattedTime)
     
           //console.log(data)
+          /*
     
           var messageHTML = `
           <div class="message-component" style="margin-top: 50px">
@@ -1643,66 +1813,141 @@ function getMessagesForChat_Classes_page(classCode){
                 <div style="width: 80%;"></div>
               </div>
               <p>${formattedTime}</p>
-              <div>
-              <p>${message}</p>
-              </div>
-              
+
+              <p style="width: 100%;">${message}</p>
             </div>
           </div>
           <hr>
         </div>
         `
-          $(messageHTML).appendTo('#message-components')
+        */
+
+        var newMessageUI = `
+        
+
+        <div>
+
+        <div class="message-component" style=" float: right; width: 100%"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+        </div>
+        </div>
+        `
+
+  var otherMessage = `
+
+  <div>
+        <div class="message-component" style= " float: left; min-width: 900px"  >
+          <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+        </div>
+        </div>
+  `
+
+  if(type == "teacher") {
+    $('#message-components').prepend(otherMessage)
+
+  } else {
+    $('#message-components').prepend(newMessageUI)
+
+  }
+    
+          //$('#message-components').prepend(messageHTML)
+
+          messagesListIDs.push(doc.id)
+    
+          
         })
     
       }).then(() => {
         scrollSmoothToBottom()
+
+        $('#message-components').on('scroll', function() {
+          var scrollTop = $(this).scrollTop();
+          if (scrollTop <= 0) {
+            //alert('top reached');
+            getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElement)
+          }
+        });
+
+
     
-          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
+
               var data = doc.data();
     
-              if (doc.id != lastID){
+              if (messagesListIDs.includes(doc.id) != true){
+
                 var message = data.message;
                 var time = data.timestamp;
-          
+
+                messagesListIDs.push(doc.id)
+                
+
                 var user = data.user
+
+                var type = data['sent type']
     
                 var formattedTime = new Date(time.seconds * 1000).toLocaleString()
-    
-                //console.log(formattedTime)
-          
-                //console.log(data)
-          
-                var messageHTML = `
-                <div class="message-component" style="margin-top: 50px">
-                <div class="row">
-                  <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-                  <div class="col">
-                    <div class="row" style="margin-left: 5px;">
-                      <h5>${user}</h5>
-                      <div style="width: 80%;"></div>
-                    </div>
-                    <p>${formattedTime}</p>
-                    <div>
-                      <p>${message}</p>
-                      </div>
-                  </div>
+
+                var newMessageUI = `
+        
+
+                <div>
+
+                <div class="message-component" style=" float: right; width: 100%"  >
+                  <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; ">${message}</p></div>
                 </div>
-                <hr>
-              </div>
-              `
-                $(messageHTML).appendTo('#message-components')
+                </div>
+                `
+        
+          var otherMessage = `
+        
+          <div>
+
+          <div class="message-component" style= " float: left; min-width: 900px"  >
+            <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; ">${message}</p></div>
+          </div>
+          </div>
+          `
+        
+          if(type == "teacher") {
+            $(otherMessage).appendTo( '#message-components')
+        
+          } else {
+            $(newMessageUI).appendTo( '#message-components')
+        
+          }
+          
               }
       
             })
             scrollSmoothToBottom()
           })
-    
+
+
+        //   $('#message-components').on('scroll', function() {
+        //     var scrollTop = $(this).scrollTop();
+        
+        //         var topDistance = $(this).offset().top;
+        
+        //         if ( (topDistance) < scrollTop ) {
+        //             alert( $(this).text() + ' was scrolled to the top' );
+        //         }
+            
+        // });
+
+          // $('#message-components').on('scroll', function() { 
+          //   if ($(this).scrollTop() + 
+          //       $(this).innerHeight() >=  
+          //       $(this)[0].scrollHeight) { 
+        
+          //       } 
+          // });
       })
     }
   });
 } 
+
 
 function sendMessage_Classes_page(classCode){
   //console.log("Message queued")
