@@ -1599,12 +1599,14 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
     else {
       var announcementsCount = 0;
 
+      var announcentsList = []
+
       for (let i = 0; i <= classesListCodes.length; i++) {
         var classcode = classesListCodes[i];
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date').get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date', 'desc').get().then(function (doc) {
   
             doc.forEach(snapshot => {
   
@@ -1620,39 +1622,20 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
                 var message = annoucementData["message"];
                 var date = annoucementData['date'];
 
-                var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+                console.log(date)
+
+                //var formattedDate = new Date(date.seconds*1000).toLocaleString() 
 
   
                 var nameClass = classnamesList[i];
-  
-                outputAnnouncements = `
-                <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-                        <h4 class="badge badge-info">${nameClass}</h4>
 
-                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
-
-                        <p style = 'color: gray'>${message}</p>
+                announcentsList.push({'title': title, 'message': message, 'date': date, 'class name': nameClass, 'timestamp': date.seconds * 1000})
   
-                        <div class="h6 mb-0" style = "color: #a2a39b">${formattedDate}</div>
-                      </div>
-                      <div class="col-auto">
-                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-                `;
-  
-                  $(outputAnnouncements).appendTo("#annoucementsSection");
+                
               }
             });
-          });
+          })
+           
         }
       }
   
@@ -1672,6 +1655,53 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
       document.getElementById("announcementsSection-section").style.display = "initial";
       
       document.getElementById("no-Announcements-section").style.display = "none";
+
+
+
+      console.log(announcentsList)
+
+      const sortedannouncentsList = announcentsList.sort((a, b) => b.timestamp - a.timestamp)
+
+      for(var i = 0; i <= sortedannouncentsList.length; i++){
+
+        if(sortedannouncentsList[i] != undefined){
+          var title = sortedannouncentsList[i]["title"];
+          var message = sortedannouncentsList[i]["message"];
+          var date = sortedannouncentsList[i]['date'];
+  
+          var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+  
+  
+          var nameClass = sortedannouncentsList[i]['class name'];
+  
+          outputAnnouncements = `
+          <div class="col-xl-12 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <h4 class="badge badge-info">${nameClass}</h4>
+  
+                  <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+  
+                  <p style = 'color: gray'>${message}</p>
+  
+                  <div class="h6 mb-0" style = "color: #a2a39b">${formattedDate}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          `;
+  
+            $(outputAnnouncements).appendTo("#annoucementsSection");
+        }
+
+      }
   }
        }, 1000)
     }
