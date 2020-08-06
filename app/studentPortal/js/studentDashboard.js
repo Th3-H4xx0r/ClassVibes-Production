@@ -1201,7 +1201,7 @@ function getMeetings(email, pageType) {
   
         var meetingsData = snapshot.data();
   
-        var classForMeeting = meetingsData["Course"];
+        var classForMeeting = meetingsData["course"];
         var date = meetingsData["date and time"];
         var title = meetingsData["title"];
         lastElement = meetingsData['timestamp']
@@ -1269,7 +1269,7 @@ function getMeetings(email, pageType) {
   
         var meetingsData = snapshot.data();
   
-        var classForMeeting = meetingsData["Course"];
+        var classForMeeting = meetingsData["course"];
         var date = meetingsData["date and time"];
         var title = meetingsData["title"];
         lastElement = meetingsData['timestamp']
@@ -1349,7 +1349,7 @@ function getMeetings_pageNation(email, pageType, lastElement) {
   
         var meetingsData = snapshot.data();
   
-        var classForMeeting = meetingsData["Course"];
+        var classForMeeting = meetingsData["course"];
         var date = meetingsData["date and time"];
         var title = meetingsData["title"];
         lastElement = meetingsData['timestamp']
@@ -1409,7 +1409,7 @@ function getMeetings_pageNation(email, pageType, lastElement) {
     
         var meetingsData = snapshot.data();
   
-        var classForMeeting = meetingsData["Course"];
+        var classForMeeting = meetingsData["course"];
         var date = meetingsData["date and time"];
         var title = meetingsData["title"];
         lastElement = meetingsData['timestamp']
