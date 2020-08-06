@@ -72,6 +72,10 @@ router.get('/student/classes/:class',function(req,res){
   res.render(path.join(__dirname+'/app/studentPortal/classPageStudent.ejs'), {code: classCode})
 });
 
+router.get('/student/login',function(req,res){
+  res.redirect('/login');
+  });
+
 /////////////////////////
 //Teacher Portal Paths
 /////////////////////////
@@ -111,6 +115,11 @@ router.get('/teacher/chats/:classCode/:studentEmail',function(req,res){
 
   res.render(path.join(__dirname+'/app/teacherPortal/chatPageTeacher.ejs'), {code: classCode, email: studentEmail})
 });
+
+router.get('/teacher/login',function(req,res){
+  res.redirect('/login');
+  });
+
 
 
 router.get('/serverdown',function(req,res){
