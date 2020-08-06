@@ -1024,7 +1024,8 @@ function addClassToStudentData(classCode) {
           'name': name,
           'email': email,
           'date': new Date(),
-          'status': 'doing great'
+          'status': 'doing great',
+          'teacher unread': 0,
         });
     
       }).then(() => {
