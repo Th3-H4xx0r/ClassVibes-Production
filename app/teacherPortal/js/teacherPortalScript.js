@@ -994,7 +994,7 @@ async function writeAnnouncement(code, className) {
   <span class="sr-only"> Sending Announcement...</span>
 </button>
   `
-  var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
+  var socket = io.connect('https://api-v1.classvibes.net', {transports: ['polling']});
 
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 

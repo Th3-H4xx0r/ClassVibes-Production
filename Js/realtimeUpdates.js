@@ -1,7 +1,7 @@
 
 
 function getRealtimeAnnouncements(code){
-   var socket = io.connect('https://api.classvibes.net', {transports: ['polling']});
+   var socket = io.connect('https://api-v1.classvibes.net', {transports: ['polling']});
 
   socket.on('connect', function(data) {
     console.log("Connected to realitme - Reciever:")
