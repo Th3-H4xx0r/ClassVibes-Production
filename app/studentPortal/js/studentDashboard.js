@@ -543,6 +543,8 @@ async function getStudentClasses(studentUsername, pageType) {
 
     var unreadMessages = classData['student unread']
 
+    console.log("Unread for " + classCode + ": is " + unreadMessages)
+
     console.log("UNDREAD: " + unreadMessages)
 
     reactionsList[classCode] = reaction
@@ -1764,6 +1766,10 @@ function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElem
 function getMessagesForChat_Classes_page(classCode, studentEmail){
   
   firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
+    'student unread': 0
+  })
+
+  firebase.firestore().collection('UserData').doc(studentEmail).collection("Classes").doc(classCode).update({
     'student unread': 0
   })
 
