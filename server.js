@@ -127,6 +127,12 @@ router.get('/serverdown',function(req,res){
   res.sendFile(path.join(__dirname+'/serverDown.html'));
 });
 
+router.get('/legal',function(req,res){
+
+  res.sendFile(path.join(__dirname+'/terms-conditions.html'));
+});
+
+
 
 
 /////////////////////////
