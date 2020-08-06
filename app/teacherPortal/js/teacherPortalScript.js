@@ -2675,12 +2675,14 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
             var newMessageUI = `
         
 
-        <div>
+            <div>
 
-        <div class="message-component" style=" float: right; width: 100%"  >
-          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
-        </div>
-        </div>
+            <div class="message-component" style=" float: right; margin-left: 50%"  >
+              <div class="row"><div style="width: 100%" ></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
+            </div>
+            </div>
+
+        
         `
 
   var otherMessage = `
@@ -2688,7 +2690,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
  
   <div>
 
-  <div class="message-component" style= " float: left; min-width: 1200px"  >
+  <div class="message-component" style= " float: left; min-width: 1200px; width: -100%"  >
     <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
   </div>
   </div>
@@ -2787,10 +2789,10 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
         <div>
 
-        <div class="message-component" style=" float: right; width: 100%" >
-          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
-        </div>
-        </div>
+            <div class="message-component" style=" float: right; margin-left: 50%"  >
+              <div class="row"><div style="width: 100%" ></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
+            </div>
+            </div>
         `
 
   var otherMessage = `
@@ -2860,10 +2862,10 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         
                 <div>
 
-        <div class="message-component" style=" float: right; width: 100%"  >
-          <div class="row"><div class="container" style="width: 100%"></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
-        </div>
-        </div>
+            <div class="message-component" style=" float: right; margin-left: 50%"  >
+              <div class="row"><div style="width: 100%" ></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
+            </div>
+            </div>
                 `
         
           var otherMessage = `
