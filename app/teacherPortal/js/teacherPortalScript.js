@@ -2514,6 +2514,8 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
   classesList = [];
 
+  var announcentsList = []
+
   var index = 0;
 
   let classesRef = firebase.firestore().collection('UserData').doc(email).collection("Classes");
@@ -2539,7 +2541,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   }
 
 
-        
       var announcementsCount = 0;
 
 
@@ -2564,10 +2565,15 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
                 var title = annoucementData["title"];
                 var message = annoucementData["message"];
-                var date = annoucementData['timestamp'];
-
+                var date = annoucementData['date'];
 
                 lastElement = date
+
+                var nameClass = classnamesList[i];
+
+                announcentsList.push({'title': title, 'message': message, 'date': date, 'class name': nameClass, 'timestamp': date.seconds * 1000})
+
+                /*
 
                 var studentReactionsData = annoucementData['Student Reactions']
 
@@ -2576,6 +2582,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                   "need help": 0,
                   "frustrated": 0
                 }
+                
 
                 if(studentReactionsData != {} && studentReactionsData != undefined){
 
@@ -2601,38 +2608,10 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                     
                   }                  
                 }
+                */
 
-                var nameClass = classnamesList[i];
-  
-                outputAnnouncements = `
-                <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-                        <h4 class="badge badge-info">${nameClass}</h4>
+               
 
-                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
-
-                        <p style = 'color: gray'>${message}</p>
-
-                        
-                      </div>
-                      <div class="col-auto">
-                      <div class="chart-container" style="position: relative; height:100px; width:100px">
-                        <canvas id="announcementChart${snapshot.id}"></canvas>
-                    </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-                `;
-
-                $(outputAnnouncements).appendTo("#annoucementsSection");
-
-                //console.log(studentReactions)
           
               }
             });
@@ -2658,6 +2637,52 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       document.getElementById("announcementsSection-section").style.display = "initial";
       
       document.getElementById("no-Announcements-section").style.display = "none";
+
+      
+      console.log(announcentsList)
+
+      const sortedannouncentsList = announcentsList.sort((a, b) => b.timestamp - a.timestamp)
+
+      for(var i = 0; i <= sortedannouncentsList.length; i++){
+
+        if(sortedannouncentsList[i] != undefined){
+          var title = sortedannouncentsList[i]["title"];
+          var message = sortedannouncentsList[i]["message"];
+          var date = sortedannouncentsList[i]['date'];
+  
+          var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+  
+  
+          var nameClass = sortedannouncentsList[i]['class name'];
+  
+          outputAnnouncements = `
+          <div class="col-xl-12 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <h4 class="badge badge-info">${nameClass}</h4>
+  
+                  <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+  
+                  <p style = 'color: gray'>${message}</p>
+  
+                  <div class="h6 mb-0" style = "color: #a2a39b">${formattedDate}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          `;
+  
+            $(outputAnnouncements).appendTo("#annoucementsSection");
+        }
+
+      }
   }
        }, 1000)
 
