@@ -1340,8 +1340,12 @@ async function getAnnouncementForClass(code) {
     var title = data["title"]
     var announcementId = doc.id
 
+    console.log(announcementId)
+
     
     lastItem = date
+
+    /*
 
     var studentReactions = {
       "doing great": 0,
@@ -1370,6 +1374,7 @@ async function getAnnouncementForClass(code) {
       })
 
     }).then(() => {
+      */
       output = `
       <div class="col-xl-12 col-md-6 mb-4">
                 <div class="card shadow h-100 py-2">
@@ -1386,9 +1391,12 @@ async function getAnnouncementForClass(code) {
                         
                       </div>
                       <div class="col-auto">
+                      <!--
+
                       <div class="chart-container" style="position: relative; height:100px; width:100px">
                         <canvas id="announcementChart${doc.id}"></canvas>
                     </div>
+                    -->
                       </div>
                     </div>
                   </div>
@@ -1399,6 +1407,8 @@ async function getAnnouncementForClass(code) {
       `
       
       $(output).appendTo('#classAnnouncement')
+
+      /*
 
       // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -1437,6 +1447,7 @@ cutoutPercentage: 60,
 },
 });
     });
+    */
     }
 
     if(index == 0){
