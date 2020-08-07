@@ -831,6 +831,24 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 }
 
 function getGraphPopupData(code){
+
+  document.getElementById('myPopup').innerHTML = `
+  <a href='/teacher/classes/${code}' style = 'text-decoration: none'>
+            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
+                <div class="card-body">
+                    <h2><span id = 'unreadMessages${code}'></span></h2>
+                  <div class="chart-pie pt-4 pb-2" id = "chartPie${code}">
+                    <canvas id="myPieChart${code}"></canvas>
+                  </div>
+                  <div style="height: 30px"></div>
+                  <center><h5 class="card-title" id = 'classNameLabel'></h5>
+                  </center>
+
+                </div>
+              </div>
+            </a>
+  `
+
   firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
 
       var data = doc.data();
@@ -1197,7 +1215,7 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
   });
 
   if(lastItemGlobalAnnouncements != lastElement){
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').startAfter(lastElement).limit(2)
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('date', 'desc').startAfter(lastElement).limit(2)
   let announcementRefGet = await announcementRef.get();
   for(const doc of announcementRefGet.docs){
 
@@ -1329,7 +1347,7 @@ async function getAnnouncementForClass(code) {
     } 
   });
 
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').limit(4)
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('date', 'desc').limit(4)
   let announcementRefGet = await announcementRef.get();
   for(const doc of announcementRefGet.docs){
 
@@ -2531,7 +2549,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('timestamp', 'desc').get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date', 'desc').get().then(function (doc) {
   
   
             doc.forEach(snapshot => {
