@@ -839,7 +839,7 @@ function getGraphPopupData(code){
 
       var className = data["class name"];
 
-      document.getElementById('classNameLabel').innerHTML = ` ${className}<span class = 'badge badge-primary'>${classCode}</span>`
+      document.getElementById('classNameLabel').innerHTML = ` ${className} <span class = 'badge badge-primary'> ${classCode}</span>`
 
       getChartData(code)
     });
