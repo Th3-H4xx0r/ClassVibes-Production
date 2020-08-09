@@ -779,7 +779,7 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
             status: reaction
           }).then(() => {
             //getStudentClasses(studentUsername, pageType)
-            updateClassReaction(classSelected, studentEmail, pageType)
+            updateClassReaction(classSelected, studentEmail, pageType, reaction)
           });
         });
       });
@@ -788,15 +788,13 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
   })
 }
 
-function updateClassReaction(classCode, studentEmail, pageType){
+function updateClassReaction(classCode, studentEmail, pageType, currentReaction){
+
+  console.log('updating')
 
   var buttonsGrid = ``
 
-  firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(studentEmail).get().then(doc => {
-    var data = doc.data()
-
-    if(data){
-      var reaction = data['status']
+      var reaction = currentReaction
 
       if(reaction == 'doing great'){
         buttonsGrid = `
@@ -841,10 +839,8 @@ function updateClassReaction(classCode, studentEmail, pageType){
       }
 
       document.getElementById(`reactionsSection${classCode}`).innerHTML = buttonsGrid
-    } else {
 
-    }
-  })
+
 }
 
 function reloadPage() {
