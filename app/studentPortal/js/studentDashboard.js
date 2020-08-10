@@ -920,23 +920,27 @@ function checkIfClassCodeExists(addType) {
        `;
         }
   
+        
+  
         if (exists == "enrolledInClass") {
           error.innerHTML = `
+        
+
        <div class="alert alert-danger" role="alert" style="width: 310px;">
        You are already enrolled in this class
       </div>
-      `;
-        }
-  
-        if (exists == true) {
-          error.innerHTML = `
-        <div class="alert alert-success" role="alert" style="width: 310px;">
-        You have joined this class
-       </div>
        `;
   
           addClassToStudentData(code);
   
+        } else if (exists == true) {
+          error.innerHTML = `
+
+          <div class="alert alert-success" role="alert" style="width: 310px;">
+        You have joined this class
+       </div>
+       
+      `;
         }
       } catch(e){
         console.log(e)
@@ -945,6 +949,7 @@ function checkIfClassCodeExists(addType) {
         Failed to join class. Internal error
        </div>`
       }
+
 
 
 
