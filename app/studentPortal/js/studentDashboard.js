@@ -1185,17 +1185,17 @@ function getMeetings(email, pageType) {
   
       if (meetingsCount == 0) {
         outputError = `
-        <center style = 'margin-left: 5%; margin-top: 7%' align = 'center'>
+        <div class="justify-content-center" align = 'center' style = 'width: 100%; margin-top: 5%'>
         <section>
-        <img src = "/student/img/undraw_Booked_j7rj.svg" width="45%">
+        <img src = "/student/img/undraw_Booked_j7rj.svg" width="30%">
   
         <h2 style="margin-top: 2%;">No Scheduled Meetings</h2>
         <p>You're all caught up</p>
-        </section>
-        </center>          
+        </section>  
+        </div>     
         `;
   
-        $(outputError).appendTo("#meetingsList");
+        $("#meetingsList").html(outputError);
       } else {
   
       }
