@@ -1815,12 +1815,6 @@ async function getAnnouncements_ForClass(code) {
 
     document.getElementById("announcementsSection-section").style.display = "none";
     
-    document.getElementById("no-Announcements-section").style.display = "initial";
-} else {
-
-    document.getElementById("announcementsSection-section").style.display = "initial";
-    
-    document.getElementById("no-Announcements-section").style.display = "none";
 }
           })
            
