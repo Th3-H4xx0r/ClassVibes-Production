@@ -245,6 +245,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
            `;
               document.getElementById('loader-icon').style.display = 'none';
               $('#main-body-page-teacher').html(activateDistrictHTML);
+              getProfileInfo();
             }
           }
         }
@@ -1194,10 +1195,6 @@ function getMeetings() {
 
     }
   })
-
-
-
-
 }
 
 var lastItemGlobalAnnouncements = ''
