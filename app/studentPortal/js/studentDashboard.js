@@ -1634,16 +1634,20 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
 }
 
 async function getAnnouncements_ForClass_pagenate(code, lastElement) {
+
+  console.log("Geeting pagenate annc")
  
   var announcementsCount = 0;
 
-  var lastElement = ''
+  var lastElementID = ''
 
       firebase.firestore().collection('Classes').doc(code).collection("Announcements").orderBy('date', 'desc').limit(2).startAfter(lastElement).get().then(function (doc) {
 
         doc.forEach(snapshot => {
 
           var annoucementData = snapshot.data();
+
+          console.log(annoucementData['title'])
 
           if(announcementIDList.includes(snapshot.id) != true){
             announcementIDList.push(snapshot.id)
@@ -1658,7 +1662,7 @@ async function getAnnouncements_ForClass_pagenate(code, lastElement) {
               var message = annoucementData["message"];
               var date = annoucementData['date'];
 
-              lastElement = date
+              lastElementID = date
   
               console.log(date)
   
@@ -1701,7 +1705,7 @@ async function getAnnouncements_ForClass_pagenate(code, lastElement) {
               $(this).innerHeight() >=  
               $(this)[0].scrollHeight) { 
       
-                getAnnouncements_ForClass_pagenate(code, lastElement)
+                getAnnouncements_ForClass_pagenate(code, lastElementID)
           } 
         });
       })
@@ -1711,8 +1715,6 @@ async function getAnnouncements_ForClass_pagenate(code, lastElement) {
 async function getAnnouncements_ForClass(code) {
  
       var announcementsCount = 0;
-
-      var announcentsList = []
 
       var lastElement = ''
   
