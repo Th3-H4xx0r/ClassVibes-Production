@@ -1202,8 +1202,12 @@ function getMeetings() {
 
 var lastItemGlobalAnnouncements = ''
 
+var announcementsIDList = []
+
 async function getAnnouncementForClass_Pagenation(code, lastElement) {
   var index = 0;
+
+  console.log(lastElement)
 
   $('#classAnnouncement').on('scroll', function() { 
     if ($(this).scrollTop() + 
@@ -1214,8 +1218,7 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
     } 
   });
 
-  if(lastItemGlobalAnnouncements != lastElement){
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('date', 'desc').startAfter(lastElement).limit(2)
+  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').startAfter(lastElement).limit(2)
   let announcementRefGet = await announcementRef.get();
   for(const doc of announcementRefGet.docs){
 
@@ -1228,8 +1231,11 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
       var title = data["title"]
       var announcementId = doc.id
 
-      if(globalGetAnnouncements_AnnouncementsPage_pageNationList.includes(doc.id) != true){
-        globalGetAnnouncements_AnnouncementsPage_pageNationList.push(doc.id)
+      if(announcementsIDList.includes(doc.id) != true){
+
+        announcementsIDList.push(doc.id)
+
+        /*
         var studentReactions = {
           "doing great": 0,
           "need help": 0,
@@ -1257,6 +1263,7 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
           })
     
         }).then(() => {
+          */
           output = `
           <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2">
@@ -1286,6 +1293,8 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
           `
           
           $(output).appendTo('#classAnnouncement')
+
+          /*
   
           
     
@@ -1326,11 +1335,12 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
     },
     });
         });
+        */
       }
 
 
     }
-  }
+  
 }
 
 async function getAnnouncementForClass(code) {
@@ -1358,10 +1368,14 @@ async function getAnnouncementForClass(code) {
     var title = data["title"]
     var announcementId = doc.id
 
+    announcementsIDList.push(doc.id)
+
     console.log(announcementId)
 
     
     lastItem = date
+
+    console.log(lastItem)
 
     /*
 
