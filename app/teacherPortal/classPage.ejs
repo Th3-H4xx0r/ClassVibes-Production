@@ -72,6 +72,8 @@
       checkUserAuthStatus('teacher');
       getTeacherAccountStatus('class-page', classCode);
       getGraphPopupData(classCode)
+
+
     });
   </script>
 
@@ -220,6 +222,7 @@
 
                     <!-- Page Heading -->
                     <div id="className"><h1>Loading</h1>></div>
+
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
                           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Students</a>
@@ -240,6 +243,7 @@
                        
                       </ul>
                       <div style="height: 50px;"></div>
+
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div id="content">
@@ -263,20 +267,10 @@
         <button type="button" class="btn btn-primary" style="width: 200px;">View Graph</button>
 
         <span class="popuptext" id="myPopup">
+
+           
     
-            <a href=`classes/${classCode}` style = 'text-decoration: none'>
-                <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
-                    <div class="card-body">
-                      <div class="chart-pie pt-4 pb-2" id = "chartPie${classCode}">
-                        <canvas id="`myPieChart<%= code %>"></canvas>
-                      </div>
-                      <div style="height: 30px"></div>
-                      <center><h5 class="card-title" id = 'classNameLabel'></h5>
-                      </center>
-    
-                    </div>
-                  </div>
-                </a>
+            
         </span>
       </div>
 </div>
@@ -290,8 +284,8 @@
 
 .fixed_button{
 position: fixed;
-bottom: 8%;
-left: 89%;
+bottom: 6%;
+left: 84%;
 z-index: 99;
 
  }
@@ -363,7 +357,7 @@ z-index: 99;
                                         <div class="card shadow mb-4">
                                             <div class="card-header py-3">
                                                 <h6 class="m-0 font-weight-bold text-primary">Students</h6>
-                                                <div style="margin-left: 65%;">
+                                                <div style="float:right;">
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                         <label class="btn btn-secondary active" onclick="showAll()">
                                                             <input type="radio" name="options" id="allstudents"
@@ -532,7 +526,7 @@ z-index: 99;
                         </div>
                         <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
                             <!--Settings Content-->
-                            <div id="meetingsListforClassPage" style="overflow: scroll; height: 580px; overflow-x: hidden;">
+                            <div id="meetingsListforClassPage" >
 
                             </div>
                             
@@ -542,7 +536,7 @@ z-index: 99;
                             <!--Settings Content-->
                             <button type="button" ID = "send_announcement_top_classPage" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style = 'margin-bottom: 20px; margin-left: 20px;'>Send Announcement</button>
 
-                            <div id="classAnnouncement" style="overflow: scroll; height: 525px; overflow-x: hidden;"></div>
+                            <div id="classAnnouncement" ></div>
 
                             <!--End of Setting Content-->
                         </div>
@@ -558,6 +552,67 @@ z-index: 99;
                       </div>
                     <!--TABLES-->
                 </div>
+
+
+
+
+                <style>
+                    /* CHROMEBOOKS */
+            @media only screen and (min-height: 600px) {
+
+            
+              .sticky-footer{
+                display: none;
+              }
+
+              #home{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 31rem;
+              }
+
+              #meetingsListforClassPage{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 31rem;
+              }
+
+              #classAnnouncement{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 27rem;
+              }
+            }
+            
+            /* REGULAR LAPTOPS */
+            @media only screen and (min-width: 1600px) {
+              .sticky-footer{
+                display: initial;
+              }
+            
+
+              #home{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 36rem;
+              }
+
+              #meetingsListforClassPage{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 35rem;
+              }
+
+              #classAnnouncement{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 32rem;
+              }
+
+              
+            }
+                   
+                </style>
 
                 <!-- /.container-fluid -->
             </div>

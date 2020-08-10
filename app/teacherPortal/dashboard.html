@@ -243,7 +243,7 @@
   
 -->
 
-<section style="max-height: 830px; overflow-y: scroll; overflow-x: hidden; padding-left: 40px;">
+<section>
    <!-- Page Heading -->
  <div class="d-sm-flex align-items-center justify-content-between mb-4">
   <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -254,6 +254,38 @@
 
 </div>
 </section>
+
+<style>
+
+  /* CHROMEBOOKS */
+  @media only screen and (min-height: 600px) {
+    
+    #topClassesSection{
+      overflow-x: hidden; 
+      overflow-y: scroll;
+      height: 38rem;
+      width: 100%;
+      margin-left: 3px;
+    }
+  
+    .sticky-footer{
+      display: none;
+    }
+  }
+  
+  /* REGULAR LAPTOPS */
+  @media only screen and (min-width: 1600px) {
+    .sticky-footer{
+      display: initial;
+    }
+  
+    #topClassesSection{
+      overflow-x: hidden; 
+      overflow-y: scroll;
+      height: 47rem;
+    }
+  }
+            </style>
 
 
 

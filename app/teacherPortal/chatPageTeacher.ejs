@@ -261,7 +261,7 @@
 
 
                         <!-- CHAT -->
-                          <div class="message-components" style="height: 590px; overflow-x: hidden; overflow-y: scroll; padding-left: 40px;" id = 'message-components'>
+                          <div class="message-components" id = 'message-components'>
                             
                             
                           </div>
@@ -279,6 +279,38 @@
                             </div>
                             
                           </div>
+
+                          <style>
+
+                            /* CHROMEBOOKS */
+                            @media only screen and (min-height: 600px) {
+                              
+                              #message-components{
+                                overflow-x: hidden; 
+                                overflow-y: scroll;
+                                padding-left: 20px;
+                                height: 30rem;
+                                width: 100%;
+                              }
+                            
+                              .sticky-footer{
+                                display: none;
+                              }
+                            }
+                            
+                            /* REGULAR LAPTOPS */
+                            @media only screen and (min-width: 1600px) {
+                              .sticky-footer{
+                                display: initial;
+                              }
+                            
+                              #message-components{
+                                overflow-x: hidden; 
+                                overflow-y: scroll;
+                                height: 37rem;
+                              }
+                            }
+                                      </style>
 
                         <style>
                           .avatar {

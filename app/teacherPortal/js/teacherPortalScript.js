@@ -243,8 +243,13 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
           </center>
            `;
-              document.getElementById('loader-icon').style.display = 'none';
+
+              if(document.getElementById('loader-icon') != null){
+                document.getElementById('loader-icon').style.display = 'none';
+              }
+              
               $('#main-body-page-teacher').html(activateDistrictHTML);
+              getProfileInfo();
             }
           }
         }
@@ -831,6 +836,24 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 }
 
 function getGraphPopupData(code){
+
+  document.getElementById('myPopup').innerHTML = `
+  <a href='/teacher/classes/${code}' style = 'text-decoration: none'>
+            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
+                <div class="card-body">
+                    <h2><span id = 'unreadMessages${code}'></span></h2>
+                  <div class="chart-pie pt-4 pb-2" id = "chartPie${code}">
+                    <canvas id="myPieChart${code}"></canvas>
+                  </div>
+                  <div style="height: 30px"></div>
+                  <center><h5 class="card-title" id = 'classNameLabel'></h5>
+                  </center>
+
+                </div>
+              </div>
+            </a>
+  `
+
   firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
 
       var data = doc.data();
@@ -839,7 +862,7 @@ function getGraphPopupData(code){
 
       var className = data["class name"];
 
-      document.getElementById('classNameLabel').innerHTML = ` ${className}<span class = 'badge badge-primary'>${classCode}</span>`
+      document.getElementById('classNameLabel').innerHTML = ` ${className} <span class = 'badge badge-primary'> ${classCode}</span>`
 
       getChartData(code)
     });
@@ -1048,7 +1071,7 @@ function getMeetings_pageNation(lastElement) {
         doc.forEach(snapshot => {
           index = index + 1
           var data1 = snapshot.data();
-          var classForMeeting = data1["Course"]
+          var classForMeeting = data1["course"]
     
           var date = data1["date and time"];
           var title = data1["title"];
@@ -1117,7 +1140,7 @@ function getMeetings() {
         doc.forEach(snapshot => {
           index = index + 1
           var data1 = snapshot.data();
-          var classForMeeting = data1["Course"]
+          var classForMeeting = data1["course"]
     
           var date = data1["date and time"];
           var title = data1["title"];
@@ -1176,42 +1199,37 @@ function getMeetings() {
 
     }
   })
-
-
-
-
 }
 
 var lastItemGlobalAnnouncements = ''
 
+var announcementsIDList = []
+
 async function getAnnouncementForClass_Pagenation(code, lastElement) {
-  var index = 0;
+  console.log("LAST ELEMENT: " + lastElement)
 
-  $('#classAnnouncement').on('scroll', function() { 
-    if ($(this).scrollTop() + 
-        $(this).innerHeight() >=  
-        $(this)[0].scrollHeight) { 
+  var lastElementID = lastElement
 
-          getAnnouncementForClass_Pagenation(code, lastElement)
-    } 
-  });
 
-  if(lastItemGlobalAnnouncements != lastElement){
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').startAfter(lastElement).limit(2)
-  let announcementRefGet = await announcementRef.get();
-  for(const doc of announcementRefGet.docs){
-
-    console.log("Getting p[age")
-
-      index = index + 1
+firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('date', 'desc').startAfter(lastElement).limit(2).get().then(snap => {
+    snap.forEach(doc => {
       var data = doc.data()
       var date = data["timestamp"]
       var message = data["message"]
       var title = data["title"]
       var announcementId = doc.id
+  
+      console.log(title)
 
-      if(globalGetAnnouncements_AnnouncementsPage_pageNationList.includes(doc.id) != true){
-        globalGetAnnouncements_AnnouncementsPage_pageNationList.push(doc.id)
+      if(announcementsIDList.includes(announcementId) != true){
+        announcementsIDList.push(doc.id)
+      
+        lastElementID = data['date']
+    
+        console.log(lastElementID)
+    
+        /*
+    
         var studentReactions = {
           "doing great": 0,
           "need help": 0,
@@ -1239,6 +1257,7 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
           })
     
         }).then(() => {
+          */
           output = `
           <div class="col-xl-12 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2">
@@ -1255,9 +1274,12 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
                             
                           </div>
                           <div class="col-auto">
+                          <!--
+    
                           <div class="chart-container" style="position: relative; height:100px; width:100px">
                             <canvas id="announcementChart${doc.id}"></canvas>
                         </div>
+                        -->
                           </div>
                         </div>
                       </div>
@@ -1268,8 +1290,8 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
           `
           
           $(output).appendTo('#classAnnouncement')
-  
-          
+    
+          /*
     
           // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -1308,11 +1330,24 @@ async function getAnnouncementForClass_Pagenation(code, lastElement) {
     },
     });
         });
+        */
+    
       }
+  
+     
+    })
+}).then(() => {
+  
+  $('#classAnnouncement').on('scroll', function() { 
+    if ($(this).scrollTop() + 
+        $(this).innerHeight() >=  
+        $(this)[0].scrollHeight) { 
 
-
-    }
-  }
+          getAnnouncementForClass_Pagenation(code, lastElementID)
+    } 
+  });
+})
+  
 }
 
 async function getAnnouncementForClass(code) {
@@ -1320,124 +1355,131 @@ async function getAnnouncementForClass(code) {
 
   var lastItem = '';
 
-  $('#classAnnouncement').on('scroll', function() { 
-    if ($(this).scrollTop() + 
-        $(this).innerHeight() >=  
-        $(this)[0].scrollHeight) { 
 
-        getAnnouncementForClass_Pagenation(code, lastItem)
-    } 
-  });
 
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('timestamp', 'desc').limit(4)
-  let announcementRefGet = await announcementRef.get();
-  for(const doc of announcementRefGet.docs){
-
-    index = index + 1
-    var data = doc.data()
-    var date = data["timestamp"]
-    var message = data["message"]
-    var title = data["title"]
-    var announcementId = doc.id
-
+  firebase.firestore().collection('Classes').doc(code).collection('Announcements').orderBy('date', 'desc').limit(4).get().then(snap => {
+      snap.forEach(doc => {
+        index = index + 1
+        var data = doc.data()
+        var date = data["timestamp"]
+        var message = data["message"]
+        var title = data["title"]
+        var announcementId = doc.id
     
-    lastItem = date
-
-    var studentReactions = {
-      "doing great": 0,
-      "need help": 0,
-      "frustrated": 0
-    }
-
-    var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
-      snap.forEach((document) => {
-        var data = document.data();
-
-        var reaction = data['reaction']
-
-        if(reaction == "doing great"){
-          studentReactions['doing great'] = studentReactions['doing great'] + 1
+        console.log(title)
+    
+        announcementsIDList.push(doc.id)
+        
+        lastItem = data['date']
+    
+        console.log(lastItem)
+    
+        /*
+    
+        var studentReactions = {
+          "doing great": 0,
+          "need help": 0,
+          "frustrated": 0
         }
-
-        if(reaction == "need help"){
-          studentReactions['need help'] = studentReactions['need help'] + 1
-        }
-
-
-        if(reaction == "frustrated"){
-          studentReactions['frustrated'] = studentReactions['frustrated'] + 1
-        }
-      })
-
-    }).then(() => {
-      output = `
-      <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-
-                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
-
-                        <p style = 'color: gray'>${message}</p>
-
-                        <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
-
-                        
-                      </div>
-                      <div class="col-auto">
-                      <div class="chart-container" style="position: relative; height:100px; width:100px">
-                        <canvas id="announcementChart${doc.id}"></canvas>
-                    </div>
+    
+        var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').get().then(snap => {
+          snap.forEach((document) => {
+            var data = document.data();
+    
+            var reaction = data['reaction']
+    
+            if(reaction == "doing great"){
+              studentReactions['doing great'] = studentReactions['doing great'] + 1
+            }
+    
+            if(reaction == "need help"){
+              studentReactions['need help'] = studentReactions['need help'] + 1
+            }
+    
+    
+            if(reaction == "frustrated"){
+              studentReactions['frustrated'] = studentReactions['frustrated'] + 1
+            }
+          })
+    
+        }).then(() => {
+          */
+          output = `
+          <div class="col-xl-12 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2">
+                      <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-2">
+    
+                            <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+    
+                            <p style = 'color: gray'>${message}</p>
+    
+                            <h3 style = 'margin-left: 5px'><i class="fa fa-trash" aria-hidden="true" onclick = "deleteAnnouncement('${announcementId}', '${code}')"></i></h3>
+    
+                            
+                          </div>
+                          <div class="col-auto">
+                          <!--
+    
+                          <div class="chart-container" style="position: relative; height:100px; width:100px">
+                            <canvas id="announcementChart${doc.id}"></canvas>
+                        </div>
+                        -->
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              
+          `
           
-      `
-      
-      $(output).appendTo('#classAnnouncement')
-
-      // Set new default font family and font color to mimic Bootstrap's default styling
-Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = '#858796';
-
-// Pie Chart Example
-var ctx = document.getElementById(`announcementChart${doc.id}`);
-new Chart(ctx, {
-type: 'doughnut',
-data: {
-labels: ["Liked", "Needs Help", "Disliked"],
-datasets: [{
-data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
-backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
-hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
-hoverBorderColor: "rgba(234, 236, 244, 1)",
-}],
-},
-options: {
-responsive: true,
-maintainAspectRatio: false,
-tooltips: {
-backgroundColor: "rgb(255,255,255)",
-bodyFontColor: "#858796",
-borderColor: '#dddfeb',
-borderWidth: 1,
-xPadding: 10,
-yPadding: 5,
-displayColors: false,
-caretPadding: 2,
-},
-legend: {
-display: false
-},
-cutoutPercentage: 60,
-},
-});
+          $(output).appendTo('#classAnnouncement')
+    
+          /*
+    
+          // Set new default font family and font color to mimic Bootstrap's default styling
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
+    
+    // Pie Chart Example
+    var ctx = document.getElementById(`announcementChart${doc.id}`);
+    new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+    labels: ["Liked", "Needs Help", "Disliked"],
+    datasets: [{
+    data: [studentReactions["doing great"], studentReactions["need help"], studentReactions["frustrated"]],
+    backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b'],
+    hoverBackgroundColor: ['#17a673', '#f6c23e', '#e74a3b'],
+    hoverBorderColor: "rgba(234, 236, 244, 1)",
+    }],
+    },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+    backgroundColor: "rgb(255,255,255)",
+    bodyFontColor: "#858796",
+    borderColor: '#dddfeb',
+    borderWidth: 1,
+    xPadding: 10,
+    yPadding: 5,
+    displayColors: false,
+    caretPadding: 2,
+    },
+    legend: {
+    display: false
+    },
+    cutoutPercentage: 60,
+    },
     });
-    }
+        });
+        */
+    
+      })
+  }).then(() => {
 
     if(index == 0){
       var noAnnouncementsHTML = ` 
@@ -1455,7 +1497,20 @@ cutoutPercentage: 60,
 
       document.getElementById('send_announcement_top_classPage').style.display = "none"
     document.getElementById("classAnnouncement").innerHTML = noAnnouncementsHTML;
+    } else {
+      $('#classAnnouncement').on('scroll', function() { 
+        if ($(this).scrollTop() + 
+            $(this).innerHeight() >=  
+            $(this)[0].scrollHeight) { 
+    
+            getAnnouncementForClass_Pagenation(code, lastItem)
+        } 
+      });
     }
+  })
+
+
+
 
 }
 
@@ -2072,7 +2127,7 @@ function schedualMeeting(emailStudent, course, code, index) {
         "title": meetingTitle,
         "date and time": meetingDate,
         "class id": code,
-        "Course": course,
+        "course": course,
         "timestamp": dateNow.toString(),
         "message" : meetingMessage,
         "recipient": emailStudent,
@@ -2082,7 +2137,7 @@ function schedualMeeting(emailStudent, course, code, index) {
           "title": meetingTitle,
           "date and time": meetingDate,
           "class id": code,
-          "Course": course,
+          "course": course,
           "timestamp": dateNow.toString(),
           "message" : meetingMessage,
           "recipient": emailStudent,
@@ -2485,6 +2540,8 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
 
   classesList = [];
 
+  var announcentsList = []
+
   var index = 0;
 
   let classesRef = firebase.firestore().collection('UserData').doc(email).collection("Classes");
@@ -2510,7 +2567,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   }
 
 
-        
       var announcementsCount = 0;
 
 
@@ -2520,7 +2576,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
         if (classcode != undefined && classcode != null) {
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('timestamp', 'desc').get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date', 'desc').get().then(function (doc) {
   
   
             doc.forEach(snapshot => {
@@ -2535,10 +2591,15 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
   
                 var title = annoucementData["title"];
                 var message = annoucementData["message"];
-                var date = annoucementData['timestamp'];
-
+                var date = annoucementData['date'];
 
                 lastElement = date
+
+                var nameClass = classnamesList[i];
+
+                announcentsList.push({'title': title, 'message': message, 'date': date, 'class name': nameClass, 'timestamp': date.seconds * 1000})
+
+                /*
 
                 var studentReactionsData = annoucementData['Student Reactions']
 
@@ -2547,6 +2608,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                   "need help": 0,
                   "frustrated": 0
                 }
+                
 
                 if(studentReactionsData != {} && studentReactionsData != undefined){
 
@@ -2572,38 +2634,10 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
                     
                   }                  
                 }
+                */
 
-                var nameClass = classnamesList[i];
-  
-                outputAnnouncements = `
-                <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-                        <h4 class="badge badge-info">${nameClass}</h4>
+               
 
-                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
-
-                        <p style = 'color: gray'>${message}</p>
-
-                        
-                      </div>
-                      <div class="col-auto">
-                      <div class="chart-container" style="position: relative; height:100px; width:100px">
-                        <canvas id="announcementChart${snapshot.id}"></canvas>
-                    </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-                `;
-
-                $(outputAnnouncements).appendTo("#annoucementsSection");
-
-                //console.log(studentReactions)
           
               }
             });
@@ -2629,6 +2663,52 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       document.getElementById("announcementsSection-section").style.display = "initial";
       
       document.getElementById("no-Announcements-section").style.display = "none";
+
+      
+      console.log(announcentsList)
+
+      const sortedannouncentsList = announcentsList.sort((a, b) => b.timestamp - a.timestamp)
+
+      for(var i = 0; i <= sortedannouncentsList.length; i++){
+
+        if(sortedannouncentsList[i] != undefined){
+          var title = sortedannouncentsList[i]["title"];
+          var message = sortedannouncentsList[i]["message"];
+          var date = sortedannouncentsList[i]['date'];
+  
+          var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+  
+  
+          var nameClass = sortedannouncentsList[i]['class name'];
+  
+          outputAnnouncements = `
+          <div class="col-xl-12 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <h4 class="badge badge-info">${nameClass}</h4>
+  
+                  <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+  
+                  <p style = 'color: gray'>${message}</p>
+  
+                  <div class="h6 mb-0" style = "color: #a2a39b">${formattedDate}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          `;
+  
+            $(outputAnnouncements).appendTo("#annoucementsSection");
+        }
+
+      }
   }
        }, 1000)
 
