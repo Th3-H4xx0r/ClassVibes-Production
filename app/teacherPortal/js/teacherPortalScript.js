@@ -243,7 +243,11 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
           </center>
            `;
-              document.getElementById('loader-icon').style.display = 'none';
+
+              if(document.getElementById('loader-icon') != null){
+                document.getElementById('loader-icon').style.display = 'none';
+              }
+              
               $('#main-body-page-teacher').html(activateDistrictHTML);
               getProfileInfo();
             }
