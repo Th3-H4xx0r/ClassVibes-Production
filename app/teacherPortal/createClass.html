@@ -251,6 +251,38 @@
 
           <button class="btn btn-primary" onclick="createClass()">Create Class</button>
 
+          <style>
+
+            /* CHROMEBOOKS */
+            @media only screen and (min-height: 600px) {
+              
+              #topClassesSection{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 39rem;
+                width: 100%;
+              }
+            
+              .sticky-footer{
+                display: none;
+              }
+            }
+            
+            /* REGULAR LAPTOPS */
+            @media only screen and (min-width: 1600px) {
+              .sticky-footer{
+                display: initial;
+              }
+            
+              #topClassesSection{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 42rem;
+              }
+            }
+                      </style>
+          
+
           <!-- /.container-fluid -->
 
         </div>
