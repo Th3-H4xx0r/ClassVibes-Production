@@ -1066,7 +1066,7 @@ function getMeetings_pageNation(lastElement) {
         doc.forEach(snapshot => {
           index = index + 1
           var data1 = snapshot.data();
-          var classForMeeting = data1["Course"]
+          var classForMeeting = data1["course"]
     
           var date = data1["date and time"];
           var title = data1["title"];
