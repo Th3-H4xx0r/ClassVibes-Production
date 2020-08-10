@@ -455,147 +455,161 @@ function emailSignUp(type) {
     var displayName = document.getElementById('inputDisplayName').value;
     var password = document.getElementById('inputPassword').value;
     var repeatPassword = document.getElementById('inputRepeatPassword').value;
-
-    var loginSuccess = true;
+    var agreeChecked = document.getElementById('agreeCheck').checked
 
     var errorMessage = document.getElementById('signupError');
 
-    var errorHTML = `<div class="alert alert-danger" role="alert"
-    style="margin-top: 20px; width: 94%; margin-left: 6%;">
-    <strong>Oops! </strong>${errorMessage}
-</div>`;
+    if(agreeChecked){
 
-    if (email == "" || displayName == "" || password == "" || repeatPassword == "") {
+        errorMessage.innerHTML = ''
+
+        var loginSuccess = true;
+    
+        var errorHTML = `<div class="alert alert-danger" role="alert"
+        style="margin-top: 20px; width: 94%; margin-left: 6%;">
+        <strong>Oops! </strong>${errorMessage}
+    </div>`;
+    
+        if (email == "" || displayName == "" || password == "" || repeatPassword == "") {
+            errorHTML = `<div class="alert alert-danger" role="alert" 
+        style="margin-top: 20px; width: 94%; margin-left: 6%;">
+        <strong>Oops! </strong> You cannot leave any of the fields blank
+    </div>`;
+    
+            errorMessage.innerHTML = errorHTML;
+        } else {
+            if (password != repeatPassword) {
+                errorHTML = `<div class="alert alert-danger" role="alert"
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                <strong>Oops! </strong> Password and repeat password don't match
+            </div>`;
+    
+                errorMessage.innerHTML = errorHTML;
+            } else {
+    
+                firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+    
+                    document.getElementById('signupError').innerHTML = "";
+    
+    
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+    
+                    console.log(errorMessage);
+                    console.log(errorCode);
+    
+                    loginSuccess = false;
+    
+                    if (errorCode == "auth/invalid-email") {
+                        document.getElementById('email-error').innerHTML = errorMessage;
+                        document.getElementById('password-error').innerHTML = "";
+                    }
+    
+                    if (errorCode == "auth/weak-password") {
+                        document.getElementById('password-error').innerHTML = errorMessage;
+                        document.getElementById('email-error').innerHTML = "";
+                    }
+    
+                    if (errorCode == "auth/email-already-in-use") {
+                        document.getElementById('email-error').innerHTML = errorMessage;
+                        document.getElementById('password-error').innerHTML = "";
+                    }
+    
+                }).then(() => {
+    
+                    console.log(loginSuccess);
+    
+                    if (loginSuccess == true) {
+                        var user = firebase.auth().currentUser;
+    
+                        user.updateProfile({
+                          displayName: displayName,
+                        }).then(function() {
+                          console.log("update success")
+                        }).catch(function(error) {
+                            console.log("update Failed")
+                        });
+    
+    
+                        var signUpPage = document.getElementById('signup-page-full');
+    
+                        signUpPage.style.display = "none";
+    
+                        var successPage = document.getElementById('signup-success-form');
+    
+                        successPage.style.display = "initial";
+    
+                        //FIREBASE DATABASE UPLOAD
+    
+                        if (type == "student") {
+    
+                            firebase.firestore().collection("UserData").doc(email).set({
+                                "display name": displayName,
+                                "email": email,
+                                "username": email,
+                                "account type": "Student",
+                                "account status": "Deactivated",
+                            });
+    
+                            const increment = firebase.firestore.FieldValue.increment(1);
+    
+                            firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                "webUsers": increment,
+                                "totalUsers": increment,
+                            });
+                        }
+    
+                        else if (type == 'teacher' || type == 'Solo Teacher') {
+                            firebase.firestore().collection("UserData").doc(email).set({
+                                "display name": displayName,
+                                "email": email,
+                                "username": email,
+                                "account type": "Teacher",
+                                "account status": "Deactivated",
+                            });
+    
+                            const increment = firebase.firestore.FieldValue.increment(1);
+    
+                            firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                "webUsers": increment,
+                                "totalUsers": increment,
+                            });
+                        }
+    
+                        else if (type == 'district') {
+                            firebase.firestore().collection("UserData").doc(email).set({
+                                "display name": displayName,
+                                "email": email,
+                                "username": email,
+                                "account type": "District",
+                                "account status": "Deactivated",
+                            });
+    
+                            const increment = firebase.firestore.FieldValue.increment(1);
+    
+                            firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                "webUsers": increment,
+                                "totalUsers": increment,
+                                "totalDistricts": increment
+                            });
+                        }
+    
+    
+                    }
+    
+                });
+            }
+        }
+    } else {
         errorHTML = `<div class="alert alert-danger" role="alert" 
     style="margin-top: 20px; width: 94%; margin-left: 6%;">
-    <strong>Oops! </strong> You cannot leave any of the fields blank
+    <strong>Oops! </strong>You must agree with our terms and conditions and privacy policy
 </div>`;
 
         errorMessage.innerHTML = errorHTML;
-    } else {
-        if (password != repeatPassword) {
-            errorHTML = `<div class="alert alert-danger" role="alert"
-            style="margin-top: 20px; width: 94%; margin-left: 6%;">
-            <strong>Oops! </strong> Password and repeat password don't match
-        </div>`;
-
-            errorMessage.innerHTML = errorHTML;
-        } else {
-
-            firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
-
-                document.getElementById('signupError').innerHTML = "";
-
-
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-
-                console.log(errorMessage);
-                console.log(errorCode);
-
-                loginSuccess = false;
-
-                if (errorCode == "auth/invalid-email") {
-                    document.getElementById('email-error').innerHTML = errorMessage;
-                    document.getElementById('password-error').innerHTML = "";
-                }
-
-                if (errorCode == "auth/weak-password") {
-                    document.getElementById('password-error').innerHTML = errorMessage;
-                    document.getElementById('email-error').innerHTML = "";
-                }
-
-                if (errorCode == "auth/email-already-in-use") {
-                    document.getElementById('email-error').innerHTML = errorMessage;
-                    document.getElementById('password-error').innerHTML = "";
-                }
-
-            }).then(() => {
-
-                console.log(loginSuccess);
-
-                if (loginSuccess == true) {
-                    var user = firebase.auth().currentUser;
-
-                    user.updateProfile({
-                      displayName: displayName,
-                    }).then(function() {
-                      console.log("update success")
-                    }).catch(function(error) {
-                        console.log("update Failed")
-                    });
-
-
-                    var signUpPage = document.getElementById('signup-page-full');
-
-                    signUpPage.style.display = "none";
-
-                    var successPage = document.getElementById('signup-success-form');
-
-                    successPage.style.display = "initial";
-
-                    //FIREBASE DATABASE UPLOAD
-
-                    if (type == "student") {
-
-                        firebase.firestore().collection("UserData").doc(email).set({
-                            "display name": displayName,
-                            "email": email,
-                            "username": email,
-                            "account type": "Student",
-                            "account status": "Deactivated",
-                        });
-
-                        const increment = firebase.firestore.FieldValue.increment(1);
-
-                        firebase.firestore().collection("Application Management").doc("Statistics").update({
-                            "webUsers": increment,
-                            "totalUsers": increment,
-                        });
-                    }
-
-                    else if (type == 'teacher' || type == 'Solo Teacher') {
-                        firebase.firestore().collection("UserData").doc(email).set({
-                            "display name": displayName,
-                            "email": email,
-                            "username": email,
-                            "account type": "Teacher",
-                            "account status": "Deactivated",
-                        });
-
-                        const increment = firebase.firestore.FieldValue.increment(1);
-
-                        firebase.firestore().collection("Application Management").doc("Statistics").update({
-                            "webUsers": increment,
-                            "totalUsers": increment,
-                        });
-                    }
-
-                    else if (type == 'district') {
-                        firebase.firestore().collection("UserData").doc(email).set({
-                            "display name": displayName,
-                            "email": email,
-                            "username": email,
-                            "account type": "District",
-                            "account status": "Deactivated",
-                        });
-
-                        const increment = firebase.firestore.FieldValue.increment(1);
-
-                        firebase.firestore().collection("Application Management").doc("Statistics").update({
-                            "webUsers": increment,
-                            "totalUsers": increment,
-                            "totalDistricts": increment
-                        });
-                    }
-
-
-                }
-
-            });
-        }
     }
+
 
     setTimeout(() => {
         document.getElementById('signup-btn-text').style.display = "initial";
@@ -722,110 +736,128 @@ facebookSignUp = (type) => {
 //FIRESTORE MIGRATED
 googleSignUp = (type) => {
 
-    console.log("TYPE Signup:" + type);
+    var agreeChecked = document.getElementById('agreeCheck').checked
+    
+    var errorMessage = document.getElementById('signupError');
 
-    base_provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(base_provider).then(function (result) {
+    if(agreeChecked){
 
-        console.log("Google login success:");
+        errorMessage.innerHTML = ''
 
-        var user = result.user;
-        var email = user.email;
-        var displayName = user.displayName;
+        console.log("TYPE Signup:" + type);
 
-        firebase.firestore().collection("UserData").doc(email).get().then((documentSnapshot) => {
-
-            var value = documentSnapshot.data();
-
-            console.log(value);
-
-            if (value != undefined || value != null) {
-
-                console.log("EXISTS:" + value);
-
-                errorHTML = `<div class="alert alert-danger" role="alert"
-                style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                <strong>Error! </strong> An account with this email already exists
-            </div>`;
-
-                document.getElementById('signupError').innerHTML = errorHTML;
-
-            } else {
-                if (type == "student") {
-
-                    firebase.firestore().collection("UserData").doc(email).set({
-                        "display name": displayName,
-                        "email": email,
-                        "username": email,
-                        "account type": "Student",
-                        "account status": "Deactivated",
-                    });
-
-                    const increment = firebase.firestore.FieldValue.increment(1);
-
-                        firebase.firestore().collection("Application Management").doc("Statistics").update({
-                            "webUsers": increment,
-                            "totalUsers": increment,
+        base_provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(base_provider).then(function (result) {
+    
+            console.log("Google login success:");
+    
+            var user = result.user;
+            var email = user.email;
+            var displayName = user.displayName;
+    
+            firebase.firestore().collection("UserData").doc(email).get().then((documentSnapshot) => {
+    
+                var value = documentSnapshot.data();
+    
+                console.log(value);
+    
+                if (value != undefined || value != null) {
+    
+                    console.log("EXISTS:" + value);
+    
+                    errorHTML = `<div class="alert alert-danger" role="alert"
+                    style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                    <strong>Error! </strong> An account with this email already exists
+                </div>`;
+    
+                    document.getElementById('signupError').innerHTML = errorHTML;
+    
+                } else {
+                    if (type == "student") {
+    
+                        firebase.firestore().collection("UserData").doc(email).set({
+                            "display name": displayName,
+                            "email": email,
+                            "username": email,
+                            "account type": "Student",
+                            "account status": "Deactivated",
                         });
-                }
-
-                else if (type == 'teacher' || type == 'Solo Teacher') {
-                    firebase.firestore().collection("UserData").doc(email).set({
-                        "display name": displayName,
-                        "email": email,
-                        "username": email,
-                        "account type": "Teacher",
-                        "account status": "Deactivated",
-                    });
-
-                    const increment = firebase.firestore.FieldValue.increment(1);
-
-                        firebase.firestore().collection("Application Management").doc("Statistics").update({
-                            "webUsers": increment,
-                            "totalUsers": increment,
+    
+                        const increment = firebase.firestore.FieldValue.increment(1);
+    
+                            firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                "webUsers": increment,
+                                "totalUsers": increment,
+                            });
+                    }
+    
+                    else if (type == 'teacher' || type == 'Solo Teacher') {
+                        firebase.firestore().collection("UserData").doc(email).set({
+                            "display name": displayName,
+                            "email": email,
+                            "username": email,
+                            "account type": "Teacher",
+                            "account status": "Deactivated",
                         });
-                }
-
-                else if (type == 'district') {
-
-                    firebase.firestore().collection("UserData").doc(email).set({
-                        "display name": displayName,
-                        "email": email,
-                        "username": email,
-                        "account type": "District",
-                        "account status": "Deactivated",
-                    });
-
-                    const increment = firebase.firestore.FieldValue.increment(1);
-
-                        firebase.firestore().collection("Application Management").doc("Statistics").update({
-                            "webUsers": increment,
-                            "totalUsers": increment,
-                            "totalDistricts": increment,
+    
+                        const increment = firebase.firestore.FieldValue.increment(1);
+    
+                            firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                "webUsers": increment,
+                                "totalUsers": increment,
+                            });
+                    }
+    
+                    else if (type == 'district') {
+    
+                        firebase.firestore().collection("UserData").doc(email).set({
+                            "display name": displayName,
+                            "email": email,
+                            "username": email,
+                            "account type": "District",
+                            "account status": "Deactivated",
                         });
+    
+                        const increment = firebase.firestore.FieldValue.increment(1);
+    
+                            firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                "webUsers": increment,
+                                "totalUsers": increment,
+                                "totalDistricts": increment,
+                            });
+                    }
+    
+                    console.log('signup success google');
+    
+                    setTimeout(() => {
+                        var signUpPage = document.getElementById('signup-page-full');
+    
+                        signUpPage.style.display = "none";
+    
+                        var successPage = document.getElementById('signup-success-form');
+    
+                        successPage.style.display = "initial";
+                    }, 200)
+    
                 }
+            }).catch((e) => {
+                console.log(e);
+            });
+    
+        }).catch(function (err) {
+            console.log(err)
+            console.log("Google Sign In Failed")
+        })
+} else {
+ errorHTML = `<div class="alert alert-danger" role="alert" 
+    style="margin-top: 20px; width: 94%; margin-left: 6%;">
+    <strong>Oops! </strong>You must agree with our terms and conditions and privacy policy
+</div>`;
 
-                console.log('signup success google');
+        errorMessage.innerHTML = errorHTML;
+}
 
-                setTimeout(() => {
-                    var signUpPage = document.getElementById('signup-page-full');
 
-                    signUpPage.style.display = "none";
-
-                    var successPage = document.getElementById('signup-success-form');
-
-                    successPage.style.display = "initial";
-                }, 200)
-
-            }
-        }).catch((e) => {
-            console.log(e);
-        });
-
-    }).catch(function (err) {
-        console.log(err)
-        console.log("Google Sign In Failed")
-    })
 }
 
 
