@@ -253,10 +253,43 @@
           <!--Annoucements Page-->
 
           <section id = "announcementsSection-section" style="display: none;">
-            <div id="annoucementsSection" style="height: 650px; overflow-x: hidden; overflow-y: scroll;">
+            <div id="annoucementsSection">
               <h1 class="h3 mb-4 text-gray-800">Announcements</h1>
             </div>
           </section>
+
+          <style>
+
+            /* CHROMEBOOKS */
+            @media only screen and (min-height: 600px) {
+              
+              #annoucementsSection{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 41rem;
+                width: 100%;
+              }
+            
+              .sticky-footer{
+                display: none;
+              }
+            }
+            
+            /* REGULAR LAPTOPS */
+            @media only screen and (min-width: 1600px) {
+              .sticky-footer{
+                display: initial;
+              }
+            
+              #topClassesSection{
+                overflow-x: hidden; 
+                overflow-y: scroll;
+                height: 42rem;
+              }
+            }
+                      </style>
+
+        <style>
 
 
         </div>

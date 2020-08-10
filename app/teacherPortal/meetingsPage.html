@@ -220,7 +220,7 @@
                 <section id = "main-page-content-meetings-page" style="display: none;">
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800" id="className">Meetings</h1>
-                    <div id="meetingsList" style="padding-left: 30px; height: 650px; overflow-x: hidden; overflow-y: scroll;">
+                    <div id="meetingsList">
 
                     </div>
                 </section>
@@ -228,6 +228,38 @@
 
 
                 </div>
+
+                <style>
+
+                    /* CHROMEBOOKS */
+                    @media only screen and (min-height: 600px) {
+                      
+                      #meetingsList{
+                        overflow-x: hidden; 
+                        overflow-y: scroll;
+                        height: 38rem;
+                        padding-left: 10px;
+                        width: 100%;
+                      }
+                    
+                      .sticky-footer{
+                        display: none;
+                      }
+                    }
+                    
+                    /* REGULAR LAPTOPS */
+                    @media only screen and (min-width: 1600px) {
+                      .sticky-footer{
+                        display: initial;
+                      }
+                    
+                      #topClassesSection{
+                        overflow-x: hidden; 
+                        overflow-y: scroll;
+                        height: 42rem;
+                      }
+                    }
+                              </style>
 
                 <style>
                       .resume .resume-title {
