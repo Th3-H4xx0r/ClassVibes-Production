@@ -5,7 +5,7 @@
 
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
   <meta name="description" content="">
   <meta name="author" content="">
   <link rel="stylesheet" href="css/index.css">
@@ -98,11 +98,12 @@
 
   <!-- HEADER -->
   <section id="header">
-    <header style="background-color: royalblue; margin-bottom: 0px;">
+    <header style="background-color: royalblue; margin-bottom: 0px;" id = 'main-header'>
 
       <!-- NAVBAR -->
 
       <div class="container-fluid" >
+
         <nav class="navbar navbar-expand-lg navbar-light bg-custom">
           <a class="navbar-brand" href="#header" style="color: white; font-size: 25px; font-weight: 700;">ClassVibes</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,24 +134,63 @@
         <div class="row">
   
           <div class="col">
-            <h1 class="mainTitle-header" style="margin-right: 100px;">Managing your <br> class just got <br>easier!</h1>
+            <h1 class="mainTitle-header" style="margin-right: 10%">Managing your <br> class just got <br>easier!</h1>
             <p class="mainTitle-header-caption">ClassVibes eliminates the difficulties <br> and obstacles of distance learning. <br> Manage your class today!  </p>
 
-            <div class="row">
-              <button class="getStarted-btn" style="margin-left: 20px;"  onclick = 'window.location = "login"'>Get Started</button>
+            <div class="row" >
+              <button class="getStarted-btn" style="margin-left: 8%"  onclick = 'window.location = "login"'>Get Started</button>
 
               <a href="#featuresSection2"><h2 style="margin-left: 20px; color: white; font-weight: 700; font-size: 20px; margin-top: 4px;">Features</h2></a>
             </div>
             
           </div>
         
-        <img src="img/undraw_segment_analysis_bdn4.svg" width="500px">
+        <img src="img/undraw_segment_analysis_bdn4.svg" width="500px" id = 'header-img'>
         </div>
       </div>
 
     </header>
 
     <img src="img/bottom_curve_1.png" class="image" style="width: 100%;">
+
+    <style>
+          /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: 600px) {
+      #header-img{
+        display: none;
+      }
+      #main-header{
+        width: 110%;
+      }
+
+      .mainTitle-header{
+        margin-left: 35px;
+        margin-right: 10px;
+      }
+
+      .mainTitle-header-caption{
+        margin-left: 6%;
+        margin-right: 7%;
+      }
+
+      #feature-section-1-css{
+        margin-left: 15%;
+      }
+
+      #featuresSection2-css{
+        margin-top: 180px;
+         margin-left: 80px;
+      }
+
+      .pricingsection-css{
+
+        margin-left: 30px;
+      }
+
+
+
+    }
+    </style>
     
   
   </section>
@@ -159,13 +199,13 @@
   <!--FEATURES SECTION 1-->
 
   <section>
-    <div class="d-flex justify-content-center" style="margin-top: 180px; margin-left: 30px;" data-aos = "fade-right">
+    <div class="d-flex justify-content-center"  data-aos = "fade-right" id = 'feature-section-1-css'>
       <div class="row">
         <div class="col">
-          <h1 style="font-weight: 700; font-size: 45px; margin-left: 20px;">Realtime Access</h1>
+          <h1 style="font-weight: 700; font-size: 45px; margin-left: 20px;" id = 'caption-realtimeAccess'>Realtime Access</h1>
           <p style="font-weight: 600; font-size: 25px; margin-left: 20px;">Easily reach your students <br> in realtime. With our <br> website, make sure your <br>are in touch with your students.</p>
         </div>
-        <img src="img/server_isometric.png" width="500px" style="margin-left: 20px;">
+        <img src="img/server_isometric.png" width="500px" style="margin-left: 20px;" id = 'server-iso-img'>
       </div>
       
     </div>
@@ -175,7 +215,7 @@
   <!--FEATURES SECTION 2-->
 
   <section id = "featuresSection2" data-aos="fade-left">
-    <div class="d-flex justify-content-center" style="margin-top: 180px; margin-left: 30px;">
+    <div class="d-flex justify-content-center"  id = "featuresSection2-css"">
       <div class="row">
 
         <img src="img/undraw_data_processing_yrrv.svg" width="500px" style="margin-left: 20px;">
@@ -207,10 +247,10 @@
 
 
   <section id = "pricing">
-    <div class="d-flex justify-content-md-center" style="margin-top: 220px; margin-left: 30px;" data-aos="zoom-in">
+    <div class="d-flex justify-content-md-center" data-aos="zoom-in" id = 'pricingsection-css' style="margin-top: 300px">
 
       <div class="col col-lg-6" align = "center">
-        <h1 style="font-weight: 700; font-size: 45px; margin-left: 20px;">Request a quota today!</h1>
+        <h1 style="font-weight: 700; font-size: 45px; margin-left: 20px;">Request a quote today!</h1>
 
         <p>Contact <a href="mailto:sales@classvibes.net">sales@classvibes.net</a> for more information about pricing and to get started with your district!</p>
       </div>
