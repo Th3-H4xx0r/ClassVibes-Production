@@ -12,7 +12,7 @@
 
     <script src="/vendor/chart.js/Chart.min.js"></script>
 
-    
+
     <title>Manage Class</title>
 
     <!-- Custom fonts for this template-->
@@ -62,20 +62,20 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
 
 
- <script>
-    $(document).ready(function () {
-      initializeFirebase();
-      setVersionFooter();
-      var classCode = '<%= code %>'
-      getServerStatus();
-      getLiveSeverAlerts();
-      checkUserAuthStatus('teacher');
-      getTeacherAccountStatus('class-page', classCode);
-      getGraphPopupData(classCode)
+    <script>
+        $(document).ready(function () {
+            initializeFirebase();
+            setVersionFooter();
+            var classCode = '<%= code %>'
+            getServerStatus();
+            getLiveSeverAlerts();
+            checkUserAuthStatus('teacher');
+            getTeacherAccountStatus('class-page', classCode);
+            getGraphPopupData(classCode)
 
 
-    });
-  </script>
+        });
+    </script>
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -128,12 +128,12 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="/teacher/create-class" data-target="#collapseUtilities" aria-expanded="true"
-                  aria-controls="collapseUtilities">
-                  <i class="fas fa-plus-square"></i>
-                  <span>Create Class</span>
+                    aria-controls="collapseUtilities">
+                    <i class="fas fa-plus-square"></i>
+                    <span>Create Class</span>
                 </a>
-              </li>
-              
+            </li>
+
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="/teacher/meetings">
@@ -143,12 +143,12 @@
 
             <li class="nav-item">
                 <a class="nav-link" href="/teacher/announcements" data-target="#collapseUtilities" aria-expanded="true"
-                  aria-controls="collapseUtilities">
-                  <i class="fa fa-bullhorn"></i>
-                  <span>Annoucements</span>
+                    aria-controls="collapseUtilities">
+                    <i class="fa fa-bullhorn"></i>
+                    <span>Annoucements</span>
                 </a>
-              </li>
-            
+            </li>
+
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -218,338 +218,355 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid" id="main-body-page-teacher">
-                    
+
 
                     <!-- Page Heading -->
-                    <div id="className"><h1>Loading</h1>></div>
+                    <div id="className">
+                        <h1>Loading</h1>>
+                    </div>
 
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Students</a>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#meetings" role="tab" aria-controls="meetings" aria-selected="false">Meetings</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                aria-controls="home" aria-selected="true">Students</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#announcements" role="tab" aria-controls="announcements" aria-selected="false">Announcements</a>
+                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#meetings" role="tab"
+                                aria-controls="meetings" aria-selected="false">Meetings</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Settings</a>
-                          </li>
-                        
-                       
-                      </ul>
-                      <div style="height: 50px;"></div>
+                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#announcements" role="tab"
+                                aria-controls="announcements" aria-selected="false">Announcements</a>
+                        </li>
 
-                      <div class="tab-content" id="myTabContent">
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                aria-controls="profile" aria-selected="false">Settings</a>
+                        </li>
+
+
+                    </ul>
+                    <div style="height: 50px;"></div>
+
+                    <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div id="content">
-                                
-                                    <!-- Begin Page Content -->
-                                    <div class="container-fluid">
 
-         
-
-
-<script>
-    // When the user clicks on div, open the popup
-    function myFunction() {
-      var popup = document.getElementById("myPopup");
-      popup.classList.toggle("show");
-    }
-    </script>
-
-<div class="fixed_button">
-    <div class="popup" onclick="myFunction()">
-        <button type="button" class="btn btn-primary" style="width: 200px;">View Graph</button>
-
-        <span class="popuptext" id="myPopup">
-
-           
-    
-            
-        </span>
-      </div>
-</div>
+                                <!-- Begin Page Content -->
+                                <div class="container-fluid">
 
 
 
-    
-  
 
-  <style>
+                                    <script>
+                                        // When the user clicks on div, open the popup
+                                        function myFunction() {
+                                            var popup = document.getElementById("myPopup");
+                                            popup.classList.toggle("show");
+                                        }
+                                    </script>
 
-.fixed_button{
-position: fixed;
-bottom: 6%;
-left: 84%;
-z-index: 99;
+                                    <div class="fixed_button">
+                                        <div class="popup" onclick="myFunction()">
+                                            <button type="button" class="btn btn-primary" style="width: 200px;">View
+                                                Graph</button>
 
- }
+                                            <span class="popuptext" id="myPopup">
 
-    /* Popup container - can be anything you want */
-    .popup {
-      position: absolute;
-      display: inline-block;
-      cursor: pointer;
-      z-index: 999999;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      
-    }
-    
-    /* The actual popup */
-    .popup .popuptext {
-      visibility: hidden;
-      width: 160px;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 8px 0;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      margin-left: -23rem;
-    }
-    
-    /* Popup arrow */
-    .popup .popuptext::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-    }
-    
-    /* Toggle this class - hide and show the popup */
-    .popup .show {
-      visibility: visible;
-      -webkit-animation: fadeIn 1s;
-      animation: fadeIn 1s;
-    }
-    
-    /* Add animation (fade in the popup) */
-    @-webkit-keyframes fadeIn {
-      from {opacity: 0;} 
-      to {opacity: 1;}
-    }
-    
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity:1 ;}
-    }
-    </style>
 
-        
-                                        <!-- Page Heading -->
-        
-                                        <!-- DataTales Example -->
- 
 
-                                        <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Students</h6>
-                                                <div style="float:right;">
-                                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                        <label class="btn btn-secondary active" onclick="showAll()">
-                                                            <input type="radio" name="options" id="allstudents"
-                                                                autocomplete="off" checked>
-                                                            All Students
-                                                        </label>
-                                                        <label class="btn btn-secondary" onclick="showGreat()">
-                                                            <input type="radio" name="options" id="great" autocomplete="off">
-                                                            Doing
-                                                            Great
-                                                        </label>
-                                                        <label class="btn btn-secondary" onclick="showHelp()">
-                                                            <input type="radio" name="options" id="help" autocomplete="off">
-                                                            Needs Help
-                                                        </label>
-                                                        <label class="btn btn-secondary" onclick="showFrustrated()">
-                                                            <input type="radio" name="options" id="frustrated"
-                                                                autocomplete="off">
-                                                            Frustrated
-                                                        </label>
-                                                        <label class="btn btn-secondary" onclick="showInactive()">
-                                                            <input type="radio" name="options" id="inactive"
-                                                                autocomplete="off">
-                                                            Inactive
-                                                        </label>
-                                                    </div>
-                                                </div>
-        
-                                            </div>
-                                            <div class="card-body">
 
-                                                
-                                                    <section>
-                                                        <section id="allStudentsTable">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered" id="dataTable" width="100%"
-                                                                    cellspacing="0">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Name</th>
-                                                                    
-                                                                            <th>Mood</th>
-                                                                            <th>Reported</th>
-                                                                            <th>Actions</th>
-                
-                                                                        </tr>
-                                                                    </thead>
-                
-                                                                    <tbody id="studentTable">
-                
-                                                                    </tbody>
-                
-                                                                </table>
-                                                            </div>
-                                                        </section>
-                
-                                                        <section id="doing-good-table-section" style="display: none;">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered" id="dataTable" width="100%"
-                                                                    cellspacing="0">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Name</th>
-                                                                         
-                                                                            <th>Mood</th>
-                                                                            <th>Reported</th>
-                                                                            <th>Actions</th>
-                
-                                                                        </tr>
-                                                                    </thead>
-                
-                                                                    <tbody id="studentTable-doing-good">
-        
-                                                                    </tbody>
-                
-                                                                </table>
-                                                            </div>
-                                                        </section>
-                
-                                                        <section id="meh-table-section" style="display: none;">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered" id="dataTable" width="100%"
-                                                                    cellspacing="0">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Name</th>
-                                                                            <th>Mood</th>
-                                                                            <th>Reported</th>
-                                                                            <th>Actions</th>
-                
-                                                                        </tr>
-                                                                    </thead>
-                
-                                                                    <tbody id="studentTable-meh">
-                
-                                                                    </tbody>
-                
-                                                                </table>
-                                                            </div>
-                                                        </section>
-                
-                                                        <section id="frustrated-table-section" style="display: none;">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered" id="dataTable" width="100%"
-                                                                    cellspacing="0">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Name</th>
-                                                                  
-                                                                            <th>Mood</th>
-                                                                            <th>Reported</th>
-                                                                            <th>Actions</th>
-                
-                                                                        </tr>
-                                                                    </thead>
-                
-                                                                    <tbody id="studentTable-frustrated">
-                
-                                                                    </tbody>
-                
-                                                                </table>
-                                                            </div>
-                                                        </section>
-        
-                                                        <section id="inactive-table-section" style="display: none;">
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered" id="dataTable" width="100%"
-                                                                    cellspacing="0">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Name</th>
-                                                                          
-                                                                            <th>Mood</th>
-                                                                            <th>Reported</th>
-                                                                            <th>Actions</th>
-                
-                                                                        </tr>
-                                                                    </thead>
-                
-                                                                    <tbody id="studentTable-inactive">
-                
-                                                                    </tbody>
-                
-                                                                </table>
-                                                            </div>
-                                                        </section>
-                                                    </section>
-                                            
-        
-                                        
-        
-                                                <div id="outputModel"></div>
-        
-                                            </div>
+                                            </span>
                                         </div>
                                     </div>
+
+
+                                    <style>
+                                        .fixed_button {
+                                            position: fixed;
+                                            bottom: 6%;
+                                            left: 84%;
+                                            z-index: 99;
+
+                                        }
+
+                                        /* Popup container - can be anything you want */
+                                        .popup {
+                                            position: absolute;
+                                            display: inline-block;
+                                            cursor: pointer;
+                                            z-index: 999999;
+                                            -webkit-user-select: none;
+                                            -moz-user-select: none;
+                                            -ms-user-select: none;
+                                            user-select: none;
+
+                                        }
+
+                                        /* The actual popup */
+                                        .popup .popuptext {
+                                            visibility: hidden;
+                                            width: 160px;
+                                            color: #fff;
+                                            text-align: center;
+                                            border-radius: 6px;
+                                            padding: 8px 0;
+                                            position: absolute;
+                                            z-index: 1;
+                                            bottom: 125%;
+                                            left: 50%;
+                                            margin-left: -23rem;
+                                        }
+
+                                        /* Popup arrow */
+                                        .popup .popuptext::after {
+                                            content: "";
+                                            position: absolute;
+                                            top: 100%;
+                                            left: 50%;
+                                            margin-left: -5px;
+                                            border-width: 5px;
+                                            border-style: solid;
+                                        }
+
+                                        /* Toggle this class - hide and show the popup */
+                                        .popup .show {
+                                            visibility: visible;
+                                            -webkit-animation: fadeIn 1s;
+                                            animation: fadeIn 1s;
+                                        }
+
+                                        /* Add animation (fade in the popup) */
+                                        @-webkit-keyframes fadeIn {
+                                            from {
+                                                opacity: 0;
+                                            }
+
+                                            to {
+                                                opacity: 1;
+                                            }
+                                        }
+
+                                        @keyframes fadeIn {
+                                            from {
+                                                opacity: 0;
+                                            }
+
+                                            to {
+                                                opacity: 1;
+                                            }
+                                        }
+                                    </style>
+
+
+                                    <!-- Page Heading -->
+
+                                    <!-- DataTales Example -->
+<!---->
+
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Students</h6>
+                                            <div style="float:right;">
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-secondary active" onclick="showAll()">
+                                                        <input type="radio" name="options" id="allstudents"
+                                                            autocomplete="off" checked>
+                                                        All Students
+                                                    </label>
+                                                    <label class="btn btn-secondary" onclick="showGreat()">
+                                                        <input type="radio" name="options" id="great"
+                                                            autocomplete="off">
+                                                        Doing
+                                                        Great
+                                                    </label>
+                                                    <label class="btn btn-secondary" onclick="showHelp()">
+                                                        <input type="radio" name="options" id="help" autocomplete="off">
+                                                        Needs Help
+                                                    </label>
+                                                    <label class="btn btn-secondary" onclick="showFrustrated()">
+                                                        <input type="radio" name="options" id="frustrated"
+                                                            autocomplete="off">
+                                                        Frustrated
+                                                    </label>
+                                                    <label class="btn btn-secondary" onclick="showInactive()">
+                                                        <input type="radio" name="options" id="inactive"
+                                                            autocomplete="off">
+                                                        Inactive
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-body">
+
+
+                                            <section>
+                                                <section id="allStudentsTable">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered" id="dataTable" width="100%"
+                                                            cellspacing="0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+
+                                                                    <th>Mood</th>
+                                                                    <th>Reported</th>
+                                                                    <th>Actions</th>
+
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="studentTable">
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </section>
+
+                                                <section id="doing-good-table-section" style="display: none;">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered" id="dataTable" width="100%"
+                                                            cellspacing="0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+
+                                                                    <th>Mood</th>
+                                                                    <th>Reported</th>
+                                                                    <th>Actions</th>
+
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="studentTable-doing-good">
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </section>
+
+                                                <section id="meh-table-section" style="display: none;">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered" id="dataTable" width="100%"
+                                                            cellspacing="0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Mood</th>
+                                                                    <th>Reported</th>
+                                                                    <th>Actions</th>
+
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="studentTable-meh">
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </section>
+
+                                                <section id="frustrated-table-section" style="display: none;">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered" id="dataTable" width="100%"
+                                                            cellspacing="0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+
+                                                                    <th>Mood</th>
+                                                                    <th>Reported</th>
+                                                                    <th>Actions</th>
+
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="studentTable-frustrated">
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </section>
+
+                                                <section id="inactive-table-section" style="display: none;">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered" id="dataTable" width="100%"
+                                                            cellspacing="0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+
+                                                                    <th>Mood</th>
+                                                                    <th>Reported</th>
+                                                                    <th>Actions</th>
+
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody id="studentTable-inactive">
+
+                                                            </tbody>
+
+                                                        </table>
+                                                    </div>
+                                                </section>
+                                            </section>
+
+
+
+
+                                            <div id="outputModel"></div>
+
+                                        </div>
+                                    </div>
+
+                                -->
+                                </div>
                             </div>
 
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <!--Settings Content-->
                             <div id="editInfo"></div>
-                                
+
 
                             <!--End of Setting Content-->
                         </div>
                         <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
                             <!--Settings Content-->
-                            <div id="meetingsListforClassPage" >
+                            <div id="meetingsListforClassPage">
 
                             </div>
-                            
+
                             <!--End of Setting Content-->
                         </div>
                         <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
                             <!--Settings Content-->
-                            <button type="button" ID = "send_announcement_top_classPage" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" style = 'margin-bottom: 20px; margin-left: 20px;'>Send Announcement</button>
+                            <button type="button" ID="send_announcement_top_classPage" class="btn btn-primary"
+                                data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"
+                                style='margin-bottom: 20px; margin-left: 20px;'>Send Announcement</button>
 
-                            <div id="classAnnouncement" ></div>
+                            <div id="classAnnouncement"></div>
 
                             <!--End of Setting Content-->
                         </div>
 
                         <style>
-                        .avatar {
-                            vertical-align: middle;
-                            width: 60px;
-                            height: 60px;
-                            border-radius: 60%;
+                            .avatar {
+                                vertical-align: middle;
+                                width: 60px;
+                                height: 60px;
+                                border-radius: 60%;
                             }
                         </style>
-                      </div>
+                    </div>
                     <!--TABLES-->
                 </div>
 
@@ -558,80 +575,79 @@ z-index: 99;
 
                 <style>
                     /* CHROMEBOOKS */
-            @media only screen and (min-height: 600px) {
+                    @media only screen and (min-height: 600px) {
 
-            
-              .sticky-footer{
-                display: none;
-              }
 
-              #home{
-                overflow-x: hidden; 
-                overflow-y: scroll;
-                height: 31rem;
-              }
+                        .sticky-footer {
+                            display: none;
+                        }
 
-              #meetingsListforClassPage{
-                overflow-x: hidden; 
-                overflow-y: scroll;
-                height: 31rem;
-              }
+                        #home {
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 31rem;
+                        }
 
-              #classAnnouncement{
-                overflow-x: hidden; 
-                overflow-y: scroll;
-                height: 27rem;
-              }
-            }
-            
-            /* REGULAR LAPTOPS */
-            @media only screen and (min-width: 1600px) {
-              .sticky-footer{
-                display: initial;
-              }
-            
+                        #meetingsListforClassPage {
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 31rem;
+                        }
 
-              #home{
-                overflow-x: hidden; 
-                overflow-y: scroll;
-                height: 36rem;
-              }
+                        #classAnnouncement {
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 27rem;
+                        }
+                    }
 
-              #meetingsListforClassPage{
-                overflow-x: hidden; 
-                overflow-y: scroll;
-                height: 35rem;
-              }
+                    /* REGULAR LAPTOPS */
+                    @media only screen and (min-width: 1600px) {
+                        .sticky-footer {
+                            display: initial;
+                        }
 
-              #classAnnouncement{
-                overflow-x: hidden; 
-                overflow-y: scroll;
-                height: 32rem;
-              }
 
-              
-            }
-                   
+                        #home {
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 36rem;
+                        }
+
+                        #meetingsListforClassPage {
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 35rem;
+                        }
+
+                        #classAnnouncement {
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 32rem;
+                        }
+
+
+                    }
                 </style>
 
                 <!-- /.container-fluid -->
             </div>
-    <!-- End of Main Content -->
+            <!-- End of Main Content -->
 
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto" id = "footer-version-code">
-            <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span> 
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto" id="footer-version-code">
+                        <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
 
-            
-          </div>
+
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
         </div>
-      </footer>
-    <!-- End of Footer -->
-
-    </div>
-    <!-- End of Content Wrapper -->
+        <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
@@ -663,63 +679,63 @@ z-index: 99;
 
     <style>
         .resume .resume-title {
-font-size: 26px;
-font-weight: 700;
-margin-top: 20px;
-margin-bottom: 20px;
-color: #050d18;
-}
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #050d18;
+        }
 
-.resume .resume-item {
-padding: 0 0 20px 20px;
-margin-top: -2px;
-border-left: 2px solid #1f5297;
-position: relative;
-}
+        .resume .resume-item {
+            padding: 0 0 20px 20px;
+            margin-top: -2px;
+            border-left: 2px solid #1f5297;
+            position: relative;
+        }
 
-.resume .resume-item h4 {
-line-height: 18px;
-font-size: 18px;
-font-weight: 600;
-text-transform: uppercase;
-font-family: "Poppins", sans-serif;
-color: #050d18;
-margin-bottom: 10px;
-}
+        .resume .resume-item h4 {
+            line-height: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-family: "Poppins", sans-serif;
+            color: #050d18;
+            margin-bottom: 10px;
+        }
 
-.resume .resume-item h5 {
-font-size: 16px;
-background: #e4edf9;
-padding: 5px 15px;
-display: inline-block;
-font-weight: 600;
-margin-bottom: 10px;
-}
+        .resume .resume-item h5 {
+            font-size: 16px;
+            background: #e4edf9;
+            padding: 5px 15px;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
 
-.resume .resume-item ul {
-padding-left: 20px;
-}
+        .resume .resume-item ul {
+            padding-left: 20px;
+        }
 
-.resume .resume-item ul li {
-padding-bottom: 10px;
-}
+        .resume .resume-item ul li {
+            padding-bottom: 10px;
+        }
 
-.resume .resume-item:last-child {
-padding-bottom: 0;
-}
+        .resume .resume-item:last-child {
+            padding-bottom: 0;
+        }
 
-.resume .resume-item::before {
-content: "";
-position: absolute;
-width: 16px;
-height: 16px;
-border-radius: 50px;
-left: -9px;
-top: 0;
-background: #fff;
-border: 2px solid #1f5297;
-}
-  </style>
+        .resume .resume-item::before {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50px;
+            left: -9px;
+            top: 0;
+            background: #fff;
+            border: 2px solid #1f5297;
+        }
+    </style>
 
 
 
