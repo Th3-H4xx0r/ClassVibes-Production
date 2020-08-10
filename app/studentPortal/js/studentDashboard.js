@@ -135,6 +135,7 @@ function getGrayStudentStatus(email, classCode){
   })
 
 }
+/*
 
 async function getAnnouncementForClass(code, email) {
   var index = 0;
@@ -257,128 +258,7 @@ async function getAnnouncementForClass(code, email) {
         document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML;
       }
 }
-
-async function getAnnouncementForClass(code, email) {
-  var index = 0;
-
-  document.getElementById('classAnnouncement').innerHTML = ``
-
-  let announcementRef = firebase.firestore().collection('Classes').doc(code).collection('Announcements')
-  let announcementRefGet = await announcementRef.get();
-  for(const doc of announcementRefGet.docs){
-
-    index = index + 1
-    var data = doc.data()
-    var date = data["timestamp"]
-    var message = data["message"]
-    var title = data["title"]
-    var announcementId = doc.id
-    console.log("THING:" + announcementId)
-
-    var myReaction = "nonet"
-
-    var x = await firebase.firestore().collection('Classes').doc(code).collection("Announcements").doc(doc.id).collection('Student Reactions').doc(email).get().then(snap => {
-        var data = snap.data();
-
-        var reaction = "none"
-
-        if(data != undefined && data != null){
-          reaction = data['reaction']
-
-          console.log(reaction)
-        }
-
-
-
-
-        if(reaction == "doing great"){
-          myReaction = 'doing great'
-        }
-
-        else if(reaction == "frustrated"){
-          myReaction = 'frustrated'
-        }
-        else {
-          myReaction = 'none'
-        }
-
-    }).then(() => {
-      output = `
-      <div class="col-xl-12 col-md-6 mb-4">
-                <div class="card shadow h-100 py-2">
-                  <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                      <div class="col mr-2">
-
-                        <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
-
-                        <p style = 'color: gray'>${message}</p>
-                        
-                      </div>
-                      <div class="col-auto">
-                      <div class = 'row' style = 'margin-right: 20px' id = "announceReactionSection${doc.id}">
-        
-                      </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          
-      `
-      
-      $(output).appendTo('#classAnnouncement')
-      
-      console.log(myReaction)
-      if(myReaction == "doing great"){
-        var announcementReactionSectionHTML = `
-        <a onclick="updateAnnouncementReaction( '${doc.id}', '${code}', 'doing great', '${email}')" href="javascript:;"><i class="fas fa-thumbs-up" style="font-size: 50px; color: lightslategray;"></i></a>
-              
-        <a onclick="updateAnnouncementReaction('${doc.id}', '${code}', 'frustrated', '${email}')" href="javascript:;"><i class="far fa-thumbs-down" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
-        `
-  
-        document.getElementById(`announceReactionSection${doc.id}`).innerHTML = announcementReactionSectionHTML
-        
-      }else if(myReaction == "none"){
-        var announcementReactionSectionHTML = `
-        <a onclick="updateAnnouncementReaction( '${doc.id}', '${code}', 'doing great', '${email}')" href="javascript:;"><i class="far fa-thumbs-up" style="font-size: 50px; color: lightslategray;"></i></a>
-              
-        <a onclick="updateAnnouncementReaction('${doc.id}', '${code}', 'frustrated', '${email}')" href="javascript:;"><i class="far fa-thumbs-down" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
-        `
-  
-        document.getElementById(`announceReactionSection${doc.id}`).innerHTML = announcementReactionSectionHTML
-      }
-      
-      else if(myReaction == "frustrated"){
-        var announcementReactionSectionHTML = `
-        <a onclick="updateAnnouncementReaction( '${doc.id}', '${code}', 'doing great', '${email}')" href="javascript:;"><i class="far fa-thumbs-up" style="font-size: 50px; color: lightslategray;"></i></a>
-              
-        <a onclick="updateAnnouncementReaction('${doc.id}', '${code}', 'frustrated', '${email}')" href="javascript:;"><i class="fas fa-thumbs-down" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
-        `
-  
-        document.getElementById(`announceReactionSection${doc.id}`).innerHTML = announcementReactionSectionHTML
-      }
-     
-    })
-
-
-    }
-      if(index == 0){
-        var noAnnouncementsHTML = `
-        <div class="d-flex justify-content-center" style="margin-top: 10%;">
-        <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
-    </div>
-    <center style="margin-top: 1%;">
-        <h2>No Announcements</h2>
-        <p>There aren't any announcements for this class</p>
-  
-    </center>
-        `
-
-        document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML;
-      }
-}
+*/
 
 function updateAnnouncementReaction(announcementID, classCode, reaction, email){
   firebase.firestore().collection("Classes").doc(classCode).collection("Announcements").doc(announcementID).collection('Student Reactions').doc(email).set({
@@ -1753,11 +1633,88 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
        }, 1000)
 }
 
+async function getAnnouncements_ForClass_pagenate(code, lastElement) {
+ 
+  var announcementsCount = 0;
+
+  var lastElement = ''
+
+      firebase.firestore().collection('Classes').doc(code).collection("Announcements").orderBy('date', 'desc').limit(2).startAfter(lastElement).get().then(function (doc) {
+
+        doc.forEach(snapshot => {
+
+          var annoucementData = snapshot.data();
+
+          if(announcementIDList.includes(snapshot.id) != true){
+            announcementIDList.push(snapshot.id)
+
+            if (annoucementData != undefined && annoucementData != null) {
+              outputAnnouncements = "";
+  
+              announcementsCount += 1;
+  
+  
+              var title = annoucementData["title"];
+              var message = annoucementData["message"];
+              var date = annoucementData['date'];
+
+              lastElement = date
+  
+              console.log(date)
+  
+              var formattedDate = new Date(date.seconds*1000).toLocaleString() 
+  
+              outputAnnouncements = `
+              <div class="col-xl-12 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+      
+                      <h4 style = 'font-weight: 700; margin: 2px'>${title}</h4>
+      
+                      <p style = 'color: gray'>${message}</p>
+      
+                      <div class="h6 mb-0" style = "color: #a2a39b">${formattedDate}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+              `;
+      
+                $(outputAnnouncements).appendTo("#classAnnouncement");
+  
+              
+            }
+          }
+
+
+        });
+      }).then(() => {
+        $('#classAnnouncement').on('scroll', function() { 
+          if ($(this).scrollTop() + 
+              $(this).innerHeight() >=  
+              $(this)[0].scrollHeight) { 
+      
+                getAnnouncements_ForClass_pagenate(code, lastElement)
+          } 
+        });
+      })
+       
+}
+
 async function getAnnouncements_ForClass(code) {
  
       var announcementsCount = 0;
 
       var announcentsList = []
+
+      var lastElement = ''
   
           firebase.firestore().collection('Classes').doc(code).collection("Announcements").orderBy('date', 'desc').limit(4).get().then(function (doc) {
   
@@ -1771,11 +1728,15 @@ async function getAnnouncements_ForClass(code) {
                 outputAnnouncements = "";
   
                 announcementsCount += 1;
+
   
   
                 var title = annoucementData["title"];
                 var message = annoucementData["message"];
                 var date = annoucementData['date'];
+
+                lastElement = date
+
 
                 console.log(date)
 
@@ -1804,7 +1765,7 @@ async function getAnnouncements_ForClass(code) {
             </div>
                 `;
         
-                  $(outputAnnouncements).appendTo("#annoucementsSection");
+                  $(outputAnnouncements).appendTo("#classAnnouncement");
   
                 
               }
@@ -1813,13 +1774,32 @@ async function getAnnouncements_ForClass(code) {
   //IF there is no annonucements
   if (announcementsCount == 0) {
 
-    document.getElementById("announcementsSection-section").style.display = "none";
+    var noAnnouncementsHTML = `
+        <div class="d-flex justify-content-center" style="margin-top: 10%;">
+        <img src="/teacher/img/undraw_popular_7nrh.svg" alt="" width="20%">
+    </div>
+    <center style="margin-top: 1%;">
+        <h2>No Announcements</h2>
+        <p>There aren't any announcements for this class</p>
+  
+    </center>
+        `
+
+        document.getElementById('classAnnouncement').innerHTML = noAnnouncementsHTML;
     
+} else {
+  $('#classAnnouncement').on('scroll', function() { 
+    if ($(this).scrollTop() + 
+        $(this).innerHeight() >=  
+        $(this)[0].scrollHeight) { 
+
+          getAnnouncements_ForClass_pagenate(code, lastElement)
+    } 
+  });
 }
           })
            
 }
-
 
 var classCodeChat = 'NONE'
 var chatList_PageNation_MainPageList = []
