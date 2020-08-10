@@ -1753,15 +1753,13 @@ async function getAnnouncements(email, pageType = "annoncements-page-main", last
        }, 1000)
 }
 
-async function getAnnouncements_ForClass(email, code) {
-
-  document.getElementById("loadingIndicator").style.display = "initial";
+async function getAnnouncements_ForClass(code) {
  
       var announcementsCount = 0;
 
       var announcentsList = []
   
-          firebase.firestore().collection('Classes').doc(classcode).collection("Announcements").orderBy('date', 'desc').limit(4).get().then(function (doc) {
+          firebase.firestore().collection('Classes').doc(code).collection("Announcements").orderBy('date', 'desc').limit(4).get().then(function (doc) {
   
             doc.forEach(snapshot => {
   
@@ -1815,14 +1813,10 @@ async function getAnnouncements_ForClass(email, code) {
   //IF there is no annonucements
   if (announcementsCount == 0) {
 
-    document.getElementById("loadingIndicator").style.display = "none";
-
     document.getElementById("announcementsSection-section").style.display = "none";
     
     document.getElementById("no-Announcements-section").style.display = "initial";
 } else {
-
-    document.getElementById("loadingIndicator").style.display = "none";
 
     document.getElementById("announcementsSection-section").style.display = "initial";
     
@@ -1830,11 +1824,6 @@ async function getAnnouncements_ForClass(email, code) {
 }
           })
            
-   
- 
-
-
-
 }
 
 
