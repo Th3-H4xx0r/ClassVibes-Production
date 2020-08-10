@@ -641,6 +641,8 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
       var studentEmail = user.email;
       //var classSelected = localStorage.getItem("selectedClassDropdown");
 
+      updateClassReaction(classSelected, studentEmail, pageType, reaction)
+
       firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
         "Last Status Update": currentDate.toString(),
         "status": reaction
@@ -657,10 +659,7 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
           });
           firebase.firestore().collection("UserData").doc(studentEmail).update({
             status: reaction
-          }).then(() => {
-            //getStudentClasses(studentUsername, pageType)
-            updateClassReaction(classSelected, studentEmail, pageType, reaction)
-          });
+          })
         });
       });
       //getStudentStatus(studentEmail);
@@ -672,7 +671,7 @@ function updateClassReaction(classCode, studentEmail, pageType, currentReaction)
 
   console.log('updating')
 
-  var buttonsGrid = ``
+  var buttonsGrid = ''
 
       var reaction = currentReaction
 
