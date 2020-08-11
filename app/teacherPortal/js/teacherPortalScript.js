@@ -1995,18 +1995,23 @@ function getStudentData(code) {
           `;
 
           inactive_column_face = `
-          <tr "row" class = "odd">
-          <td>${studentName}</td>
-          <td><center id = 'inactive_face'>Loading</center></td>
-          <td>${studentReportedDate}</td>
-          <td>
-          <div class = 'row' style = 'margin-left: 10px'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>  
-          </div>          
-          </td>
-          </tr>
-      </div>
+          <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
+            <div class = "row">
+
+            <div style = 'margin-left: 10px; font-size: 30px'><div id = "inactive_face" ></div></div>
+
+          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+        
+          </div>
+
+          <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
+          <div class = 'row'>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
+          </div>
+         
+          </div>
+            </div>
           `
     
             outputModel = `
