@@ -835,9 +835,9 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     
 }
 
-function getGraphPopupData(code){
+function getGraphData_Classes_page(code){
 
-  document.getElementById('myPopup').innerHTML = `
+  document.getElementById('chartBody').innerHTML = `
   <a href='/teacher/classes/${code}' style = 'text-decoration: none'>
             <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
                 <div class="card-body">
@@ -1879,13 +1879,13 @@ function getStudentData(code) {
         for (var i = 0; i <= classInfoList.length; i++) {
           let descriptionOutput = "";
           classInfoData = classInfoList[i];
-          var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
-          var meh = '<i class="fas fa-meh" style="font-size: 70px; color: #f6c23e;"></i>';
-          var sad = '<i class="fas fa-frown" style="font-size: 70px; color: #e74a3b;"></i>'
+          var happy = '<i class="fas fa-user" style="font-size: 70px; color: #1cc88a;"></i>';
+          var meh = '<i class="fas fa-user" style="font-size: 70px; color: #f6c23e;"></i>';
+          var sad = '<i class="fas fa-user" style="font-size: 70px; color: #e74a3b;"></i>'
 
-          var inactive_happy = '<i class="fas fa-smile" style="font-size: 70px; color: #b5b0a3;"></i>'
-          var inactive_meh = '<i class="fas fa-meh" style="font-size: 70px; color: #b5b0a3;"></i>'
-          var inactive_sad = '<i class="fas fa-frown" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_happy = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_meh = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_sad = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
 
 
           if (classInfoData != null || classInfoData != undefined) {
@@ -1914,21 +1914,21 @@ function getStudentData(code) {
             //console.log(classInfoData)
     
             descriptionOutput2 = `
-            <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px;'>
             <div class = "row">
-          <div style = 'margin-left: 10px; font-size: 20px; margin-top: 20px'>${studentName}</div>
-          
-          <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
 
-          <td>${studentReportedDate}</td>
-          
-          <td>
-          <div class = 'row' style = 'margin-left: 10px'>
+            <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
+
+          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+        
+          <div style = 'float: right'>
+          <div class = 'row'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
           <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px; margin-top: 20px'></i></a>
           </div>
          
-          </td>
+          </div>
+
           </div>
             </div>
           

@@ -71,7 +71,7 @@
             getLiveSeverAlerts();
             checkUserAuthStatus('teacher');
             getTeacherAccountStatus('class-page', classCode);
-            getGraphPopupData(classCode)
+            getGraphData_Classes_page(classCode)
 
 
         });
@@ -365,46 +365,49 @@
 
                                     <!-- DataTales Example -->
 
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Students</h6>
-                                            <div style="float:right;">
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary active" onclick="showAll()">
-                                                        <input type="radio" name="options" id="allstudents"
-                                                            autocomplete="off" checked>
-                                                        All Students
-                                                    </label>
-                                                    <label class="btn btn-secondary" onclick="showGreat()">
-                                                        <input type="radio" name="options" id="great"
-                                                            autocomplete="off">
-                                                        Doing
-                                                        Great
-                                                    </label>
-                                                    <label class="btn btn-secondary" onclick="showHelp()">
-                                                        <input type="radio" name="options" id="help" autocomplete="off">
-                                                        Needs Help
-                                                    </label>
-                                                    <label class="btn btn-secondary" onclick="showFrustrated()">
-                                                        <input type="radio" name="options" id="frustrated"
-                                                            autocomplete="off">
-                                                        Frustrated
-                                                    </label>
-                                                    <label class="btn btn-secondary" onclick="showInactive()">
-                                                        <input type="radio" name="options" id="inactive"
-                                                            autocomplete="off">
-                                                        Inactive
-                                                    </label>
-                                                </div>
-                                            </div>
+                                    <div class="row">
 
-                                        </div>
-                                        <div class="card-body">
+                                        <div id="chartBody"></div>
+
+                                        <div class="card-body" style="margin-top: -35px;">
 
                                             <section>
+
+                                                <div class="card-header py-3">
+                                                    <div >
+                                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                            <label class="btn btn-secondary active" onclick="showAll()">
+                                                                <input type="radio" name="options" id="allstudents"
+                                                                    autocomplete="off" checked>
+                                                                All Students
+                                                            </label>
+                                                            <label class="btn btn-secondary" onclick="showGreat()">
+                                                                <input type="radio" name="options" id="great"
+                                                                    autocomplete="off">
+                                                                Doing
+                                                                Great
+                                                            </label>
+                                                            <label class="btn btn-secondary" onclick="showHelp()">
+                                                                <input type="radio" name="options" id="help" autocomplete="off">
+                                                                Needs Help
+                                                            </label>
+                                                            <label class="btn btn-secondary" onclick="showFrustrated()">
+                                                                <input type="radio" name="options" id="frustrated"
+                                                                    autocomplete="off">
+                                                                Frustrated
+                                                            </label>
+                                                            <label class="btn btn-secondary" onclick="showInactive()">
+                                                                <input type="radio" name="options" id="inactive"
+                                                                    autocomplete="off">
+                                                                Inactive
+                                                            </label>
+                                                        </div>
+                                                    </div>
+        
+                                                </div>
                                                 <section id="allStudentsTable">         
 
-                                                            <div id="studentTable">
+                                                            <div id="studentTable" style="height: 33rem; overflow-y: scroll; overflow-x: hidden;">
 
                                                             </div>
                                                 </section>
@@ -450,9 +453,11 @@
                                             <div id="outputModel"></div>
 
                                         </div>
+
+
                                     </div>
 
-                                -->
+                                    
                                 </div>
                             </div>
 
@@ -507,11 +512,7 @@
                             display: none;
                         }
 
-                        #home {
-                            overflow-x: hidden;
-                            overflow-y: scroll;
-                            height: 31rem;
-                        }
+                        
 
                         #meetingsListforClassPage {
                             overflow-x: hidden;
@@ -532,12 +533,6 @@
                             display: initial;
                         }
 
-
-                        #home {
-                            overflow-x: hidden;
-                            overflow-y: scroll;
-                            height: 36rem;
-                        }
 
                         #meetingsListforClassPage {
                             overflow-x: hidden;
