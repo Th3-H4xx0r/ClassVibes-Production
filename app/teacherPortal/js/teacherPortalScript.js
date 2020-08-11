@@ -1914,11 +1914,14 @@ function getStudentData(code) {
             //console.log(classInfoData)
     
             descriptionOutput2 = `
-          <tr role = "row" class = "odd">
-          <td>${studentName}</td>
+            <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <div class = "row">
+          <div style = 'margin-left: 10px; font-size: 20px; margin-top: 20px'>${studentName}</div>
           
-          <td><center><div id = "face"></center></div></td>
+          <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
+
           <td>${studentReportedDate}</td>
+          
           <td>
           <div class = 'row' style = 'margin-left: 10px'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px; margin-top: 15px">Schedule Meeting</button>
@@ -1926,7 +1929,9 @@ function getStudentData(code) {
           </div>
          
           </td>
-          </tr>
+          </div>
+            </div>
+          
           `;
     
             happy_face_Column = `
