@@ -256,111 +256,6 @@
 
                                 <!-- Begin Page Content -->
                                 <div class="container-fluid">
-
-
-
-
-                                    <script>
-                                        // When the user clicks on div, open the popup
-                                        function myFunction() {
-                                            var popup = document.getElementById("myPopup");
-                                            popup.classList.toggle("show");
-                                        }
-                                    </script>
-
-                                    <div class="fixed_button">
-                                        <div class="popup" onclick="myFunction()">
-                                            <button type="button" class="btn btn-primary" style="width: 200px;">View
-                                                Graph</button>
-
-                                            <span class="popuptext" id="myPopup">
-
-
-
-
-                                            </span>
-                                        </div>
-                                    </div>
-
-
-                                    <style>
-                                        .fixed_button {
-                                            position: fixed;
-                                            bottom: 6%;
-                                            left: 84%;
-                                            z-index: 99;
-
-                                        }
-
-                                        /* Popup container - can be anything you want */
-                                        .popup {
-                                            position: absolute;
-                                            display: inline-block;
-                                            cursor: pointer;
-                                            z-index: 999999;
-                                            -webkit-user-select: none;
-                                            -moz-user-select: none;
-                                            -ms-user-select: none;
-                                            user-select: none;
-
-                                        }
-
-                                        /* The actual popup */
-                                        .popup .popuptext {
-                                            visibility: hidden;
-                                            width: 160px;
-                                            color: #fff;
-                                            text-align: center;
-                                            border-radius: 6px;
-                                            padding: 8px 0;
-                                            position: absolute;
-                                            z-index: 1;
-                                            bottom: 125%;
-                                            left: 50%;
-                                            margin-left: -23rem;
-                                        }
-
-                                        /* Popup arrow */
-                                        .popup .popuptext::after {
-                                            content: "";
-                                            position: absolute;
-                                            top: 100%;
-                                            left: 50%;
-                                            margin-left: -5px;
-                                            border-width: 5px;
-                                            border-style: solid;
-                                        }
-
-                                        /* Toggle this class - hide and show the popup */
-                                        .popup .show {
-                                            visibility: visible;
-                                            -webkit-animation: fadeIn 1s;
-                                            animation: fadeIn 1s;
-                                        }
-
-                                        /* Add animation (fade in the popup) */
-                                        @-webkit-keyframes fadeIn {
-                                            from {
-                                                opacity: 0;
-                                            }
-
-                                            to {
-                                                opacity: 1;
-                                            }
-                                        }
-
-                                        @keyframes fadeIn {
-                                            from {
-                                                opacity: 0;
-                                            }
-
-                                            to {
-                                                opacity: 1;
-                                            }
-                                        }
-                                    </style>
-
-
                                     <!-- Page Heading -->
 
                                     <!-- DataTales Example -->
@@ -372,10 +267,7 @@
                                         <div class="card-body" style="margin-top: -35px;">
 
                                             <section>
-
-                                                <div class="card-header py-3">
-                                                    <div >
-                                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="margin-bottom: 10px;">
                                                             <label class="btn btn-secondary active" onclick="showAll()">
                                                                 <input type="radio" name="options" id="allstudents"
                                                                     autocomplete="off" checked>
@@ -402,9 +294,8 @@
                                                                 Inactive
                                                             </label>
                                                         </div>
-                                                    </div>
-        
-                                                </div>
+                                               
+                                               
                                                 <section id="allStudentsTable">         
 
                                                             <div id="studentTable" style="height: 33rem; overflow-y: scroll; overflow-x: hidden;">
