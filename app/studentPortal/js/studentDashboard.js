@@ -839,22 +839,28 @@ function checkIfClassCodeExists(addType) {
     var error = document.getElementById("errorMessage");
 
 
-    //var exists = false;
+      
 
-    // var _ref = firebase.database().ref().child("Classes").child(code).child("Code");
+
 
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var classCode = doc.data();
 
       var exist = false;
+      var name, email, photoUrl, uid, emailVerified;
+
+
+      
 
       if (classCode != null) {
         exists = true;
+      } 
       } else {
         exists = false;
       }
-      
 
+     
+    
       if (exists == false) {
         error.innerHTML = `
       <div class="alert alert-danger" role="alert" style="width: 310px;">
@@ -863,13 +869,7 @@ function checkIfClassCodeExists(addType) {
      `;
       }
 
-      if (exists == "enrolledInClass") {
-        error.innerHTML = `
-      <div class="alert alert-danger" role="alert" style="width: 310px;">
-      You are already enrolled in this class
-     </div>
-     `;
-      }
+      
 
       if (exists == true) {
         error.innerHTML = `
