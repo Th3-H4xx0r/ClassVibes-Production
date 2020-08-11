@@ -738,6 +738,39 @@ function setMainClassForMood(index) {
 
 }
 
+function checkIfAlreadyinClass(addType) {
+  var enrolledClasses = []
+  var inputCode = document.getElementById('inputClassCode').value;
+  var error = document.getElementById("errorMessage");
+
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      var email = user.email
+      firebase.firestore().collection('UserData').doc(email).collection('Classes').get().then(function (doc) {
+        doc.forEach(snapshot => {
+          var classesData = snapshot.data();
+          var classCode = classesData['code'];
+          enrolledClasses.push(classCode)
+        })
+      }).then(() => {
+
+        console.log("list:" + enrolledClasses)
+        if(enrolledClasses.includes(inputCode)) {
+          error.innerHTML = `
+            <div class="alert alert-danger" role="alert" style="width: 310px;">
+            You are already enrolled in this class
+           </div> `
+        } else {
+          checkIfClassCodeExists(addType)
+        }
+
+      })
+    } else {
+      // No user is signed in.
+    }
+  });
+
+}
 //Firestore migrated fully
 function checkIfClassCodeExists(addType) {
 
