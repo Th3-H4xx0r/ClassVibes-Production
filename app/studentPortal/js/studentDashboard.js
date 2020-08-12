@@ -383,7 +383,10 @@ function leaveClass(code){
       var email = user.email;
 
       firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
-        window.location.href = "/student/dashboard";
+        firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete()
+          //window.location.href = "/student/dashboard";
+  
+        
       });
     }
   });
