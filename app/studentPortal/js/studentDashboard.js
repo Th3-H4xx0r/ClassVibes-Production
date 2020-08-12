@@ -38,6 +38,14 @@ function getProfileInfo() {
       var name = user.displayName;
       var pic = user.photoURL;
 
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+        //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+        //console.log(idToken)
+  
+      }).catch(function(error) {
+        // Handle error
+      });
+
       console.log(user)
 
       var outputPic = ``;

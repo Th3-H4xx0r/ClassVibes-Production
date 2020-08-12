@@ -137,6 +137,14 @@ router.get('/privacy',function(req,res){
   res.sendFile(path.join(__dirname+'/privacy.html'));
 });
 
+router.get('/webRTC',function(req,res){
+
+  res.sendFile(path.join(__dirname+'/app/liveClass/test.html'));
+});
+
+io.on('connection', socket => {
+  socket.on('join-room')
+})
 
 
 
