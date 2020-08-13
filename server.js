@@ -262,39 +262,44 @@ router.get('/district/dashboard',function(req,res){
 
   router.get('/district/create',function(req,res){
     if(serverStatus){
-      res.redirect('/serverDown');
+      res.sendFile(path.join(__dirname+'/app/districtPortal/createDistrict.html'));
 
     } else {
-      res.sendFile(path.join(__dirname+'/app/districtPortal/createDistrict.html'));
+      res.redirect('/serverDown');
     }
     });
 
 
   router.get('/district/schools',function(req,res){
     if(serverStatus){
-      res.redirect('/serverDown');
+      res.sendFile(path.join(__dirname+'/app/districtPortal/manageSchools.html'));
+
   
     } else {
-      res.sendFile(path.join(__dirname+'/app/districtPortal/manageSchools.html'));
+      res.redirect('/serverDown');
+
     }
     });
 
   router.get('/district/requests',function(req,res){
     if(serverStatus){
-      res.redirect('/serverDown');
+      res.sendFile(path.join(__dirname+'/app/districtPortal/teacherRequests.html'));
 
     } else {
-      res.sendFile(path.join(__dirname+'/app/districtPortal/teacherRequests.html'));
+      res.redirect('/serverDown');
+
     }
     });
 
 
   router.get('/district/school',function(req,res){
     if(serverStatus){
-      res.redirect('/serverDown');
+      res.sendFile(path.join(__dirname+'/app/districtPortal/viewSchool.html'));
+
   
     } else {
-      res.sendFile(path.join(__dirname+'/app/districtPortal/viewSchool.html'));
+      res.redirect('/serverDown');
+
     }
     });
 
