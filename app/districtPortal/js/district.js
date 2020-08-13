@@ -1,102 +1,96 @@
-function initializeFirebase(){
-    var firebaseConfig = {
-        apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
-        authDomain: "cyberdojo-a2a3e.firebaseapp.com",
-        databaseURL: "https://cyberdojo-a2a3e.firebaseio.com",
-        projectId: "cyberdojo-a2a3e",
-        storageBucket: "cyberdojo-a2a3e.appspot.com",
-        messagingSenderId: "938057332518",
-        appId: "1:938057332518:web:99c34da5abf1b1548533e7",
-        measurementId: "G-0EWJ1V40VX"
-    };
-    firebase.initializeApp(firebaseConfig);
-}
 
 //FIRESTORE MIGRATED
 function validateDistrictStatus(page) {
-    var email = localStorage.getItem('email');
-    var districtID = localStorage.getItem('district id');
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          var email = user.email;
 
-    //OLD CODE
-    // var _ref = firebase.database().ref().child("UserData").child(email).child('Account Status');
+          var districtID = localStorage.getItem('district id');
 
-    // _ref.once('value').then(function (snapshot) {
-    //     if (snapshot.val() == "Deactivated") {
-    //         document.getElementById('deactivatedAccountSection').style.display = "initial";
-    //         document.getElementById('createDistrictOptions').style.display = "none";
+          //OLD CODE
+          // var _ref = firebase.database().ref().child("UserData").child(email).child('Account Status');
+      
+          // _ref.once('value').then(function (snapshot) {
+          //     if (snapshot.val() == "Deactivated") {
+          //         document.getElementById('deactivatedAccountSection').style.display = "initial";
+          //         document.getElementById('createDistrictOptions').style.display = "none";
+      
+          //         return "Deactivated";
+      
+          //     } else if (snapshot.val() == "Activated") {
+      
+          //         if (page == 'dashboard') {
+          //             getDistrictID();
+      
+          //             getDistrictStatus();
+          //         }
+      
+          //         if (page == 'createPage') {
+          //             getDistrictStatusCreatePage();
+      
+          //              getDistrictID();
+          //         }
+      
+          //         if(page == "schoolsPage"){
+          //             getDistrictID();
+      
+          //             getSchoolStatusManageSchoolsScreen();
+          //         }
+      
+          //         return "Activated";
+          //     }
+          // });
+      
+          //NEW CODE
+          firebase.firestore().collection("Districts").doc(districtID).get().then((docSnap) => {
+              var districtStatus = docSnap.data()['Status'];
+              
+              console.log("Working");
+      
+              
+          if (districtStatus == "Deactivated") {
+              document.getElementById('deactivatedDistrictSection').style.display = "initial";
+      
+              if(page != "createPage"){
+                  document.getElementById('createDistrictOptions').style.display = "none";
+              } 
+      
+      
+              
+          console.log("Deactivated");
+      
+              return "Deactivated";
+      
+          } else if (accountStatus == "Activated") {
+      
+              if (page == 'dashboard') {
+                  getDistrictID();
+      
+                  getDistrictStatus();
+              }
+      
+              if (page == 'createPage') {
+                  getDistrictStatusCreatePage();
+      
+                  getDistrictID();
+      
+                  
+                  console.log("Create page");
+              }
+      
+              if (page == "schoolsPage") {
+                  getDistrictID();
+      
+                  getSchoolStatusManageSchoolsScreen();
+              }
+      
+              return "Activated";
+          }
+          });
+      
 
-    //         return "Deactivated";
-
-    //     } else if (snapshot.val() == "Activated") {
-
-    //         if (page == 'dashboard') {
-    //             getDistrictID();
-
-    //             getDistrictStatus();
-    //         }
-
-    //         if (page == 'createPage') {
-    //             getDistrictStatusCreatePage();
-
-    //              getDistrictID();
-    //         }
-
-    //         if(page == "schoolsPage"){
-    //             getDistrictID();
-
-    //             getSchoolStatusManageSchoolsScreen();
-    //         }
-
-    //         return "Activated";
-    //     }
-    // });
-
-    //NEW CODE
-    firebase.firestore().collection("Districts").doc(districtID).get().then((docSnap) => {
-        var districtStatus = docSnap.data()['Status'];
-        
-        console.log("Working");
-
-        
-    if (districtStatus == "Deactivated") {
-        document.getElementById('deactivatedDistrictSection').style.display = "initial";
-
-        if(page != "createPage"){
-            document.getElementById('createDistrictOptions').style.display = "none";
-        } 
-
-
-        
-    console.log("Deactivated");
-
-        return "Deactivated";
-
-    } else if (accountStatus == "Activated") {
-
-        if (page == 'dashboard') {
-            getDistrictID();
-
-            getDistrictStatus();
         }
-
-        if (page == 'createPage') {
-            getDistrictStatusCreatePage();
-
-            getDistrictID();
-
-            
-            console.log("Create page");
-        }
-
-        if (page == "schoolsPage") {
-            getDistrictID();
-
-            getSchoolStatusManageSchoolsScreen();
-        }
-
-        return "Activated";
-    }
-    });
+    })
 
 
 }
@@ -105,8 +99,6 @@ function validateDistrictStatus(page) {
              
 
 function getDistrictStatus(page) {
-    var email = localStorage.getItem('email');
-
     var districtID = localStorage.getItem('district id');
 
     firebase.firestore().collection("Districts").doc(districtID).get().then((querySnap) => {
@@ -341,7 +333,10 @@ function getSchoolStatusManageSchoolsScreen() {
 
 //FIRESTORE MIGRATED FULLY
 function getDistrictID(page) {
-    var email = localStorage.getItem('email');
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          var email = user.email;
+          
 
     firebase.firestore().collection('UserData').doc(email).collection('Districts').get().then(snapshot => {
 
@@ -413,6 +408,9 @@ function getDistrictID(page) {
         }
 
 
+    })
+
+}
     })
 
     /*

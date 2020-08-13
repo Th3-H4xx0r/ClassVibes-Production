@@ -253,11 +253,11 @@ router.get('/teacher/login',function(req,res){
 
 router.get('/district/dashboard',function(req,res){
   if(serverStatus){
-    res.redirect('/serverDown');
+    res.sendFile(path.join(__dirname+'/app/districtPortal/districtDashboard.html'));
+    
 
   } else {
-    res.sendFile(path.join(__dirname+'/app/districtPortal/districtDashboard.html'));
-  }
+    res.redirect('/serverDown');  }
   });
 
   router.get('/district/create',function(req,res){
@@ -336,6 +336,7 @@ app.use('/authcss', express.static('app/authentication/css/'))
 app.use('/authjs', express.static('app/authentication/js/'))
 app.use('/authimg', express.static('app/authentication/img/'))
 app.use('/student', express.static('app/studentPortal/'))
+app.use('/district', express.static('app/districtPortal/'))
 
 app.use('/teacher', express.static('app/teacherPortal/'))
 app.use('/app', express.static('app/'))
