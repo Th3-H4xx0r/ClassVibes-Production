@@ -136,6 +136,15 @@ router.get('/student/login',function(req,res){
   }
   });
 
+  
+router.get('/student/serverDown',function(req,res){
+  if(serverStatus){
+    res.redirect('/serverDown');
+
+  } else {
+    res.sendFile(path.join(__dirname+'/serverDown.html'));
+  }
+  });
 /////////////////////////
 //Teacher Portal Paths
 /////////////////////////
@@ -224,6 +233,16 @@ router.get('/teacher/login',function(req,res){
   }
   
   });
+
+
+  router.get('/teacher/serverDown',function(req,res){
+    if(serverStatus){
+      res.redirect('/serverDown');
+  
+    } else {
+      res.sendFile(path.join(__dirname+'/serverDown.html'));
+    }
+    });
 
 
 
