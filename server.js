@@ -265,6 +265,7 @@ app.use('/app', express.static('app/'))
 app.use('/teacherjs', express.static('app/teacherPortal/js/'))
 app.use('/teachercss', express.static('app/teacherPortal/css/'))
 app.use('/404page', express.static('PageNotFound/'))
+app.use('/socket.io', express.static('socket.io/'))
 
 //add the router
 app.use('/', router);
