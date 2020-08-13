@@ -283,7 +283,7 @@ router.get('/district/dashboard',function(req,res){
 
   router.get('/district/requests',function(req,res){
     if(serverStatus){
-      res.sendFile(path.join(__dirname+'/app/districtPortal/teacherRequests.html'));
+      res.sendFile(path.join(__dirname+'/app/districtPortal/teacherRequest.html'));
 
     } else {
       res.redirect('/serverDown');
