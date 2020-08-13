@@ -115,7 +115,7 @@ function facebookLoginDistrict() {
                     console.log('Login Success');
 
                     //localStorage.setItem("email", email);
-                    window.location = "districtDashboard.html";
+                    window.location = "/district/dashboard";
                 } else {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
@@ -407,7 +407,7 @@ googleSignInDistrict = () => {
                 if (accountType == "District") {
                     console.log('Login Success');
                     //localStorage.setItem("email", email);
-                    window.location = "../districtDashboard.html";
+                    window.location = "/district/dashboard";
                 } else {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
@@ -1072,7 +1072,7 @@ function loginWithEmailDistrict() {
                 if (accountType != null) {
                     if (accountType == "District") {
 
-                            window.location = "districtDashboard.html";
+                            window.location = "/district/dashboard";
 
 
                     } else {

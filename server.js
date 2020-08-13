@@ -145,9 +145,11 @@ router.get('/student/serverDown',function(req,res){
     res.sendFile(path.join(__dirname+'/serverDown.html'));
   }
   });
+
 /////////////////////////
 //Teacher Portal Paths
 /////////////////////////
+
 router.get('/teacher/dashboard',function(req,res){
   if(serverStatus){
     res.sendFile(path.join(__dirname+'/app/teacherPortal/dashboard.html'));
@@ -243,6 +245,62 @@ router.get('/teacher/login',function(req,res){
       res.sendFile(path.join(__dirname+'/serverDown.html'));
     }
     });
+
+
+/////////////////////////
+//District Portal Paths
+/////////////////////////
+
+router.get('/district/dashboard',function(req,res){
+  if(serverStatus){
+    res.redirect('/serverDown');
+
+  } else {
+    res.sendFile(path.join(__dirname+'/app/districtPortal/districtDashboard.html'));
+  }
+  });
+
+  router.get('/district/create',function(req,res){
+    if(serverStatus){
+      res.redirect('/serverDown');
+
+    } else {
+      res.sendFile(path.join(__dirname+'/app/districtPortal/createDistrict.html'));
+    }
+    });
+
+
+  router.get('/district/schools',function(req,res){
+    if(serverStatus){
+      res.redirect('/serverDown');
+  
+    } else {
+      res.sendFile(path.join(__dirname+'/app/districtPortal/manageSchools.html'));
+    }
+    });
+
+  router.get('/district/requests',function(req,res){
+    if(serverStatus){
+      res.redirect('/serverDown');
+
+    } else {
+      res.sendFile(path.join(__dirname+'/app/districtPortal/teacherRequests.html'));
+    }
+    });
+
+
+  router.get('/district/school',function(req,res){
+    if(serverStatus){
+      res.redirect('/serverDown');
+  
+    } else {
+      res.sendFile(path.join(__dirname+'/app/districtPortal/viewSchool.html'));
+    }
+    });
+
+
+
+
 
 
 
