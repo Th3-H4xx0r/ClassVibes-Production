@@ -1,102 +1,96 @@
-function initializeFirebase(){
-    var firebaseConfig = {
-        apiKey: "AIzaSyA2ESJBkNRjibHsQr2UTHtyYPslzNleyXw",
-        authDomain: "cyberdojo-a2a3e.firebaseapp.com",
-        databaseURL: "https://cyberdojo-a2a3e.firebaseio.com",
-        projectId: "cyberdojo-a2a3e",
-        storageBucket: "cyberdojo-a2a3e.appspot.com",
-        messagingSenderId: "938057332518",
-        appId: "1:938057332518:web:99c34da5abf1b1548533e7",
-        measurementId: "G-0EWJ1V40VX"
-    };
-    firebase.initializeApp(firebaseConfig);
-}
 
 //FIRESTORE MIGRATED
 function validateDistrictStatus(page) {
-    var email = localStorage.getItem('email');
-    var districtID = localStorage.getItem('district id');
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          var email = user.email;
 
-    //OLD CODE
-    // var _ref = firebase.database().ref().child("UserData").child(email).child('Account Status');
+          var districtID = localStorage.getItem('district id');
 
-    // _ref.once('value').then(function (snapshot) {
-    //     if (snapshot.val() == "Deactivated") {
-    //         document.getElementById('deactivatedAccountSection').style.display = "initial";
-    //         document.getElementById('createDistrictOptions').style.display = "none";
+          //OLD CODE
+          // var _ref = firebase.database().ref().child("UserData").child(email).child('Account Status');
+      
+          // _ref.once('value').then(function (snapshot) {
+          //     if (snapshot.val() == "Deactivated") {
+          //         document.getElementById('deactivatedAccountSection').style.display = "initial";
+          //         document.getElementById('createDistrictOptions').style.display = "none";
+      
+          //         return "Deactivated";
+      
+          //     } else if (snapshot.val() == "Activated") {
+      
+          //         if (page == 'dashboard') {
+          //             getDistrictID();
+      
+          //             getDistrictStatus();
+          //         }
+      
+          //         if (page == 'createPage') {
+          //             getDistrictStatusCreatePage();
+      
+          //              getDistrictID();
+          //         }
+      
+          //         if(page == "schoolsPage"){
+          //             getDistrictID();
+      
+          //             getSchoolStatusManageSchoolsScreen();
+          //         }
+      
+          //         return "Activated";
+          //     }
+          // });
+      
+          //NEW CODE
+          firebase.firestore().collection("Districts").doc(districtID).get().then((docSnap) => {
+              var districtStatus = docSnap.data()['Status'];
+              
+              console.log("Working");
+      
+              
+          if (districtStatus == "Deactivated") {
+              document.getElementById('deactivatedDistrictSection').style.display = "initial";
+      
+              if(page != "createPage"){
+                  document.getElementById('createDistrictOptions').style.display = "none";
+              } 
+      
+      
+              
+          console.log("Deactivated");
+      
+              return "Deactivated";
+      
+          } else if (accountStatus == "Activated") {
+      
+              if (page == 'dashboard') {
+                  getDistrictID();
+      
+                  getDistrictStatus();
+              }
+      
+              if (page == 'createPage') {
+                  getDistrictStatusCreatePage();
+      
+                  getDistrictID();
+      
+                  
+                  console.log("Create page");
+              }
+      
+              if (page == "schoolsPage") {
+                  getDistrictID();
+      
+                  getSchoolStatusManageSchoolsScreen();
+              }
+      
+              return "Activated";
+          }
+          });
+      
 
-    //         return "Deactivated";
-
-    //     } else if (snapshot.val() == "Activated") {
-
-    //         if (page == 'dashboard') {
-    //             getDistrictID();
-
-    //             getDistrictStatus();
-    //         }
-
-    //         if (page == 'createPage') {
-    //             getDistrictStatusCreatePage();
-
-    //              getDistrictID();
-    //         }
-
-    //         if(page == "schoolsPage"){
-    //             getDistrictID();
-
-    //             getSchoolStatusManageSchoolsScreen();
-    //         }
-
-    //         return "Activated";
-    //     }
-    // });
-
-    //NEW CODE
-    firebase.firestore().collection("Districts").doc(districtID).get().then((docSnap) => {
-        var districtStatus = docSnap.data()['Status'];
-        
-        console.log("Working");
-
-        
-    if (districtStatus == "Deactivated") {
-        document.getElementById('deactivatedDistrictSection').style.display = "initial";
-
-        if(page != "createPage"){
-            document.getElementById('createDistrictOptions').style.display = "none";
-        } 
-
-
-        
-    console.log("Deactivated");
-
-        return "Deactivated";
-
-    } else if (accountStatus == "Activated") {
-
-        if (page == 'dashboard') {
-            getDistrictID();
-
-            getDistrictStatus();
         }
-
-        if (page == 'createPage') {
-            getDistrictStatusCreatePage();
-
-            getDistrictID();
-
-            
-            console.log("Create page");
-        }
-
-        if (page == "schoolsPage") {
-            getDistrictID();
-
-            getSchoolStatusManageSchoolsScreen();
-        }
-
-        return "Activated";
-    }
-    });
+    })
 
 
 }
@@ -105,8 +99,6 @@ function validateDistrictStatus(page) {
              
 
 function getDistrictStatus(page) {
-    var email = localStorage.getItem('email');
-
     var districtID = localStorage.getItem('district id');
 
     firebase.firestore().collection("Districts").doc(districtID).get().then((querySnap) => {
@@ -341,7 +333,10 @@ function getSchoolStatusManageSchoolsScreen() {
 
 //FIRESTORE MIGRATED FULLY
 function getDistrictID(page) {
-    var email = localStorage.getItem('email');
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          var email = user.email;
+          
 
     firebase.firestore().collection('UserData').doc(email).collection('Districts').get().then(snapshot => {
 
@@ -415,6 +410,9 @@ function getDistrictID(page) {
 
     })
 
+}
+    })
+
     /*
 
     var _ref = firebase.database().ref().child("UserData").child(email).child('Districts');
@@ -444,191 +442,203 @@ function getDistrictID(page) {
 
 //Firestore Migrated FUlly
 function getDistrictStatusCreatePage() {
-    var email = localStorage.getItem('email');
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          var email = user.email;
 
-    firebase.firestore().collection('UserData').doc(email).collection('Districts').get().then(snap => {
+          firebase.firestore().collection('UserData').doc(email).collection('Districts').get().then(snap => {
 
-        var index = 0;
-        snap.forEach(doc => {
-            index += 1
-            var data = doc.data()
-            if ( data == null) {
-                document.getElementById('createDistrict-page').style.display = "initial";
-                document.getElementById('quotaReached').style.display = "none";
-            } else {
-                document.getElementById('createDistrict-page').style.display = "none";
-                document.getElementById('quotaReached').style.display = "initial";
-            }
-        })
-            if(index == 0){
+            var index = 0;
+            snap.forEach(doc => {
+                index += 1
+                var data = doc.data()
+                if ( data == null) {
+                    document.getElementById('createDistrict-page').style.display = "initial";
+                    document.getElementById('quotaReached').style.display = "none";
+                } else {
+                    document.getElementById('createDistrict-page').style.display = "none";
+                    document.getElementById('quotaReached').style.display = "initial";
+                }
+            })
+                if(index == 0){
+    
+                    document.getElementById('createDistrict-page').style.display = "initial";
+                    document.getElementById('quotaReached').style.display = "none";
+                }
+    
+    
+        });
+    
+        /*
+    
+        var _ref = firebase.database().ref().child("UserData").child(email).child('Districts');
+    
+        _ref.once('value').then(function (snapshot) {
+            //console.log(snapshot.val());
+                if (snapshot.val() == null) {
+                    document.getElementById('createDistrict-page').style.display = "initial";
+                    document.getElementById('quotaReached').style.display = "none";
+                } else {
+                    document.getElementById('createDistrict-page').style.display = "none";
+                    document.getElementById('quotaReached').style.display = "initial";
+                }
+    
+        });
+        */
+        }
+    })
 
-                document.getElementById('createDistrict-page').style.display = "initial";
-                document.getElementById('quotaReached').style.display = "none";
-            }
 
-
-    });
-
-    /*
-
-    var _ref = firebase.database().ref().child("UserData").child(email).child('Districts');
-
-    _ref.once('value').then(function (snapshot) {
-        //console.log(snapshot.val());
-            if (snapshot.val() == null) {
-                document.getElementById('createDistrict-page').style.display = "initial";
-                document.getElementById('quotaReached').style.display = "none";
-            } else {
-                document.getElementById('createDistrict-page').style.display = "none";
-                document.getElementById('quotaReached').style.display = "initial";
-            }
-
-    });
-    */
 }
 
 //Firestore migrated fully
 function createDistrict() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          var userEmail = user.email;
 
-    var userEmail = localStorage.getItem('email');
-    var name = document.getElementById('districtName').value;
-    var email = document.getElementById('districtEmail').value;
-    var website = document.getElementById('districtWebsite').value;
-    var headOffice = document.getElementById('districtAddress').value;
-    var headEmail = document.getElementById('districtEmailHead').value;
-    var phone = document.getElementById('districtPhone').value;
-    var socialMedia = document.getElementById('districtSocialMedia').value;
+          var name = document.getElementById('districtName').value;
+          var email = document.getElementById('districtEmail').value;
+          var website = document.getElementById('districtWebsite').value;
+          var headOffice = document.getElementById('districtAddress').value;
+          var headEmail = document.getElementById('districtEmailHead').value;
+          var phone = document.getElementById('districtPhone').value;
+          var socialMedia = document.getElementById('districtSocialMedia').value;
+      
+          var errorMessage = document.getElementById('districtCreateError');
+      
+          if (name, email, website, headOffice, headEmail, phone, socialMedia == "") {
+      
+              var errorHTML = `
+              <div class="alert alert-danger" role="alert"
+              style="margin-top: 20px; width: 100%;">
+              <strong>Error! </strong> You can't leave any fields blank
+          </div>
+              `;
+      
+              errorMessage.innerHTML = errorHTML;
+      
+          } else {
+              errorMessage.innerHTML = "";
+      
+              var code = Math.floor(100000 + Math.random() * 900000);
+      
+              console.log(code);
+      
+              firebase.firestore().collection('Districts').doc(code.toString()).get().then(snapshot => {
+                  var exists = snapshot.data();
+      
+                  while (exists != null) {
+      
+                      function generateNew() {
+                          _newRef.get().then(snapshot => {
+                              var data = snapshot.data();
+                              if (data == null) {
+                                  code = newCode;
+                                  return true;
+                              } else {
+                                  return false;
+                              }
+                          });
+                      }
+                      console.log("exists");
+                      var newCode = Math.floor(100000 + Math.random() * 900000);
+      
+                      console.log(newCode);
+      
+                      var _newRef = firebase.firestore().collection('Districts').doc(newCode.toString());
+      
+                      var newCode = generateNew();
+      
+                      if (newCode == true) {
+                          break
+                      }
+      
+      
+                  }
+              }).then(() => {
+                  firebase.firestore().collection('Districts').doc(code.toString()).set({
+                      "Name": name,
+                      "Email": email,
+                      "Website": website,
+                      "Address": headOffice,
+                      "Head Email": headEmail,
+                      "Phone": phone,
+                      "Social Media Links": socialMedia,
+                      "Code": code,
+                      "Status": "Deactivated"
+                  });
+      
+                  firebase.firestore().collection('UserData').doc(userEmail).collection("Districts").doc(code.toString()).set({
+                      "Name": name,
+                      "Code": code
+                  }).then(() => {
+                      document.getElementById('districtCreateSuccess').style.display = 'initial';
+                      document.getElementById('createDistrict-page').style.display = 'none';
+      
+      
+                  });
+      
+              });
+      
+              /*
+      
+              var _ref = firebase.database().ref().child('Districts').child(code).child('Name');
+      
+              _ref.once('value').then(function (snapshot) {
+                  var exists = snapshot.val();
+      
+                  while (exists != null) {
+      
+                      function generateNew() {
+                          _newRef.once('value').then(function (snapshot) {
+                              if (snapshot.val() == null) {
+                                  code = newCode;
+                                  return true;
+                              } else {
+                                  return false;
+                              }
+                          });
+                      }
+                      console.log("exists");
+                      var newCode = Math.floor(100000 + Math.random() * 900000);
+      
+                      console.log(newCode);
+      
+                      var _newRef = firebase.database().ref().child('Districts').child(newCode).child('Name');
+      
+                      var newCode = generateNew();
+      
+                      if (newCode == true) {
+                          break
+                      }
+      
+      
+                  }
+              }).then(() => {
+                  var _ref = firebase.database().ref().child('Districts').child(code);
+      
+                  _ref.child("Name").set(name);
+                  _ref.child("Email").set(email);
+                  _ref.child("Website").set(website);
+                  _ref.child("Address").set(headOffice);
+                  _ref.child("Head Email").set(headEmail);
+                  _ref.child("Phone").set(phone);
+                  _ref.child("Social Media Links").set(socialMedia);
+                  _ref.child("Code").set(code);
+      
+                  var _ref = firebase.database().ref().child('UserData').child(userEmail).child("Districts").child(code);
+      
+                  _ref.child("Name").set(name);
+                  _ref.child("Code").set(code);
+              });
+          }
+          */
+          }
 
-    var errorMessage = document.getElementById('districtCreateError');
+        }
+    });
 
-    if (name, email, website, headOffice, headEmail, phone, socialMedia == "") {
-
-        var errorHTML = `
-        <div class="alert alert-danger" role="alert"
-        style="margin-top: 20px; width: 100%;">
-        <strong>Error! </strong> You can't leave any fields blank
-    </div>
-        `;
-
-        errorMessage.innerHTML = errorHTML;
-
-    } else {
-        errorMessage.innerHTML = "";
-
-        var code = Math.floor(100000 + Math.random() * 900000);
-
-        console.log(code);
-
-        firebase.firestore().collection('Districts').doc(code.toString()).get().then(snapshot => {
-            var exists = snapshot.data();
-
-            while (exists != null) {
-
-                function generateNew() {
-                    _newRef.get().then(snapshot => {
-                        var data = snapshot.data();
-                        if (data == null) {
-                            code = newCode;
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    });
-                }
-                console.log("exists");
-                var newCode = Math.floor(100000 + Math.random() * 900000);
-
-                console.log(newCode);
-
-                var _newRef = firebase.firestore().collection('Districts').doc(newCode.toString());
-
-                var newCode = generateNew();
-
-                if (newCode == true) {
-                    break
-                }
-
-
-            }
-        }).then(() => {
-            firebase.firestore().collection('Districts').doc(code.toString()).set({
-                "Name": name,
-                "Email": email,
-                "Website": website,
-                "Address": headOffice,
-                "Head Email": headEmail,
-                "Phone": phone,
-                "Social Media Links": socialMedia,
-                "Code": code,
-                "Status": "Deactivated"
-            });
-
-            firebase.firestore().collection('UserData').doc(userEmail).collection("Districts").doc(code.toString()).set({
-                "Name": name,
-                "Code": code
-            }).then(() => {
-                document.getElementById('districtCreateSuccess').style.display = 'initial';
-                document.getElementById('createDistrict-page').style.display = 'none';
-
-
-            });
-
-        });
-
-        /*
-
-        var _ref = firebase.database().ref().child('Districts').child(code).child('Name');
-
-        _ref.once('value').then(function (snapshot) {
-            var exists = snapshot.val();
-
-            while (exists != null) {
-
-                function generateNew() {
-                    _newRef.once('value').then(function (snapshot) {
-                        if (snapshot.val() == null) {
-                            code = newCode;
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    });
-                }
-                console.log("exists");
-                var newCode = Math.floor(100000 + Math.random() * 900000);
-
-                console.log(newCode);
-
-                var _newRef = firebase.database().ref().child('Districts').child(newCode).child('Name');
-
-                var newCode = generateNew();
-
-                if (newCode == true) {
-                    break
-                }
-
-
-            }
-        }).then(() => {
-            var _ref = firebase.database().ref().child('Districts').child(code);
-
-            _ref.child("Name").set(name);
-            _ref.child("Email").set(email);
-            _ref.child("Website").set(website);
-            _ref.child("Address").set(headOffice);
-            _ref.child("Head Email").set(headEmail);
-            _ref.child("Phone").set(phone);
-            _ref.child("Social Media Links").set(socialMedia);
-            _ref.child("Code").set(code);
-
-            var _ref = firebase.database().ref().child('UserData').child(userEmail).child("Districts").child(code);
-
-            _ref.child("Name").set(name);
-            _ref.child("Code").set(code);
-        });
-    }
-    */
-    }
 }
 
 //Firestore Migrated Fully
@@ -1009,8 +1019,6 @@ function makeid(length) {
 
 //FIRESTORE MIGRATED FULLY
 function createSchool() {
-
-    var userEmail = localStorage.getItem('email');
 
     var schoolName = document.getElementById('schoolName').value;
     var schoolWebsite = document.getElementById('schoolWebsite').value;
@@ -1432,7 +1440,7 @@ function storePrefForSchoolView(schoolID, districtID, schoolName){
 
     localStorage.setItem('School Name', schoolName);
 
-    window.location = 'viewSchool.html';
+    window.location = '/district/school';
 }
 
 //FIRESTORE MIGRATED FULLY
@@ -1704,3 +1712,46 @@ function declineRequest(schoolID, districtID, requestID, teacherEmail){
         });
     })
 }
+
+function getProfileInfo() {
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        var name = user.displayName;
+        var pic = user.photoURL;
+  
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+          //console.log(idToken)
+    
+        }).catch(function(error) {
+          // Handle error
+        });
+  
+        console.log(user)
+  
+        var outputPic = ``;
+  
+        if(pic != null && pic != undefined && pic != ""){
+            outputPic = `<img class="img-profile rounded-circle" src="${pic}">`;
+        } else {
+            outputPic = `<img class="img-profile rounded-circle" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">`;
+        }
+      
+      
+        $(outputPic).appendTo("#profilePic")
+  
+        if(name != null&& name != undefined){
+          document.getElementById("displayName").innerHTML = name
+        } else {
+          document.getElementById("displayName").innerHTML = "Error Occured"
+        }
+      
+        
+      } else {
+        console.log("user Signed out");
+        
+      }
+    })
+  
+  }

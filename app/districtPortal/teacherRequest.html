@@ -12,6 +12,9 @@
 
   <script src="js/district.js"></script>
 
+  <script src="https://cstatic.classvibes.net/init.js"></script>
+
+
   <title>View School</title>
 
   <!-- Custom fonts for this template -->
@@ -24,11 +27,11 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
   <!-- Custom styles for this page -->
-  <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="css/loader.css">
   
-  <script src="../app_config.js"></script>
+  <script src="/app/app_config.js"></script>
 </head>
 
 <body id="page-top">
@@ -52,6 +55,7 @@
     $( document ).ready(function() {
       setVersionFooter();
       initializeFirebase();
+      getProfileInfo()
       getTeacherRequests();
     });
 </script>
@@ -64,9 +68,9 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
-        </div>
+        <div class="sidebar-brand-icon">
+          <img src="/img/classvibelogo.png" alt="" style="width: 50px;">
+      </div>
         <div class="sidebar-brand-text mx-3">ClassVibes</div>
       </a>
 
@@ -75,7 +79,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="districtDashboard.html">
+        <a class="nav-link" href="/district/dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
@@ -91,25 +95,25 @@
       <!-- Nav Item - Pages Collapse Menu -->
 
       <li class="nav-item">
-        <a class="nav-link" href="districtDashboard.html">
+        <a class="nav-link" href="/district/dashboard">
             <i class="fas fa-cogs"></i>
           <span>Manage District</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="manageSchools.html">
+        <a class="nav-link" href="/district/schools">
           <i class="fas fa-school"></i>
             <span>Manage Schools</span></a>
     </li>
 
     <li class="nav-item active">
-      <a class="nav-link" href="teacherRequest.html">
+      <a class="nav-link" href="/district/requests">
         <i class="fas fa-chalkboard-teacher"></i>
           <span>Teacher Requests</span></a>
   </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="createDistrict.html">
+        <a class="nav-link" href="/district/create">
             <i class="fas fa-folder-plus"></i>
           <span>Create District</span></a>
       </li>
@@ -166,8 +170,8 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id = 'displayName'>Loading...</span>
+                <div id="profilePic"></div>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

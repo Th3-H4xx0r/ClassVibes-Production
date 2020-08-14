@@ -13,6 +13,9 @@
 
   <title>Manage Schools</title>
 
+  <script src="https://cstatic.classvibes.net/init.js"></script>
+
+
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -26,7 +29,7 @@
 
   <script src="js/clipboard.js-master/dist/clipboard.js"></script>
 
-  <script src="../app_config.js"></script>
+  <script src="/app/app_config.js"></script>
 
 
 </head>
@@ -51,6 +54,7 @@
     $( document ).ready(function() {
       setVersionFooter();
       initializeFirebase();
+      getProfileInfo()
       getDistrictID('schoolpage');
       new ClipboardJS('.btn');
     });
@@ -64,9 +68,9 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
-        </div>
+        <div class="sidebar-brand-icon">
+          <img src="/img/classvibelogo.png" alt="" style="width: 50px;">
+      </div>
         <div class="sidebar-brand-text mx-3">ClassVibes</div>
       </a>
 
@@ -75,7 +79,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="districtDashboard.html">
+        <a class="nav-link" href="/district/dashboard">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
@@ -91,25 +95,25 @@
       <!-- Nav Item - Pages Collapse Menu -->
 
       <li class="nav-item">
-        <a class="nav-link" href="districtDashboard.html">
+        <a class="nav-link" href="/district/dashboard">
             <i class="fas fa-cogs"></i>
           <span>Manage District</span></a>
       </li>
 
       <li class="nav-item active">
-        <a class="nav-link" href="manageSchools.html">
+        <a class="nav-link" href="/district/schools">
           <i class="fas fa-school"></i>
             <span>Manage Schools</span></a>
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="teacherRequest.html">
+      <a class="nav-link" href="/district/requests">
         <i class="fas fa-chalkboard-teacher"></i>
           <span>Teacher Requests</span></a>
   </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="createDistrict.html">
+        <a class="nav-link" href="/district/create">
             <i class="fas fa-folder-plus"></i>
           <span>Create District</span></a>
       </li>
@@ -166,8 +170,8 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id = 'displayName'>Loading...</span>
+                <div id="profilePic"></div>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -211,7 +215,7 @@
             </center>
  
 
-          <!--
+      
 
             <section id = "deactivatedDistrictSection" style="display: none;">
                 <center style="margin-top: 22%;">
@@ -219,9 +223,7 @@
                     <p style="margin-top: 10px;"> District Activation Required. Please <br> contact <a href="mailto:sales@classvibes.net" target="blank">sales@classvibes.net</a> for activating your account.</p>
              </center>
             </section>
-          -->
-
-          <!--
+      
             <section id = "createSchoolMessage" style="display: none;">
 
                 <center style="margin-top: 14%;">
@@ -244,9 +246,7 @@
 
             </section>
 
-          -->
-
-          <!--
+        
                         <section id = "createSchool-page" style="display: none;">
                 <h1 style="margin-bottom: 1%;">Create School</h1>
 
@@ -285,7 +285,7 @@
                   </a>
 
             </section>
-          -->
+    
 
 
 
@@ -311,7 +311,7 @@
 
           </section>
 
-          <!--
+ 
 
             
             <section id = "schoolCreateSuccess" style="display: none;">
@@ -338,7 +338,7 @@
 
 
                
-            <!--
+       
             <section id = "schoolsInfoSection" style="display: none;">
 
                 <div class="row" style="justify-content: space-between; margin-left: 10px;">
@@ -353,7 +353,7 @@
 
               </div>
             </section>
-            -->
+        
 
 
          

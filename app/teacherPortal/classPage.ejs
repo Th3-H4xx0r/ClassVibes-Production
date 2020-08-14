@@ -11,6 +11,7 @@
     <script src="https://cstatic.classvibes.net/init.js"></script>
 
     <script src="/vendor/chart.js/Chart.min.js"></script>
+    <link rel="icon" href="/img/classvibelogo.png">
 
 
     <title>Manage Class</title>
@@ -251,23 +252,23 @@
                     <div style="height: 50px;"></div>
 
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" style="overflow: hidden;">
                             <div id="content">
 
                                 <!-- Begin Page Content -->
-                                <div class="container-fluid">
+                                <div class="container-fluid" >
                                     <!-- Page Heading -->
 
                                     <!-- DataTales Example -->
 
-                                    <div class="row">
+                                    <div class="row" >
 
                                         <div id="chartBody"></div>
 
-                                        <div class="card-body" style="margin-top: -35px;">
+                                        <div class="card-body" >
 
                                             <section>
-                                                        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="margin-bottom: 10px;">
+                                                        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="margin-bottom: 10px; margin-top: 0px;">
                                                             <label class="btn btn-secondary active" onclick="showAll()">
                                                                 <input type="radio" name="options" id="allstudents"
                                                                     autocomplete="off" checked>
@@ -404,7 +405,6 @@
                         }
 
                         
-
                         #meetingsListforClassPage {
                             overflow-x: hidden;
                             overflow-y: scroll;
@@ -415,6 +415,12 @@
                             overflow-x: hidden;
                             overflow-y: scroll;
                             height: 27rem;
+                        }
+
+                        #home{
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 29rem;
                         }
                     }
 
@@ -435,6 +441,12 @@
                             overflow-x: hidden;
                             overflow-y: scroll;
                             height: 32rem;
+                        }
+
+                        #home{
+                            overflow-x: hidden;
+                            overflow-y: scroll;
+                            height: 36rem;
                         }
 
 
@@ -567,7 +579,6 @@
     <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 
     <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
 
 
 </body>

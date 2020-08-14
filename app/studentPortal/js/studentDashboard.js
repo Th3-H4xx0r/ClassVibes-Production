@@ -38,6 +38,14 @@ function getProfileInfo() {
       var name = user.displayName;
       var pic = user.photoURL;
 
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+        //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+        //console.log(idToken)
+  
+      }).catch(function(error) {
+        // Handle error
+      });
+
       console.log(user)
 
       var outputPic = ``;
@@ -333,7 +341,7 @@ function getClassDataClassesPage(code){
 
       <h3 style="margin-top: 30px;">Leave Class</h3>
 
-      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${className}', '${code}')">Leave Class</button>
+      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${code}')">Leave Class</button>
       `;
   
       //document.getElementById('info-pannel').innerHTML = courseInfoHTML;
@@ -345,7 +353,9 @@ function getClassDataClassesPage(code){
   })
 }
 
-function toggleLeaveClassPopup(className, classCode){
+function toggleLeaveClassPopup(classCode){
+
+  console.log(classCode)
 
   var modalHTML = `
   <!-- Modal -->
@@ -359,7 +369,7 @@ function toggleLeaveClassPopup(className, classCode){
         </button>
       </div>
       <div class="modal-body">
-        Are you sure you want to leave the class <strong>${className}?</strong>
+        Are you sure you want to leave the class?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -378,12 +388,20 @@ function toggleLeaveClassPopup(className, classCode){
 }
 
 function leaveClass(code){
+
+  console.log(code)
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
 
       firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
-        window.location.href = "/student/dashboard";
+        console.log("Deleted class")
+        firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete()
+          window.location.href = "/student/dashboard";
+  
+        
+      }).catch(err => {
+        console.log(err)
       });
     }
   });
@@ -1844,9 +1862,6 @@ function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElem
 
   var lastElementPageNation = ''
 
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      var email = user.email;
 
       firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(5).startAfter(lastElement).get().then(snap => {
         snap.forEach(doc => {
@@ -1873,11 +1888,7 @@ function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElem
             //console.log(data)
       
             var newMessageUI = `
-        
-
-          
             <div>
-
             <div class="message-component" style=" float: right; margin-left: 50%"  >
               <div class="row"><div style="width: 100%" ></div><p style="color: white; background-color: royalblue; border-radius: 20px 20px 0px 20px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br> ${message}</p></div>
             </div>
@@ -1885,9 +1896,7 @@ function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElem
             `
     
       var otherMessage = `
-    
       <div>
-
         <div class="message-component" style= " float: left; min-width: 900px"  >
           <div class="row"><div class="container" style="width: 100%"></div><p style="color: black; background-color: #d8e6eb; border-radius: 20px 20px 20px 0px; margin-right: 30px; padding: 20px; "><strong>${user}</strong> <br>${message}</p></div>
         </div>
@@ -1917,19 +1926,10 @@ function getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElem
           }
         });
       });
-    }
-  });
+
 } 
 
 function getMessagesForChat_Classes_page(classCode, studentEmail){
-  
-  firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
-    'student unread': 0
-  })
-
-  firebase.firestore().collection('UserData').doc(studentEmail).collection("Classes").doc(classCode).update({
-    'student unread': 0
-  })
 
 
   classCodeChat = classCode
@@ -1944,7 +1944,17 @@ function getMessagesForChat_Classes_page(classCode, studentEmail){
     if (user) {
       var email = user.email;
 
-      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp', 'desc').limit(10).get().then(snap => {
+        
+  firebase.firestore().collection('Classes').doc(classCode).collection("Students").doc(studentEmail).update({
+    'student unread': 0
+  })
+
+  firebase.firestore().collection('UserData').doc(studentEmail).collection("Classes").doc(classCode).update({
+    'student unread': 0
+  })
+
+
+      firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp', 'desc').limit(10).get().then(snap => {
         snap.forEach(doc => {
           var data = doc.data();
     
@@ -2029,13 +2039,13 @@ function getMessagesForChat_Classes_page(classCode, studentEmail){
           var scrollTop = $(this).scrollTop();
           if (scrollTop <= 0) {
             //alert('top reached');
-            getMessagesForChat_Classes_pageNation(classCode, studentEmail, lastElement)
+            getMessagesForChat_Classes_pageNation(classCode, email, lastElement)
           }
         });
 
 
     
-          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
+          firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(email).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
 
               var data = doc.data();
