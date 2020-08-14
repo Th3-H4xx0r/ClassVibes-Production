@@ -1934,7 +1934,7 @@ function getStudentData(code) {
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
 
           <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} 
-          <a  href = '' onclick = "removeStudent('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"></i></a>
+          <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"></i></a>
 
           ${unreadMessagesHTML} </h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
         
@@ -1958,7 +1958,7 @@ function getStudentData(code) {
 
             <div style = 'margin-left: 10px; font-size: 30px'>${happy}</div>
 
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
         
           </div>
 
@@ -1978,7 +1978,7 @@ function getStudentData(code) {
 
             <div style = 'margin-left: 10px; font-size: 30px'>${meh}</div>
 
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
         
           </div>
 
@@ -1998,7 +1998,7 @@ function getStudentData(code) {
 
             <div style = 'margin-left: 10px; font-size: 30px'>${sad}</div>
 
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
         
           </div>
 
@@ -2018,7 +2018,7 @@ function getStudentData(code) {
 
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "inactive_face" ></div></div>
 
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
         
           </div>
 
@@ -2155,54 +2155,34 @@ function getStudentData(code) {
 function showRemoveStudentPopup(email, code){
   
   var popupHTML = `
-  <div class="modal fade" id="exampleModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel${i}" aria-hidden="true">
+  <div class="modal" tabindex="-1" role="dialog" id = 'removeStudentModal${code}'>
   <div class="modal-dialog" role="document">
-      <div class="modal-content">
+    <div class="modal-content">
       <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel${i}">Schedule Meeting</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title">Remove Student?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-          </button>
+        </button>
       </div>
       <div class="modal-body">
-          <form>
-          <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Title:</label>
-              <input type="text" class="form-control" id="title1${i}" maxlength="100">
-          </div>
-          <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Date/Time</label>
-              <input type="text" class="form-control" id="date${i}" maxlength="60">
-          </div>
-          <div class="form-group">
-              <label for="recipient-name" class="col-form-label">Message</label>
-              <textarea type="text" class="form-control" id="message${i}">
-              </textarea>
-          </div>
-          <div class="form-group">
-          <label for="recipient-name" class="col-form-label">Meeting Length</label>
-          <input type="text" class="form-control" id="len${i}" textarea >
-          </div>
-          <div class="form-group">
-              <label for="message-text" class="col-form-label">Student</label>
-              <input type="text" class="form-control" placeholder = "${studentName}" readonly>
-          </div>
-          </form>
+        <p>Are you sure you want to remove this student from the class?</p>
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick = "schedualMeeting('${studentEmail}', '${className}', '${code}', '${i}')" data-dismiss = "modal">Send message</button>
+        <button type="button" class="btn btn-danger" onclick = "removeStudent('${email}', '${code}')">Remove Student</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
-      </div>
+    </div>
   </div>
-  </div>
+</div>
   `
 
-  
+  $(popupHTML).appendTo('#page-top')
+  $(`#removeStudentModal${code}`).modal('toggle')
 }
 
 
-function removeStudent(email, code){
+async function removeStudent(email, code){
+  console.log("Removing")
   firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete().then(() => {
     firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
       window.location.reload();
@@ -2300,7 +2280,12 @@ function showInactive() {
 }
 
 function showAll() {
-  window.location.reload();
+  document.getElementById('studentTable').style.display = "initial";
+  document.getElementById('allStudentsTable').style.display = "initial";
+  document.getElementById("doing-good-table-section").style.display = "none";
+  document.getElementById("meh-table-section").style.display = "none";
+  document.getElementById("frustrated-table-section").style.display = "none";
+  document.getElementById("inactive-table-section").style.display = "none";
 }
 
 
