@@ -421,83 +421,91 @@ function checkIfDistrictCodeExists() {
 }
 
 function checkIfSchoolCodeExists() {
-  var district_code = document.getElementById('searchInputDistrict').value;
-  var school_code = document.getElementById('searchInputSchool').value;
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var teacher_email = user.email
+      var teacher_name = user.displayName
 
-  var teacher_email = localStorage.getItem('email');
-  var teacher_name = localStorage.getItem('name');
+      var district_code = document.getElementById('searchInputDistrict').value;
+      var school_code = document.getElementById('searchInputSchool').value;
 
-  firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).get().then(function (doc) {
-    var data = doc.data();
-
-    if (data != null && data != undefined) {
-
-      $('#joinSchool-district-err').html('');
-
-
-      firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).collection('Teachers').doc(teacher_email).set({
-        "Teacher Name": teacher_name,
-        "Teacher Email": teacher_email,
-      });
-
-
-
-
-      firebase.firestore().collection('UserData').doc(teacher_email).update({
-        "District Code": district_code,
-      })
-
-
-
-      firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).collection('Teachers').doc(teacher_email).set({
-        "Teacher Name": teacher_name,
-        "Teacher Email": teacher_email,
-      });
-
-
-      firebase.firestore().collection('Districts').doc(district_code).collection('Schools').doc(school_code).get().then(snapshot => {
-        var data = snapshot.data();
-
-        var schoolName = data['School Name']
-
-        return schoolName
-
-      }).then((name) => {
-
-        const increment = firebase.firestore.FieldValue.increment(1);
-
-        firebase.firestore().collection('Districts').doc(district_code).update({
-          "Pending Requests": increment
-        })
-
-        var _requestRef = firebase.firestore().collection('Districts').doc(district_code).collection("Teacher Requests").doc()
-
-        _requestRef.set({
-          "Teacher Name": teacher_name,
-          "Teacher Email": teacher_email,
-          "Teacher School ID Request": school_code,
-          "School Name": name,
-        }).then(() => {
-
-          console.log(_requestRef.id);
-
-
+    
+      firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).get().then(function (doc) {
+        var data = doc.data();
+    
+        if (data != null && data != undefined) {
+    
+          $('#joinSchool-district-err').html('');
+    
+    
+          firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).collection('Teachers').doc(teacher_email).set({
+            "Teacher Name": teacher_name,
+            "Teacher Email": teacher_email,
+          });
+    
+    
+    
+    
           firebase.firestore().collection('UserData').doc(teacher_email).update({
-            "Pending District Request": district_code,
-            "Pending School Request": school_code,
-            "Pending School Request Name": name,
-            "Pending Request ID": _requestRef.id,
-          }).then(() => {
-            window.location.reload();
+            "District Code": district_code,
           })
-        })
-      })
-    } else {
-      var errHTML = `<p style = 'color: red; margin-top: 5px'>School doesn't exist</p>`;
+    
+    
+    
+          firebase.firestore().collection('Districts').doc(district_code).collection("Schools").doc(school_code).collection('Teachers').doc(teacher_email).set({
+            "Teacher Name": teacher_name,
+            "Teacher Email": teacher_email,
+          });
+    
+    
+          firebase.firestore().collection('Districts').doc(district_code).collection('Schools').doc(school_code).get().then(snapshot => {
+            var data = snapshot.data();
+    
+            var schoolName = data['School Name']
+    
+            return schoolName
+    
+          }).then((name) => {
+    
+            const increment = firebase.firestore.FieldValue.increment(1);
+    
+            firebase.firestore().collection('Districts').doc(district_code).update({
+              "Pending Requests": increment
+            })
+    
+            var _requestRef = firebase.firestore().collection('Districts').doc(district_code).collection("Teacher Requests").doc()
+    
+            _requestRef.set({
+              "Teacher Name": teacher_name,
+              "Teacher Email": teacher_email,
+              "Teacher School ID Request": school_code,
+              "School Name": name,
+            }).then(() => {
+    
+              console.log(_requestRef.id);
+    
+    
+              firebase.firestore().collection('UserData').doc(teacher_email).update({
+                "Pending District Request": district_code,
+                "Pending School Request": school_code,
+                "Pending School Request Name": name,
+                "Pending Request ID": _requestRef.id,
+              }).then(() => {
+                window.location.reload();
+              })
+            })
+          })
+        } else {
+          var errHTML = `<p style = 'color: red; margin-top: 5px'>School doesn't exist</p>`;
+    
+          $('#joinSchool-district-err').html(errHTML);
+        }
+      });
 
-      $('#joinSchool-district-err').html(errHTML);
     }
   });
+
+
 }
 
 function getProfileInfo() {
