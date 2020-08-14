@@ -1712,3 +1712,46 @@ function declineRequest(schoolID, districtID, requestID, teacherEmail){
         });
     })
 }
+
+function getProfileInfo() {
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        var name = user.displayName;
+        var pic = user.photoURL;
+  
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+          //console.log(idToken)
+    
+        }).catch(function(error) {
+          // Handle error
+        });
+  
+        console.log(user)
+  
+        var outputPic = ``;
+  
+        if(pic != null && pic != undefined && pic != ""){
+            outputPic = `<img class="img-profile rounded-circle" src="${pic}">`;
+        } else {
+            outputPic = `<img class="img-profile rounded-circle" src="https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg">`;
+        }
+      
+      
+        $(outputPic).appendTo("#profilePic")
+  
+        if(name != null&& name != undefined){
+          document.getElementById("displayName").innerHTML = name
+        } else {
+          document.getElementById("displayName").innerHTML = "Error Occured"
+        }
+      
+        
+      } else {
+        console.log("user Signed out");
+        
+      }
+    })
+  
+  }
