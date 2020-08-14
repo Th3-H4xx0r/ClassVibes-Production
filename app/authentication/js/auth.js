@@ -1104,3 +1104,15 @@ function loginWithEmailDistrict() {
     });
 
 }
+
+function forgotPassword() {
+    var email = document.getElementById('forgotPasswordEmail').value;
+    var auth = firebase.auth();
+    var emailAddress = email;
+
+    auth.sendPasswordResetEmail(emailAddress).then(function() {
+    // Email sent.
+    }).catch(function(error) {
+    // An error happened.
+    });
+}
