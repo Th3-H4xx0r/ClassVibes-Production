@@ -1941,6 +1941,8 @@ function getStudentData(code) {
           <div class = 'row'>
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
           <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
+
+          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-minus-circle"></i></a>
           </div>
          
           </div>
