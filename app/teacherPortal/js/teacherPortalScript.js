@@ -2149,10 +2149,66 @@ function getStudentData(code) {
         }
       });
     })
-
-
 }
 
+
+function showRemoveStudentPopup(email, code){
+  
+  var popupHTML = `
+  <div class="modal fade" id="exampleModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel${i}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel${i}">Schedule Meeting</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body">
+          <form>
+          <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Title:</label>
+              <input type="text" class="form-control" id="title1${i}" maxlength="100">
+          </div>
+          <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Date/Time</label>
+              <input type="text" class="form-control" id="date${i}" maxlength="60">
+          </div>
+          <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Message</label>
+              <textarea type="text" class="form-control" id="message${i}">
+              </textarea>
+          </div>
+          <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Meeting Length</label>
+          <input type="text" class="form-control" id="len${i}" textarea >
+          </div>
+          <div class="form-group">
+              <label for="message-text" class="col-form-label">Student</label>
+              <input type="text" class="form-control" placeholder = "${studentName}" readonly>
+          </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick = "schedualMeeting('${studentEmail}', '${className}', '${code}', '${i}')" data-dismiss = "modal">Send message</button>
+      </div>
+      </div>
+  </div>
+  </div>
+  `
+
+  
+}
+
+
+function removeStudent(email, code){
+  firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete().then(() => {
+    firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
+      window.location.reload();
+    })
+  })
+}
 
 function schedualMeeting(emailStudent, course, code, index) {
   console.log("schedual meeting")
