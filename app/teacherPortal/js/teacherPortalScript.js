@@ -1933,7 +1933,10 @@ function getStudentData(code) {
 
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
 
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} 
+          <a  href = '' onclick = "removeStudent('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"></i></a>
+
+          ${unreadMessagesHTML} </h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
         
           </div>
 
@@ -1942,7 +1945,6 @@ function getStudentData(code) {
           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
           <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
 
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-minus-circle"></i></a>
           </div>
          
           </div>
@@ -2498,7 +2500,7 @@ function getChartData(code) {
   
               var noStudentsHTML = `
               <center style = 'margin-top: 10%'>
-                <img src = 'img/undraw_empty_xct9.svg' width = "50%" />
+                <img src = '/teacher/img/undraw_empty_xct9.svg' width = "50%" />
                 <h3 style = 'margin-top: 10px'>No Students</h3>
               </center>
               `;
