@@ -444,8 +444,6 @@ function checkIfSchoolCodeExists() {
           });
     
     
-    
-    
           firebase.firestore().collection('UserData').doc(teacher_email).update({
             "District Code": district_code,
           })
