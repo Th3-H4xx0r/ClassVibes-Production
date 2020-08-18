@@ -435,36 +435,43 @@ async function getStudentClasses(studentUsername, pageType) {
 
     var classData = doc.data();
 
-    var classCode = classData["code"];
+    var accepted = classData['accepted'] != undefined ? classData['accepted'] : false
 
-    var reaction = classData["status"];
+    if(accepted == true){
+      var classCode = classData["code"];
 
-    var unreadMessages = classData['student unread']
-
-    console.log("Unread for " + classCode + ": is " + unreadMessages)
-
-    console.log("UNDREAD: " + unreadMessages)
-
-    reactionsList[classCode] = reaction
-
-    getRealtimeAnnouncements(classCode);
-
-    var className = "loading"
-
-    console.log(classData['status'])
-
-    var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
-      var data = snap.data();
+      var reaction = classData["status"];
   
-      if(data != null && data != undefined){
-          className = data['class name'];
-      }
-    }).then(() => {
-      
-      classesList.push(className);
-      classCodes[className] = classCode;
-      unreadList.push(unreadMessages)
-    })
+      var unreadMessages = classData['student unread']
+  
+  
+      console.log("Unread for " + classCode + ": is " + unreadMessages)
+  
+      console.log("UNDREAD: " + unreadMessages)
+  
+      reactionsList[classCode] = reaction
+  
+      getRealtimeAnnouncements(classCode);
+  
+      var className = "loading"
+  
+      console.log(classData['status'])
+  
+      var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
+        var data = snap.data();
+    
+        if(data != null && data != undefined){
+            className = data['class name'];
+        }
+      }).then(() => {
+        
+        classesList.push(className);
+        classCodes[className] = classCode;
+        unreadList.push(unreadMessages)
+      })
+    }
+
+
   }
 
     if (classesList.length != 0) {
@@ -946,6 +953,7 @@ function addClassToStudentData(classCode) {
         firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(classCode).set({
           'code': classCode.toString(),
           'class name': classNamE,
+          'accepted': false,
         });
     
         firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
@@ -954,6 +962,7 @@ function addClassToStudentData(classCode) {
           'date': new Date(),
           'status': 'doing great',
           'teacher unread': 0,
+          'accepted': false,
         });
     
       }).then(() => {
