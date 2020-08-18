@@ -2125,6 +2125,10 @@ function getStudentData(code) {
 }
 
 
+function getStudentJoinRequests(code){
+  
+}
+
 function showRemoveStudentPopup(email, code){
   
   var popupHTML = `
