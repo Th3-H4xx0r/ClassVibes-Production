@@ -591,11 +591,11 @@ async function getStudentClasses(studentUsername, pageType) {
             <div class="card-body">
   
               <div style="display: inline;">
-                <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
+                <a style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
                 
                 <section>
                   <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
-                       <h1 class = 'badge badge-primary'>Pending<h1>
+                       <h2><span class = 'badge badge-primary'>Pending</span></h2>
   
                   </div>
                 </section>
@@ -610,7 +610,6 @@ async function getStudentClasses(studentUsername, pageType) {
         }
 
      
-
 
             if(pageType == 'class-page'){
               output2 = `
