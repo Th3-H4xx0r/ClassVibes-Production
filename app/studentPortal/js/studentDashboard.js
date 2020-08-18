@@ -628,7 +628,11 @@ async function getStudentClasses(studentUsername, pageType) {
 
         $(output3).appendTo("#dropDownMoodPicker");
 
-        $(output2).appendTo("#classesListSideBar");
+
+          if(acceptedList[index] == true){
+            $(output2).appendTo("#classesListSideBar");
+
+          }
 
         $(output).appendTo("#classesRowDisplay");
 
@@ -673,6 +677,8 @@ async function getStudentClasses(studentUsername, pageType) {
         document.getElementById('dashboardSection-content').style.display = "none";
 
         document.getElementById('noClassesSection').style.display = "initial";
+
+        document.getElementById("classesListSideBar").innerHTML = `<h6 class="collapse-header">No Classes</h6>`;
 
       }
     }   
