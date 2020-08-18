@@ -2126,7 +2126,15 @@ function getStudentData(code) {
 
 
 function getStudentJoinRequests(code){
-  
+  firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).get().then(snap => {
+    snap.forEach(doc => {
+      var data = doc.data()
+
+      var name = data['name']
+
+      var accepted = data['accepted']
+    })
+  })
 }
 
 function showRemoveStudentPopup(email, code){
