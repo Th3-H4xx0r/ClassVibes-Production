@@ -2128,6 +2128,8 @@ function getStudentData(code) {
 
 
 function getStudentJoinRequests(code){
+
+  document.getElementById('student-requests-list').innerHTML = ''
   firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).get().then(snap => {
     snap.forEach(doc => {
       var data = doc.data()
@@ -2154,8 +2156,8 @@ function getStudentJoinRequests(code){
             <div class="col-auto">
 
               <div class = 'row'>
-              <a onclick = 'declineStudentRequest('${code}', '${email}')'><i class="fas fa-check-circle" style = 'color: green; font-size: 45px; margin-right: 20px'></i></a>
-              <a onclick = 'declineStudentRequest('${code}', '${email}')' href = '#'><i class="fas fa-times" style = 'color: red; font-size: 45px; margin-right: 25px'></i></a>
+              <a onclick = "acceptStudentRequest('${code}', '${email}')" href = '#'><i class="fas fa-check-circle" style = 'color: green; font-size: 45px; margin-right: 20px'></i></a>
+              <a onclick = "declineStudentRequest('${code}', '${email}')" href = '#'><i class="fas fa-times" style = 'color: red; font-size: 45px; margin-right: 25px'></i></a>
               </div>
 
             </div>
@@ -2175,7 +2177,7 @@ function getStudentJoinRequests(code){
 
 function declineStudentRequest(code, email){
   firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).delete().then(() => {
-    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(code).delete().then(() => {
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(email).delete().then(() => {
       getStudentJoinRequests(code)
     })
   })
@@ -2185,7 +2187,7 @@ function acceptStudentRequest(code, email){
   firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
     'accepted': true
   }).then(() => {
-    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(code).update({
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(email).update({
       'accepted': true
     }).then(() => {
       getStudentJoinRequests(code)
