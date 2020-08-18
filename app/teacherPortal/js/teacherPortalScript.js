@@ -90,6 +90,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   getEditData(classCode);
                   getAnnouncementForClass(classCode);
                   getMeetingForClass(classCode);
+                  getStudentJoinRequests(classCode)
                 }
     
                 else if (pageType == 'dashboard') {
@@ -160,6 +161,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 getEditData(classCode);
                 getAnnouncementForClass(classCode);
                 getMeetingForClass(classCode);    
+                getStudentJoinRequests(classCode)
               }
               else if (pageType == 'dashboard') {
                 //console.log("executing");
@@ -2144,22 +2146,37 @@ function getStudentJoinRequests(code){
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
 
-              <h1 style = 'font-weight: 700; margin: 2px'>${accepted}</h4>
+              <h3 style = 'font-weight: 700; margin: 2px'>${name}</h3>
 
               <p style = 'color: gray'>${email}</p>
 
             </div>
             <div class="col-auto">
-              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+
+              <div class = 'row'>
+              <a onclick = 'declineStudentRequest('${code}', '${email}')'><i class="fas fa-check-circle" style = 'color: green; font-size: 45px; margin-right: 20px'></i></a>
+              <a onclick = 'declineStudentRequest('${code}', '${email}')' href = '#'><i class="fas fa-times" style = 'color: red; font-size: 45px; margin-right: 25px'></i></a>
+              </div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-      `
+      `;
+
+      $(requestHTML).appendTo('#student-requests-list')
 
 
+    })
+  })
+}
+
+function declineStudentRequest(code, email){
+  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).delete().then(() => {
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(code).delete().then(() => {
+      getStudentJoinRequests(code)
     })
   })
 }
