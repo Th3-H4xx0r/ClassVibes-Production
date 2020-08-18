@@ -1010,6 +1010,8 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
   var classCodesList = []
 
+  var acceptedList = []
+
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
   let classesRefGet = await classesRef.get();
   for(const doc of classesRefGet.docs){
@@ -1017,6 +1019,8 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
     var classData = doc.data();
 
     var accepted = classData['accepted'] != undefined ? classData['accepted'] : false
+
+    console.log("Accepted: " + accepted + ": " + classData['code'])
 
     if(accepted == true){
       var classCode = classData["code"];
