@@ -427,6 +427,8 @@ async function getStudentClasses(studentUsername, pageType) {
 
   var unreadList = []
 
+  var acceptedList = []
+
   var index = 0;
 
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
@@ -437,7 +439,7 @@ async function getStudentClasses(studentUsername, pageType) {
 
     var accepted = classData['accepted'] != undefined ? classData['accepted'] : false
 
-    if(accepted == true){
+
       var classCode = classData["code"];
 
       var reaction = classData["status"];
@@ -468,9 +470,9 @@ async function getStudentClasses(studentUsername, pageType) {
         classesList.push(className);
         classCodes[className] = classCode;
         unreadList.push(unreadMessages)
+        acceptedList.push(accepted)
       })
-    }
-
+   
 
   }
 
@@ -557,30 +559,57 @@ async function getStudentClasses(studentUsername, pageType) {
           `
         }
 
-        output = `
-        <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
-        <div class="card bg-white text-black shadow">
-          <div class="card-body">
-
-          ${unreadMessagesHTML}
-
-            <div style="display: inline;">
-              <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
+        if(acceptedList[index] == true){
+          output = `
+          <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
+          <div class="card bg-white text-black shadow">
+            <div class="card-body">
+  
+            ${unreadMessagesHTML}
+  
+              <div style="display: inline;">
+                <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
+                
+                <section>
+                  <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;" id = 'reactionsSection${classCode}'>
+                       ${buttonsGrid}
+  
+                  </div>
+                </section>
+  
+               
+              </div>
               
-              <section>
-                <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;" id = 'reactionsSection${classCode}'>
-                     ${buttonsGrid}
-
-                </div>
-              </section>
-
-             
             </div>
-            
           </div>
-        </div>
-    </div>
-            `;
+      </div>
+              `;
+        } else {
+          output = `
+          <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
+          <div class="card bg-white text-black shadow">
+            <div class="card-body">
+  
+              <div style="display: inline;">
+                <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
+                
+                <section>
+                  <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
+                       <h1 class = 'badge badge-primary'>Pending<h1>
+  
+                  </div>
+                </section>
+  
+               
+              </div>
+              
+            </div>
+          </div>
+      </div>
+              `;
+        }
+
+     
 
 
             if(pageType == 'class-page'){
