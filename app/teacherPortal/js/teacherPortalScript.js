@@ -2133,6 +2133,33 @@ function getStudentJoinRequests(code){
       var name = data['name']
 
       var accepted = data['accepted']
+
+      var email = data['email']
+
+
+      var requestHTML = `
+      <div class="col-xl-12 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+
+              <h1 style = 'font-weight: 700; margin: 2px'>${accepted}</h4>
+
+              <p style = 'color: gray'>${email}</p>
+
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      `
+
+
     })
   })
 }
