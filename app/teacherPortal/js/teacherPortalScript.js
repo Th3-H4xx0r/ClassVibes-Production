@@ -2181,6 +2181,18 @@ function declineStudentRequest(code, email){
   })
 }
 
+function acceptStudentRequest(code, email){
+  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
+    'accepted': true
+  }).then(() => {
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(code).update({
+      'accepted': true
+    }).then(() => {
+      getStudentJoinRequests(code)
+    })
+  })
+}
+
 function showRemoveStudentPopup(email, code){
   
   var popupHTML = `
