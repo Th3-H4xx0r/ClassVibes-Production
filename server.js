@@ -318,6 +318,11 @@ router.get('/legal',function(req,res){
   res.sendFile(path.join(__dirname+'/terms-conditions.html'));
 });
 
+router.get('/pricing',function(req,res){
+
+  res.sendFile(path.join(__dirname+'/pricing.html'));
+});
+
 router.get('/privacy',function(req,res){
 
   res.sendFile(path.join(__dirname+'/privacy.html'));
