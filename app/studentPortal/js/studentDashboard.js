@@ -988,26 +988,32 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
     var classData = doc.data();
 
-    var classCode = classData["code"];
+    var accepted = classData['accepted'] != undefined ? classData['accepted'] : false
 
-    var className = ""
+    if(accepted == true){
+      var classCode = classData["code"];
 
-    getRealtimeAnnouncements(classCode);
-
-    var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
-      var data = snap.data();
+      var className = ""
   
-      if(data != null && data != undefined){
-          className = data['class name'];
-      } else {
-        className = undefined
-      }
-    }).then(() => {
-      if(className != undefined){
-        classesList.push(className);
-        classCodesList.push(classCode)
-      }
-    })
+      getRealtimeAnnouncements(classCode);
+  
+      var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
+        var data = snap.data();
+    
+        if(data != null && data != undefined){
+            className = data['class name'];
+        } else {
+          className = undefined
+        }
+      }).then(() => {
+        if(className != undefined){
+          classesList.push(className);
+          classCodesList.push(classCode)
+        }
+      })
+    }
+
+ 
   }
 
     inital = `
