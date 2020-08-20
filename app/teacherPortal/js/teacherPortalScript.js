@@ -1867,7 +1867,7 @@ function getStudentData(code) {
       maxdays = data["max days inactive"]
 
     }).then(() => {
-      firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
+      firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', 'true').get().then(function (doc) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
     
@@ -2499,7 +2499,7 @@ function getChartData(code) {
 
 
       }).then(() => {
-        firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
+        firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', 'true').onSnapshot(function (doc) {
 
           var unreadMessages = 0
 
