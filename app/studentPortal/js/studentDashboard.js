@@ -693,7 +693,7 @@ async function getStudentClasses(studentUsername, pageType) {
 }
 
 function removePendingRequest(classCode, student){
-  firebase.firestore().collection('Classes').doc(classCode).collection(student).delete().then(() => {
+  firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(student).delete().then(() => {
     firebase.firestore().collection('UserData').doc(student).collection('Classes').doc(classCode).delete().then(() => {
       window.location.reload()
     })
