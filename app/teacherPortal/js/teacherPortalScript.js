@@ -1851,7 +1851,11 @@ function createClass() {
 
 function getStudentData(code) {
 
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var teacherEmail = user.email;
 
+      
   var classInfoList = [];
   //console.log(classInfoList);
   var maxdays = 0
@@ -1934,7 +1938,7 @@ function getStudentData(code) {
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
             <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} 
-            <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a>
+            <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a>
             ${unreadMessagesHTML} </h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
@@ -1951,7 +1955,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${happy}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>        
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>        
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -1966,7 +1970,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${meh}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>      
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>      
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -1981,7 +1985,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${sad}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -1996,7 +2000,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "inactive_face" ></div></div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -2124,6 +2128,11 @@ function getStudentData(code) {
         }
       });
     })
+
+    }
+  })
+
+
 }
 
 
@@ -2218,7 +2227,7 @@ function acceptStudentRequest(code, email){
   })
 }
 
-function showRemoveStudentPopup(email, code){
+function showRemoveStudentPopup(email, code, teacherEmail){
   
   var popupHTML = `
   <div class="modal" tabindex="-1" role="dialog" id = 'removeStudentModal${code}'>
@@ -2234,7 +2243,7 @@ function showRemoveStudentPopup(email, code){
         <p>Are you sure you want to remove this student from the class?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" onclick = "removeStudent('${email}', '${code}')">Remove Student</button>
+        <button type="button" class="btn btn-danger" onclick = "removeStudent('${email}', '${code}', '${teacherEmail}')" id = 'removeStudentButton${code}'>Remove Student</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -2247,13 +2256,61 @@ function showRemoveStudentPopup(email, code){
 }
 
 
-async function removeStudent(email, code){
-  console.log("Removing")
-  firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete().then(() => {
-    firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
-      window.location.reload();
-    })
-  })
+async function removeStudent(email, code, teacherEmail){
+
+  console.log(teacherEmail)
+
+  document.getElementById(`removeStudentButton${code}`).innerHTML = `
+
+    <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
+  `
+
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+    //console.log(idToken)
+
+    var url = "http://localhost:3120/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
+
+    //console.log("Removing")
+
+    /*
+  
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", url, false ); // false for synchronous request
+    xmlHttp.send( null );
+    console.log(xmlHttp.responseText);
+    */
+
+    console.log("Getting")
+
+    const xhr = new XMLHttpRequest();
+
+xhr.onreadystatechange = () => {
+    if(xhr.readyState === XMLHttpRequest.DONE){
+        // Code to execute with response
+        console.log(xhr.responseText);
+        document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
+
+        window.location.reload()
+    }
+}
+
+xhr.open('GET', url);
+xhr.send();
+
+  
+
+
+  }).catch(function(error) {
+    console.log(error)
+    console.log("Failed")
+
+    document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
+
+  });
+
+
+
+
 }
 
 function schedualMeeting(emailStudent, course, code, index) {
