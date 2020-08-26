@@ -2287,7 +2287,7 @@ async function removeStudent(email, code, teacherEmail){
 xhr.onreadystatechange = () => {
     if(xhr.readyState === XMLHttpRequest.DONE){
         // Code to execute with response
-        console.log(xhr.responseText);
+        //console.log(xhr.responseText);
         document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
 
         window.location.reload()
