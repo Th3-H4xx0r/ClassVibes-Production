@@ -2129,9 +2129,13 @@ function getStudentData(code) {
 
 function getStudentJoinRequests(code){
 
+  var requests = 0
+
   document.getElementById('student-requests-list').innerHTML = ''
   firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).get().then(snap => {
     snap.forEach(doc => {
+
+      requests = requests + 1
       var data = doc.data()
 
       var name = data['name']
@@ -2172,7 +2176,26 @@ function getStudentJoinRequests(code){
 
 
     })
-  })
+  }).then(() => {
+    if(requests == 0){
+      document.getElementById('student-requests-list').innerHTML = `
+      <div class="d-flex justify-content-center">
+        <img src = '/teacher/img/undraw_Checklist__re_2w7v.svg' width = '25%' style = 'margin-top: 5%'>
+      
+        </div>
+        <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+
+        <h1>No Pending Requests</h1>
+       
+        </div>
+        <div class="d-flex justify-content-center">
+
+        <p>Any pending student join requests will show up here</p>
+        </div>
+
+      `
+    }
+})
 }
 
 function declineStudentRequest(code, email){
