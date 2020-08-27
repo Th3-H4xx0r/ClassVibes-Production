@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
+
 </head>
+
 <body>
-    <!-- Image and text -->
-<nav class="navbar navbar-light bg"  style= "background-color: royalblue
-"  >
+  <!-- Image and text -->
+  <nav class="navbar navbar-light bg" style="background-color: royalblue
+">
     <a class="navbar-brand" href="#">
       <div class="row">
         <h2 style="color: white; margin-left: 30px;"><i class="fa fa-arrow-left" aria-hidden="true"></i></h2>
 
 
-    </div>
+      </div>
     </a>
   </nav>
 
@@ -29,11 +39,12 @@
 
   <div class="d-flex justify-content-center">
     <div style="width: 85%; height: 670px; background-color: white; " class="box">
-       <div class="row">
+      <div class="row">
         <ul style="list-style-type: none; margin-left: 20px;">
           <div class="row nav-itemr" style="color: rgba(128, 128, 128, 0.616);">
             <i class="fa fa-user" aria-hidden="true" style="margin-top: 35px; margin-right: 10px"></i>
-            <a href="settings.html" style="text-decoration: none; color: rgba(128, 128, 128, 0.616);">            <li style="margin-top: 30px;">Account</li>
+            <a href="/settings" style="text-decoration: none; color: rgba(128, 128, 128, 0.616);">
+              <li style="margin-top: 30px;">Account</li>
             </a>
 
 
@@ -70,80 +81,140 @@
           .nav-itemr:hover {
             cursor: pointer;
           }
-          </style>
+        </style>
+
+        <script>
+          async function getTransactionHistory() {
+            var customerID = 'cus_HuQXXKQR6ohWwJ'
+
+            var url = `http://localhost:3120/api/getTransactions?id=${customerID}`
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.onreadystatechange = () => {
+              if (xhr.readyState === XMLHttpRequest.DONE) {
+                // Code to execute with response
+                //console.log(xhr.responseText);
+
+                var transactionsList = JSON.parse(xhr.responseText);
+
+                for (var i = 0; i <= transactionsList.length; i++) {
+                  var transaction = transactionsList[i]
+
+                  console.log(transaction)
+
+                  if (transaction != undefined) {
+                    var amount = (transaction['amount']/100).toFixed(2)
+
+                    var status = transaction['status']
+
+                    var currency = transaction['currency'].toUpperCase()
+
+                    var date = transaction['created']
+
+                    var formattedDate = new Date(date * 1000).toLocaleString()
+
+                    var lastFour = transaction['payment_method_details']['card']['last4']
+
+                    console.log(lastFour)
+
+                    var transactionHTML = `
+                      <div class="history-item">
+                                  <div class="row" style="margin-left: 30px; margin-top: 20px;">
+                                      <h5>$${amount} ${currency}</h4>
+                                      <div class="badge badge-primary" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px;">${status}</div>
+                                      <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
+                                      <i class="fa fa-credit-card" style="margin-left: 300px; font-size: 30px;"></i>
+                                      <p style="margin-left: 20px; font-size: 20px;">${lastFour}</p>
+
+                                      
+
+                                  </div>
+                              </div>
+                    `
+
+                    $(transactionHTML).appendTo('#payment-history')
+                  }
 
 
-          
-          <div class="vl"></div>
-
-
-          <div class="col">
-            <h2 style="margin-left: 20px; margin-top: 20px;">Payment Settings</h2>
-
-             <div style="margin-left: 20px;">
-                <div class="card3">
-
-                </div>
-
-                <h5 style="margin-top: 30px;">Payment History</h5>
-                <div style="height: 50px; width: 1000px; background-color: rgba(128, 128, 128, 0.158); border-radius: 10px;">
-                <div class="row" style="margin-top: 10px;">
-                    <p style="margin-left: 35px; margin-top: 11px; font-weight: 200px; font-size: 17px;">Amount</p>
-                    <p style="margin-left: 65px; margin-top: 11px; font-size: 17px;">Status</p>
-                    <p style="margin-left: 130px; margin-top: 11px; font-size: 17px;">Date</p>
-                    <p style="margin-left: 330px; margin-top: 11px; font-size: 17px;">Payment Method</p>
-
-                </div></div>
-                <div style="height: 20px;"></div>
-                <div style="height: 230px; overflow-y: scroll; width: 90%;">
-                    <div class="history-item">
-                        <div class="row" style="margin-left: 30px; margin-top: 20px;">
-                            <h5>$1.99</h4>
-                            <div class="badge badge-primary" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px;">Completed</div>
-                            <h5 style="margin-left: 80px;">May 10, 2020</h5>
-                            <i class="fa fa-credit-card" style="margin-left: 300px; font-size: 30px;"></i>
-                            <p style="margin-left: 20px; font-size: 20px;">0098</p>
-
-                            
-
-                        </div>
-                    </div>
-                    <div class="history-item"></div>
-                    <div class="history-item"></div>
 
 
 
-                </div>
 
-                <style>
-                    .card3 {
-                        margin-top: 30px;
-                        height: 200px;
-                        width: 1000px;
-                        background-color: rgba(128, 128, 128, 0.192);
-                        border-radius: 30px;
-                    }
+                }
 
-                    .history-item {
-                        margin-top: 10px;
-                        height: 80px;
-                        width: 1000px;
-                        border-radius: 10px;
-                        border-color: rgba(0, 0, 0, 0.096);
-                        border-style: solid;
-                        border-width: 2px;
+              }
+            }
 
-                    }
+            xhr.open('GET', url);
+            xhr.send();
+          }
 
-                </style>
+          getTransactionHistory();
 
-              
+        </script>
+
+
+
+        <div class="vl"></div>
+
+
+        <div class="col">
+          <h2 style="margin-left: 20px; margin-top: 20px;">Payment Settings</h2>
+
+          <div style="margin-left: 20px;">
+            <div class="card3">
+
             </div>
-             </div>
+
+            <h5 style="margin-top: 30px;">Payment History</h5>
+            <div
+              style="height: 50px; width: 1000px; background-color: rgba(128, 128, 128, 0.158); border-radius: 10px;">
+              <div class="row" style="margin-top: 10px;">
+                <p style="margin-left: 35px; margin-top: 11px; font-weight: 200px; font-size: 17px;">Amount</p>
+                <p style="margin-left: 65px; margin-top: 11px; font-size: 17px;">Status</p>
+                <p style="margin-left: 130px; margin-top: 11px; font-size: 17px;">Date</p>
+                <p style="margin-left: 330px; margin-top: 11px; font-size: 17px;">Payment Method</p>
+
+              </div>
+            </div>
+
+            <div style="height: 230px; overflow-y: scroll; width: 90%; margin-top: 20px" id='payment-history'>
 
 
-       </div>
-    
+
+
+
+            </div>
+
+            <style>
+              .card3 {
+                margin-top: 30px;
+                height: 200px;
+                width: 1000px;
+                background-color: rgba(128, 128, 128, 0.192);
+                border-radius: 30px;
+              }
+
+              .history-item {
+                margin-top: 10px;
+                height: 80px;
+                width: 1000px;
+                border-radius: 10px;
+                border-color: rgba(0, 0, 0, 0.096);
+                border-style: solid;
+                border-width: 2px;
+
+              }
+            </style>
+
+
+          </div>
+        </div>
+
+
+      </div>
+
     </div>
 
 
@@ -152,19 +223,19 @@
 
 
   <style>
-      body {
-          background-color: whitesmoke;
-          font-family: 'Nunito'
+    body {
+      background-color: whitesmoke;
+      font-family: 'Nunito'
 
-      }
+    }
 
-      .box {
-        box-shadow: 0 25px 50px -12px #DCDCDC
-;
+    .box {
+      box-shadow: 0 25px 50px -12px #DCDCDC;
 
-        border-radius: 10px;
+      border-radius: 10px;
 
-      }
+    }
   </style>
 </body>
+
 </html>

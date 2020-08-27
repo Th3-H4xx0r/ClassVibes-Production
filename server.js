@@ -304,7 +304,31 @@ router.get('/district/dashboard',function(req,res){
     });
 
 
+/////////////////////////
+//Settings Pages Paths
+/////////////////////////
 
+router.get('/settings',function(req,res){
+  if(serverStatus){
+    res.sendFile(path.join(__dirname+'/app/settings/settings.html'));
+
+
+  } else {
+    res.redirect('/serverDown');
+
+  }
+  });
+
+  router.get('/settings/payments',function(req,res){
+    if(serverStatus){
+      res.sendFile(path.join(__dirname+'/app/settings/payment.html'));
+  
+  
+    } else {
+      res.redirect('/serverDown');
+  
+    }
+    });
 
 
 
@@ -354,6 +378,7 @@ app.use('/teacherjs', express.static('app/teacherPortal/js/'))
 app.use('/teachercss', express.static('app/teacherPortal/css/'))
 app.use('/404page', express.static('PageNotFound/'))
 app.use('/socket.io', express.static('socket.io/'))
+app.use('/settings', express.static('app/settings/'))
 
 //add the router
 app.use('/', router);
