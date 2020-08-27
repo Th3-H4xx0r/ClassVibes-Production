@@ -598,7 +598,7 @@ function emailSignUp(type) {
                             }).then(() => {
 
 
-                                var url = "http://localhost:3120/api/createCustomer?email=" + email
+                                var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
 
                                 const xhr = new XMLHttpRequest();
 
@@ -847,7 +847,7 @@ googleSignUp = (type) => {
                             "account status": "Deactivated",
                         }).then(() => {
 
-                            var url = "http://localhost:3120/api/createCustomer?email=" + email
+                            var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
 
                             const xhr = new XMLHttpRequest();
                             xhr.onreadystatechange = () => {
