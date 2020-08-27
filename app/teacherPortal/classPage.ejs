@@ -74,7 +74,6 @@
             getTeacherAccountStatus('class-page', classCode);
             getGraphData_Classes_page(classCode)
 
-
         });
     </script>
 
@@ -193,16 +192,8 @@
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -230,6 +221,11 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                                 aria-controls="home" aria-selected="true">Students</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" id="some-tab" data-toggle="tab" href="#requests" role="tab"
+                                aria-controls="requests" aria-selected="false">Join Requests</a>
                         </li>
 
                         <li class="nav-item">
@@ -369,6 +365,16 @@
 
                             <!--End of Setting Content-->
                         </div>
+
+                        <div class="tab-pane fade" id="requests" role="tabpanel" aria-labelledby="requests-tab">
+                            <!--Settings Content-->
+                            <div id="student-requests-list">
+
+                            </div>
+
+                            <!--End of Setting Content-->
+                        </div>
+
                         <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
                             <!--Settings Content-->
                             <button type="button" ID="send_announcement_top_classPage" class="btn btn-primary"

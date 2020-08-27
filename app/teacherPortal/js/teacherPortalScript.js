@@ -90,6 +90,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   getEditData(classCode);
                   getAnnouncementForClass(classCode);
                   getMeetingForClass(classCode);
+                  getStudentJoinRequests(classCode)
                 }
     
                 else if (pageType == 'dashboard') {
@@ -160,6 +161,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 getEditData(classCode);
                 getAnnouncementForClass(classCode);
                 getMeetingForClass(classCode);    
+                getStudentJoinRequests(classCode)
               }
               else if (pageType == 'dashboard') {
                 //console.log("executing");
@@ -515,7 +517,7 @@ function getProfileInfo() {
 
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
         //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
-        //console.log(idToken)
+        console.log(idToken)
   
       }).catch(function(error) {
         // Handle error
@@ -1849,7 +1851,11 @@ function createClass() {
 
 function getStudentData(code) {
 
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var teacherEmail = user.email;
 
+      
   var classInfoList = [];
   //console.log(classInfoList);
   var maxdays = 0
@@ -1865,7 +1871,7 @@ function getStudentData(code) {
       maxdays = data["max days inactive"]
 
     }).then(() => {
-      firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
+      firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', true).get().then(function (doc) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
     
@@ -1930,20 +1936,17 @@ function getStudentData(code) {
             descriptionOutput2 = `
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
-
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
-
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
-        
-          </div>
-
-          <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
-          <div class = 'row'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
-          </div>
-         
-          </div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} 
+            <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a>
+            ${unreadMessagesHTML} </h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            </div>
+            <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
+            <div class = 'row'>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
+            <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
+            </div>       
+            </div>
             </div>
           
           `;
@@ -1951,82 +1954,62 @@ function getStudentData(code) {
             happy_face_Column = `
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
-
             <div style = 'margin-left: 10px; font-size: 30px'>${happy}</div>
-
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
-        
-          </div>
-
-          <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
-          <div class = 'row'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
-          </div>
-         
-          </div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>        
+            </div>
+            <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
+            <div class = 'row'>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
+            <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
+            </div>        
+            </div>
             </div>
           `;
     
             meh_colum_face = `
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
-
             <div style = 'margin-left: 10px; font-size: 30px'>${meh}</div>
-
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
-        
-          </div>
-
-          <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
-          <div class = 'row'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
-          </div>
-         
-          </div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>      
+            </div>
+            <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
+            <div class = 'row'>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
+            <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
+            </div>
+            </div>
             </div>
           `;
     
             frustrated_column_face = `
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
-
             <div style = 'margin-left: 10px; font-size: 30px'>${sad}</div>
-
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
-        
-          </div>
-
-          <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
-          <div class = 'row'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
-          </div>
-         
-          </div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            </div>
+            <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
+            <div class = 'row'>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
+            <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
+            </div>
+            </div>
             </div>
           `;
 
-          inactive_column_face = `
-          <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
+            inactive_column_face = `
+            <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
-
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "inactive_face" ></div></div>
-
-          <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}</h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
-        
-          </div>
-
-          <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
-          <div class = 'row'>
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
-          <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
-          </div>
-         
-          </div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
             </div>
-          `
+            <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
+            <div class = 'row'>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal${i}" data-whatever="@mdo" style = "height: 50px; margin-right: 20px;">Schedule Meeting</button>
+            <a href = '/teacher/chats/${code}/${studentEmail}?'>${unreadMessagesHTML}<i class="fas fa-comments" style = 'font-size: 40px;'></i></a>
+            </div>
+            </div>
+            </div>
+            `
     
             outputModel = `
           <div class="modal fade" id="exampleModal${i}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel${i}" aria-hidden="true">
@@ -2146,9 +2129,189 @@ function getStudentData(code) {
       });
     })
 
+    }
+  })
+
 
 }
 
+
+function getStudentJoinRequests(code){
+
+  var requests = 0
+
+  document.getElementById('student-requests-list').innerHTML = ''
+  firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).get().then(snap => {
+    snap.forEach(doc => {
+
+      requests = requests + 1
+      var data = doc.data()
+
+      var name = data['name']
+
+      var accepted = data['accepted']
+
+      var email = data['email']
+
+
+      var requestHTML = `
+      <div class="col-xl-12 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+
+              <h3 style = 'font-weight: 700; margin: 2px'>${name}</h3>
+
+              <p style = 'color: gray'>${email}</p>
+
+            </div>
+            <div class="col-auto">
+
+              <div class = 'row'>
+              <a onclick = "acceptStudentRequest('${code}', '${email}')" href = '#'><i class="fas fa-check-circle" style = 'color: green; font-size: 45px; margin-right: 20px'></i></a>
+              <a onclick = "declineStudentRequest('${code}', '${email}')" href = '#'><i class="fas fa-times" style = 'color: red; font-size: 45px; margin-right: 25px'></i></a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      `;
+
+      $(requestHTML).appendTo('#student-requests-list')
+
+
+    })
+  }).then(() => {
+    if(requests == 0){
+      document.getElementById('student-requests-list').innerHTML = `
+      <div class="d-flex justify-content-center">
+        <img src = '/teacher/img/undraw_Checklist__re_2w7v.svg' width = '25%' style = 'margin-top: 5%'>
+      
+        </div>
+        <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+
+        <h1>No Pending Requests</h1>
+       
+        </div>
+        <div class="d-flex justify-content-center">
+
+        <p>Any pending student join requests will show up here</p>
+        </div>
+
+      `
+    }
+})
+}
+
+function declineStudentRequest(code, email){
+  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).delete().then(() => {
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(email).delete().then(() => {
+      getStudentJoinRequests(code)
+    })
+  })
+}
+
+function acceptStudentRequest(code, email){
+  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
+    'accepted': true
+  }).then(() => {
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(email).update({
+      'accepted': true
+    }).then(() => {
+      getStudentJoinRequests(code)
+    })
+  })
+}
+
+function showRemoveStudentPopup(email, code, teacherEmail){
+  
+  var popupHTML = `
+  <div class="modal" tabindex="-1" role="dialog" id = 'removeStudentModal${code}'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Remove Student?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove this student from the class?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick = "removeStudent('${email}', '${code}', '${teacherEmail}')" id = 'removeStudentButton${code}'>Remove Student</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+  `
+
+  $(popupHTML).appendTo('#page-top')
+  $(`#removeStudentModal${code}`).modal('toggle')
+}
+
+
+async function removeStudent(email, code, teacherEmail){
+
+  console.log(teacherEmail)
+
+  document.getElementById(`removeStudentButton${code}`).innerHTML = `
+
+    <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
+  `
+
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+    //console.log(idToken)
+
+    var url = "http://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
+
+    //console.log("Removing")
+
+    /*
+  
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", url, false ); // false for synchronous request
+    xmlHttp.send( null );
+    console.log(xmlHttp.responseText);
+    */
+
+    console.log("Getting")
+
+    const xhr = new XMLHttpRequest();
+
+xhr.onreadystatechange = () => {
+    if(xhr.readyState === XMLHttpRequest.DONE){
+        // Code to execute with response
+        //console.log(xhr.responseText);
+        document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
+
+        window.location.reload()
+    }
+}
+
+xhr.open('GET', url);
+xhr.send();
+
+  
+
+
+  }).catch(function(error) {
+    console.log(error)
+    console.log("Failed")
+
+    document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
+
+  });
+
+
+
+
+}
 
 function schedualMeeting(emailStudent, course, code, index) {
   console.log("schedual meeting")
@@ -2240,7 +2403,12 @@ function showInactive() {
 }
 
 function showAll() {
-  window.location.reload();
+  document.getElementById('studentTable').style.display = "initial";
+  document.getElementById('allStudentsTable').style.display = "initial";
+  document.getElementById("doing-good-table-section").style.display = "none";
+  document.getElementById("meh-table-section").style.display = "none";
+  document.getElementById("frustrated-table-section").style.display = "none";
+  document.getElementById("inactive-table-section").style.display = "none";
 }
 
 
@@ -2411,7 +2579,7 @@ function getChartData(code) {
 
 
       }).then(() => {
-        firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
+        firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', true).onSnapshot(function (doc) {
 
           var unreadMessages = 0
 
@@ -2496,7 +2664,7 @@ function getChartData(code) {
   
               var noStudentsHTML = `
               <center style = 'margin-top: 10%'>
-                <img src = 'img/undraw_empty_xct9.svg' width = "50%" />
+                <img src = '/teacher/img/undraw_empty_xct9.svg' width = "50%" />
                 <h3 style = 'margin-top: 10px'>No Students</h3>
               </center>
               `;

@@ -595,6 +595,24 @@ function emailSignUp(type) {
                                 "username": email,
                                 "account type": "Teacher",
                                 "account status": "Deactivated",
+                            }).then(() => {
+
+
+                                var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
+
+                                const xhr = new XMLHttpRequest();
+
+                                xhr.onreadystatechange = () => {
+                                    if(xhr.readyState === XMLHttpRequest.DONE){
+                                        // Code to execute with response
+                                        console.log(xhr.responseText);
+                                
+                                    }
+                                }
+                                
+                                xhr.open('GET', url);
+                                xhr.send();
+
                             });
     
                             const increment = firebase.firestore.FieldValue.increment(1);
@@ -603,6 +621,7 @@ function emailSignUp(type) {
                                 "webUsers": increment,
                                 "totalUsers": increment,
                             });
+
                         }
     
                         else if (type == 'district') {
@@ -826,6 +845,22 @@ googleSignUp = (type) => {
                             "username": email,
                             "account type": "Teacher",
                             "account status": "Deactivated",
+                        }).then(() => {
+
+                            var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
+
+                            const xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = () => {
+                                if(xhr.readyState === XMLHttpRequest.DONE){
+                                    // Code to execute with response
+                                    console.log(xhr.responseText);
+                            
+                                }
+                            }
+                            
+                            xhr.open('GET', url);
+                            xhr.send();
+
                         });
     
                         const increment = firebase.firestore.FieldValue.increment(1);
