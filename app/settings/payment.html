@@ -20,6 +20,24 @@
 
 <body>
   <!-- Image and text -->
+
+  <script>
+    $(document).ready(function () {
+      initializeFirebase();
+
+      setVersionFooter();
+
+      getServerStatus();
+      getLiveSeverAlerts();
+      checkUserAuthStatus('teacher');
+
+      getTeacherAccountStatus('dashboard');
+
+
+
+    });
+  </script>
+  
   <nav class="navbar navbar-light bg" style="background-color: royalblue
 ">
     <a class="navbar-brand" href="#">
