@@ -16,10 +16,33 @@
     integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script src="https://cstatic.classvibes.net/applicationManagement.js"></script>
+
+
+  <script src="/teacher/js/teacherPortalScript.js"></script>
+
+  <link rel="stylesheet" href="css/loader.css">
+
+  <script src="../app/app_config.js"></script>
+
 </head>
 
 <body>
-  <!-- Image and text -->
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+
 
   <script>
     $(document).ready(function () {
@@ -37,7 +60,7 @@
 
     });
   </script>
-  
+
   <nav class="navbar navbar-light bg" style="background-color: royalblue
 ">
     <a class="navbar-brand" href="#">
