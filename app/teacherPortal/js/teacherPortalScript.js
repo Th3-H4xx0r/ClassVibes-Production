@@ -517,7 +517,7 @@ function getProfileInfo() {
 
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
         //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
-        //console.log(idToken)
+        console.log(idToken)
   
       }).catch(function(error) {
         // Handle error
