@@ -3308,34 +3308,90 @@ async function getTransactionHistory(customerID) {
 }
 
 async function getPaymentMethods(){
-  var id = ''
+  var id = 'cus_HuQXXKQR6ohWwJ'
 
-  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-    //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
-    console.log(idToken)
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+        //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+    
+        var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
 
-    var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
+        console.log(url)
+    
+        const xhr = new XMLHttpRequest();
+    
+          xhr.onreadystatechange = () => {
+              if(xhr.readyState === XMLHttpRequest.DONE){
+                  // Code to execute with response
+                  //console.log(xhr.responseText);
+    
+                  var paymentMethodsList = JSON.parse(xhr.responseText);
+    
+                  console.log(paymentMethodsList)
+    
+                  for(var i = 0; i <= paymentMethodsList.length; i++){
+                    console.log(paymentMethodsList[i])
 
-    const xhr = new XMLHttpRequest();
+                    var paymentMethod = paymentMethodsList[i]
 
-      xhr.onreadystatechange = () => {
-          if(xhr.readyState === XMLHttpRequest.DONE){
-              // Code to execute with response
-              //console.log(xhr.responseText);
+                    if(paymentMethod != undefined){
 
-              var paymentMethodsList = JSON.parse(xhr.responseText);
+                      var lastFour = paymentMethod['last4']
 
+                      var brand = paymentMethod['brand']
+  
+                      var expireMonth = paymentMethod['exp_month']
+  
+                      var expireYear = paymentMethod['exp_year']
+
+                      var cardIcon = ``
+
+                      if(brand == 'Visa'){
+                        cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
+                      }
+
+                      var paymentMethodHTML = `
+                      <div style="display: flex; justify-content: space-between; margin-left: 1%;">
+                        <div class="row">
+                          ${cardIcon}
+                          <div class="col" style = 'padding-top: 2%'>
+                            <p> Visa •••• ${lastFour} </p>
+                            <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
+                          </div>
+                        </div>
+
+                        <i class="fas fa-ellipsis-h" style = 'margin-right: 15%; margin-top: 1%'></i>
+
+                       
+                      </div>
+
+                      <hr style="margin-top: -7px;"/>
+                      `
+
+                      $(paymentMethodHTML).appendTo('#payment-method-list')
+                    }
+
+
+    
+                    //payment-method-list
+                  }
+    
+              }
           }
-      }
-
-      xhr.open('GET', url);
-      xhr.send();
-
-
-
-
-  }).catch(function(error) {
-    // Handle error
+    
+          xhr.open('GET', url);
+          xhr.send();
+    
+    
+    
+    
+      }).catch(function(error) {
+        // Handle error
+      });
+    }
   });
+
+
 
 }

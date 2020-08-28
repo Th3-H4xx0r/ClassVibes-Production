@@ -56,7 +56,9 @@
       getServerStatus();
       getLiveSeverAlerts();
       checkUserAuthStatus('teacher');
+      getPaymentMethods();
       getTransactionHistory();
+      
       //getTeacherAccountStatus('dashboard');
 
 
@@ -185,20 +187,10 @@
 
         <hr/>
 
-        <div class="payment-plan">
-          <div style="display: flex; justify-content: space-between; margin-left: 1%;">
-            <div class="row">
-              <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="6%" height="95%"/>
-              <div class="col">
-                <p> Visa •••• 4242 </p>
-              </div>
-            </div>
-
-            <h6 style="margin-right: 15%; margin-top: 1%;">Exp 8/27</h6>
-          </div>
+        <div class="payment-plan"  id = 'payment-method-list'>
         </div>
 
-    <hr/>
+
 
 
           <h5 style="margin-top: 30px;">Payment History</h5>
