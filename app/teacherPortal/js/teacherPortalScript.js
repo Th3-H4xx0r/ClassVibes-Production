@@ -1820,16 +1820,21 @@ function createClass() {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Payment Confirmation</h5>
+        <h5 class="modal-title" id = 'payment-modal-header'>Payment Confirmation</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id = 'payment-modal-text'>
+   
         <p>Your default payment method will be charged with $1.99 for the creation of this class. Continue?</p>
         <p style = 'color: red;' id = 'feedback-error-payment'></p>
+   
+
+      
+
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" id = 'payment-modal-options'>
         <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', '${className}', '${course}', '${courseDescription}', '${maxInactiveDays}')" id = 'continueButton'>Checkout</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
@@ -1903,6 +1908,27 @@ function chargeCardForClassCreation( email, code, className, course, courseDescr
         console.log("payment success")
         document.getElementById('feedback-error-payment').innerHTML = ''
         document.getElementById('continueButton').innerHTML = "Continue"
+
+        document.getElementById('payment-modal-text').innerHTML = `
+        <center>
+        <i class="far fa-check-circle" style = 'color: green; font-size: 55px'></i>
+        <h2 style = 'margin-top: 10px'>Payment Success</h2>
+
+        <p>The payment has been added to your card and an reciept has been mailed to you. You have successfully created your class.</p>
+        </center>
+        `
+
+        document.getElementById('payment-modal-header').innerHTML = `
+        Class successfully created
+        `
+
+        document.getElementById('payment-modal-options').innerHTML = `
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+        `
+
+
+
+
 
 
       } else {
