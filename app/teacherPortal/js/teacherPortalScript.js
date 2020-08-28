@@ -3243,3 +3243,99 @@ function scrollSmoothToBottom() {
     scrollTop: div.scrollHeight - div.clientHeight
   }, 500);
 }
+
+async function getTransactionHistory(customerID) {
+  var customerID = 'cus_HuQXXKQR6ohWwJ'
+
+  var url = `http://localhost:3120/api/getTransactions?id=${customerID}`
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      // Code to execute with response
+      //console.log(xhr.responseText);
+
+      var transactionsList = JSON.parse(xhr.responseText);
+
+      for (var i = 0; i <= transactionsList.length; i++) {
+        var transaction = transactionsList[i]
+
+        console.log(transaction)
+
+        if (transaction != undefined) {
+          var amount = (transaction['amount']/100).toFixed(2)
+
+          var status = transaction['status']
+
+          var currency = transaction['currency'].toUpperCase()
+
+          var date = transaction['created']
+
+          var formattedDate = new Date(date * 1000).toLocaleString()
+
+          var lastFour = transaction['payment_method_details']['card']['last4']
+
+          console.log(lastFour)
+
+          var transactionHTML = `
+            <div class="history-item">
+                        <div style="margin-left: 30px; margin-top: 20px; display: flex; justify-content: space-between">
+                        <div class='row'>
+                          <h5>$${amount} ${currency}</h4>
+                          <div class="badge badge-primary" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px;">${status}</div>
+                          <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
+                        </div>
+
+                        <div class='row' style = 'margin-right: 5%'>
+                          <i class="fa fa-credit-card" style="margin-left: 300px; font-size: 30px;"></i>
+                          <p style="margin-left: 20px; font-size: 20px;">${lastFour}</p>
+                        </div>
+                           
+                          
+                        </div>
+                    </div>
+          `
+          $(transactionHTML).appendTo('#payment-history')
+        }
+      }
+
+    }
+  }
+
+  xhr.open('GET', url);
+  xhr.send();
+}
+
+async function getPaymentMethods(){
+  var id = ''
+
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+    //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+    console.log(idToken)
+
+    var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
+
+    const xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = () => {
+          if(xhr.readyState === XMLHttpRequest.DONE){
+              // Code to execute with response
+              //console.log(xhr.responseText);
+
+              var paymentMethodsList = JSON.parse(xhr.responseText);
+
+          }
+      }
+
+      xhr.open('GET', url);
+      xhr.send();
+
+
+
+
+  }).catch(function(error) {
+    // Handle error
+  });
+
+}
