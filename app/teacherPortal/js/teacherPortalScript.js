@@ -1809,8 +1809,6 @@ function createClass() {
 
       var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
       var className = document.getElementById("className").value;
-      var course = document.getElementById("course").value;
-      var courseDescription = document.getElementById("courseDescription").value;
       var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
       var maxInactiveDays = Number(maxInactiveDaysInput)
 
@@ -1835,7 +1833,7 @@ function createClass() {
 
       </div>
       <div class="modal-footer" id = 'payment-modal-options'>
-        <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', '${className}', '${course}', '${courseDescription}', '${maxInactiveDays}')" id = 'continueButton'>Checkout</button>
+        <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', '${className}', '${maxInactiveDays}')" id = 'continueButton'>Checkout</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>
@@ -1857,7 +1855,7 @@ function createClass() {
 }
 
 
-function chargeCardForClassCreation( email, code, className, course, courseDescription, maxInactiveDays){
+function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
   document.getElementById('continueButton').disabled = true
 
@@ -1923,7 +1921,7 @@ function chargeCardForClassCreation( email, code, className, course, courseDescr
         `
 
         document.getElementById('payment-modal-options').innerHTML = `
-        <button type="button" class="btn btn-primary" onclick = 'window.location = "/teacher/dashboard">Continue</button>
+        <button type="button" class="btn btn-primary" onclick = 'window.location = "/teacher/dashboard"'>Continue</button>
         `
 
 
