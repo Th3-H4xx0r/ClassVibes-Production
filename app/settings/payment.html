@@ -52,7 +52,7 @@
 
 
   <script>
-    $(document).ready(function () {
+    $(document).ready(async function () {
       initializeFirebase();
 
       setVersionFooter();
@@ -60,9 +60,9 @@
       getServerStatus();
       getLiveSeverAlerts();
       checkUserAuthStatus('teacher');
-      getPaymentMethods().then(() => {
-        getTransactionHistory();
-      });
+      await getPaymentMethods()
+      await getTransactionHistory();
+      
       
       
       //getTeacherAccountStatus('dashboard');

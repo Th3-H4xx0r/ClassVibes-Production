@@ -3407,63 +3407,75 @@ async function getPaymentMethods(){
                   // Code to execute with response
                   //console.log(xhr.responseText);
     
-                  var paymentMethodsList = JSON.parse(xhr.responseText);
+                  var response = JSON.parse(xhr.responseText);
+
+
+                  if(paymentMethodsList.status == "success"){
+                    var paymentMethodsList = JSON.parse(xhr.responseText.message);
+
+                    console.log(paymentMethodsList)
     
-                  console.log(paymentMethodsList)
+                    for(var i = 0; i <= paymentMethodsList.length; i++){
+                      console.log(paymentMethodsList[i])
+  
+                      var paymentMethod = paymentMethodsList[i]
+  
+                      if(paymentMethod != undefined){
+  
+                        var lastFour = paymentMethod['last4']
+  
+                        var brand = paymentMethod['brand']
     
-                  for(var i = 0; i <= paymentMethodsList.length; i++){
-                    console.log(paymentMethodsList[i])
-
-                    var paymentMethod = paymentMethodsList[i]
-
-                    if(paymentMethod != undefined){
-
-                      var lastFour = paymentMethod['last4']
-
-                      var brand = paymentMethod['brand']
+                        var expireMonth = paymentMethod['exp_month']
+    
+                        var expireYear = paymentMethod['exp_year']
   
-                      var expireMonth = paymentMethod['exp_month']
+                        var cardIcon = ``
   
-                      var expireYear = paymentMethod['exp_year']
-
-                      var cardIcon = ``
-
-                      if(brand == 'Visa'){
-                        cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
-                      }
-
-                      var paymentMethodHTML = `
-                      <div style="display: flex; justify-content: space-between; margin-left: 1%;">
-                        <div class="row">
-                          ${cardIcon}
-                          <div class="col" style = 'padding-top: 2%'>
-                            <p> Visa •••• ${lastFour} </p>
-                            <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
+                        if(brand == 'Visa'){
+                          cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
+                        }
+  
+                        var paymentMethodHTML = `
+                        <div style="display: flex; justify-content: space-between; margin-left: 1%;">
+                          <div class="row">
+                            ${cardIcon}
+                            <div class="col" style = 'padding-top: 2%'>
+                              <p> Visa •••• ${lastFour} </p>
+                              <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
+                            </div>
                           </div>
+  
+                          <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
+  
+                         
                         </div>
-
-                        <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
-
-                       
-                      </div>
-
-                      <hr style="margin-top: -7px;"/>
-                      `
-
-                      $(paymentMethodHTML).appendTo('#payment-method-list')
+  
+                        <hr style="margin-top: -7px;"/>
+                        `
+  
+                        $(paymentMethodHTML).appendTo('#payment-method-list')
+                      }
+  
+  
+      
+                      //payment-method-list
                     }
-
-
-    
-                    //payment-method-list
                   }
     
+
               }
             }
+
+            xhr.open('GET', url);
+            xhr.send();
+
       }).catch(function(error) {
         console.log(error)
         // Handle error
       });
+
+
     }
   });
 
