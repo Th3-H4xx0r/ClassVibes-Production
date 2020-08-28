@@ -1838,8 +1838,35 @@ function createClass() {
   
   
       
-        }).then(() => {
-          window.location = "dashboard.html"
+        }).then(async () => {
+
+          var customerID = 'cus_HuQXXKQR6ohWwJ'
+
+          var amount = 1.99
+
+          var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+
+          const xhr = new XMLHttpRequest();
+        
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              // Code to execute with response
+              //console.log(xhr.responseText);
+        
+              var responseText = JSON.parse(xhr.responseText);
+
+              var status = responseText['status']
+
+              if(status == 'success'){
+                window.location = "dashboard.html"
+              }
+            }
+          }
+
+          xhr.open('GET', url);
+          xhr.send();
+
+          
         });
       } else {
         document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
@@ -3380,8 +3407,7 @@ async function getPaymentMethods(){
               }
           }
     
-          xhr.open('GET', url);
-          xhr.send();
+c
     
     
     
