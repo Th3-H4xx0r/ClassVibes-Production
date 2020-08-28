@@ -3489,7 +3489,68 @@ async function getPaymentMethods(){
 
     }
   });
+}
 
 
+function addCardToAccount(){
 
+  document.getElementById('CancelButton').enabled = false
+  document.getElementById('add-card-text').innerHTML = 'Adding Card...'
+
+
+  var name = document.getElementById('NameOnCard').value
+  var cardNumber = document.getElementById('CreditCardNumber').value
+  var expireDate = document.getElementById('ExpiryDate').value
+  var securityCode = document.getElementById('SecurityCode').value
+  var zipCode = document.getElementById('ZIPCode').value
+
+  var str = expireDate.split('/');
+
+  var expireMonth = str[0]
+
+  var expireYear = str[1]
+
+  const xhr = new XMLHttpRequest();
+
+  var customerID = 'cus_HuQXXKQR6ohWwJ'
+
+  var url = `http://localhost:3120/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+    
+  xhr.onreadystatechange = () => {
+    console.log("Got")
+      if(xhr.readyState === XMLHttpRequest.DONE){
+          // Code to execute with response
+          //console.log(xhr.responseText);
+
+          var response = JSON.parse(xhr.responseText);
+
+          console.log(response)
+
+          document.getElementById('CancelButton').enabled = true
+
+          document.getElementById('add-card-text').innerHTML = 'Add Card'
+
+          if(response.status == 'failed'){
+            document.getElementById('feedback-error-add-card').innerHTML = response.message
+          } else {
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+            window.location.reload()
+          }
+
+      }
+    }
+
+    
+    xhr.open('GET', url);
+    xhr.send();
+
+
+}
+
+function clearCardAddFields(){
+  document.getElementById('NameOnCard').value = ''
+  document.getElementById('CreditCardNumber').value = ''
+  document.getElementById('ExpiryDate').value = ''
+  document.getElementById('SecurityCode').value = ''
+  document.getElementById('ZIPCode').value = ''
 }
