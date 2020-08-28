@@ -1809,18 +1809,81 @@ function createClass() {
 
       var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
       var className = document.getElementById("className").value;
-      var course = document.getElementById("course").value;
-      var courseDescription = document.getElementById("courseDescription").value;
       var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
       var maxInactiveDays = Number(maxInactiveDaysInput)
 
       if(maxInactiveDays <= 14){
-    
+        var paymentPopupHTML = `
+          <div class="modal fade" tabindex="-1" role="dialog" id = 'paymentModal'>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id = 'payment-modal-header'>Payment Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id = 'payment-modal-text'>
+   
+        <p>Your default payment method will be charged with $1.99 for the creation of this class. Continue?</p>
+        <p style = 'color: red;' id = 'feedback-error-payment'></p>
+   
+
+      
+
+      </div>
+      <div class="modal-footer" id = 'payment-modal-options'>
+        <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', '${className}', ${maxInactiveDays})" id = 'continueButton'>Checkout</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+          `
+
+          $(paymentPopupHTML).appendTo('#page-top')
+
+          $('#paymentModal').modal('toggle')
+     
+ 
+      } else {
+        document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
+      }
+
+}
+})
+}
+
+
+function chargeCardForClassCreation( email, code, className, maxInactiveDays){
+
+  document.getElementById('continueButton').disabled = true
+
+  document.getElementById('continueButton').innerHTML = "Processing Payment..."
+
+  var customerID = 'cus_HuQXXKQR6ohWwJ'
+
+  var amount = 1.99
+
+  var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      // Code to execute with response
+      //console.log(xhr.responseText);
+
+      var responseText = JSON.parse(xhr.responseText);
+
+      var status = responseText['status']
+
+      if(status == 'success'){
+        //window.location = "dashboard.html"
+
         firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
           "class code": code,
           "class name": className,
-          "Course": course,
-          "courseDescription": courseDescription,
           "max days inactive": maxInactiveDays,
           "teacher email" : email,
           "allow join": true
@@ -1830,23 +1893,43 @@ function createClass() {
         firebase.firestore().collection("Classes").doc(code).set({
           "class code": code,
           "class name": className,
-          "Course": course,
-          "courseDescription": courseDescription,
           "teacher email" : email,
           "max days inactive": maxInactiveDays,
           "allow join": true
-  
-  
-      
-        }).then(() => {
-          window.location = "dashboard.html"
-        });
-      } else {
-        document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
-      }
 
-}
-})
+        })
+
+        console.log("payment success")
+        document.getElementById('feedback-error-payment').innerHTML = ''
+        document.getElementById('continueButton').innerHTML = "Continue"
+
+        document.getElementById('payment-modal-text').innerHTML = `
+        <center>
+        <i class="far fa-check-circle" style = 'color: green; font-size: 55px'></i>
+        <h2 style = 'margin-top: 10px'>Payment Success</h2>
+
+        <p>The payment has been added to your card and an reciept has been mailed to you. You have successfully created your class.</p>
+        </center>
+        `
+
+        document.getElementById('payment-modal-header').innerHTML = `
+        Class successfully created
+        `
+
+        document.getElementById('payment-modal-options').innerHTML = `
+        <button type="button" class="btn btn-primary" onclick = 'window.location = "/teacher/dashboard"'>Continue</button>
+        `
+
+
+      } else {
+        document.getElementById('continueButton').innerHTML = "Continue"
+        document.getElementById('feedback-error-payment').innerHTML = 'Payment failed, please try again'
+      }
+    }
+  }
+
+  xhr.open('GET', url);
+  xhr.send();
 }
 
 function getStudentData(code) {
@@ -2664,7 +2747,6 @@ function getChartData(code) {
   
   
           });
-          setTimeout(function(){
   
             if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0 && studentsReactionLists[3] == 0){
   
@@ -2724,7 +2806,7 @@ function getChartData(code) {
             }
     
             document.getElementById(`unreadMessages${code}`).innerHTML = unreadMessagesHTML
-         }, 700);
+         
       });
       })
 
@@ -3267,8 +3349,6 @@ async function getTransactionHistory(customerID) {
       for (var i = 0; i <= transactionsList.length; i++) {
         var transaction = transactionsList[i]
 
-        console.log(transaction)
-
         if (transaction != undefined) {
           var amount = (transaction['amount']/100).toFixed(2)
 
@@ -3281,8 +3361,6 @@ async function getTransactionHistory(customerID) {
           var formattedDate = new Date(date * 1000).toLocaleString()
 
           var lastFour = transaction['payment_method_details']['card']['last4']
-
-          console.log(lastFour)
 
           var transactionHTML = `
             <div class="history-item">
@@ -3316,6 +3394,8 @@ async function getTransactionHistory(customerID) {
 async function getPaymentMethods(){
   var id = 'cus_HuQXXKQR6ohWwJ'
 
+  console.log("gettings payment methods")
+
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
@@ -3328,73 +3408,85 @@ async function getPaymentMethods(){
         const xhr = new XMLHttpRequest();
     
           xhr.onreadystatechange = () => {
+            console.log("Got")
               if(xhr.readyState === XMLHttpRequest.DONE){
                   // Code to execute with response
                   //console.log(xhr.responseText);
     
-                  var paymentMethodsList = JSON.parse(xhr.responseText);
+                  var response = JSON.parse(xhr.responseText);
+
+
+                  if(response.status == "success"){
+                    var paymentMethodsList = JSON.parse(xhr.responseText.message);
+
+                    console.log(paymentMethodsList)
     
-                  console.log(paymentMethodsList)
+                    for(var i = 0; i <= paymentMethodsList.length; i++){
+                      console.log(paymentMethodsList[i])
+  
+                      var paymentMethod = paymentMethodsList[i]
+  
+                      if(paymentMethod != undefined){
+  
+                        var lastFour = paymentMethod['last4']
+  
+                        var brand = paymentMethod['brand']
     
-                  for(var i = 0; i <= paymentMethodsList.length; i++){
-                    console.log(paymentMethodsList[i])
-
-                    var paymentMethod = paymentMethodsList[i]
-
-                    if(paymentMethod != undefined){
-
-                      var lastFour = paymentMethod['last4']
-
-                      var brand = paymentMethod['brand']
+                        var expireMonth = paymentMethod['exp_month']
+    
+                        var expireYear = paymentMethod['exp_year']
   
-                      var expireMonth = paymentMethod['exp_month']
+                        var cardIcon = ``
   
-                      var expireYear = paymentMethod['exp_year']
-
-                      var cardIcon = ``
-
-                      if(brand == 'Visa'){
-                        cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
-                      }
-
-                      var paymentMethodHTML = `
-                      <div style="display: flex; justify-content: space-between; margin-left: 1%;">
-                        <div class="row">
-                          ${cardIcon}
-                          <div class="col" style = 'padding-top: 2%'>
-                            <p> Visa •••• ${lastFour} </p>
-                            <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
+                        if(brand == 'Visa'){
+                          cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
+                        }
+  
+                        var paymentMethodHTML = `
+                        <div style="display: flex; justify-content: space-between; margin-left: 1%;">
+                          <div class="row">
+                            ${cardIcon}
+                            <div class="col" style = 'padding-top: 2%'>
+                              <p> Visa •••• ${lastFour} </p>
+                              <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
+                            </div>
                           </div>
+  
+                          <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
+  
+                         
                         </div>
+  
+                        <hr style="margin-top: -7px;"/>
+                        `
+  
+                        $(paymentMethodHTML).appendTo('#payment-method-list')
+                      }
+  
 
-                        <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
-
-                       
-                      </div>
-
-                      <hr style="margin-top: -7px;"/>
-                      `
-
-                      $(paymentMethodHTML).appendTo('#payment-method-list')
+                      //payment-method-list
                     }
+                  } else {
+                    console.log(response.message)
 
-
-    
-                    //payment-method-list
+                    document.getElementById('payment-method-list').innerHTML = `
+                      <a style = 'color: red'>Failed to get payment methods</a>
+                    `
                   }
     
+
               }
-          }
-    
-          xhr.open('GET', url);
-          xhr.send();
-    
-    
-    
-    
+            }
+
+            xhr.open('GET', url);
+            xhr.send();
+
       }).catch(function(error) {
+        console.log(error)
         // Handle error
       });
+
+
     }
   });
 
