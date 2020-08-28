@@ -1923,12 +1923,8 @@ function chargeCardForClassCreation( email, code, className, course, courseDescr
         `
 
         document.getElementById('payment-modal-options').innerHTML = `
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Continue</button>
+        <button type="button" class="btn btn-primary" onclick = 'window.location = "/teacher/dashboard">Continue</button>
         `
-
-
-
-
 
 
       } else {
