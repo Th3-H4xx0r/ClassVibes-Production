@@ -1815,7 +1815,67 @@ function createClass() {
       var maxInactiveDays = Number(maxInactiveDaysInput)
 
       if(maxInactiveDays <= 14){
-    
+        var paymentPopupHTML = `
+          <div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Payment Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Your default payment method will be charged with 1.99 for the creation of this class. Continue?</p>
+        <p style = 'color: red;' id = 'feedback-error-payment'></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick = 'chargeCardForClassCreation('${email}', '${code}', '${className}', '${course}', '${courseDescription}')' id = 'continueButton'>Continue</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+          `
+
+          $(paymentPopupHTML).appendTo('#page-top')
+     
+ 
+      } else {
+        document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
+      }
+
+}
+})
+}
+
+
+function chargeCardForClassCreation( email, code, className, course, courseDescription){
+
+  document.getElementById('continueButton').disabled = true
+
+  document.getElementById('continueButton').innerHTML = "Processing Payment..."
+
+  var customerID = 'cus_HuQXXKQR6ohWwJ'
+
+  var amount = 1.99
+
+  var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+
+  const xhr = new XMLHttpRequest();
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      // Code to execute with response
+      //console.log(xhr.responseText);
+
+      var responseText = JSON.parse(xhr.responseText);
+
+      var status = responseText['status']
+
+      if(status == 'success'){
+        //window.location = "dashboard.html"
+
         firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
           "class code": code,
           "class name": className,
@@ -1838,42 +1898,25 @@ function createClass() {
   
   
       
-        }).then(async () => {
+        })
 
-          var customerID = 'cus_HuQXXKQR6ohWwJ'
+      
 
-          var amount = 1.99
 
-          var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+        console.log("payment success")
+        document.getElementById('feedback-error-payment').innerHTML = ''
+        document.getElementById('continueButton').innerHTML = "Continue"
 
-          const xhr = new XMLHttpRequest();
-        
-          xhr.onreadystatechange = () => {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-              // Code to execute with response
-              //console.log(xhr.responseText);
-        
-              var responseText = JSON.parse(xhr.responseText);
 
-              var status = responseText['status']
-
-              if(status == 'success'){
-                window.location = "dashboard.html"
-              }
-            }
-          }
-
-          xhr.open('GET', url);
-          xhr.send();
-
-          
-        });
       } else {
-        document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
+        document.getElementById('continueButton').innerHTML = "Continue"
+        document.getElementById('feedback-error-payment').innerHTML = 'Payment failed, please try again'
       }
+    }
+  }
 
-}
-})
+  xhr.open('GET', url);
+  xhr.send();
 }
 
 function getStudentData(code) {
