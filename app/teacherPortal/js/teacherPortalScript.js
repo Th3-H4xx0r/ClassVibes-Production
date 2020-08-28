@@ -3361,7 +3361,7 @@ async function getPaymentMethods(){
                           </div>
                         </div>
 
-                        <i class="fas fa-ellipsis-h" style = 'margin-right: 15%; margin-top: 1%'></i>
+                        <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
 
                        
                       </div>
