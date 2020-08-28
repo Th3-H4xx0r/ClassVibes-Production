@@ -1884,8 +1884,6 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
         firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
           "class code": code,
           "class name": className,
-          "Course": course,
-          "courseDescription": courseDescription,
           "max days inactive": maxInactiveDays,
           "teacher email" : email,
           "allow join": true
@@ -1895,8 +1893,6 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
         firebase.firestore().collection("Classes").doc(code).set({
           "class code": code,
           "class name": className,
-          "Course": course,
-          "courseDescription": courseDescription,
           "teacher email" : email,
           "max days inactive": maxInactiveDays,
           "allow join": true
