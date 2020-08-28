@@ -2124,13 +2124,19 @@ function getStudentData(code) {
               
 
             }
+            
+            
           }
+
+          
         }
       });
     })
 
     }
   })
+
+  
 
 
 }
