@@ -3410,7 +3410,7 @@ async function getPaymentMethods(){
                   var response = JSON.parse(xhr.responseText);
 
 
-                  if(paymentMethodsList.status == "success"){
+                  if(response.status == "success"){
                     var paymentMethodsList = JSON.parse(xhr.responseText.message);
 
                     console.log(paymentMethodsList)
@@ -3457,10 +3457,15 @@ async function getPaymentMethods(){
                         $(paymentMethodHTML).appendTo('#payment-method-list')
                       }
   
-  
-      
+
                       //payment-method-list
                     }
+                  } else {
+                    console.log(response.message)
+
+                    document.getElementById('payment-method-list').innerHTML = `
+                      <a style = 'color: red'>Failed to get payment methods</a>
+                    `
                   }
     
 
