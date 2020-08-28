@@ -3343,8 +3343,6 @@ async function getTransactionHistory(customerID) {
       for (var i = 0; i <= transactionsList.length; i++) {
         var transaction = transactionsList[i]
 
-        console.log(transaction)
-
         if (transaction != undefined) {
           var amount = (transaction['amount']/100).toFixed(2)
 
@@ -3357,8 +3355,6 @@ async function getTransactionHistory(customerID) {
           var formattedDate = new Date(date * 1000).toLocaleString()
 
           var lastFour = transaction['payment_method_details']['card']['last4']
-
-          console.log(lastFour)
 
           var transactionHTML = `
             <div class="history-item">
@@ -3392,6 +3388,8 @@ async function getTransactionHistory(customerID) {
 async function getPaymentMethods(){
   var id = 'cus_HuQXXKQR6ohWwJ'
 
+  console.log("gettings payment methods")
+
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
@@ -3404,6 +3402,7 @@ async function getPaymentMethods(){
         const xhr = new XMLHttpRequest();
     
           xhr.onreadystatechange = () => {
+            console.log("Got")
               if(xhr.readyState === XMLHttpRequest.DONE){
                   // Code to execute with response
                   //console.log(xhr.responseText);
@@ -3460,14 +3459,9 @@ async function getPaymentMethods(){
                   }
     
               }
-          }
-    
-c
-    
-    
-    
-    
+            }
       }).catch(function(error) {
+        console.log(error)
         // Handle error
       });
     }

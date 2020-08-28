@@ -60,8 +60,10 @@
       getServerStatus();
       getLiveSeverAlerts();
       checkUserAuthStatus('teacher');
-      getPaymentMethods();
-      getTransactionHistory();
+      getPaymentMethods().then(() => {
+        getTransactionHistory();
+      });
+      
       
       //getTeacherAccountStatus('dashboard');
 
