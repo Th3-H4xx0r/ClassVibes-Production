@@ -2741,7 +2741,6 @@ function getChartData(code) {
   
   
           });
-          setTimeout(function(){
   
             if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0 && studentsReactionLists[3] == 0){
   
@@ -2801,7 +2800,7 @@ function getChartData(code) {
             }
     
             document.getElementById(`unreadMessages${code}`).innerHTML = unreadMessagesHTML
-         }, 700);
+         
       });
       })
 
