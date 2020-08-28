@@ -1816,7 +1816,7 @@ function createClass() {
 
       if(maxInactiveDays <= 14){
         var paymentPopupHTML = `
-          <div class="modal" tabindex="-1" role="dialog">
+          <div class="modal fade" tabindex="-1" role="dialog" id = 'paymentModal'>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -1826,11 +1826,11 @@ function createClass() {
         </button>
       </div>
       <div class="modal-body">
-        <p>Your default payment method will be charged with 1.99 for the creation of this class. Continue?</p>
+        <p>Your default payment method will be charged with $1.99 for the creation of this class. Continue?</p>
         <p style = 'color: red;' id = 'feedback-error-payment'></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick = 'chargeCardForClassCreation('${email}', '${code}', '${className}', '${course}', '${courseDescription}')' id = 'continueButton'>Continue</button>
+        <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', '${className}', '${course}', '${courseDescription}', '${maxInactiveDays}')" id = 'continueButton'>Checkout</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>
@@ -1839,6 +1839,8 @@ function createClass() {
           `
 
           $(paymentPopupHTML).appendTo('#page-top')
+
+          $('#paymentModal').modal('toggle')
      
  
       } else {
@@ -1850,7 +1852,7 @@ function createClass() {
 }
 
 
-function chargeCardForClassCreation( email, code, className, course, courseDescription){
+function chargeCardForClassCreation( email, code, className, course, courseDescription, maxInactiveDays){
 
   document.getElementById('continueButton').disabled = true
 
@@ -1895,13 +1897,8 @@ function chargeCardForClassCreation( email, code, className, course, courseDescr
           "teacher email" : email,
           "max days inactive": maxInactiveDays,
           "allow join": true
-  
-  
-      
+
         })
-
-      
-
 
         console.log("payment success")
         document.getElementById('feedback-error-payment').innerHTML = ''
