@@ -1,3 +1,5 @@
+const e = require("express");
+
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
   
   firebase.auth().onAuthStateChanged(user => {
@@ -2514,6 +2516,11 @@ function cancelTeacherRequest(ID, districtID, teacher_email) {
   });
 }
 
+
+var classNameGlobal = ''
+
+var maxDaysGlobal = ''
+
 function getEditData(code) {
   output = ''
 
@@ -2525,14 +2532,22 @@ function getEditData(code) {
 
   }).then((data) => {
     var className = data['class name'];
+
+    var joinStatus = data['allow join']
+
+
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
     showSendAnnouncementModal(code, className);
 
-    var course = data['Course']
-    var description = data['courseDescription'] != undefined ? data['courseDescription'] : "Not Set"
     var inactiveDays = data['max days inactive'] != NaN ?  data['max days inactive'] : "Not Set"
+
+    classNameGlobal = className
+
+    maxDaysGlobal = inactiveDays
+
     output += `
+
 
     <h6>Edit Class Name</h6>
 
@@ -2543,29 +2558,10 @@ function getEditData(code) {
     </span>
   </div>
 
-  <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="editName" id="editName" value = '${className}'>
+  <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="editName" id="editName" value = '${className}' oninput = 'updateDetailsOnChange("${code}")'>
 </div>
-<h6>Edit Class Course</h6>
 
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">
-    <i class="fa fa-pencil" aria-hidden="true" onclick = "editTitle()"></i>
-    </span>
-  </div>
-
-  <input type="text" class="form-control" value="${course}" aria-label="Username" aria-describedby="basic-addon1" name="editCourse" id="editCourse">
 </div>
-<h6>Edit Class Description</h6>
-
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">
-    <i class="fa fa-pencil" aria-hidden="true" onclick = "editTitle()"></i>
-    </span>
-  </div>
-
-  <input type="text" class="form-control" value="${description}" aria-label="Username" aria-describedby="basic-addon1" name="editDescription" id="editDescription">
 </div>
 
 <h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
@@ -2575,16 +2571,62 @@ function getEditData(code) {
     <span class="input-group-text">Days</span>
     <span class="input-group-text">1-14</span>
   </div>
-  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" value="${inactiveDays}">
+  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" value="${inactiveDays}" oninput = 'updateDetailsOnChange("${code}")'>
 </div>
+
+<h6>Allow Students To Join <h4><span class = 'badge badge-primary' id  = 'join-setting'>Join Enabled</span> <h4></h6>
+
+
+    <label class="switch-container">
+    <input class="switch sw-1" type="checkbox" id = 'allow-join-switch' onclick="changeJoinStatus(this, '${code}')">
+    <span class="slider sl-1"></span>
+  </label>
 
 <p style = "color: red; font-weight: 700" id = "error-feedback-edit-class"></p>
 
-<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
+<div id = 'update-details-section'></div>
 
   `
+
+  //<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
     $(output).appendTo("#editInfo");   
+
+    if(joinStatus == true){
+      document.getElementById('join-setting').className  = "badge badge-success"
+      document.getElementById('join-setting').innerText = "Allowed"
+      document.getElementById('allow-join-switch').checked = true
+
+
+    } else {
+      document.getElementById('join-setting').className  = "badge badge-danger"
+      document.getElementById('join-setting').innerText = "Not Allowed"
+      document.getElementById('allow-join-switch').checked = false
+    }
+
+    console.log("CHECKED: " +document.getElementById('allow-join-switch').checked)
   })
+}
+
+function updateDetailsOnChange(code){
+
+  var updateClassButton = `<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>`
+
+  document.getElementById('update-details-section').innerHTML = updateClassButton
+
+}
+
+function changeJoinStatus(value, code){
+
+  var updateClassButton = `<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>`
+
+  document.getElementById('update-details-section').innerHTML = updateClassButton
+  if(value.checked == true){
+    document.getElementById('join-setting').className  = "badge badge-success"
+    document.getElementById('join-setting').innerText = "Allowed"
+  } else {
+    document.getElementById('join-setting').className  = "badge badge-danger"
+    document.getElementById('join-setting').innerText = "Not Allowed"
+  }
 }
 
 function updateDetails(code) {
@@ -2594,14 +2636,14 @@ function updateDetails(code) {
       //console.log(email)
 
   var newName = document.getElementById('editName').value;
-  var newCourse = document.getElementById('editCourse').value;
-  var newDescription = document.getElementById('editDescription').value;
   var maxDays = document.getElementById('maxDays').value;
+
+  var joinStatus = document.getElementById('allow-join-switch').checked
   let maxDaysNum = parseInt(maxDays);
 
   //console.log(newName, newCourse, newDescription, maxDays)
 
-  if(newName, newCourse, newDescription, maxDaysNum != null && newName, newCourse, newDescription, maxDaysNum != ""){
+  if(newName, maxDaysNum != null && newName, maxDaysNum != ""){
 
     if(maxDaysNum > 14){
       var feedbackError = document.getElementById('error-feedback-edit-class');
@@ -2614,15 +2656,13 @@ function updateDetails(code) {
   
       firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
         "class name": newName,
-        "Course": newCourse,
-        "courseDescription": newDescription,
+        "allow join": joinStatus,
         "max days inactive": maxDaysNum,
     
       }).then(() => {
         firebase.firestore().collection('Classes').doc(code).update({
           "class name": newName,
-        "Course": newCourse,
-        "courseDescription": newDescription,
+        "allow join": joinStatus,
         "max days inactive": maxDaysNum,
     
     
