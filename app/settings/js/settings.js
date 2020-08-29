@@ -34,17 +34,20 @@ function getProfileData(){
 
 }
 
-function nameChanged(){
-
-    var name = document.getElementById('nameInputField').value
+function nameChanged(name){
 
     if(nameGlobal != name){
-        var saveButtonHTML = `<button type="submit" class="btn btn-primary" style="width: 100px;">Save</button>`
+        var saveButtonHTML = `<button class="btn btn-primary" style="width: 100%;">Save</button>`
 
         document.getElementById('saveButtonField').innerHTML = saveButtonHTML
+    } else {
+        document.getElementById('saveButtonField').innerHTML = ""
     }
 }
 
 function changeUserName(){
-    var name = document.getElementById('').value
+
+    var name = document.getElementById('nameInputField').value
+
+    
 }
