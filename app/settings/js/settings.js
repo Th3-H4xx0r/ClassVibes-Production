@@ -37,7 +37,7 @@ function getProfileData(){
 function nameChanged(name){
 
     if(nameGlobal != name){
-        var saveButtonHTML = `<button class="btn btn-primary" style="width: 100%;">Save</button>`
+        var saveButtonHTML = `<button class="btn btn-primary" style="width: 100%;" onclick = 'changeUserName()'>Save</button>`
 
         document.getElementById('saveButtonField').innerHTML = saveButtonHTML
     } else {
@@ -49,5 +49,20 @@ function changeUserName(){
 
     var name = document.getElementById('nameInputField').value
 
+    var user = firebase.auth().currentUser;
+
+    try{
+        user.updateProfile({
+            displayName: name,
+        }).then(function() {
+            document.getElementById('feedback-error-feild').innerHTML = ""
+            window.location.reload()
+        }).catch(function(error) {
+            document.getElementById('feedback-error-feild').innerHTML = error.message
+        });
+    }catch(error){
+        document.getElementById('feedback-error-feild').innerHTML = "An error has occured, try again later"
+    }
     
+
 }
