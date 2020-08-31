@@ -3379,8 +3379,9 @@ async function getTransactionHistory(customerID) {
 
   const xhr = new XMLHttpRequest();
 
-  try{
+
     xhr.onreadystatechange = () => {
+      try{
       if (xhr.readyState === XMLHttpRequest.DONE) {
         // Code to execute with response
         //console.log(xhr.responseText);
@@ -3426,10 +3427,11 @@ async function getTransactionHistory(customerID) {
         }
   
       }
+    } catch(e){
+      document.getElementById('payment-history').innerHTML = `<h5 style = 'color: red'>Failed to get payment history</h5>`
     }
-  } catch(e){
-    document.getElementById('payment-history').innerHTML = `<h5 style = 'color: red'>Failed to get payment history</h5>`
-  }
+    }
+
   
 
   xhr.open('GET', url);
