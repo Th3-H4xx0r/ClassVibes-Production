@@ -595,6 +595,7 @@ function emailSignUp(type) {
                                 "username": email,
                                 "account type": "Teacher",
                                 "account status": "Deactivated",
+                                "billing status": "Inactive",
                             }).then(() => {
 
 
@@ -845,6 +846,7 @@ googleSignUp = (type) => {
                             "username": email,
                             "account type": "Teacher",
                             "account status": "Deactivated",
+                            "billing status": "Inactive",
                         }).then(() => {
 
                             var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
