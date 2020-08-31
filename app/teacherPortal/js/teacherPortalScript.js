@@ -1,4 +1,4 @@
-const e = require("express");
+
 
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
   
@@ -3379,53 +3379,58 @@ async function getTransactionHistory(customerID) {
 
   const xhr = new XMLHttpRequest();
 
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      // Code to execute with response
-      //console.log(xhr.responseText);
-
-      var transactionsList = JSON.parse(xhr.responseText);
-
-      for (var i = 0; i <= transactionsList.length; i++) {
-        var transaction = transactionsList[i]
-
-        if (transaction != undefined) {
-          var amount = (transaction['amount']/100).toFixed(2)
-
-          var status = transaction['status']
-
-          var currency = transaction['currency'].toUpperCase()
-
-          var date = transaction['created']
-
-          var formattedDate = new Date(date * 1000).toLocaleString()
-
-          var lastFour = transaction['payment_method_details']['card']['last4']
-
-          var transactionHTML = `
-            <div class="history-item">
-                        <div style="margin-left: 30px; margin-top: 20px; display: flex; justify-content: space-between">
-                        <div class='row'>
-                          <h5>$${amount} ${currency}</h4>
-                          <div class="badge badge-primary" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px;">${status}</div>
-                          <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
-                        </div>
-
-                        <div class='row' style = 'margin-right: 5%'>
-                          <i class="fa fa-credit-card" style="margin-left: 300px; font-size: 30px;"></i>
-                          <p style="margin-left: 20px; font-size: 20px;">${lastFour}</p>
-                        </div>
-                           
-                          
-                        </div>
-                    </div>
-          `
-          $(transactionHTML).appendTo('#payment-history')
+  try{
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        // Code to execute with response
+        //console.log(xhr.responseText);
+  
+        var transactionsList = JSON.parse(xhr.responseText);
+  
+        for (var i = 0; i <= transactionsList.length; i++) {
+          var transaction = transactionsList[i]
+  
+          if (transaction != undefined) {
+            var amount = (transaction['amount']/100).toFixed(2)
+  
+            var status = transaction['status']
+  
+            var currency = transaction['currency'].toUpperCase()
+  
+            var date = transaction['created']
+  
+            var formattedDate = new Date(date * 1000).toLocaleString()
+  
+            var lastFour = transaction['payment_method_details']['card']['last4']
+  
+            var transactionHTML = `
+              <div class="history-item">
+                          <div style="margin-left: 30px; margin-top: 20px; display: flex; justify-content: space-between">
+                          <div class='row'>
+                            <h5>$${amount} ${currency}</h4>
+                            <div class="badge badge-primary" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px;">${status}</div>
+                            <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
+                          </div>
+  
+                          <div class='row' style = 'margin-right: 5%'>
+                            <i class="fa fa-credit-card" style="margin-left: 300px; font-size: 30px;"></i>
+                            <p style="margin-left: 20px; font-size: 20px;">${lastFour}</p>
+                          </div>
+                             
+                            
+                          </div>
+                      </div>
+            `
+            $(transactionHTML).appendTo('#payment-history')
+          }
         }
+  
       }
-
     }
+  } catch(e){
+    document.getElementById('payment-history').innerHTML = `<h5 style = 'color: red'>Failed to get payment history</h5>`
   }
+  
 
   xhr.open('GET', url);
   xhr.send();
