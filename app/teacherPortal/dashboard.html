@@ -36,6 +36,38 @@
 
   <script src="../app/app_config.js"></script>
 
+  <style>
+
+    /* CHROMEBOOKS */
+    @media only screen and (min-height: 600px) {
+      
+      #topClassesSection{
+        overflow-x: hidden; 
+        overflow-y: scroll;
+        height: 38rem;
+        width: 100%;
+        margin-left: 3px;
+      }
+    
+      .sticky-footer{
+        display: none;
+      }
+    }
+    
+    /* REGULAR LAPTOPS */
+    @media only screen and (min-width: 1600px) {
+      .sticky-footer{
+        display: initial;
+      }
+    
+      #topClassesSection{
+        overflow-x: hidden; 
+        overflow-y: scroll;
+        height: 47rem;
+      }
+    }
+              </style>
+
 </head>
 
 <body id="page-top">
@@ -248,37 +280,7 @@
 </div>
 </section>
 
-<style>
 
-  /* CHROMEBOOKS */
-  @media only screen and (min-height: 600px) {
-    
-    #topClassesSection{
-      overflow-x: hidden; 
-      overflow-y: scroll;
-      height: 38rem;
-      width: 100%;
-      margin-left: 3px;
-    }
-  
-    .sticky-footer{
-      display: none;
-    }
-  }
-  
-  /* REGULAR LAPTOPS */
-  @media only screen and (min-width: 1600px) {
-    .sticky-footer{
-      display: initial;
-    }
-  
-    #topClassesSection{
-      overflow-x: hidden; 
-      overflow-y: scroll;
-      height: 47rem;
-    }
-  }
-            </style>
 
 
 
