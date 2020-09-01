@@ -75,6 +75,7 @@ async function getBillingInformation(){
           var data = doc.data();
       
           var billingStatus = data['billing status']
+
       
           if(billingStatus == 'active'){
   
@@ -150,10 +151,12 @@ async function getBillingInformation(){
             `
   
             document.getElementById('payment-settings-body').innerHTML = paymentSettingsHTML
+
+            var customerID = data['customer stripe id']
   
             
-            await getPaymentMethods()
-            await getTransactionHistory();
+            await getPaymentMethods(customerID)
+            await getTransactionHistory(customerID);
   
           } else {
             var billingSetupHTML = `
@@ -192,7 +195,6 @@ async function getBillingInformation(){
   }
 
   async function getTransactionHistory(customerID) {
-    var customerID = 'cus_HuQXXKQR6ohWwJ'
   
     var url = `http://localhost:3120/api/getTransactions?id=${customerID}`
   
@@ -257,14 +259,8 @@ async function getBillingInformation(){
     xhr.send();
   }
   
-  async function getPaymentMethods(){
+  async function getPaymentMethods(id){
 
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-
-            var email = user.email
-
-            var id = 'cus_HuQXXKQR6ohWwJ'
   
             console.log("gettings payment methods")
           
@@ -359,9 +355,8 @@ async function getBillingInformation(){
                 });
           
           
-              }
-            });
-        }
+            }
+      
     })
    
   }
