@@ -157,13 +157,13 @@ async function getBillingInformation(){
   
           } else {
             var billingSetupHTML = `
-                <center style = 'margin-top: 10%'>
+                <center style = 'margin-top: 15%'>
                     <img  src = '/settings/img/undraw_pay_online_b1hk.svg' width = '25%'/>
 
                 </center>
 
-                <center>
-                <button class = 'btn btn-primary'>Setup Billing</button>
+                <center style = 'margin-top: 2%'>
+                <button class = 'btn btn-primary' onclick = 'setupBillingPressed()'>Setup Billing</button>
                 </center>
             `
   
@@ -173,4 +173,20 @@ async function getBillingInformation(){
       }
     })
   
+  }
+
+
+  function setupBillingPressed(){
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          var email = user.email;
+    
+          firebase.firestore().collection("UserData").doc(email).update({
+              'billing status': 'active',
+              'billing platform': 'stripe'
+          }).then(() => {
+              window.location.reload()
+          });
+        }
+    })  
   }
