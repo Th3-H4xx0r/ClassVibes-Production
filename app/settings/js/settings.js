@@ -258,165 +258,181 @@ async function getBillingInformation(){
   }
   
   async function getPaymentMethods(){
-    var id = 'cus_HuQXXKQR6ohWwJ'
-  
-    console.log("gettings payment methods")
-  
+
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-          //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
-      
-          var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
+        if (user) {
+
+            var email = user.email
+
+            var id = 'cus_HuQXXKQR6ohWwJ'
   
-          console.log(url)
-      
-          const xhr = new XMLHttpRequest();
-      
-            xhr.onreadystatechange = () => {
-              console.log("Got")
-                if(xhr.readyState === XMLHttpRequest.DONE){
-                    // Code to execute with response
-                    //console.log(xhr.responseText);
-      
-                    var response = JSON.parse(xhr.responseText);
-  
-  
-                    if(response.status == "success"){
-                      var paymentMethodsList = JSON.parse(xhr.responseText.message);
-  
-                      console.log(paymentMethodsList)
-      
-                      for(var i = 0; i <= paymentMethodsList.length; i++){
-                        console.log(paymentMethodsList[i])
-    
-                        var paymentMethod = paymentMethodsList[i]
-    
-                        if(paymentMethod != undefined){
-    
-                          var lastFour = paymentMethod['last4']
-    
-                          var brand = paymentMethod['brand']
-      
-                          var expireMonth = paymentMethod['exp_month']
-      
-                          var expireYear = paymentMethod['exp_year']
-    
-                          var cardIcon = ``
-    
-                          if(brand == 'Visa'){
-                            cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
-                          }
-    
-                          var paymentMethodHTML = `
-                          <div style="display: flex; justify-content: space-between; margin-left: 1%;">
-                            <div class="row">
-                              ${cardIcon}
-                              <div class="col" style = 'padding-top: 2%'>
-                                <p> Visa •••• ${lastFour} </p>
-                                <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
-                              </div>
-                            </div>
-    
-                            <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
-    
-                           
-                          </div>
-    
-                          <hr style="margin-top: -7px;"/>
-                          `
-    
-                          $(paymentMethodHTML).appendTo('#payment-method-list')
+            console.log("gettings payment methods")
+          
+            firebase.auth().onAuthStateChanged(user => {
+              if (user) {
+                firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+                  //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+              
+                  var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
+          
+                  console.log(url)
+              
+                  const xhr = new XMLHttpRequest();
+              
+                    xhr.onreadystatechange = () => {
+                      console.log("Got")
+                        if(xhr.readyState === XMLHttpRequest.DONE){
+                            // Code to execute with response
+                            //console.log(xhr.responseText);
+              
+                            var response = JSON.parse(xhr.responseText);
+          
+          
+                            if(response.status == "success"){
+                              var paymentMethodsList = JSON.parse(xhr.responseText.message);
+          
+                              console.log(paymentMethodsList)
+              
+                              for(var i = 0; i <= paymentMethodsList.length; i++){
+                                console.log(paymentMethodsList[i])
+            
+                                var paymentMethod = paymentMethodsList[i]
+            
+                                if(paymentMethod != undefined){
+            
+                                  var lastFour = paymentMethod['last4']
+            
+                                  var brand = paymentMethod['brand']
+              
+                                  var expireMonth = paymentMethod['exp_month']
+              
+                                  var expireYear = paymentMethod['exp_year']
+            
+                                  var cardIcon = ``
+            
+                                  if(brand == 'Visa'){
+                                    cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
+                                  }
+            
+                                  var paymentMethodHTML = `
+                                  <div style="display: flex; justify-content: space-between; margin-left: 1%;">
+                                    <div class="row">
+                                      ${cardIcon}
+                                      <div class="col" style = 'padding-top: 2%'>
+                                        <p> Visa •••• ${lastFour} </p>
+                                        <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
+                                      </div>
+                                    </div>
+            
+                                    <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
+            
+                                   
+                                  </div>
+            
+                                  <hr style="margin-top: -7px;"/>
+                                  `
+            
+                                  $(paymentMethodHTML).appendTo('#payment-method-list')
+                                }
+            
+          
+                                //payment-method-list
+                              }
+                            } else {
+                              console.log(response.message)
+          
+                              document.getElementById('payment-method-list').innerHTML = `
+                                <a style = 'color: red'>Failed to get payment methods</a>
+                              `
+                            }
+              
+          
                         }
-    
-  
-                        //payment-method-list
                       }
-                    } else {
-                      console.log(response.message)
-  
-                      document.getElementById('payment-method-list').innerHTML = `
-                        <a style = 'color: red'>Failed to get payment methods</a>
-                      `
-                    }
-      
-  
-                }
+          
+                      xhr.open('GET', url);
+                      xhr.send();
+          
+                }).catch(function(error) {
+                  console.log(error)
+                  // Handle error
+                });
+          
+          
               }
-  
-              xhr.open('GET', url);
-              xhr.send();
-  
-        }).catch(function(error) {
-          console.log(error)
-          // Handle error
-        });
-  
-  
-      }
-    });
+            });
+        }
+    })
+   
   }
   
   
   function addCardToAccount(){
-  
-    document.getElementById('CancelButton').enabled = false
-    document.getElementById('add-card-text').innerHTML = 'Adding Card...'
-  
-  
-    var name = document.getElementById('NameOnCard').value
-    var cardNumber = document.getElementById('CreditCardNumber').value
-    var expireDate = document.getElementById('ExpiryDate').value
-    var securityCode = document.getElementById('SecurityCode').value
-    var zipCode = document.getElementById('ZIPCode').value
-  
-    var str = expireDate.split('/');
-  
-    var expireMonth = str[0]
-  
-    var expireYear = str[1]
-  
-    const xhr = new XMLHttpRequest();
 
-    firebase.firestore().collection('UserData').doc(email).get().then(doc => {
-
-        var data = doc.data();
-
-        var customerID = data['customer stripe id']
-  
-        var url = `http://localhost:3120/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            var email = user.email
+            document.getElementById('CancelButton').enabled = false
+            document.getElementById('add-card-text').innerHTML = 'Adding Card...'
           
-        xhr.onreadystatechange = () => {
-          console.log("Got")
-            if(xhr.readyState === XMLHttpRequest.DONE){
-                // Code to execute with response
-                //console.log(xhr.responseText);
-      
-                var response = JSON.parse(xhr.responseText);
-      
-                console.log(response)
-      
-                document.getElementById('CancelButton').enabled = true
-      
-                document.getElementById('add-card-text').innerHTML = 'Add Card'
-      
-                if(response.status == 'failed'){
-                  document.getElementById('feedback-error-add-card').innerHTML = response.message
-                } else {
-                  document.getElementById('feedback-error-add-card').innerHTML = ''
-                  window.location.reload()
-                }
-      
-            }
-          }
-      
           
-          xhr.open('GET', url);
-          xhr.send();
-      
+            var name = document.getElementById('NameOnCard').value
+            var cardNumber = document.getElementById('CreditCardNumber').value
+            var expireDate = document.getElementById('ExpiryDate').value
+            var securityCode = document.getElementById('SecurityCode').value
+            var zipCode = document.getElementById('ZIPCode').value
+          
+            var str = expireDate.split('/');
+          
+            var expireMonth = str[0]
+          
+            var expireYear = str[1]
+          
+            const xhr = new XMLHttpRequest();
+        
+            firebase.firestore().collection('UserData').doc(email).get().then(doc => {
+        
+                var data = doc.data();
+        
+                var customerID = data['customer stripe id']
+          
+                var url = `http://localhost:3120/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+                  
+                xhr.onreadystatechange = () => {
+                  console.log("Got")
+                    if(xhr.readyState === XMLHttpRequest.DONE){
+                        // Code to execute with response
+                        //console.log(xhr.responseText);
+              
+                        var response = JSON.parse(xhr.responseText);
+              
+                        console.log(response)
+              
+                        document.getElementById('CancelButton').enabled = true
+              
+                        document.getElementById('add-card-text').innerHTML = 'Add Card'
+              
+                        if(response.status == 'failed'){
+                          document.getElementById('feedback-error-add-card').innerHTML = response.message
+                        } else {
+                          document.getElementById('feedback-error-add-card').innerHTML = ''
+                          window.location.reload()
+                        }
+              
+                    }
+                  }
+              
+                  
+                  xhr.open('GET', url);
+                  xhr.send();
+              
+            })
+          
+        
+        }
     })
   
-
+  
   
   }
   
