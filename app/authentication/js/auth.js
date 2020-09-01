@@ -855,7 +855,14 @@ googleSignUp = (type) => {
                             xhr.onreadystatechange = () => {
                                 if(xhr.readyState === XMLHttpRequest.DONE){
                                     // Code to execute with response
-                                    console.log(xhr.responseText);
+
+                                    var transactionsList = JSON.parse(xhr.responseText);
+
+                                    var customerID = transactionsList.message
+
+                                    firebase.firestore().collection("UserData").doc(email).update({
+                                        "customer stripe id": customerID
+                                    })
                             
                                 }
                             }
