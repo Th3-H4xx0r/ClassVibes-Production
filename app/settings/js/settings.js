@@ -71,7 +71,7 @@ async function getBillingInformation(){
       if (user) {
         var email = user.email;
   
-        firebase.firestore().collection("UserData").doc(email).get(doc => {
+        firebase.firestore().collection("UserData").doc(email).get().then(async doc => {
           var data = doc.data();
       
           var billingStatus = data['billing status']
