@@ -65,8 +65,7 @@
       getServerStatus();
       getLiveSeverAlerts();
       checkUserAuthStatus('teacher');
-      await getPaymentMethods()
-      await getTransactionHistory();
+      getBillingInformation();
       
       
       
@@ -142,7 +141,7 @@
         <div class="vl"></div>
 
 
-        <div class="col">
+        <div class="col" id = 'payment-settings-body'>
           <h2 style="margin-left: 20px; margin-top: 20px;">Payment Settings</h2>
 
           <div style="margin-left: 20px;">

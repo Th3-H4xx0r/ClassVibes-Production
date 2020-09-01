@@ -3620,16 +3620,30 @@ function clearCardAddFields(){
   document.getElementById('ZIPCode').value = ''
 }
 
-function getBillingInformation(){
-  firebase.firestore().collection("UserData").doc().get(doc => {
-    var data = doc.data();
+async function getBillingInformation(){
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
 
-    var billingStatus = data['billing status']
+      firebase.firestore().collection("UserData").doc(email).get(doc => {
+        var data = doc.data();
+    
+        var billingStatus = data['billing status']
+    
+        if(billingStatus == 'active'){
 
-    if(billingStatus == 'active'){
+          await getPaymentMethods()
+          await getTransactionHistory();
 
-    } else {
-      
+        } else {
+          var billingSetupHTML = `
+
+          `
+
+          document.getElementById('payment-settings-body').innerHTML = billingSetupHTML
+        }
+      })
     }
   })
+
 }
