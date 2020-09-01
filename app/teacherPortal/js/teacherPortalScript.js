@@ -262,7 +262,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
           }
         } else{
             var billingErrorHTML = `<center style="margin-top: 18%;">
-            <img src = '/teacher/img/undraw_credit_card_payment_12va (1).svg' width = '20%'/>
+            <img src = '/teacher/img/undraw_online_payments_luau.svg' width = '20%'/>
       
             <h2 style="margin-top: 2%;">Billing Setup Required</h2>
       
