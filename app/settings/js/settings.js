@@ -63,6 +63,144 @@ function changeUserName(){
     }catch(error){
         document.getElementById('feedback-error-feild').innerHTML = "An error has occured, try again later"
     }
-    
 
 }
+
+async function getBillingInformation(){
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        var email = user.email;
+  
+        firebase.firestore().collection("UserData").doc(email).get(doc => {
+          var data = doc.data();
+      
+          var billingStatus = data['billing status']
+      
+          if(billingStatus == 'active'){
+  
+            var paymentSettingsHTML = `
+            <h2 style="margin-left: 20px; margin-top: 20px;">Payment Settings</h2>
+  
+            <div style="margin-left: 20px;">
+  
+              <!--
+  <div class="card3">
+                <div class="row">
+                  <img src =  'img/undraw_credit_card_payment_12va.svg' width="17%" style="margin-top: 2%; margin-left: 2%;">
+  
+                  <div class="col">
+  
+                    <h4 style="margin-left: 2%; margin-top: 2%;">Active Plan</h4>
+  
+                    <h5 style="margin-left: 2%; margin-top: 1%;">Pay as you go <span class="badge badge-primary">Yearly</span></h5>
+  
+                    <h4 style="margin-left: 2%; margin-top: 2%;">Billing Cycle</h4>
+  
+                    <h5 style="margin-left: 2%; margin-top: 1%; font-size: 16px;">Stars 8/27/2020</h5>
+  
+                  </div>
+  
+                </div>
+              
+  
+              </div>
+              -->
+  
+              <style>
+                hr {
+                  margin-top: 1rem;
+                  margin-bottom: 1rem;
+                  border: 0;
+                  margin-right: 10%;
+                  border-top: 1px solid rgba(0, 0, 0, 0.1);
+                }
+              </style>
+  
+              <h5 style="margin-top: 30px;">Active Plan</h5>
+  
+              <hr/>
+  
+              <div class="payment-plan">
+                <div style="display: flex; justify-content: space-between; margin-left: 1%;">
+                  <h6 style="font-size: 20px; margin-top: 1%;">Pay as you go <span class="badge badge-primary">Yearly</span></h6>
+  
+                  <h6 style="margin-right: 15%; margin-top: 1%;">Exp 8/27/2020</h6>
+                </div>
+              </div>
+  
+          <hr/>
+  
+          <h5 style="margin-top: 30px;">Payment Methods <a href = '#addPayment'><i class="fas fa-plus-circle" data-toggle="modal" data-target="#exampleModal"></i></a></h5>
+  
+          <hr/>
+  
+          <div class="payment-plan"  id = 'payment-method-list'>
+          </div>
+  
+  
+  
+  
+            <h5 style="margin-top: 30px;">Payment History</h5>
+            <div style="height: 50px; width: 85%; background-color: rgba(209, 209, 209, 0.158); border-radius: 10px;">
+              <div class="row" style="margin-top: 10px;">
+                <p style="margin-left: 5%; margin-top: 11px; font-weight: 200px; font-size: 17px;">Amount</p>
+                <p style="margin-left: 9%; margin-top: 11px; font-size: 17px;">Status</p>
+                <p style="margin-left: 10%; margin-top: 11px; font-size: 17px;">Date</p>
+                <p style="margin-left: 45%; margin-top: 11px; font-size: 17px;">Payment Method</p>
+  
+              </div>
+            </div>
+  
+            <div style="height: 250px; overflow-y: scroll; width: 90%; margin-top: 20px" id='payment-history'>
+  
+  
+  
+  
+  
+            </div>
+  
+            <style>
+              .card3 {
+                margin-top: 30px;
+                height: 200px;
+                width: 1000px;
+                background-color: rgba(209, 209, 209, 0.158);
+                border-radius: 30px;
+              }
+  
+              .history-item {
+                margin-top: 10px;
+                height: 80px;
+                width: 95%;
+                border-radius: 10px;
+                border-color: rgba(0, 0, 0, 0.096);
+                border-style: solid;
+                border-width: 2px;
+  
+              }
+            </style>
+  
+            
+  
+  
+          </div>
+            `
+  
+            document.getElementById('payment-settings-body').innerHTML = paymentSettingsHTML
+  
+            
+            await getPaymentMethods()
+            await getTransactionHistory();
+  
+          } else {
+            var billingSetupHTML = `
+  
+            `
+  
+            document.getElementById('payment-settings-body').innerHTML = billingSetupHTML
+          }
+        })
+      }
+    })
+  
+  }
