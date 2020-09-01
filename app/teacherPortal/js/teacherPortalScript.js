@@ -1949,7 +1949,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
           } else {
             console.log(responseText['data'])
             document.getElementById('continueButton').innerHTML = "Continue"
-            document.getElementById('feedback-error-payment').innerHTML = 'Payment failed, please try again'
+            document.getElementById('feedback-error-payment').innerHTML = responseText['message']
           }
         }
       }
