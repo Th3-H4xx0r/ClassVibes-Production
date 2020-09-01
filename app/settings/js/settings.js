@@ -285,7 +285,7 @@ async function getBillingInformation(){
           
           
                             if(response.status == "success"){
-                              var paymentMethodsList = JSON.parse(xhr.responseText.message);
+                              var paymentMethodsList = JSON.parse(xhr.responseText['message']);
           
                               console.log(paymentMethodsList)
               
