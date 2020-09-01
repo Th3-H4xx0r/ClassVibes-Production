@@ -106,15 +106,7 @@ async function getBillingInformation(){
               </div>
               -->
   
-              <style>
-                hr {
-                  margin-top: 1rem;
-                  margin-bottom: 1rem;
-                  border: 0;
-                  margin-right: 10%;
-                  border-top: 1px solid rgba(0, 0, 0, 0.1);
-                }
-              </style>
+    
   
               <h5 style="margin-top: 30px;">Active Plan</h5>
   
@@ -152,37 +144,8 @@ async function getBillingInformation(){
             </div>
   
             <div style="height: 250px; overflow-y: scroll; width: 90%; margin-top: 20px" id='payment-history'>
-  
-  
-  
-  
-  
+
             </div>
-  
-            <style>
-              .card3 {
-                margin-top: 30px;
-                height: 200px;
-                width: 1000px;
-                background-color: rgba(209, 209, 209, 0.158);
-                border-radius: 30px;
-              }
-  
-              .history-item {
-                margin-top: 10px;
-                height: 80px;
-                width: 95%;
-                border-radius: 10px;
-                border-color: rgba(0, 0, 0, 0.096);
-                border-style: solid;
-                border-width: 2px;
-  
-              }
-            </style>
-  
-            
-  
-  
           </div>
             `
   
@@ -194,7 +157,14 @@ async function getBillingInformation(){
   
           } else {
             var billingSetupHTML = `
-  
+                <center style = 'margin-top: 10%'>
+                    <img  src = '/settings/img/undraw_pay_online_b1hk.svg' width = '25%'/>
+
+                </center>
+
+                <center>
+                <button class = 'btn btn-primary'>Setup Billing</button>
+                </center>
             `
   
             document.getElementById('payment-settings-body').innerHTML = billingSetupHTML
