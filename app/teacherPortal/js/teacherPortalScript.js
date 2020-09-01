@@ -1881,75 +1881,82 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
   document.getElementById('continueButton').innerHTML = "Processing Payment..."
 
-  var customerID = 'cus_HuQXXKQR6ohWwJ'
+    firebase.firestore().collection("UserData").doc(email).get().then(doc => {
 
-  var amount = 1.99
+      var data = doc.data();
 
-  var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+      var customerID = data['customer stripe id']
 
-  const xhr = new XMLHttpRequest();
-
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      // Code to execute with response
-      //console.log(xhr.responseText);
-
-      var responseText = JSON.parse(xhr.responseText);
-
-      var status = responseText['status']
-
-      if(status == 'success'){
-        //window.location = "dashboard.html"
-
-        firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
-          "class code": code,
-          "class name": className,
-          "max days inactive": maxInactiveDays,
-          "teacher email" : email,
-          "allow join": true
-      
-        });
-      
-        firebase.firestore().collection("Classes").doc(code).set({
-          "class code": code,
-          "class name": className,
-          "teacher email" : email,
-          "max days inactive": maxInactiveDays,
-          "allow join": true
-
-        })
-
-        console.log("payment success")
-        document.getElementById('feedback-error-payment').innerHTML = ''
-        document.getElementById('continueButton').innerHTML = "Continue"
-
-        document.getElementById('payment-modal-text').innerHTML = `
-        <center>
-        <i class="far fa-check-circle" style = 'color: green; font-size: 55px'></i>
-        <h2 style = 'margin-top: 10px'>Payment Success</h2>
-
-        <p>The payment has been added to your card and an reciept has been mailed to you. You have successfully created your class.</p>
-        </center>
-        `
-
-        document.getElementById('payment-modal-header').innerHTML = `
-        Class successfully created
-        `
-
-        document.getElementById('payment-modal-options').innerHTML = `
-        <button type="button" class="btn btn-primary" onclick = 'window.location = "/teacher/dashboard"'>Continue</button>
-        `
-
-
-      } else {
-        document.getElementById('continueButton').innerHTML = "Continue"
-        document.getElementById('feedback-error-payment').innerHTML = 'Payment failed, please try again'
+      var amount = 1.99
+    
+      var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+    
+      const xhr = new XMLHttpRequest();
+    
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          // Code to execute with response
+          //console.log(xhr.responseText);
+    
+          var responseText = JSON.parse(xhr.responseText);
+    
+          var status = responseText['status']
+    
+          if(status == 'success'){
+            //window.location = "dashboard.html"
+    
+            firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
+              "class code": code,
+              "class name": className,
+              "max days inactive": maxInactiveDays,
+              "teacher email" : email,
+              "allow join": true
+          
+            });
+          
+            firebase.firestore().collection("Classes").doc(code).set({
+              "class code": code,
+              "class name": className,
+              "teacher email" : email,
+              "max days inactive": maxInactiveDays,
+              "allow join": true
+    
+            })
+    
+            console.log("payment success")
+            document.getElementById('feedback-error-payment').innerHTML = ''
+            document.getElementById('continueButton').innerHTML = "Continue"
+    
+            document.getElementById('payment-modal-text').innerHTML = `
+            <center>
+            <i class="far fa-check-circle" style = 'color: green; font-size: 55px'></i>
+            <h2 style = 'margin-top: 10px'>Payment Success</h2>
+    
+            <p>The payment has been added to your card and an reciept has been mailed to you. You have successfully created your class.</p>
+            </center>
+            `
+    
+            document.getElementById('payment-modal-header').innerHTML = `
+            Class successfully created
+            `
+    
+            document.getElementById('payment-modal-options').innerHTML = `
+            <button type="button" class="btn btn-primary" onclick = 'window.location = "/teacher/dashboard"'>Continue</button>
+            `
+    
+    
+          } else {
+            document.getElementById('continueButton').innerHTML = "Continue"
+            document.getElementById('feedback-error-payment').innerHTML = 'Payment failed, please try again'
+          }
+        }
       }
-    }
-  }
+    
+      xhr.open('GET', url);
+      xhr.send();
+    })
 
-  xhr.open('GET', url);
-  xhr.send();
+  
 }
 
 function getStudentData(code) {
