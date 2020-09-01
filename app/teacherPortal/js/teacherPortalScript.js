@@ -3619,3 +3619,17 @@ function clearCardAddFields(){
   document.getElementById('SecurityCode').value = ''
   document.getElementById('ZIPCode').value = ''
 }
+
+function getBillingInformation(){
+  firebase.firestore().collection("UserData").doc().get(doc => {
+    var data = doc.data();
+
+    var billingStatus = data['billing status']
+
+    if(billingStatus == 'active'){
+
+    } else {
+      
+    }
+  })
+}
