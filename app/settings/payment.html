@@ -21,6 +21,8 @@
 
   <script src="/socket.io/socket.io.js"></script>
 
+  <link rel = 'stylesheet' href = 'css/payment.css'></link>
+
   <script src="https://cstatic.classvibes.net/applicationManagement.js"></script>
 
 
@@ -33,6 +35,8 @@
 
 
   <script src="../app/app_config.js"></script>
+
+  <script src="https://js.stripe.com/v3/"></script>
 
   <script src="js/settings.js"></script>
 
@@ -118,8 +122,6 @@
       checkUserAuthStatus('teacher');
       await getBillingInformation();
 
-      //getTeacherAccountStatus('dashboard');
-
 
 
     });
@@ -189,6 +191,8 @@
 
           </div>
 
+          
+
 
          
 
@@ -233,7 +237,12 @@
     <div class="modal-dialog" role="document" style="outline: none;">
       <div class="modal-content" style="background-color: transparent; outline: none;">
 
+    
         <div class="d-flex justify-content-center">
+
+         
+          
+       
           <div class="container">
             <div id="Checkout" class="inline" style="width: 450px; margin-left: -10px;">
               <h1>Add Card</h1>
@@ -274,7 +283,7 @@
                 </div>
 
                 <div>
-                  <!--Nothing-->
+                  
                 </div>
 
                 <div style="color: red; font-weight: 700; margin-bottom: 10px; margin-top: -10px"
@@ -291,7 +300,14 @@
               </form>
             </div>
           </div>
+
+   
         </div>
+
+
+
+     
+
       </div>
     </div>
   </div>
@@ -392,7 +408,6 @@
 
     #Checkout {
       z-index: 100001;
-      background: ;
       width: 50%;
       min-width: 300px;
       height: 100%;
@@ -544,7 +559,6 @@
 
   <script>
     $(function () {
-      $('[data-toggle="popover"]').popover();
 
       $('#cvc').on('click', function () {
         if ($('.cvc-preview-container').hasClass('hide')) {

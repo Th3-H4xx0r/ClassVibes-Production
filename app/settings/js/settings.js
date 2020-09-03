@@ -130,9 +130,6 @@ async function getBillingInformation(){
           <div class="payment-plan"  id = 'payment-method-list'>
           </div>
   
-  
-  
-  
             <h5 style="margin-top: 30px;">Payment History</h5>
             <div style="height: 50px; width: 85%; background-color: rgba(209, 209, 209, 0.158); border-radius: 10px;">
               <div class="row" style="margin-top: 10px;">
@@ -157,6 +154,7 @@ async function getBillingInformation(){
             
             await getPaymentMethods(customerID)
             await getTransactionHistory(customerID);
+            
   
           } else {
             var billingSetupHTML = `
@@ -285,7 +283,14 @@ async function getBillingInformation(){
           
           
                             if(response.status == "success"){
-                              var paymentMethodsList = JSON.parse(xhr.responseText['message']);
+
+                              var responseText = xhr.responseText
+
+                              console.log(responseText)
+
+                              var paymentMethodsJSON = JSON.parse(responseText);
+
+                              var paymentMethodsList = paymentMethodsJSON.message.data
           
                               console.log(paymentMethodsList)
               
