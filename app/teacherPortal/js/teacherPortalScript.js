@@ -1961,6 +1961,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
   
 }
 
+
 function getStudentData(code) {
 
   firebase.auth().onAuthStateChanged(user => {
