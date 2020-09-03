@@ -595,20 +595,27 @@ function emailSignUp(type) {
                                 "username": email,
                                 "account type": "Teacher",
                                 "account status": "Deactivated",
+                                "billing status": "Inactive",
                             }).then(() => {
 
 
                                 var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
 
                                 const xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = () => {
+                                if(xhr.readyState === XMLHttpRequest.DONE){
+                                    // Code to execute with response
 
-                                xhr.onreadystatechange = () => {
-                                    if(xhr.readyState === XMLHttpRequest.DONE){
-                                        // Code to execute with response
-                                        console.log(xhr.responseText);
-                                
-                                    }
+                                    var transactionsList = JSON.parse(xhr.responseText);
+
+                                    var customerID = transactionsList.message
+
+                                    firebase.firestore().collection("UserData").doc(email).update({
+                                        "customer stripe id": customerID
+                                    })
+                            
                                 }
+                            }
                                 
                                 xhr.open('GET', url);
                                 xhr.send();
@@ -845,6 +852,7 @@ googleSignUp = (type) => {
                             "username": email,
                             "account type": "Teacher",
                             "account status": "Deactivated",
+                            "billing status": "Inactive",
                         }).then(() => {
 
                             var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
@@ -853,7 +861,14 @@ googleSignUp = (type) => {
                             xhr.onreadystatechange = () => {
                                 if(xhr.readyState === XMLHttpRequest.DONE){
                                     // Code to execute with response
-                                    console.log(xhr.responseText);
+
+                                    var transactionsList = JSON.parse(xhr.responseText);
+
+                                    var customerID = transactionsList.message
+
+                                    firebase.firestore().collection("UserData").doc(email).update({
+                                        "customer stripe id": customerID
+                                    })
                             
                                 }
                             }

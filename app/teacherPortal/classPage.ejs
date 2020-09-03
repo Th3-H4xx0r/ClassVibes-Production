@@ -459,6 +459,71 @@
                     }
                 </style>
 
+                <style>
+
+ .switch-container {
+	 width: 60px;
+	 height: 30px;
+	 margin: 2rem auto;
+	 position: relative;
+     margin-top: 0px;
+
+}
+ .switch {
+	 opacity: 0;
+	 width: 0;
+	 height: 0;
+
+}
+ .switch:checked + .slider:before {
+	 -webkit-transform: translateX(25px);
+	 -ms-transform: translateX(25px);
+	 transform: translateX(25px);
+}
+ .slider {
+	 position: absolute;
+	 top: 0;
+	 left: 0;
+	 right: 0;
+	 bottom: 0;
+	 border-radius: 50px;
+	 -webkit-transition: 0.4s;
+	 transition: 0.4s;
+}
+ .slider:before {
+	 position: absolute;
+	 border-radius: 10%;
+	 content: "";
+	 left: 5px;
+	 bottom: 10px;
+	 width: 20px;
+	 height: 20px;
+	 -webkit-transition: 0.4s;
+	 transition: 0.4s;
+     top: 4px;
+}
+ .sl-1, .sl-2, .sl-3, .sl-4 {
+	 background-color: #ccc;
+}
+ .sl-1:before, .sl-2:before, .sl-3:before, .sl-4:before {
+	 border-radius: 50%;
+	 background-color: white;
+}
+ .sw-1:checked + .slider {
+	 background-color: #1cc88a;
+}
+ .sw-2:checked + .slider {
+	 background-color: #abd40b;
+}
+ .sw-3:checked + .slider {
+	 background-color: #4508d1;
+}
+ .sw-4:checked + .slider {
+	 background-color: #42cdff;
+}
+ 
+                </style>
+
                 <!-- /.container-fluid -->
             </div>
             <!-- End of Main Content -->
