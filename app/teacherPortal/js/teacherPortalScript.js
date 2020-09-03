@@ -1955,6 +1955,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
       }
     
       
+
       xhr.open('GET', url);
       xhr.send();
     })
