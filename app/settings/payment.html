@@ -8,7 +8,8 @@
 
   <link rel="icon" href="/img/classvibelogo.png">
 
-  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://js.stripe.com/v2/"></script>
+<script src="https://js.stripe.com/v3/"></script>
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
@@ -124,9 +125,62 @@
       checkUserAuthStatus('teacher');
       await getBillingInformation();
 
+      Stripe.setPublishableKey('sk_test_51HJSAPHxKyunjmTeuH6rMxLfpXffjmMJt7pi9Nq3Eon1lvfVD4rTKmVtqzsJVqaDW0wLDEUKwji5SDFoXJEUffSj00dJ0Lb4BZ');
+
 
 
     });
+  </script>
+
+  <script>
+    function validCardNum(form){
+
+      console.log(form.value)
+      var card = Stripe.card.validateCardNumber(form.value)
+
+      if(card){
+        document.getElementById('cardNumberError').innerHTML = ''
+      } else {
+        document.getElementById('cardNumberError').innerHTML = "Invalid"
+
+      }
+
+      console.log(card)
+    }
+
+    function validCardCVC(form){
+
+      console.log(form.value)
+      var cvc = Stripe.card.validateCVC(form.value)   
+
+      if(cvc){
+        document.getElementById('cvcError').innerHTML = ''
+      } else {
+        document.getElementById('cvcError').innerHTML = "Invalid"
+
+      }
+
+console.log(cvc)
+}
+
+function validCardExpireDate(form){
+
+console.log(form.value)
+var date = Stripe.card.validateExpiry(form.value)   
+
+if(date){
+  document.getElementById('dateError').innerHTML = ''
+} else {
+  document.getElementById('dateError').innerHTML = "Invalid"
+
+}
+
+console.log(date)
+}
+
+
+
+    
   </script>
 
   <nav class="navbar navbar-light bg" style="background-color: royalblue">
@@ -263,17 +317,23 @@
                   <input id="NameOnCard" class="form-control" type="text" maxlength="255"></input>
                 </div>
                 <div class="form-group">
-                  <label for="CreditCardNumber">Card number</label>
-                  <input id="CreditCardNumber" class="null card-image form-control" type="text"></input>
+               
+                    <label for="CreditCardNumber">Card number </label>
+                
+
+                  <input id="CreditCardNumber" class="null card-image form-control" type="text" oninput="validCardNum(this)"></input>
+                  <p id = 'cardNumberError' style="color: red;"></p>
                 </div>
                 <div class="expiry-date-group form-group">
                   <label for="ExpiryDate">Expiry date</label>
-                  <input id="ExpiryDate" class="form-control" type="text" placeholder="MM / YY" maxlength="7"></input>
+                  <input id="ExpiryDate" class="form-control" type="text" placeholder="MM / YY" maxlength="5"  oninput="validCardExpireDate(this)"></input>
+                  <p id = 'dateError' style="color: red;"></p>
                 </div>
                 <div class="security-code-group form-group">
                   <label for="SecurityCode">Security code</label>
                   <div class="input-container">
-                    <input id="SecurityCode" class="form-control" type="password"></input>
+                    <input id="SecurityCode" class="form-control" type="password" oninput="validCardCVC(this)"></input>
+                    <p id = 'cvcError' style="color: red;"></p>
                   </div>
 
                 </div>

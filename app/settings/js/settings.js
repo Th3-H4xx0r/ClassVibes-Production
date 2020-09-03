@@ -369,6 +369,8 @@ async function getBillingInformation(){
   
   function addCardToAccount(){
 
+
+
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
             var email = user.email
@@ -413,7 +415,12 @@ async function getBillingInformation(){
                         document.getElementById('add-card-text').innerHTML = 'Add Card'
               
                         if(response.status == 'failed'){
-                          document.getElementById('feedback-error-add-card').innerHTML = response.message
+                          if(response.data.code == 'card_declined'){
+                            document.getElementById('feedback-error-add-card').innerHTML = "Card was declined"
+                          } else {
+                            document.getElementById('feedback-error-add-card').innerHTML = response.message
+                          }
+                          
                         } else {
                           document.getElementById('feedback-error-add-card').innerHTML = ''
                           window.location.reload()
