@@ -1,6 +1,3 @@
-const { response } = require("express");
-
-
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
   
   firebase.auth().onAuthStateChanged(user => {
