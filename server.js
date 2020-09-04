@@ -6,7 +6,6 @@ const firebase = require('firebase');
 const ejs = require('ejs')
 var http = require('http').createServer(app);
 var socket = require('socket.io-client')('https://api-v1.classvibes.net');
-var subdomain = require('express-subdomain');
 
 
 ////////////////////////////////////////
@@ -404,8 +403,6 @@ socket.on('connect', function () {
 /////////////////////////
 //HTTP SERVER LISTENER CONFIG
 /////////////////////////
-
-app.use(subdomain('test', router));
 
 app.get('*', function(req, res){
   res.status(404).sendFile(path.join(__dirname+'/PageNotFound/404.html'));
