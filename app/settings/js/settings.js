@@ -369,13 +369,14 @@ async function getBillingInformation(){
   
   function addCardToAccount(){
 
-
-
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
             var email = user.email
             document.getElementById('CancelButton').enabled = false
-            document.getElementById('add-card-text').innerHTML = 'Adding Card...'
+            document.getElementById('add-card-text').innerHTML = `
+            <img src = 'img/oval.svg' width = '7%'/>`
+
+            
           
           
             var name = document.getElementById('NameOnCard').value
@@ -383,57 +384,94 @@ async function getBillingInformation(){
             var expireDate = document.getElementById('ExpiryDate').value
             var securityCode = document.getElementById('SecurityCode').value
             var zipCode = document.getElementById('ZIPCode').value
+
+            var numberError = document.getElementById('cardNumberError').innerHTML
+            var cvcError = document.getElementById('cvcError').innerHTML
+            var dateError = document.getElementById('dateError').innerHTML
+
+            console.log(numberError, cvcError, dateError)
+       
+
+            if(name && cardNumber && expireDate && securityCode && zipCode){
+
+              document.getElementById('CancelButton').enabled = true
+            document.getElementById('add-card-text').innerHTML = 'Add Card'
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+
+              if((numberError == '' && cvcError == "" && dateError == "")  ){
+
+                document.getElementById('CancelButton').enabled = false
+                document.getElementById('add-card-text').innerHTML = `
+                <img src = 'img/oval.svg' width = '7%'/>`
+                
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+
+                var str = expireDate.split('/');
           
-            var str = expireDate.split('/');
-          
-            var expireMonth = str[0]
-          
-            var expireYear = str[1]
-          
-            const xhr = new XMLHttpRequest();
-        
-            firebase.firestore().collection('UserData').doc(email).get().then(doc => {
-        
-                var data = doc.data();
-        
-                var customerID = data['customer stripe id']
-          
-                var url = `http://localhost:3120/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+                var expireMonth = str[0]
+              
+                var expireYear = str[1]
+              
+                const xhr = new XMLHttpRequest();
+            
+                firebase.firestore().collection('UserData').doc(email).get().then(doc => {
+            
+                    var data = doc.data();
+            
+                    var customerID = data['customer stripe id']
+              
+                    var url = `http://localhost:3120/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+                      
+                    xhr.onreadystatechange = () => {
+                      console.log("Got")
+                        if(xhr.readyState === XMLHttpRequest.DONE){
+                            // Code to execute with response
+                            //console.log(xhr.responseText);
+
+                            document.getElementById('CancelButton').enabled = true
+                            document.getElementById('add-card-text').innerHTML = 'Add Card'
                   
-                xhr.onreadystatechange = () => {
-                  console.log("Got")
-                    if(xhr.readyState === XMLHttpRequest.DONE){
-                        // Code to execute with response
-                        //console.log(xhr.responseText);
-              
-                        var response = JSON.parse(xhr.responseText);
-              
-                        console.log(response)
-              
-                        document.getElementById('CancelButton').enabled = true
-              
-                        document.getElementById('add-card-text').innerHTML = 'Add Card'
-              
-                        if(response.status == 'failed'){
-                          if(response.data.code == 'card_declined'){
-                            document.getElementById('feedback-error-add-card').innerHTML = "Card was declined"
-                          } else {
-                            document.getElementById('feedback-error-add-card').innerHTML = response.message
-                          }
-                          
-                        } else {
-                          document.getElementById('feedback-error-add-card').innerHTML = ''
-                          window.location.reload()
+                            var response = JSON.parse(xhr.responseText);
+                  
+                            console.log(response)
+                  
+                            if(response.status == 'failed'){
+                              if(response.data.code == 'card_declined'){
+                                document.getElementById('feedback-error-add-card').innerHTML = "Card was declined"
+                              } else {
+                                document.getElementById('feedback-error-add-card').innerHTML = response.message
+                              }
+                              
+                            } else {
+                              document.getElementById('feedback-error-add-card').innerHTML = ''
+                              window.location.reload()
+                            }
+                  
                         }
-              
-                    }
-                  }
-              
+                      }
                   
-                  xhr.open('GET', url);
-                  xhr.send();
-              
-            })
+                      
+                      xhr.open('GET', url);
+                      xhr.send();
+                  
+                })
+              } else {
+                document.getElementById('CancelButton').enabled = true
+            document.getElementById('add-card-text').innerHTML = 'Add Card'
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+                document.getElementById('feedback-error-add-card').innerHTML = 'Card is invalid'
+
+              }
+
+            } else {
+              document.getElementById('CancelButton').enabled = true
+            document.getElementById('add-card-text').innerHTML = 'Add Card'
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+              document.getElementById('feedback-error-add-card').innerHTML = 'Please fill out all the fields'
+
+            }
+          
+
           
         
         }
