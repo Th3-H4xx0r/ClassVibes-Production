@@ -211,7 +211,11 @@ async function getBillingInformation(){
             var transaction = transactionsList[i]
     
             if (transaction != undefined) {
+
+              console.log(transaction)
               var amount = (transaction['amount']/100).toFixed(2)
+
+              var amount_refunded = (transaction['amount_refunded']/100).toFixed(2)
     
               var status = transaction['status']
     
@@ -222,18 +226,47 @@ async function getBillingInformation(){
               var formattedDate = new Date(date * 1000).toLocaleString()
     
               var lastFour = transaction['payment_method_details']['card']['last4']
+
+              var brand = transaction['payment_method_details']['card']['brand']
+
+              var brandHTML = ``
+
+              var statusHTML = ``
+
+              console.log(status)
+
+              if(status == 'succeeded'){
+
+                if(amount_refunded == amount){
+                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #4f566b; background-color: #e3e8ee; font-weigth: 700; ">Refunded<i class="fas fa-check"></i></div>`
+
+                } else {
+                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #0e6245; background-color: #cbf4c9; font-weigth: 700; ">Succeeded<i class="fas fa-check"></i></div>`
+
+                }
+              } else if(status == ''){
+
+              }
+
+
+
+              if(brand.toLowerCase() == "visa"){
+                brandHTML = `<i class="fab fa-cc-visa" style = "margin-top: 2%; color: #192061; font-size: 30px;"></i>`
+              } else {
+                brandHTML = `<i class="far fa-credit-card" style = "margin-top: 2%; color: #192061; font-size: 30px;"></i>`
+              }
     
               var transactionHTML = `
                 <div class="history-item">
                             <div style="margin-left: 30px; margin-top: 20px; display: flex; justify-content: space-between">
                             <div class='row'>
                               <h5>$${amount} ${currency}</h4>
-                              <div class="badge badge-primary" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px;">${status}</div>
-                              <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
+                             ${statusHTML}                              
+                             <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
                             </div>
     
                             <div class='row' style = 'margin-right: 5%'>
-                              <i class="fa fa-credit-card" style="margin-left: 300px; font-size: 30px;"></i>
+                              ${brandHTML}
                               <p style="margin-left: 20px; font-size: 20px;">${lastFour}</p>
                             </div>
                                
@@ -312,7 +345,7 @@ async function getBillingInformation(){
                                   var cardIcon = ``
             
                                   if(brand == 'Visa'){
-                                    cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
+                                    cardIcon = `<i class="fab fa-cc-visa" style = "font-size: 40px; margin-top: 3%; color: #192061"></i>`
                                   }
             
                                   var paymentMethodHTML = `
