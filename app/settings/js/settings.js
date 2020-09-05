@@ -200,7 +200,7 @@ async function getBillingInformation(){
           
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick = 'validateCoupon()'>Redeem</button>
+        <button type="button" class="btn btn-primary" onclick = 'validateCoupon()' id = 'redeem-button'>Redeem</button>
       </div>
     </div>
   </div>
@@ -215,6 +215,9 @@ async function getBillingInformation(){
   }
 
   function validateCoupon(){
+
+    document.getElementById('redeem-button').innerHTML = ``
+    
     var code = document.getElementById('coupon-code-input').value
 
     var errorField = document.getElementById('coupon-code-error-field')
