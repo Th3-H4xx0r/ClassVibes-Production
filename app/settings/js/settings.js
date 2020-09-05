@@ -184,7 +184,7 @@ async function getBillingInformation(){
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Redeem Coupon</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -192,29 +192,56 @@ async function getBillingInformation(){
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
+            <label for="recipient-name" class="col-form-label">Code</label>
+            <input type="text" class="form-control" id="coupon-code-input">
           </div>
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
+
+          <p id = 'coupon-code-error-field' style = 'color: red; font-weight: 700'></p>
+          
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
+        <button type="button" class="btn btn-primary" onclick = 'validateCoupon()'>Redeem</button>
       </div>
     </div>
   </div>
 </div>
     `
 
-    document.getElementById('#pageModalSection').innerHTML = ''
+    document.getElementById('pageModalSection').innerHTML = ''
 
     $(modalHTML).appendTo('#pageModalSection')
 
     $('#couponModal').modal('toggle')
+  }
+
+  function validateCoupon(){
+    var code = document.getElementById('coupon-code-input').value
+
+    var errorField = document.getElementById('coupon-code-error-field')
+
+    if(code){
+      firebase.firestore().collection('Coupons').doc(code).get().then(doc => {
+        var data = doc.data()
+  
+        if(data){
+          var redeemed = data['redeemed']
+
+          if(redeemed == false){
+            console.log("coupon redeemed success")
+            errorField.innerHTML = ''
+          } else {
+            errorField.innerHTML = 'Coupon already redeemed'
+          }
+        } else {
+          errorField.innerHTML = 'Coupon does not exist'
+        }
+      })
+    } else {
+      errorField.innerHTML = 'Coupon does not exist'
+    }
+
+
+    console.log(code)
   }
 
 
