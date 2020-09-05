@@ -166,7 +166,7 @@ async function getBillingInformation(){
                 <center style = 'margin-top: 2%'>
                 <button class = 'btn btn-primary' onclick = 'setupBillingPressed()'>Setup Billing Details</button>
 
-                <a href = '#haveCuponCode' onclick = 'showCuponCodePopup()' style = 'text-decoration: none'><p style = 'margin-top: 1%; color: #5469d4'>I have a cupon code</p></a>
+                <a href = '#haveCuponCode' onclick = "showCuponCodePopup('${email}')" style = 'text-decoration: none'><p style = 'margin-top: 1%; color: #5469d4'>I have a cupon code</p></a>
                 </center>
             `
   
@@ -178,7 +178,7 @@ async function getBillingInformation(){
   
   }
 
-  function showCuponCodePopup(){
+  function showCuponCodePopup(email){
     var modalHTML = `
     <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -200,7 +200,7 @@ async function getBillingInformation(){
           
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick = 'validateCoupon()' id = 'redeem-button'>Redeem</button>
+        <button type="button" class="btn btn-primary" onclick = "validateCoupon('${email}')" id = 'redeem-button'>Redeem</button>
       </div>
     </div>
   </div>
@@ -214,37 +214,55 @@ async function getBillingInformation(){
     $('#couponModal').modal('toggle')
   }
 
-  function validateCoupon(){
+  function validateCoupon(email){
 
-    document.getElementById('redeem-button').innerHTML = ``
-    
-    var code = document.getElementById('coupon-code-input').value
+    document.getElementById('redeem-button').innerHTML = `<img src = 'img/oval.svg' width = '30%'/>`
 
-    var errorField = document.getElementById('coupon-code-error-field')
+    setTimeout(function(){ 
 
-    if(code){
-      firebase.firestore().collection('Coupons').doc(code).get().then(doc => {
-        var data = doc.data()
+      var code = document.getElementById('coupon-code-input').value
+
+      var errorField = document.getElementById('coupon-code-error-field')
   
-        if(data){
-          var redeemed = data['redeemed']
-
-          if(redeemed == false){
-            console.log("coupon redeemed success")
-            errorField.innerHTML = ''
+      if(code){
+        firebase.firestore().collection('Coupons').doc(code).get().then(doc => {
+          var data = doc.data()
+    
+          if(data){
+            var redeemed = data['redeemed']
+  
+            if(redeemed == false){
+              console.log("coupon redeemed success")
+              firebase.firestore().collection('Coupons').doc(code).update({
+                redeemed: true
+              }).then(() => {
+                firebase.firestore().collection('UserData').doc(email).update({
+                  'billing status': 'active',
+                  'billing platform': 'stripe'
+                }).then(() => {
+                  window.location.reload();
+                })
+              })
+              
+            } else {
+              errorField.innerHTML = 'Coupon already redeemed'
+              document.getElementById('redeem-button').innerHTML = `Redeem`
+            }
           } else {
-            errorField.innerHTML = 'Coupon already redeemed'
+            errorField.innerHTML = 'Coupon does not exist'
+            document.getElementById('redeem-button').innerHTML = `Redeem`
           }
-        } else {
-          errorField.innerHTML = 'Coupon does not exist'
-        }
-      })
-    } else {
-      errorField.innerHTML = 'Coupon does not exist'
-    }
+        })
+      } else {
+        errorField.innerHTML = 'Coupon does not exist'
+        document.getElementById('redeem-button').innerHTML = `Redeem`
+      }
+  
+  
+      console.log(code)
+     }, 1000);
 
-
-    console.log(code)
+  
   }
 
 
