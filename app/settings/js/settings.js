@@ -210,7 +210,11 @@ async function getBillingInformation(){
 </div>
     `
 
+    document.getElementById('#pageModalSection').innerHTML = ''
+
     $(modalHTML).appendTo('#pageModalSection')
+
+    $('#couponModal').modal('toggle')
   }
 
 
