@@ -238,7 +238,8 @@ async function getBillingInformation(){
               }).then(() => {
                 firebase.firestore().collection('UserData').doc(email).update({
                   'billing status': 'active',
-                  'billing platform': 'stripe'
+                  'billing platform': 'stripe',
+                  'coupon redeemed': true
                 }).then(() => {
                   window.location.reload();
                 })
