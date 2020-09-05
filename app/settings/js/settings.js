@@ -164,7 +164,9 @@ async function getBillingInformation(){
                 </center>
 
                 <center style = 'margin-top: 2%'>
-                <button class = 'btn btn-primary' onclick = 'setupBillingPressed()'>Setup Billing</button>
+                <button class = 'btn btn-primary' onclick = 'setupBillingPressed()'>Setup Billing Details</button>
+
+                <a href = '#haveCuponCode' onclick = 'showCuponCodePopup()' style = 'text-decoration: none'><p style = 'margin-top: 1%; color: #5469d4'>I have a cupon code</p></a>
                 </center>
             `
   
@@ -174,6 +176,10 @@ async function getBillingInformation(){
       }
     })
   
+  }
+
+  function showCuponCodePopup(){
+    
   }
 
 
@@ -238,14 +244,14 @@ async function getBillingInformation(){
               if(status == 'succeeded'){
 
                 if(amount_refunded == amount){
-                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #4f566b; background-color: #e3e8ee; font-weigth: 700; ">Refunded<i class="fas fa-check"></i></div>`
+                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #4f566b; background-color: #e3e8ee; font-weigth: 700; ">Refunded <i class="fas fa-redo"></i></div>`
 
                 } else {
-                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #0e6245; background-color: #cbf4c9; font-weigth: 700; ">Succeeded<i class="fas fa-check"></i></div>`
+                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #0e6245; background-color: #cbf4c9; font-weigth: 700; ">Succeeded <i class="fas fa-check"></i></div>`
 
                 }
-              } else if(status == ''){
-
+              } else{
+                statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #983705; background-color: #f8e5b9; font-weigth: 700; ">Failed <i class="fas fa-redo"></i></div>`
               }
 
 
