@@ -434,16 +434,22 @@ async function getBillingInformation(){
             
                                   var cardIcon = ``
             
-                                  if(brand.toLowerCase() == 'Visa'){
+                                  if(brand.toLowerCase() == 'visa'){
                                     cardIcon = `<i class="fab fa-cc-visa" style = "font-size: 40px; margin-top: 3%; color: #192061"></i>`
-                                  } else if(brand == '')
+                                  } else if(brand.toLowerCase() == 'mastercard'){
+                                    cardIcon = `<i class="fab fa-cc-mastercard" style = "font-size: 40px; margin-top: 3%; color: black"></i>`
+                                  } else if(brand.toLowerCase() == 'american express'){
+                                    cardIcon = `<i class="fab fa-cc-amex" style = "font-size: 40px; margin-top: 3%; color: #1c71b9"></i>`
+                                  }else if(brand.toLowerCase() == 'discover'){
+                                    cardIcon = `<i class="fab fa-cc-discover" style = "font-size: 40px; margin-top: 3%; color: #1c71b9"></i>`
+                                  }
             
                                   var paymentMethodHTML = `
                                   <div style="display: flex; justify-content: space-between; margin-left: 1%;">
                                     <div class="row">
                                       ${cardIcon}
                                       <div class="col" style = 'padding-top: 2%'>
-                                        <p> Visa •••• ${lastFour} </p>
+                                        <p> ${brand} •••• ${lastFour} </p>
                                         <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
                                       </div>
                                     </div>
