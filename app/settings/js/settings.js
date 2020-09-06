@@ -434,9 +434,9 @@ async function getBillingInformation(){
             
                                   var cardIcon = ``
             
-                                  if(brand == 'Visa'){
+                                  if(brand.toLowerCase() == 'Visa'){
                                     cardIcon = `<i class="fab fa-cc-visa" style = "font-size: 40px; margin-top: 3%; color: #192061"></i>`
-                                  }
+                                  } else if(brand == '')
             
                                   var paymentMethodHTML = `
                                   <div style="display: flex; justify-content: space-between; margin-left: 1%;">
