@@ -836,6 +836,8 @@ googleSignUp = (type) => {
 
                                     var customerID = transactionsList.message
 
+                                    console.log(customerID)
+
                                     firebase.firestore().collection("UserData").doc(email).update({
                                         "customer stripe id": customerID
                                     })
