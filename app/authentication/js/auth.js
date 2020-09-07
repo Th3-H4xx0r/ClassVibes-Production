@@ -832,11 +832,11 @@ googleSignUp = (type) => {
                                 if(xhr.readyState === XMLHttpRequest.DONE){
                                     // Code to execute with response
 
-                                    var transactionsList = JSON.parse(xhr.responseText);
+                                    var response = JSON.parse(xhr.responseText);
 
-                                    var customerID = transactionsList.message
+                                    var customerID = response.message
 
-                                    console.log(customerID)
+                                    console.log(response, customerID)
 
                                     firebase.firestore().collection("UserData").doc(email).update({
                                         "customer stripe id": customerID
