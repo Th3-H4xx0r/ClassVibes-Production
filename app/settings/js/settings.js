@@ -574,6 +574,7 @@ async function getBillingInformation(){
                               }
                               
                             } else {
+                              console.log(xhr.responseText)
                               document.getElementById('feedback-error-add-card').innerHTML = ''
                               window.location.reload()
                             }
