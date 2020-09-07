@@ -832,9 +832,11 @@ googleSignUp = (type) => {
                                 if(xhr.readyState === XMLHttpRequest.DONE){
                                     // Code to execute with response
 
+                                    console.log(xhr.responseText)
+                                    
                                     var response = JSON.parse(xhr.responseText);
 
-                                    console.log(response)
+                                    
 
                                     var customerID = response.message
 
