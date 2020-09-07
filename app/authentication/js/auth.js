@@ -319,12 +319,10 @@ googleSignInTeacher = () => {
 
            // localStorage.setItem("email", email);
 
-
             console.log("data from doc : ", doc.data());
 
-            var accountType = doc.data()['account type'];
-
             if (doc.exists) {
+                var accountType = doc.data()['account type'];
                 console.log("Document data:", doc.data()["account type"]);
 
                 if (accountType != null) {
