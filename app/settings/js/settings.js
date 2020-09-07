@@ -239,7 +239,8 @@ async function getBillingInformation(){
                 firebase.firestore().collection('UserData').doc(email).update({
                   'billing status': 'active',
                   'billing platform': 'stripe',
-                  'coupon redeemed': true
+                  'coupon redeemed': true,
+                  "account status": "Activated"
                 }).then(() => {
                   window.location.reload();
                 })
