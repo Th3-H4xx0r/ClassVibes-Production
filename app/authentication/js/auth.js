@@ -834,6 +834,8 @@ googleSignUp = (type) => {
 
                                     var response = JSON.parse(xhr.responseText);
 
+                                    console.log(response)
+
                                     var customerID = response.message
 
                                     console.log(response, customerID)
