@@ -1885,9 +1885,8 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
       var customerID = data['customer stripe id']
 
-      var amount = 1.99
     
-      var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+      var url = `http://localhost:3120/api/subscribe?id=${customerID}`
     
       const xhr = new XMLHttpRequest();
     
