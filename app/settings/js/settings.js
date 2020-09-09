@@ -286,10 +286,9 @@ async function getBillingInformation(){
 
   async function getTransactionHistory(customerID) {
   
-    var url = `http://localhost:3120/api/getTransactions?id=${customerID}`
+    var url = `https://api-v1.classvibes.net/api/getTransactions?id=${customerID}`
   
     const xhr = new XMLHttpRequest();
-  
   
       xhr.onreadystatechange = () => {
         try{
@@ -392,7 +391,7 @@ async function getBillingInformation(){
                 firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
                   //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
               
-                  var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
+                  var url = `https://api-v1.classvibes.net/api/getPaymentMethods?id=${id}&authToken=${idToken}`
           
                   console.log(url)
               
@@ -551,13 +550,13 @@ async function getBillingInformation(){
             
                     var customerID = data['customer stripe id']
               
-                    var url = `http://localhost:3120/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+                    var url = `https://api-v1.classvibes.net/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
                       
                     xhr.onreadystatechange = () => {
                       console.log("Got")
                         if(xhr.readyState === XMLHttpRequest.DONE){
                             // Code to execute with response
-                            //console.log(xhr.responseText);
+                            //console.log(xhr.responseText); 
 
                             document.getElementById('CancelButton').enabled = true
                             document.getElementById('add-card-text').innerHTML = 'Add Card'
