@@ -1886,7 +1886,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
       var customerID = data['customer stripe id']
 
     
-      var url = `http://localhost:3120/api/subscribe?id=${customerID}&class=${code}`
+      var url = `https://api-v1.classvibes.net/api/subscribe?id=${customerID}&class=${code}`
     
       const xhr = new XMLHttpRequest();
     
