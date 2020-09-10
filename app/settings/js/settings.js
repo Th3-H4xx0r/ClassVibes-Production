@@ -129,6 +129,17 @@ async function getBillingInformation(){
   
           <div class="payment-plan"  id = 'payment-method-list'>
           </div>
+
+          <h5 style="margin-top: 30px;">Active Subscriptions</h5>
+
+          <hr />
+  
+
+
+          <div id="active-subscriptions-section">
+           
+          </div>
+
   
             <h5 style="margin-top: 30px;">Payment History</h5>
             <div style="height: 50px; width: 85%; background-color: rgba(209, 209, 209, 0.158); border-radius: 10px;">
@@ -154,6 +165,8 @@ async function getBillingInformation(){
             
             await getPaymentMethods(customerID)
             await getTransactionHistory(customerID);
+
+            await getActiveSubscriptions(customerID);
             
   
           } else {
@@ -176,6 +189,126 @@ async function getBillingInformation(){
       }
     })
   
+  }
+
+
+  function getActiveSubscriptions(customerID){
+    
+    console.log("gettings payment methods")
+          
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+      
+          var url = `http://localhost:3120/api/getActiveSubscriptions?id=${customerID}&authToken=${idToken}`
+  
+          console.log(url)
+      
+          const xhr = new XMLHttpRequest();
+      
+            xhr.onreadystatechange = () => {
+              console.log("Got")
+                if(xhr.readyState === XMLHttpRequest.DONE){
+                    // Code to execute with response
+                    //console.log(xhr.responseText);
+      
+                    var response = JSON.parse(xhr.responseText);
+  
+  
+                    if(response.status == "success"){
+
+                      var responseText = xhr.responseText
+
+                      console.log(responseText)
+
+                      var subscriptionsJSON = JSON.parse(responseText);
+
+                      var subscriptions = subscriptionsJSON.message.data
+
+                      console.log(subscriptions)
+  
+      
+                      for(var i = 0; i <= subscriptions.length; i++){
+
+                        var subscription = subscriptions[i]
+
+                        console.log(subscription)
+    
+                        if(subscription != undefined){
+    
+                          var classCode = subscription['metadata']['class']
+
+                          var nextInvoice = new Date(subscription['current_period_end'] * 1000).toLocaleDateString()
+
+                          var price = (subscription['plan']['amount'])/100
+
+                          firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
+
+                            if(doc.data != undefined){
+
+                              var data  = doc.data()
+
+                              var name = data['class name']
+
+                              var code = doc.id
+                              var subscriptionHTML = `
+                              <div style="display: flex; justify-content: space-between; margin-left: 1%; margin-bottom: -10px">
+                
+                              <h6 style="font-size: 20px; margin-top: 1%;"> <i class="fas fa-tags" style = 'font-size: 25px; color: green'></i> ${name} <span class = 'badge badge-success'> ${code}</span> <br> <p style = 'font-size: 15px; color: gray; margin-top: 5px'>Billing yearly
+                              •
+                              Next invoice on ${nextInvoice} for $${price}</p></h6>
+                
+                              <h6 style="margin-right: 15%; margin-top: 1%;">Exp ${nextInvoice}</h6>
+                            </div>
+    
+                            <hr />
+                              `
+    
+        
+                              $(subscriptionHTML).appendTo('#active-subscriptions-section')
+                            } else {
+
+                            }
+                           
+                          })
+
+                         
+                        }
+    
+  
+                        //payment-method-list
+                      }
+
+                      if(subscriptions.length == 0){
+                        $('<hr/>').appendTo('#active-subscriptions-section')
+                        
+                      }
+                    } else {
+                      console.log(response.message)
+  
+                      document.getElementById('payment-method-list').innerHTML = `
+                        <a style = 'color: red'>Failed to get active subscriptions</a>
+                      `
+                    }
+      
+  
+                }
+              }
+  
+              xhr.open('GET', url);
+              xhr.send();
+  
+        }).catch(function(error) {
+          console.log(error)
+          // Handle error
+        });
+  
+  
+    }
+
+})
+
   }
 
   function showCuponCodePopup(email){
@@ -391,7 +524,7 @@ async function getBillingInformation(){
                 firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
                   //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
               
-                  var url = `https://api-v1.classvibes.net/api/getPaymentMethods?id=${id}&authToken=${idToken}`
+                  var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
           
                   console.log(url)
               
@@ -414,9 +547,14 @@ async function getBillingInformation(){
 
                               var paymentMethodsJSON = JSON.parse(responseText);
 
-                              var paymentMethodsList = paymentMethodsJSON.message.data
+                              var paymentMethodsTextJson = paymentMethodsJSON.message
+
+                              var paymentMethodsList = paymentMethodsTextJson.card.data
+
+                              var defaultPaymentMethod = paymentMethodsTextJson.default
+
+                              console.log(defaultPaymentMethod)
           
-                              console.log(paymentMethodsList)
               
                               for(var i = 0; i <= paymentMethodsList.length; i++){
                                 console.log(paymentMethodsList[i])
@@ -432,6 +570,14 @@ async function getBillingInformation(){
                                   var expireMonth = paymentMethod['exp_month']
               
                                   var expireYear = paymentMethod['exp_year']
+
+                                  var cardID = paymentMethod['id']
+
+                                  var defaultTagHTML = ''
+
+                                  if(cardID == defaultPaymentMethod){
+                                    defaultTagHTML = `<span class = 'badge badge-primary'>Default</span>`
+                                  }
             
                                   var cardIcon = ``
             
@@ -450,14 +596,14 @@ async function getBillingInformation(){
                                     <div class="row">
                                       ${cardIcon}
                                       <div class="col" style = 'padding-top: 2%'>
-                                        <p> ${brand} •••• ${lastFour} </p>
+                                        <p> ${brand} •••• ${lastFour} ${defaultTagHTML}</p>
                                         <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
                                       </div>
                                     </div>
             
                                     <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
             
-                                   
+      
                                   </div>
             
                                   <hr style="margin-top: -7px;"/>
