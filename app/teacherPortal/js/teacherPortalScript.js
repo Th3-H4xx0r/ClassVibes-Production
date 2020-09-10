@@ -2256,6 +2256,37 @@ function getStudentData(code) {
 
           
         }
+      }).then(() => {
+          var allStudentsHTML = document.getElementById('studentTable').innerHTML
+          var happyStudentHTML = document.getElementById('studentTable-doing-good').innerHTML
+          var mehStudentHTML = document.getElementById('studentTable-meh').innerHTML
+          var frustratedStudentHTML = document.getElementById('studentTable-frustrated').innerHTML
+          var inactiveStudentHTML = document.getElementById('studentTable-inactive').innerHTML
+
+
+          var noStudentsHTML = `
+            <h2 style = 'margin-top: 5%'>No Students here</h2>
+          `
+
+          if(allStudentsHTML == ''){
+            $(noStudentsHTML).appendTo("#studentTable")
+          }
+
+          if(!happyStudentHTML){
+            $(noStudentsHTML).appendTo("#studentTable-doing-good")
+          }
+
+          if(!mehStudentHTML){
+            $(noStudentsHTML).appendTo("#studentTable-meh")
+          }
+
+          if(!frustratedStudentHTML){
+            $(noStudentsHTML).appendTo("#studentTable-frustrated")
+          }
+
+          if(!inactiveStudentHTML){
+            $(noStudentsHTML).appendTo("#studentTable-inactive")
+          }
       });
     })
 
