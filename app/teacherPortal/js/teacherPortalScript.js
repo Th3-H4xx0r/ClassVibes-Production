@@ -2448,7 +2448,7 @@ async function removeStudent(email, code, teacherEmail){
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     //console.log(idToken)
 
-    var url = "http://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
+    var url = "http://localhost:3120/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
 
     //console.log("Removing")
 
@@ -2468,9 +2468,16 @@ xhr.onreadystatechange = () => {
     if(xhr.readyState === XMLHttpRequest.DONE){
         // Code to execute with response
         //console.log(xhr.responseText);
+
+        var responseText = xhr.responseText
+
+        if(responseText == 'success'){
+
+          window.location.reload()
+        }
+
         document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
 
-        window.location.reload()
     }
 }
 
