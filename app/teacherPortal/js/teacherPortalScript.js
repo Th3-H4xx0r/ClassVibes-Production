@@ -2448,7 +2448,7 @@ async function removeStudent(email, code, teacherEmail){
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     //console.log(idToken)
 
-    var url = "http://localhost:3120/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
+    var url = "https://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
 
     //console.log("Removing")
 
