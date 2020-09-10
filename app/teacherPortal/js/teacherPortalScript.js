@@ -19,7 +19,6 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
 
         var billingStatus = data["billing status"];
 
-        if(billingStatus == 'active'){
           if (pendingSchoolRequestName) {
     
             var waitingRequestHTML = `
@@ -83,6 +82,22 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   else if(pageType == 'create-class'){
                     getProfileInfo();
                     getClassDataDropdown(email);
+
+                    if(billingStatus != 'active'){
+                    
+                        var billingErrorHTML = `<center style="margin-top: 18%;">
+                        <img src = '/teacher/img/undraw_online_payments_luau.svg' width = '20%'/>
+                  
+                        <h2 style="margin-top: 2%;">Billing Setup Required</h2>
+                  
+                        <p>Please go to <a href = '/settings/payments'>billing settings</a> to get started with your account's free trial!</p>
+                  
+                      </center>
+                        `;
+                  
+                        $('#main-body-page-teacher').html(billingErrorHTML);
+                    }
+                    
                   }
       
                   else if (pageType == 'class-page') {
@@ -176,6 +191,21 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 else if(pageType == 'create-class'){
                   getProfileInfo();
                   getClassDataDropdown(email);
+
+                  if(billingStatus != 'active'){
+                    
+                    var billingErrorHTML = `<center style="margin-top: 18%;">
+                    <img src = '/teacher/img/undraw_online_payments_luau.svg' width = '20%'/>
+              
+                    <h2 style="margin-top: 2%;">Billing Setup Required</h2>
+              
+                    <p>Please go to <a href = '/settings/payments'>billing settings</a> to get started with your account's free trial!</p>
+              
+                  </center>
+                    `;
+              
+                    $('#main-body-page-teacher').html(billingErrorHTML);
+                }
                 }
       
                 else if(pageType == "announcementsTeacher"){
@@ -258,19 +288,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               }
             }
           }
-        } else{
-            var billingErrorHTML = `<center style="margin-top: 18%;">
-            <img src = '/teacher/img/undraw_online_payments_luau.svg' width = '20%'/>
-      
-            <h2 style="margin-top: 2%;">Billing Setup Required</h2>
-      
-            <p>Please go to <a href = '/settings/payments'>billing settings</a> to get started with your account's free trial!</p>
-      
-          </center>
-            `;
-      
-            $('#main-body-page-teacher').html(billingErrorHTML);
-        }
+         
     
 
       });
