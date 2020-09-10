@@ -2471,7 +2471,7 @@ xhr.onreadystatechange = () => {
 
         var responseText = xhr.responseText
 
-        if(responseText == 'success'){
+        if(responseText.status == 'success'){
 
           window.location.reload()
         }
