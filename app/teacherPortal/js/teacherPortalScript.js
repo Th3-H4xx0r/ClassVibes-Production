@@ -1977,6 +1977,12 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
 function getStudentData(code) {
 
+  var happyCount = 0
+  var mehCount = 0
+  var frustratedCount = 0
+  var inactiveCount = 0
+  var totalCount = 0
+
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var teacherEmail = user.email;
@@ -2194,13 +2200,20 @@ function getStudentData(code) {
 
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
+
+            totalCount = totalCount + 1
     
         if (studentReaction == "doing great") {
               //$(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
 
+              happyCount = happyCount + 1
+
+
               if(today > exceedDate) {
                 $(inactive_column_face).appendTo("#studentTable-inactive");
+
+                inactiveCount = inactiveCount + 1
 
                 document.getElementById("face").outerHTML = inactive_happy;
                 document.getElementById("inactive_face").outerHTML = inactive_happy;
@@ -2216,12 +2229,16 @@ function getStudentData(code) {
               //$(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
 
+              mehCount = mehCount + 1
+
               if(today > exceedDate) {
 
                 $(inactive_column_face).appendTo("#studentTable-inactive");
 
                 document.getElementById("face").outerHTML = inactive_meh;
                 document.getElementById("inactive_face").outerHTML = inactive_meh;
+
+                inactiveCount = inactiveCount + 1
     
               
 
@@ -2231,6 +2248,8 @@ function getStudentData(code) {
     
     
             } else if (studentReaction == "frustrated") {
+
+              frustratedCount = frustratedCount + 1
     
               $(frustrated_column_face).appendTo("#studentTable-frustrated");
 
@@ -2238,6 +2257,8 @@ function getStudentData(code) {
                 $(inactive_column_face).appendTo("#studentTable-inactive");
                 document.getElementById("face").outerHTML = inactive_sad;
                 document.getElementById("inactive_face").outerHTML = inactive_sad;
+
+                inactiveCount = inactiveCount + 1
                 
 
               } else {
@@ -2257,36 +2278,32 @@ function getStudentData(code) {
           
         }
       }).then(() => {
-          var allStudentsHTML = document.getElementById('studentTable').innerHTML
-          var happyStudentHTML = document.getElementById('studentTable-doing-good').innerHTML
-          var mehStudentHTML = document.getElementById('studentTable-meh').innerHTML
-          var frustratedStudentHTML = document.getElementById('studentTable-frustrated').innerHTML
-          var inactiveStudentHTML = document.getElementById('studentTable-inactive').innerHTML
 
 
           var noStudentsHTML = `
             <h2 style = 'margin-top: 5%'>No Students here</h2>
           `
 
-          if(allStudentsHTML == ''){
+          if(totalCount == 0){
             $(noStudentsHTML).appendTo("#studentTable")
           }
 
-          if(!happyStudentHTML){
+          if(happyCount == 0){
             $(noStudentsHTML).appendTo("#studentTable-doing-good")
           }
 
-          if(!mehStudentHTML){
+          if(mehCount == 0){
             $(noStudentsHTML).appendTo("#studentTable-meh")
           }
 
-          if(!frustratedStudentHTML){
+          if(frustratedCount == 0){
             $(noStudentsHTML).appendTo("#studentTable-frustrated")
           }
 
-          if(!inactiveStudentHTML){
+          if(inactiveCount == 0){
             $(noStudentsHTML).appendTo("#studentTable-inactive")
           }
+
       });
     })
 
