@@ -1537,7 +1537,7 @@ async function getAnnouncementForClass(code) {
       var noAnnouncementsHTML = ` 
       
       <center>
-      <img src="/teacher/img/undraw_popular_7nrh.svg" width="20%">  
+      <img src="/teacher/img/undraw_news_go0e.svg" width="20%" style = 'margin-top: 5%'>  
     
       <h2 style="margin-top: 3%;">No Announcements</h2>
       <p>You're all caught up</p>
@@ -2281,7 +2281,7 @@ function getStudentData(code) {
 
 
           var noStudentsHTML = `
-            <h2 style = 'margin-top: 5%'>No Students here</h2>
+            <h2 style = 'margin-top: 5%; margin-left: 15%'>No Students here</h2>
           `
 
           if(totalCount == 0){
@@ -2469,9 +2469,11 @@ xhr.onreadystatechange = () => {
         // Code to execute with response
         //console.log(xhr.responseText);
 
-        var responseText = xhr.responseText
+        var response = JSON.parse(xhr.responseText);
 
-        if(responseText.status == 'success'){
+        console.log(response.status)
+
+        if(response.status == 'success'){
 
           window.location.reload()
         }
