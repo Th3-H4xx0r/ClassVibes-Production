@@ -914,7 +914,7 @@ function getGraphData_Classes_page(code){
 
       var className = data["class name"];
 
-      document.getElementById('classNameLabel').innerHTML = ` ${className} <span class = 'badge badge-primary'> ${classCode}</span>`
+      document.getElementById('classNameLabel').innerHTML = `${className}`
 
       getChartData(code)
     });
@@ -1008,7 +1008,7 @@ function getClassData(emailRef) {
                     <canvas id="myPieChart${classCode}"></canvas>
                   </div>
                   <div style="height: 30px"></div>
-                  <center><h5 class="card-title">${className} <span class = 'badge badge-primary'>${classCode}</span></h5>
+                  <center><h5 class="card-title">${className}</h5>
                   </center>
 
                 </div>
