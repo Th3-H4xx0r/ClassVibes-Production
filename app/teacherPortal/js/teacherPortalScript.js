@@ -2690,7 +2690,7 @@ function getEditData(code) {
     $(output).appendTo("#editInfo");   
 
     if(joinStatus == true){
-      document.getElementById('join-setting').className  = "badge badge-success"
+      document.getElementById('join-setting').className  = "badge badge-primary"
       document.getElementById('join-setting').innerText = "Allowed"
       document.getElementById('allow-join-switch').checked = true
 
