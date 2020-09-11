@@ -2719,7 +2719,7 @@ function changeJoinStatus(value, code){
 
   document.getElementById('update-details-section').innerHTML = updateClassButton
   if(value.checked == true){
-    document.getElementById('join-setting').className  = "badge badge-success"
+    document.getElementById('join-setting').className  = "badge badge-primary"
     document.getElementById('join-setting').innerText = "Allowed"
   } else {
     document.getElementById('join-setting').className  = "badge badge-danger"
