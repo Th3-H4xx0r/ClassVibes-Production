@@ -247,6 +247,26 @@ async function getBillingInformation(){
 
                           var price = (subscription['plan']['amount'])/100
 
+                          var autoRenuew = subscription['cancel_at_period_end']
+
+                          var autoRenuewHTML = ''
+
+                          if(autoRenuew == false){
+                            autoRenuewHTML = `
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                              </label>
+                            `
+                          } else {
+                            autoRenuewHTML = `
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                              </label>
+                            `
+                          }
+
                           firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
 
                             if(doc.data != undefined){
@@ -265,10 +285,7 @@ async function getBillingInformation(){
                 
                               <div style="margin-right: 15%; margin-top: 1%;">
                               <h6>Auto Renew</h6>
-                              <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider round"></span>
-                              </label>
+                              ${autoRenuewHTML}
                               </div>
 
 
@@ -321,6 +338,11 @@ async function getBillingInformation(){
 
 })
 
+  }
+
+
+  function updateRenewPref(customerID, subscriptionID){
+    
   }
 
   function showCuponCodePopup(email){
