@@ -196,11 +196,11 @@ async function getBillingInformation(){
   }
 
 
-  function getActiveSubscriptions(customerID){
+  async function getActiveSubscriptions(customerID){
     
     console.log("gettings payment methods")
           
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
           //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
@@ -228,10 +228,10 @@ async function getBillingInformation(){
 
       
                       for(var i = 0; i <= subscriptions.length; i++){
-
-                        var subscription = subscriptions[i]
     
-                        if(subscription != undefined){
+                        if(subscriptions[i] != undefined){
+
+                          var subscription = subscriptions[i]
     
                           var classCode = subscription['metadata']['class']
 
