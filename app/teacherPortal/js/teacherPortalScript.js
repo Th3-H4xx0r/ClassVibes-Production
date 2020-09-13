@@ -1065,8 +1065,7 @@ async function writeAnnouncement(code, className) {
 
   button.innerHTML = `
   <button class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="sr-only"> Sending Announcement...</span>
+  <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
 </button>
   `
   var socket = io.connect('https://api-v1.classvibes.net', {transports: ['polling']});
