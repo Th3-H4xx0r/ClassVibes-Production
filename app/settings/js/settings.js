@@ -247,21 +247,25 @@ async function getBillingInformation(){
 
                           var price = (subscription['plan']['amount'])/100
 
+                          var subscriptionID = subscription['id']
+
                           var autoRenuew = subscription['cancel_at_period_end']
+
+                          console.log(autoRenuew)
 
                           var autoRenuewHTML = ''
 
-                          if(autoRenuew == false){
+                          if(autoRenuew == true){
                             autoRenuewHTML = `
                             <label class="switch">
-                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${}')">
+                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')">
                                 <span class="slider round"></span>
                               </label>
                             `
                           } else {
                             autoRenuewHTML = `
                             <label class="switch">
-                                <input type="checkbox" onclick="updateRenewPref(this, '${code}')" checked>
+                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')" checked>
                                 <span class="slider round"></span>
                               </label>
                             `
@@ -342,6 +346,12 @@ async function getBillingInformation(){
 
 
   function updateRenewPref(switchObject, customerID, subscriptionID){
+
+    if(switchObject.checked == true){
+
+    } else {
+
+    }
 
   }
 
