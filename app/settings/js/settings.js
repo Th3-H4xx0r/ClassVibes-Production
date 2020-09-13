@@ -263,7 +263,7 @@ async function getBillingInformation(){
                               •
                               Next invoice on ${nextInvoice} for $${price}</p></h6>
                 
-                              <h6 style="margin-right: 15%; margin-top: 1%;">Exp ${nextInvoice}</h6>
+                              <h6 style="margin-right: 15%; margin-top: 1%;"></h6>
                             </div>
     
                             <hr />
