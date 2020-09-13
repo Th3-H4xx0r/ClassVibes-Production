@@ -206,8 +206,6 @@ async function getBillingInformation(){
           //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
       
           var url = `https://api-v1.classvibes.net/api/getActiveSubscriptions?id=${customerID}&authToken=${idToken}`
-  
-          console.log(url)
       
           const xhr = new XMLHttpRequest();
       
@@ -224,20 +222,14 @@ async function getBillingInformation(){
 
                       var responseText = xhr.responseText
 
-                      console.log(responseText)
-
                       var subscriptionsJSON = JSON.parse(responseText);
 
                       var subscriptions = subscriptionsJSON.message.data
 
-                      console.log(subscriptions)
-  
       
                       for(var i = 0; i <= subscriptions.length; i++){
 
                         var subscription = subscriptions[i]
-
-                        console.log(subscription)
     
                         if(subscription != undefined){
     
@@ -250,6 +242,8 @@ async function getBillingInformation(){
                           var subscriptionID = subscription['id']
 
                           var autoRenuew = subscription['cancel_at_period_end']
+
+                          console.log(subscription)
 
                           console.log(autoRenuew)
 
@@ -273,9 +267,11 @@ async function getBillingInformation(){
 
                           firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
 
-                            if(doc.data != undefined){
+                            if(doc.data() != undefined){
 
                               var data  = doc.data()
+
+                              //console.log(data)
 
                               var name = data['class name']
 
@@ -346,8 +342,34 @@ async function getBillingInformation(){
 
 
   function updateRenewPref(switchObject, customerID, subscriptionID){
-
+    console.log(switchObject.checked )
     if(switchObject.checked == true){
+      
+      var url = `http://localhost:3120/api/updateSubscriptionPref?id=${customerID}&subid=${subscriptionID}&pref=false`
+  
+      const xhr = new XMLHttpRequest();
+  
+        xhr.onreadystatechange = () => {
+          console.log("Got")
+            if(xhr.readyState === XMLHttpRequest.DONE){
+                // Code to execute with response
+                //console.log(xhr.responseText);
+  
+                var response = JSON.parse(xhr.responseText);
+
+                if(response.status == 'success'){
+                  console.log(response)
+                  //window.location.reload();
+                }
+
+            }
+        }
+
+
+        xhr.open('GET', url);
+        xhr.send();
+
+    } else {
       var url = `http://localhost:3120/api/updateSubscriptionPref?id=${customerID}&subid=${subscriptionID}&pref=true`
   
       const xhr = new XMLHttpRequest();
@@ -361,7 +383,8 @@ async function getBillingInformation(){
                 var response = JSON.parse(xhr.responseText);
 
                 if(response.status == 'success'){
-                  window.location.reload();
+                  console.log(response)
+                  //window.location.reload();
                 }
 
             }
@@ -370,9 +393,6 @@ async function getBillingInformation(){
 
         xhr.open('GET', url);
         xhr.send();
-
-    } else {
-
     }
 
   }
@@ -502,7 +522,6 @@ async function getBillingInformation(){
     
             if (transaction != undefined) {
 
-              console.log(transaction)
               var amount = (transaction['amount']/100).toFixed(2)
 
               var amount_refunded = (transaction['amount_refunded']/100).toFixed(2)
@@ -523,7 +542,6 @@ async function getBillingInformation(){
 
               var statusHTML = ``
 
-              console.log(status)
 
               if(status == 'succeeded'){
 
