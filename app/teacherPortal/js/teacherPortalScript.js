@@ -1893,6 +1893,8 @@ function createClass() {
 
 function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
+  /*
+
   document.getElementById('continueButton').disabled = true
 
   document.getElementById('continueButton').innerHTML = "Processing Payment..."
@@ -1970,6 +1972,55 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
       xhr.open('GET', url);
       xhr.send();
     })
+
+    */
+
+
+     var PUBLISHABLE_KEY = "pk_test_51HJSAPHxKyunjmTecWP4BIWHHPha6jEzvfJopOrydgMBJmW0F5yJDEIb1eh57hVvZGm7h3KxciXREcXotTqjrHwR00GuN4JVdJ";
+
+     var stripe = Stripe(PUBLISHABLE_KEY);
+
+
+     var handleResult = function (result) {
+       if (result.error) {
+         var displayError = document.getElementById("error-message");
+         displayError.textContent = result.error.message;
+       }
+     };
+
+     var url = `http://localhost:3120/api/createCheckoutSession?id=$`
+    
+     const xhr = new XMLHttpRequest();
+   
+     xhr.onreadystatechange = () => {
+       if (xhr.readyState === XMLHttpRequest.DONE) {
+         // Code to execute with response
+         //console.log(xhr.responseText);
+   
+         var responseText = JSON.parse(xhr.responseText);
+   
+         var status = responseText['status']
+   
+         if(status == 'success'){
+           //window.location = "dashboard.html"
+   
+   
+         } else {
+           console.log(responseText['data'])
+           document.getElementById('continueButton').innerHTML = "Continue"
+           document.getElementById('feedback-error-payment').innerHTML = responseText['message']
+         }
+       }
+     }
+     xhr.open('GET', url);
+     xhr.send();
+
+
+       stripe
+         .redirectToCheckout({
+           sessionId: 'cs_test_dJBpacH7dNnF3cymwCejS1FLqoqZn8bT6oT8xiQdALXly8JYV1gMtUCp',
+         })
+         .then(handleResult);
 
   
 }
