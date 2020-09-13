@@ -254,14 +254,14 @@ async function getBillingInformation(){
                           if(autoRenuew == false){
                             autoRenuewHTML = `
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" onclick="updateRenewPref(this, '${code}')">
                                 <span class="slider round"></span>
                               </label>
                             `
                           } else {
                             autoRenuewHTML = `
                             <label class="switch">
-                                <input type="checkbox" checked>
+                                <input type="checkbox" onclick="updateRenewPref(this, '${code}')" checked>
                                 <span class="slider round"></span>
                               </label>
                             `
@@ -342,7 +342,7 @@ async function getBillingInformation(){
 
 
   function updateRenewPref(customerID, subscriptionID){
-    
+
   }
 
   function showCuponCodePopup(email){
