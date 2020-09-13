@@ -1,6 +1,3 @@
-const { response } = require("express");
-
-
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
   
   firebase.auth().onAuthStateChanged(user => {
@@ -20,9 +17,6 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
     
         var pendingDistrictRequestID = data["Pending District Request"];
 
-        var billingStatus = data["billing status"];
-
-        if(billingStatus == 'active'){
           if (pendingSchoolRequestName) {
     
             var waitingRequestHTML = `
@@ -86,6 +80,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   else if(pageType == 'create-class'){
                     getProfileInfo();
                     getClassDataDropdown(email);
+                    
                   }
       
                   else if (pageType == 'class-page') {
@@ -261,19 +256,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               }
             }
           }
-        } else{
-            var billingErrorHTML = `<center style="margin-top: 18%;">
-            <img src = '/teacher/img/undraw_online_payments_luau.svg' width = '20%'/>
-      
-            <h2 style="margin-top: 2%;">Billing Setup Required</h2>
-      
-            <p>Please go to <a href = '/settings/payments'>billing settings</a> to get started with your account's free trial!</p>
-      
-          </center>
-            `;
-      
-            $('#main-body-page-teacher').html(billingErrorHTML);
-        }
+         
     
 
       });
@@ -899,7 +882,7 @@ function getGraphData_Classes_page(code){
 
       var className = data["class name"];
 
-      document.getElementById('classNameLabel').innerHTML = ` ${className} <span class = 'badge badge-primary'> ${classCode}</span>`
+      document.getElementById('classNameLabel').innerHTML = `${className}`
 
       getChartData(code)
     });
@@ -993,7 +976,7 @@ function getClassData(emailRef) {
                     <canvas id="myPieChart${classCode}"></canvas>
                   </div>
                   <div style="height: 30px"></div>
-                  <center><h5 class="card-title">${className} <span class = 'badge badge-primary'>${classCode}</span></h5>
+                  <center><h5 class="card-title">${className}</h5>
                   </center>
 
                 </div>
@@ -1050,8 +1033,7 @@ async function writeAnnouncement(code, className) {
 
   button.innerHTML = `
   <button class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="sr-only"> Sending Announcement...</span>
+  <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
 </button>
   `
   var socket = io.connect('https://api-v1.classvibes.net', {transports: ['polling']});
@@ -1522,7 +1504,7 @@ async function getAnnouncementForClass(code) {
       var noAnnouncementsHTML = ` 
       
       <center>
-      <img src="/teacher/img/undraw_popular_7nrh.svg" width="20%">  
+      <img src="/teacher/img/undraw_news_go0e.svg" width="20%" style = 'margin-top: 5%'>  
     
       <h2 style="margin-top: 3%;">No Announcements</h2>
       <p>You're all caught up</p>
@@ -1880,7 +1862,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
   document.getElementById('continueButton').disabled = true
 
-  document.getElementById('continueButton').innerHTML = "Processing Payment..."
+  document.getElementById('continueButton').innerHTML = ` <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
 
     firebase.firestore().collection("UserData").doc(email).get().then(doc => {
 
@@ -1888,9 +1870,66 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
       var customerID = data['customer stripe id']
 
-      var amount = 1.99
+      
+     var val = "pk_test_51HJSAPHxKyunjmTecWP4BIWHHPha6jEzvfJopOrydgMBJmW0F5yJDEIb1eh57hVvZGm7h3KxciXREcXotTqjrHwR00GuN4JVdJ";
+
+     var stripe = Stripe(val);
+
+
+     var handleResult = function (result) {
+       if (result.error) {
+         var displayError = document.getElementById("error-message");
+         displayError.textContent = result.error.message;
+       }
+     };
+
+     var url = `https://api-v1.classvibes.net/api/createCheckoutSession?id=${customerID}&email=${email}&name=${className}&maxdays=${maxInactiveDays}&code=${code}`
     
-      var url = `http://localhost:3120/api/makePayment?id=${customerID}&amount=${amount}`
+     const xhr = new XMLHttpRequest();
+   
+     xhr.onreadystatechange = () => {
+       if (xhr.readyState === XMLHttpRequest.DONE) {
+         // Code to execute with response
+         //console.log(xhr.responseText);
+   
+         var responseText = JSON.parse(xhr.responseText);
+   
+         var status = responseText['status']
+   
+         if(status == 'success'){
+           //window.location = "dashboard.html"
+
+           var sessionID = responseText.message.id
+
+           
+          stripe
+          .redirectToCheckout({
+            sessionId: sessionID,
+          })
+          .then(handleResult);
+
+          var handleResult = function (result) {
+            if (result.error) {
+              document.getElementById('feedback-error-payment').innerHTML = result.error.message
+            }
+          };
+   
+   
+         } else {
+           console.log(responseText['data'])
+           document.getElementById('continueButton').innerHTML = "Continue"
+           document.getElementById('feedback-error-payment').innerHTML = responseText['message']
+         }
+       }
+     }
+     xhr.open('GET', url);
+     xhr.send();
+
+
+
+  /*
+    
+      var url = `https://api-v1.classvibes.net/api/subscribe?id=${customerID}&class=${code}`
     
       const xhr = new XMLHttpRequest();
     
@@ -1955,13 +1994,25 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
       }
       xhr.open('GET', url);
       xhr.send();
+
+      */
     })
+
+
+
+
 
   
 }
 
 
 function getStudentData(code) {
+
+  var happyCount = 0
+  var mehCount = 0
+  var frustratedCount = 0
+  var inactiveCount = 0
+  var totalCount = 0
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -2180,13 +2231,20 @@ function getStudentData(code) {
 
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
+
+            totalCount = totalCount + 1
     
         if (studentReaction == "doing great") {
               //$(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
 
+              happyCount = happyCount + 1
+
+
               if(today > exceedDate) {
                 $(inactive_column_face).appendTo("#studentTable-inactive");
+
+                inactiveCount = inactiveCount + 1
 
                 document.getElementById("face").outerHTML = inactive_happy;
                 document.getElementById("inactive_face").outerHTML = inactive_happy;
@@ -2202,12 +2260,16 @@ function getStudentData(code) {
               //$(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
 
+              mehCount = mehCount + 1
+
               if(today > exceedDate) {
 
                 $(inactive_column_face).appendTo("#studentTable-inactive");
 
                 document.getElementById("face").outerHTML = inactive_meh;
                 document.getElementById("inactive_face").outerHTML = inactive_meh;
+
+                inactiveCount = inactiveCount + 1
     
               
 
@@ -2217,6 +2279,8 @@ function getStudentData(code) {
     
     
             } else if (studentReaction == "frustrated") {
+
+              frustratedCount = frustratedCount + 1
     
               $(frustrated_column_face).appendTo("#studentTable-frustrated");
 
@@ -2224,6 +2288,8 @@ function getStudentData(code) {
                 $(inactive_column_face).appendTo("#studentTable-inactive");
                 document.getElementById("face").outerHTML = inactive_sad;
                 document.getElementById("inactive_face").outerHTML = inactive_sad;
+
+                inactiveCount = inactiveCount + 1
                 
 
               } else {
@@ -2242,6 +2308,33 @@ function getStudentData(code) {
 
           
         }
+      }).then(() => {
+
+
+          var noStudentsHTML = `
+            <h2 style = 'margin-top: 5%; margin-left: 15%'>No Students here</h2>
+          `
+
+          if(totalCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable")
+          }
+
+          if(happyCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-doing-good")
+          }
+
+          if(mehCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-meh")
+          }
+
+          if(frustratedCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-frustrated")
+          }
+
+          if(inactiveCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-inactive")
+          }
+
       });
     })
 
@@ -2386,7 +2479,7 @@ async function removeStudent(email, code, teacherEmail){
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     //console.log(idToken)
 
-    var url = "http://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
+    var url = "https://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
 
     //console.log("Removing")
 
@@ -2406,9 +2499,18 @@ xhr.onreadystatechange = () => {
     if(xhr.readyState === XMLHttpRequest.DONE){
         // Code to execute with response
         //console.log(xhr.responseText);
+
+        var response = JSON.parse(xhr.responseText);
+
+        console.log(response.status)
+
+        if(response.status == 'success'){
+
+          window.location.reload()
+        }
+
         document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
 
-        window.location.reload()
     }
 }
 
@@ -2619,7 +2721,7 @@ function getEditData(code) {
     $(output).appendTo("#editInfo");   
 
     if(joinStatus == true){
-      document.getElementById('join-setting').className  = "badge badge-success"
+      document.getElementById('join-setting').className  = "badge badge-primary"
       document.getElementById('join-setting').innerText = "Allowed"
       document.getElementById('allow-join-switch').checked = true
 
@@ -2648,7 +2750,7 @@ function changeJoinStatus(value, code){
 
   document.getElementById('update-details-section').innerHTML = updateClassButton
   if(value.checked == true){
-    document.getElementById('join-setting').className  = "badge badge-success"
+    document.getElementById('join-setting').className  = "badge badge-primary"
     document.getElementById('join-setting').innerText = "Allowed"
   } else {
     document.getElementById('join-setting').className  = "badge badge-danger"

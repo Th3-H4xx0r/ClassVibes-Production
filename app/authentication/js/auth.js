@@ -61,7 +61,7 @@ function facebookLoginStudent() {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                 <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                     document.getElementById('signupError').innerHTML = errorHTML;
@@ -130,7 +130,7 @@ function facebookLoginDistrict() {
 
                 errorHTML = `<div class="alert alert-danger" role="alert" 
             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                 <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                 document.getElementById('signupError').innerHTML = errorHTML;
@@ -201,7 +201,7 @@ function facebookLoginTeacher() {
 
                 errorHTML = `<div class="alert alert-danger" role="alert" 
             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                 <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                 document.getElementById('signupError').innerHTML = errorHTML;
@@ -275,7 +275,7 @@ googleSignInStudent = () => {
     
                     errorHTML = `<div class="alert alert-danger" role="alert" 
                        style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                            <strong>Oops! </strong> This account is not yet registered. <a href = "signup">Sign Up</a>
+                            <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
                       </div>`;
     
                     document.getElementById('signupError').innerHTML = errorHTML;
@@ -284,7 +284,7 @@ googleSignInStudent = () => {
             } else {
                 errorHTML = `<div class="alert alert-danger" role="alert" 
                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> Google login failed. This account might not be registered yet. <a href = "signup">Sign Up</a>
+                 <strong>Oops! </strong> Google login failed. This account might not be registered yet. <a href = "/signup">Sign Up</a>
            </div>`;
 
                document.getElementById('signupError').innerHTML = errorHTML;
@@ -319,12 +319,10 @@ googleSignInTeacher = () => {
 
            // localStorage.setItem("email", email);
 
-
             console.log("data from doc : ", doc.data());
 
-            var accountType = doc.data()['account type'];
-
             if (doc.exists) {
+                var accountType = doc.data()['account type'];
                 console.log("Document data:", doc.data()["account type"]);
 
                 if (accountType != null) {
@@ -357,7 +355,7 @@ googleSignInTeacher = () => {
 
                 errorHTML = `<div class="alert alert-danger" role="alert" 
                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                 errorMessage.innerHTML = errorHTML;
@@ -518,34 +516,6 @@ function emailSignUp(type) {
     
                 }).then(() => {
 
-                    var actionCodeSettings = {
-                    // URL you want to redirect back to. The domain (www.example.com) for this
-                    // URL must be whitelisted in the Firebase Console.
-                    url: 'https://classvibes.net/teacher/dashboard',
-                    // This must be true.
-                    handleCodeInApp: true,
-                    iOS: {
-                        bundleId: 'com.example.ios'
-                    },
-                    android: {
-                        packageName: 'com.example.android',
-                        installApp: true,
-                        minimumVersion: '12'
-                    },
-                    dynamicLinkDomain: 'example.page.link'
-                    };
-
-                    firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
-                    .then(function() {
-                        // The link was successfully sent. Inform the user.
-                        // Save the email locally so you don't need to ask the user for it again
-                        // if they open the link on the same device.
-                        window.localStorage.setItem('emailForSignIn', email);
-                    })
-                    .catch(function(error) {
-                        // Some error occurred, you can inspect the code: error.code
-                    });
-                        
                     console.log(loginSuccess);
     
                     if (loginSuccess == true) {
@@ -862,9 +832,15 @@ googleSignUp = (type) => {
                                 if(xhr.readyState === XMLHttpRequest.DONE){
                                     // Code to execute with response
 
-                                    var transactionsList = JSON.parse(xhr.responseText);
+                                    console.log(xhr.responseText)
 
-                                    var customerID = transactionsList.message
+                                    var responseText = xhr.responseText
+                                    
+                                    var response = JSON.parse(responseText);
+
+                                    var customerID = response.message
+
+                                    console.log(response, customerID)
 
                                     firebase.firestore().collection("UserData").doc(email).update({
                                         "customer stripe id": customerID
@@ -991,7 +967,7 @@ function loginWithEmailStudent() {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
              style="margin-top: 20px; width: 94%; margin-left: 6%;">
-               <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+               <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
              </div>`;
 
                     document.getElementById('signupError').innerHTML = errorHTML;
@@ -1070,7 +1046,7 @@ function loginWithEmailTeacher() {
                 } else {
                     errorHTML = `<div class="alert alert-danger" role="alert" 
              style="margin-top: 20px; width: 94%; margin-left: 6%;">
-               <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+               <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
              </div>`;
 
                     errorMessage.innerHTML = errorHTML;
@@ -1139,7 +1115,7 @@ function loginWithEmailDistrict() {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
              style="margin-top: 20px; width: 94%; margin-left: 6%;">
-               <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+               <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
              </div>`;
 
                     document.getElementById('signupError').innerHTML = errorHTML;

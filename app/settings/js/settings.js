@@ -129,9 +129,17 @@ async function getBillingInformation(){
   
           <div class="payment-plan"  id = 'payment-method-list'>
           </div>
+
+          <h5 style="margin-top: 30px;">Active Subscriptions</h5>
+
+          <hr />
   
-  
-  
+
+
+          <div id="active-subscriptions-section">
+           
+          </div>
+
   
             <h5 style="margin-top: 30px;">Payment History</h5>
             <div style="height: 50px; width: 85%; background-color: rgba(209, 209, 209, 0.158); border-radius: 10px;">
@@ -157,6 +165,9 @@ async function getBillingInformation(){
             
             await getPaymentMethods(customerID)
             await getTransactionHistory(customerID);
+
+            await getActiveSubscriptions(customerID);
+            
   
           } else {
             var billingSetupHTML = `
@@ -166,7 +177,9 @@ async function getBillingInformation(){
                 </center>
 
                 <center style = 'margin-top: 2%'>
-                <button class = 'btn btn-primary' onclick = 'setupBillingPressed()'>Setup Billing</button>
+                <button class = 'btn btn-primary' onclick = 'setupBillingPressed()'>Setup Billing Details</button>
+
+                <a href = '#haveCuponCode' onclick = "showCuponCodePopup('${email}')" style = 'text-decoration: none'><p style = 'margin-top: 1%; color: #5469d4'>I have a cupon code</p></a>
                 </center>
             `
   
@@ -179,6 +192,215 @@ async function getBillingInformation(){
   }
 
 
+  function getActiveSubscriptions(customerID){
+    
+    console.log("gettings payment methods")
+          
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+      
+          var url = `http://localhost:3120/api/getActiveSubscriptions?id=${customerID}&authToken=${idToken}`
+  
+          console.log(url)
+      
+          const xhr = new XMLHttpRequest();
+      
+            xhr.onreadystatechange = () => {
+              console.log("Got")
+                if(xhr.readyState === XMLHttpRequest.DONE){
+                    // Code to execute with response
+                    //console.log(xhr.responseText);
+      
+                    var response = JSON.parse(xhr.responseText);
+  
+  
+                    if(response.status == "success"){
+
+                      var responseText = xhr.responseText
+
+                      console.log(responseText)
+
+                      var subscriptionsJSON = JSON.parse(responseText);
+
+                      var subscriptions = subscriptionsJSON.message.data
+
+                      console.log(subscriptions)
+  
+      
+                      for(var i = 0; i <= subscriptions.length; i++){
+
+                        var subscription = subscriptions[i]
+
+                        console.log(subscription)
+    
+                        if(subscription != undefined){
+    
+                          var classCode = subscription['metadata']['class']
+
+                          var nextInvoice = new Date(subscription['current_period_end'] * 1000).toLocaleDateString()
+
+                          var price = (subscription['plan']['amount'])/100
+
+                          firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
+
+                            if(doc.data != undefined){
+
+                              var data  = doc.data()
+
+                              var name = data['class name']
+
+                              var code = doc.id
+                              var subscriptionHTML = `
+                              <div style="display: flex; justify-content: space-between; margin-left: 1%; margin-bottom: -10px">
+                
+                              <h6 style="font-size: 20px; margin-top: 1%;"> <i class="fas fa-tags" style = 'font-size: 25px; color: green'></i> ${name} <span class = 'badge badge-success'> ${code}</span> <br> <p style = 'font-size: 15px; color: gray; margin-top: 5px'>Billing yearly
+                              •
+                              Next invoice on ${nextInvoice} for $${price}</p></h6>
+                
+                              <h6 style="margin-right: 15%; margin-top: 1%;">Exp ${nextInvoice}</h6>
+                            </div>
+    
+                            <hr />
+                              `
+    
+        
+                              $(subscriptionHTML).appendTo('#active-subscriptions-section')
+                            } else {
+
+                            }
+                           
+                          })
+
+                         
+                        }
+    
+  
+                        //payment-method-list
+                      }
+
+                      if(subscriptions.length == 0){
+                        $('<hr/>').appendTo('#active-subscriptions-section')
+                        
+                      }
+                    } else {
+                      console.log(response.message)
+  
+                      document.getElementById('payment-method-list').innerHTML = `
+                        <a style = 'color: red'>Failed to get active subscriptions</a>
+                      `
+                    }
+      
+  
+                }
+              }
+  
+              xhr.open('GET', url);
+              xhr.send();
+  
+        }).catch(function(error) {
+          console.log(error)
+          // Handle error
+        });
+  
+  
+    }
+
+})
+
+  }
+
+  function showCuponCodePopup(email){
+    var modalHTML = `
+    <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Redeem Coupon</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Code</label>
+            <input type="text" class="form-control" id="coupon-code-input">
+          </div>
+
+          <p id = 'coupon-code-error-field' style = 'color: red; font-weight: 700'></p>
+          
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick = "validateCoupon('${email}')" id = 'redeem-button'>Redeem</button>
+      </div>
+    </div>
+  </div>
+</div>
+    `
+
+    document.getElementById('pageModalSection').innerHTML = ''
+
+    $(modalHTML).appendTo('#pageModalSection')
+
+    $('#couponModal').modal('toggle')
+  }
+
+  function validateCoupon(email){
+
+    document.getElementById('redeem-button').innerHTML = `<img src = 'img/oval.svg' width = '30%'/>`
+
+    setTimeout(function(){ 
+
+      var code = document.getElementById('coupon-code-input').value
+
+      var errorField = document.getElementById('coupon-code-error-field')
+  
+      if(code){
+        firebase.firestore().collection('Coupons').doc(code).get().then(doc => {
+          var data = doc.data()
+    
+          if(data){
+            var redeemed = data['redeemed']
+  
+            if(redeemed == false){
+              console.log("coupon redeemed success")
+              firebase.firestore().collection('Coupons').doc(code).update({
+                redeemed: true
+              }).then(() => {
+                firebase.firestore().collection('UserData').doc(email).update({
+                  'billing status': 'active',
+                  'billing platform': 'stripe',
+                  'coupon redeemed': true,
+                  "account status": "Activated"
+                }).then(() => {
+                  window.location.reload();
+                })
+              })
+              
+            } else {
+              errorField.innerHTML = 'Coupon already redeemed'
+              document.getElementById('redeem-button').innerHTML = `Redeem`
+            }
+          } else {
+            errorField.innerHTML = 'Coupon does not exist'
+            document.getElementById('redeem-button').innerHTML = `Redeem`
+          }
+        })
+      } else {
+        errorField.innerHTML = 'Coupon does not exist'
+        document.getElementById('redeem-button').innerHTML = `Redeem`
+      }
+  
+  
+      console.log(code)
+     }, 1000);
+
+  
+  }
+
+
   function setupBillingPressed(){
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -186,7 +408,8 @@ async function getBillingInformation(){
     
           firebase.firestore().collection("UserData").doc(email).update({
               'billing status': 'active',
-              'billing platform': 'stripe'
+              'billing platform': 'stripe',
+              'account status': "Activated",
           }).then(() => {
               window.location.reload()
           });
@@ -196,10 +419,9 @@ async function getBillingInformation(){
 
   async function getTransactionHistory(customerID) {
   
-    var url = `http://localhost:3120/api/getTransactions?id=${customerID}`
+    var url = `https://api-v1.classvibes.net/api/getTransactions?id=${customerID}`
   
     const xhr = new XMLHttpRequest();
-  
   
       xhr.onreadystatechange = () => {
         try{
@@ -213,7 +435,11 @@ async function getBillingInformation(){
             var transaction = transactionsList[i]
     
             if (transaction != undefined) {
+
+              console.log(transaction)
               var amount = (transaction['amount']/100).toFixed(2)
+
+              var amount_refunded = (transaction['amount_refunded']/100).toFixed(2)
     
               var status = transaction['status']
     
@@ -224,18 +450,47 @@ async function getBillingInformation(){
               var formattedDate = new Date(date * 1000).toLocaleString()
     
               var lastFour = transaction['payment_method_details']['card']['last4']
+
+              var brand = transaction['payment_method_details']['card']['brand']
+
+              var brandHTML = ``
+
+              var statusHTML = ``
+
+              console.log(status)
+
+              if(status == 'succeeded'){
+
+                if(amount_refunded == amount){
+                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #4f566b; background-color: #e3e8ee; font-weigth: 700; ">Refunded <i class="fas fa-redo"></i></div>`
+
+                } else {
+                  statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #0e6245; background-color: #cbf4c9; font-weigth: 700; ">Succeeded <i class="fas fa-check"></i></div>`
+
+                }
+              } else{
+                statusHTML = ` <div class="badge badge-custom" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px; color: #983705; background-color: #f8e5b9; font-weigth: 700; ">Failed <i class="fas fa-redo"></i></div>`
+              }
+
+
+
+              if(brand.toLowerCase() == "visa"){
+                brandHTML = `<i class="fab fa-cc-visa" style = "margin-top: 2%; color: #192061; font-size: 30px;"></i>`
+              } else {
+                brandHTML = `<i class="far fa-credit-card" style = "margin-top: 2%; color: #192061; font-size: 30px;"></i>`
+              }
     
               var transactionHTML = `
                 <div class="history-item">
                             <div style="margin-left: 30px; margin-top: 20px; display: flex; justify-content: space-between">
                             <div class='row'>
                               <h5>$${amount} ${currency}</h4>
-                              <div class="badge badge-primary" style="margin-left: 50px; opacity: 0.6; padding-bottom: -40px; height: 23px; margin-top: 3px;">${status}</div>
-                              <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
+                             ${statusHTML}                              
+                             <h5 style="margin-left: 80px; margin-top: 7px">${formattedDate}</h5>
                             </div>
     
                             <div class='row' style = 'margin-right: 5%'>
-                              <i class="fa fa-credit-card" style="margin-left: 300px; font-size: 30px;"></i>
+                              ${brandHTML}
                               <p style="margin-left: 20px; font-size: 20px;">${lastFour}</p>
                             </div>
                                
@@ -285,9 +540,21 @@ async function getBillingInformation(){
           
           
                             if(response.status == "success"){
-                              var paymentMethodsList = JSON.parse(xhr.responseText['message']);
+
+                              var responseText = xhr.responseText
+
+                              console.log(responseText)
+
+                              var paymentMethodsJSON = JSON.parse(responseText);
+
+                              var paymentMethodsTextJson = paymentMethodsJSON.message
+
+                              var paymentMethodsList = paymentMethodsTextJson.card.data
+
+                              var defaultPaymentMethod = paymentMethodsTextJson.default
+
+                              console.log(defaultPaymentMethod)
           
-                              console.log(paymentMethodsList)
               
                               for(var i = 0; i <= paymentMethodsList.length; i++){
                                 console.log(paymentMethodsList[i])
@@ -303,11 +570,25 @@ async function getBillingInformation(){
                                   var expireMonth = paymentMethod['exp_month']
               
                                   var expireYear = paymentMethod['exp_year']
+
+                                  var cardID = paymentMethod['id']
+
+                                  var defaultTagHTML = ''
+
+                                  if(cardID == defaultPaymentMethod){
+                                    defaultTagHTML = `<span class = 'badge badge-primary'>Default</span>`
+                                  }
             
                                   var cardIcon = ``
             
-                                  if(brand == 'Visa'){
-                                    cardIcon = ' <img style="font-size: 20px;" src="img/iconfinder_363_Visa_Credit_Card_logo_4375165.png" width="50px" height="50px"/>'
+                                  if(brand.toLowerCase() == 'visa'){
+                                    cardIcon = `<i class="fab fa-cc-visa" style = "font-size: 40px; margin-top: 3%; color: #192061"></i>`
+                                  } else if(brand.toLowerCase() == 'mastercard'){
+                                    cardIcon = `<i class="fab fa-cc-mastercard" style = "font-size: 40px; margin-top: 3%; color: black"></i>`
+                                  } else if(brand.toLowerCase() == 'american express'){
+                                    cardIcon = `<i class="fab fa-cc-amex" style = "font-size: 40px; margin-top: 3%; color: #1c71b9"></i>`
+                                  }else if(brand.toLowerCase() == 'discover'){
+                                    cardIcon = `<i class="fab fa-cc-discover" style = "font-size: 40px; margin-top: 3%; color: #1c71b9"></i>`
                                   }
             
                                   var paymentMethodHTML = `
@@ -315,14 +596,14 @@ async function getBillingInformation(){
                                     <div class="row">
                                       ${cardIcon}
                                       <div class="col" style = 'padding-top: 2%'>
-                                        <p> Visa •••• ${lastFour} </p>
+                                        <p> ${brand} •••• ${lastFour} ${defaultTagHTML}</p>
                                         <p style="margin-right: 15%; margin-top: -15px; color: gray">Exp ${expireMonth}/${expireYear}</p>
                                       </div>
                                     </div>
             
                                     <a href = '#editPayment' style = 'margin-right: 15%; margin-top: 1%; '><i class="fas fa-ellipsis-h" style='color: gray'></i></a>
             
-                                   
+      
                                   </div>
             
                                   <hr style="margin-top: -7px;"/>
@@ -368,7 +649,10 @@ async function getBillingInformation(){
         if (user) {
             var email = user.email
             document.getElementById('CancelButton').enabled = false
-            document.getElementById('add-card-text').innerHTML = 'Adding Card...'
+            document.getElementById('add-card-text').innerHTML = `
+            <img src = 'img/oval.svg' width = '7%'/>`
+
+            
           
           
             var name = document.getElementById('NameOnCard').value
@@ -376,52 +660,95 @@ async function getBillingInformation(){
             var expireDate = document.getElementById('ExpiryDate').value
             var securityCode = document.getElementById('SecurityCode').value
             var zipCode = document.getElementById('ZIPCode').value
+
+            var numberError = document.getElementById('cardNumberError').innerHTML
+            var cvcError = document.getElementById('cvcError').innerHTML
+            var dateError = document.getElementById('dateError').innerHTML
+
+            console.log(numberError, cvcError, dateError)
+       
+
+            if(name && cardNumber && expireDate && securityCode && zipCode){
+
+              document.getElementById('CancelButton').enabled = true
+            document.getElementById('add-card-text').innerHTML = 'Add Card'
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+
+              if((numberError == '' && cvcError == "" && dateError == "")  ){
+
+                document.getElementById('CancelButton').enabled = false
+                document.getElementById('add-card-text').innerHTML = `
+                <img src = 'img/oval.svg' width = '7%'/>`
+                
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+
+                var str = expireDate.split('/');
           
-            var str = expireDate.split('/');
-          
-            var expireMonth = str[0]
-          
-            var expireYear = str[1]
-          
-            const xhr = new XMLHttpRequest();
-        
-            firebase.firestore().collection('UserData').doc(email).get().then(doc => {
-        
-                var data = doc.data();
-        
-                var customerID = data['customer stripe id']
-          
-                var url = `http://localhost:3120/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+                var expireMonth = str[0]
+              
+                var expireYear = str[1]
+              
+                const xhr = new XMLHttpRequest();
+            
+                firebase.firestore().collection('UserData').doc(email).get().then(doc => {
+            
+                    var data = doc.data();
+            
+                    var customerID = data['customer stripe id']
+              
+                    var url = `https://api-v1.classvibes.net/api/linkPaymentMethod?id=${customerID}&cardNumber=${cardNumber}&expMonth=${expireMonth}&expYear=${expireYear}&cvcNumber=${securityCode}&name=${name}&zip=${zipCode}`
+                      
+                    xhr.onreadystatechange = () => {
+                      console.log("Got")
+                        if(xhr.readyState === XMLHttpRequest.DONE){
+                            // Code to execute with response
+                            //console.log(xhr.responseText); 
+
+                            document.getElementById('CancelButton').enabled = true
+                            document.getElementById('add-card-text').innerHTML = 'Add Card'
                   
-                xhr.onreadystatechange = () => {
-                  console.log("Got")
-                    if(xhr.readyState === XMLHttpRequest.DONE){
-                        // Code to execute with response
-                        //console.log(xhr.responseText);
-              
-                        var response = JSON.parse(xhr.responseText);
-              
-                        console.log(response)
-              
-                        document.getElementById('CancelButton').enabled = true
-              
-                        document.getElementById('add-card-text').innerHTML = 'Add Card'
-              
-                        if(response.status == 'failed'){
-                          document.getElementById('feedback-error-add-card').innerHTML = response.message
-                        } else {
-                          document.getElementById('feedback-error-add-card').innerHTML = ''
-                          window.location.reload()
+                            var response = JSON.parse(xhr.responseText);
+                  
+                            console.log(response)
+                  
+                            if(response.status == 'failed'){
+                              if(response.data.code == 'card_declined'){
+                                document.getElementById('feedback-error-add-card').innerHTML = "Card was declined"
+                              } else {
+                                document.getElementById('feedback-error-add-card').innerHTML = response.message
+                              }
+                              
+                            } else {
+                              console.log(xhr.responseText)
+                              document.getElementById('feedback-error-add-card').innerHTML = ''
+                              window.location.reload()
+                            }
+                  
                         }
-              
-                    }
-                  }
-              
+                      }
                   
-                  xhr.open('GET', url);
-                  xhr.send();
-              
-            })
+                      
+                      xhr.open('GET', url);
+                      xhr.send();
+                  
+                })
+              } else {
+                document.getElementById('CancelButton').enabled = true
+            document.getElementById('add-card-text').innerHTML = 'Add Card'
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+                document.getElementById('feedback-error-add-card').innerHTML = 'Card is invalid'
+
+              }
+
+            } else {
+              document.getElementById('CancelButton').enabled = true
+            document.getElementById('add-card-text').innerHTML = 'Add Card'
+            document.getElementById('feedback-error-add-card').innerHTML = ''
+              document.getElementById('feedback-error-add-card').innerHTML = 'Please fill out all the fields'
+
+            }
+          
+
           
         
         }
