@@ -254,7 +254,7 @@ async function getBillingInformation(){
                           if(autoRenuew == false){
                             autoRenuewHTML = `
                             <label class="switch">
-                                <input type="checkbox" onclick="updateRenewPref(this, '${code}')">
+                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${}')">
                                 <span class="slider round"></span>
                               </label>
                             `
@@ -341,7 +341,7 @@ async function getBillingInformation(){
   }
 
 
-  function updateRenewPref(customerID, subscriptionID){
+  function updateRenewPref(switchObject, customerID, subscriptionID){
 
   }
 
