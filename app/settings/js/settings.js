@@ -243,27 +243,7 @@ async function getBillingInformation(){
 
                           var autoRenuew = subscription['cancel_at_period_end']
 
-                          console.log(subscription)
-
-                          console.log(autoRenuew)
-
-                          var autoRenuewHTML = ''
-
-                          if(autoRenuew == true){
-                            autoRenuewHTML = `
-                            <label class="switch">
-                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')">
-                                <span class="slider round"></span>
-                              </label>
-                            `
-                          } else {
-                            autoRenuewHTML = `
-                            <label class="switch">
-                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')" checked>
-                                <span class="slider round"></span>
-                              </label>
-                            `
-                          }
+                         
 
                           firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
 
@@ -276,6 +256,30 @@ async function getBillingInformation(){
                               var name = data['class name']
 
                               var code = doc.id
+
+                              console.log(subscription)
+    
+                              console.log(autoRenuew)
+    
+                              var autoRenuewHTML = ''
+    
+                              if(autoRenuew == true){
+                                autoRenuewHTML = `
+                                <label class="switch">
+                                    <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')">
+                                    <span class="slider round"></span>
+                                  </label>
+                                `
+                              } else {
+                                autoRenuewHTML = `
+                                <label class="switch">
+                                    <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')" checked>
+                                    <span class="slider round"></span>
+                                  </label>
+                                `
+                              }
+
+
                               var subscriptionHTML = `
                               <div style="display: flex; justify-content: space-between; margin-left: 1%; margin-bottom: -10px">
                 
@@ -288,13 +292,11 @@ async function getBillingInformation(){
                               ${autoRenuewHTML}
                               </div>
 
-
                             </div>
     
                             <hr />
                               `
     
-        
                               $(subscriptionHTML).appendTo('#active-subscriptions-section')
                             } else {
 
