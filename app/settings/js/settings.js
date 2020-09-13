@@ -205,7 +205,7 @@ async function getBillingInformation(){
         firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
           //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
       
-          var url = `http://localhost:3120/api/getActiveSubscriptions?id=${customerID}&authToken=${idToken}`
+          var url = `https://api-v1.classvibes.net/api/getActiveSubscriptions?id=${customerID}&authToken=${idToken}`
   
           console.log(url)
       
