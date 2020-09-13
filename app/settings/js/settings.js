@@ -348,6 +348,28 @@ async function getBillingInformation(){
   function updateRenewPref(switchObject, customerID, subscriptionID){
 
     if(switchObject.checked == true){
+      var url = `http://localhost:3120/api/updateSubscriptionPref?id=${customerID}&subid=${subscriptionID}&pref=true`
+  
+      const xhr = new XMLHttpRequest();
+  
+        xhr.onreadystatechange = () => {
+          console.log("Got")
+            if(xhr.readyState === XMLHttpRequest.DONE){
+                // Code to execute with response
+                //console.log(xhr.responseText);
+  
+                var response = JSON.parse(xhr.responseText);
+
+                if(response.status == 'success'){
+                  window.location.reload();
+                }
+
+            }
+        }
+
+
+        xhr.open('GET', url);
+        xhr.send();
 
     } else {
 
