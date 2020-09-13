@@ -77,7 +77,7 @@ async function getBillingInformation(){
           var billingStatus = data['billing status']
 
       
-          if(billingStatus == 'active'){
+          //if(billingStatus == 'active'){
   
             var paymentSettingsHTML = `
             <h2 style="margin-left: 20px; margin-top: 20px;">Payment Settings</h2>
@@ -122,6 +122,8 @@ async function getBillingInformation(){
               </div>
   
           <hr/>
+
+          <!--
   
           <h5 style="margin-top: 30px;">Payment Methods <a href = '#addPayment'><i class="fas fa-plus-circle" data-toggle="modal" data-target="#exampleModal"></i></a></h5>
   
@@ -129,6 +131,8 @@ async function getBillingInformation(){
   
           <div class="payment-plan"  id = 'payment-method-list'>
           </div>
+
+          -->
 
           <h5 style="margin-top: 30px;">Active Subscriptions</h5>
 
@@ -163,13 +167,13 @@ async function getBillingInformation(){
             var customerID = data['customer stripe id']
   
             
-            await getPaymentMethods(customerID)
+            //await getPaymentMethods(customerID)
             await getTransactionHistory(customerID);
 
             await getActiveSubscriptions(customerID);
             
   
-          } else {
+          //} else {
             var billingSetupHTML = `
                 <center style = 'margin-top: 15%'>
                     <img  src = '/settings/img/undraw_pay_online_b1hk.svg' width = '25%'/>
@@ -183,8 +187,8 @@ async function getBillingInformation(){
                 </center>
             `
   
-            document.getElementById('payment-settings-body').innerHTML = billingSetupHTML
-          }
+            //document.getElementById('payment-settings-body').innerHTML = billingSetupHTML
+         // }
         })
       }
     })
@@ -201,7 +205,7 @@ async function getBillingInformation(){
         firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
           //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
       
-          var url = `http://localhost:3120/api/getActiveSubscriptions?id=${customerID}&authToken=${idToken}`
+          var url = `https://api-v1.classvibes.net/api/getActiveSubscriptions?id=${customerID}&authToken=${idToken}`
   
           console.log(url)
       
@@ -243,6 +247,30 @@ async function getBillingInformation(){
 
                           var price = (subscription['plan']['amount'])/100
 
+                          var subscriptionID = subscription['id']
+
+                          var autoRenuew = subscription['cancel_at_period_end']
+
+                          console.log(autoRenuew)
+
+                          var autoRenuewHTML = ''
+
+                          if(autoRenuew == true){
+                            autoRenuewHTML = `
+                            <label class="switch">
+                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')">
+                                <span class="slider round"></span>
+                              </label>
+                            `
+                          } else {
+                            autoRenuewHTML = `
+                            <label class="switch">
+                                <input type="checkbox" onclick="updateRenewPref(this, '${customerID}', '${subscriptionID}')" checked>
+                                <span class="slider round"></span>
+                              </label>
+                            `
+                          }
+
                           firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
 
                             if(doc.data != undefined){
@@ -255,11 +283,16 @@ async function getBillingInformation(){
                               var subscriptionHTML = `
                               <div style="display: flex; justify-content: space-between; margin-left: 1%; margin-bottom: -10px">
                 
-                              <h6 style="font-size: 20px; margin-top: 1%;"> <i class="fas fa-tags" style = 'font-size: 25px; color: green'></i> ${name} <span class = 'badge badge-success'> ${code}</span> <br> <p style = 'font-size: 15px; color: gray; margin-top: 5px'>Billing yearly
+                              <h6 style="font-size: 20px; margin-top: 1%;"> <i class="fas fa-chalkboard-teacher" style = 'font-size: 25px; color: green'></i> ${name} <span class = 'badge badge-success'> ${code}</span> <br> <p style = 'font-size: 15px; color: gray; margin-top: 5px'>Billing yearly
                               •
                               Next invoice on ${nextInvoice} for $${price}</p></h6>
                 
-                              <h6 style="margin-right: 15%; margin-top: 1%;">Exp ${nextInvoice}</h6>
+                              <div style="margin-right: 15%; margin-top: 1%;">
+                              <h6>Auto Renew</h6>
+                              ${autoRenuewHTML}
+                              </div>
+
+
                             </div>
     
                             <hr />
@@ -308,6 +341,17 @@ async function getBillingInformation(){
     }
 
 })
+
+  }
+
+
+  function updateRenewPref(switchObject, customerID, subscriptionID){
+
+    if(switchObject.checked == true){
+
+    } else {
+
+    }
 
   }
 

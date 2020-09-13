@@ -2677,7 +2677,6 @@ function getEditData(code) {
 
     output += `
 
-
     <h6>Edit Class Name</h6>
 
   <div class="input-group mb-3">
@@ -2714,7 +2713,6 @@ function getEditData(code) {
 <p style = "color: red; font-weight: 700" id = "error-feedback-edit-class"></p>
 
 <div id = 'update-details-section'></div>
-
   `
 
   //<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
@@ -2724,7 +2722,6 @@ function getEditData(code) {
       document.getElementById('join-setting').className  = "badge badge-primary"
       document.getElementById('join-setting').innerText = "Allowed"
       document.getElementById('allow-join-switch').checked = true
-
 
     } else {
       document.getElementById('join-setting').className  = "badge badge-danger"
