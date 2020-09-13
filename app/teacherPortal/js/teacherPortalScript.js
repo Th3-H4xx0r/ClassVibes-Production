@@ -1893,11 +1893,9 @@ function createClass() {
 
 function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
-
-
   document.getElementById('continueButton').disabled = true
 
-  document.getElementById('continueButton').innerHTML = "Processing Payment..."
+  document.getElementById('continueButton').innerHTML = ` <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
 
     firebase.firestore().collection("UserData").doc(email).get().then(doc => {
 
