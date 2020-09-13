@@ -1918,7 +1918,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
        }
      };
 
-     var url = `http://localhost:3120/api/createCheckoutSession?id=$${customerID}`
+     var url = `http://localhost:3120/api/createCheckoutSession?id=${customerID}&email=${email}`
     
      const xhr = new XMLHttpRequest();
    
@@ -1934,7 +1934,20 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
          if(status == 'success'){
            //window.location = "dashboard.html"
 
-           var 
+           var sessionID = responseText.message.id
+
+           
+          stripe
+          .redirectToCheckout({
+            sessionId: sessionID,
+          })
+          .then(handleResult);
+
+          var handleResult = function (result) {
+            if (result.error) {
+              document.getElementById('feedback-error-payment').innerHTML = result.error.message
+            }
+          };
    
    
          } else {
@@ -1948,11 +1961,6 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
      xhr.send();
 
 
-       stripe
-         .redirectToCheckout({
-           sessionId: 'cs_test_dJBpacH7dNnF3cymwCejS1FLqoqZn8bT6oT8xiQdALXly8JYV1gMtUCp',
-         })
-         .then(handleResult);
 
   /*
     
