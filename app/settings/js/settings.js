@@ -259,11 +259,19 @@ async function getBillingInformation(){
                               var subscriptionHTML = `
                               <div style="display: flex; justify-content: space-between; margin-left: 1%; margin-bottom: -10px">
                 
-                              <h6 style="font-size: 20px; margin-top: 1%;"> <i class="fas fa-tags" style = 'font-size: 25px; color: green'></i> ${name} <span class = 'badge badge-success'> ${code}</span> <br> <p style = 'font-size: 15px; color: gray; margin-top: 5px'>Billing yearly
+                              <h6 style="font-size: 20px; margin-top: 1%;"> <i class="fas fa-chalkboard-teacher" style = 'font-size: 25px; color: green'></i> ${name} <span class = 'badge badge-success'> ${code}</span> <br> <p style = 'font-size: 15px; color: gray; margin-top: 5px'>Billing yearly
                               •
                               Next invoice on ${nextInvoice} for $${price}</p></h6>
                 
-                              <h6 style="margin-right: 15%; margin-top: 1%;"></h6>
+                              <div style="margin-right: 15%; margin-top: 1%;">
+                              <h6>Auto Renew</h6>
+                              <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider round"></span>
+                              </label>
+                              </div>
+
+
                             </div>
     
                             <hr />
