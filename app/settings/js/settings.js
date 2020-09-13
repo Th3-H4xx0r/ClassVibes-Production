@@ -77,7 +77,7 @@ async function getBillingInformation(){
           var billingStatus = data['billing status']
 
       
-          if(billingStatus == 'active'){
+          //if(billingStatus == 'active'){
   
             var paymentSettingsHTML = `
             <h2 style="margin-left: 20px; margin-top: 20px;">Payment Settings</h2>
@@ -122,6 +122,8 @@ async function getBillingInformation(){
               </div>
   
           <hr/>
+
+          <!--
   
           <h5 style="margin-top: 30px;">Payment Methods <a href = '#addPayment'><i class="fas fa-plus-circle" data-toggle="modal" data-target="#exampleModal"></i></a></h5>
   
@@ -129,6 +131,8 @@ async function getBillingInformation(){
   
           <div class="payment-plan"  id = 'payment-method-list'>
           </div>
+
+          -->
 
           <h5 style="margin-top: 30px;">Active Subscriptions</h5>
 
@@ -163,13 +167,13 @@ async function getBillingInformation(){
             var customerID = data['customer stripe id']
   
             
-            await getPaymentMethods(customerID)
+            //await getPaymentMethods(customerID)
             await getTransactionHistory(customerID);
 
             await getActiveSubscriptions(customerID);
             
   
-          } else {
+          //} else {
             var billingSetupHTML = `
                 <center style = 'margin-top: 15%'>
                     <img  src = '/settings/img/undraw_pay_online_b1hk.svg' width = '25%'/>
@@ -183,8 +187,8 @@ async function getBillingInformation(){
                 </center>
             `
   
-            document.getElementById('payment-settings-body').innerHTML = billingSetupHTML
-          }
+            //document.getElementById('payment-settings-body').innerHTML = billingSetupHTML
+         // }
         })
       }
     })
