@@ -243,8 +243,7 @@ async function getBillingInformation(){
 
                           var autoRenuew = subscription['cancel_at_period_end']
 
-                         
-
+            
                           firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
 
                             if(doc.data() != undefined){
