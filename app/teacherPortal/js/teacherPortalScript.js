@@ -553,8 +553,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 
   var code = localStorage.getItem("graphClassCode") != null ? localStorage.getItem("graphClassCode") : "none";
 
-  //console.log(code)
-
   var getNewData = false;
 
   document.getElementById('studentReportText').innerText = "Student Report - " + code
@@ -572,18 +570,13 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
       if(lastWeeklyReport != null){
         var restrictionTimeEnd = new Date(lastWeeklyReport)
         restrictionTimeEnd.setHours(restrictionTimeEnd.getHours() + 5)
-
-        //console.log(dateNow.getTime(),  restrictionTimeEnd.getTime(), restrictionTimeEnd)
   
         if(dateNow.getTime() >= restrictionTimeEnd.getTime()){
           getNewData = true
-          //console.log("SHOULD GET NEW REPORT")
         }
       } else {
         getNewData = true
       }
-
-      //console.log("GET NEW REPORT:" + getNewData)
 
       if(getNewData == false){
         
@@ -619,10 +612,8 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     var satTotal = [];
     var sunTotal = [];
 
-    //console.log(reportData)
 
     if(reportData == null || reportData.length == 0){
-      //console.log("GETTING NEW DATA")
       var d = new Date();
       var day = d.getDay(),
           diff = d.getDate() - day + (day == 0 ? -6:1);
@@ -632,9 +623,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
           d.setMilliseconds(0);
   
       var weekStart =  new Date(d.setDate(diff));
-  
-      //console.log(weekStart)
-  
+    
       var weekStartTimestamp = weekStart.getTime().toString();
   
   
@@ -660,9 +649,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
           } else if (studentReaction == 'frustrated'){
             reactionKey = 1
           }
-  
-          //console.log(reactionDay)
-  
+    
           if(reactionDay == 1){
             monTotal.push(reactionKey)
           }
@@ -691,7 +678,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
             sunTotal.push(reactionKey)
           }
   
-         // console.log(doc.data());
         })
       }).then(() => {
   
@@ -731,8 +717,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         sunAverage = sumSun / sunTotal.length;
         sunAverage = sunAverage ? sunAverage: 0
   
-       // console.log(monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage)
-        //console.log('//')
 
         firebase.firestore().collection("Classes-Cache").doc(code).set({
           "Last Weekly Report": new Date().toString(),
@@ -756,7 +740,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     return [monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage]
 
   }).then((avgList) => {
-    //console.log("Setting area chart")
     //Configure Graph
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -1012,10 +995,6 @@ function storeClassforChart(code) {
 }
 
 function sendRealtimeAnnouncement(code, title, message){
-
-  //console.log("Senindg realtime announcement")
-  
-  
           socket.emit('join-class-room', code.toString());
   
           socket.emit('send-announcement-to-class-realtime', {"code": code, "title": title, "message": message});
@@ -1042,7 +1021,6 @@ async function writeAnnouncement(code, className) {
 
 
   socket.on('connect', function(data) {
-    //console.log("Connected to Email Server - Sender:" + data)
     
 });
   
@@ -1064,7 +1042,6 @@ async function writeAnnouncement(code, className) {
   }).then(() => {
 
     setTimeout(function(){ 
-        console.log('Completed')
         $('#exampleModal').modal('toggle')
         window.location.reload()
      }, 4000);
@@ -1080,11 +1057,7 @@ function getMeetings_pageNation(lastElement) {
     if (user) {
       var email = user.email;
 
-      //console.log("geeting page nation")
-
       var index = 0;
-    
-      //console.log(lastElement)
     
       firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy('timestamp', 'desc').startAfter(lastElement).limit(4).get().then(function (doc) {
         doc.forEach(snapshot => {
@@ -1098,7 +1071,6 @@ function getMeetings_pageNation(lastElement) {
           var length = data1["length"]
     
           lastElement = data1['timestamp']
-          //console.log(meetingsList_PageNation_MainPageList)
     
           if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
     
@@ -1225,7 +1197,6 @@ var lastItemGlobalAnnouncements = ''
 var announcementsIDList = []
 
 async function getAnnouncementForClass_Pagenation(code, lastElement) {
-  console.log("LAST ELEMENT: " + lastElement)
 
   var lastElementID = lastElement
 
@@ -1237,15 +1208,11 @@ firebase.firestore().collection('Classes').doc(code).collection('Announcements')
       var message = data["message"]
       var title = data["title"]
       var announcementId = doc.id
-  
-      console.log(title)
 
       if(announcementsIDList.includes(announcementId) != true){
         announcementsIDList.push(doc.id)
       
         lastElementID = data['date']
-    
-        console.log(lastElementID)
     
         /*
     
@@ -1385,13 +1352,9 @@ async function getAnnouncementForClass(code) {
         var title = data["title"]
         var announcementId = doc.id
     
-        console.log(title)
-    
         announcementsIDList.push(doc.id)
         
         lastItem = data['date']
-    
-        console.log(lastItem)
     
         /*
     
@@ -1572,7 +1535,6 @@ function showSendAnnouncementModal(code, className){
 }
 
 function deleteAnnouncement(id, classCode){
-  console.log(id)
 
   firebase.firestore().collection("Classes").doc(classCode).collection("Announcements").doc(id).delete().then(() => {
     window.location.reload()
@@ -1739,7 +1701,6 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
   //Delete for Student
   firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('class id', '==', meetingClass).where('date and time', '==', date).where('title', '==', title).get().then(snap => {
     snap.forEach(doc => {
-      console.log(doc.data())
       doc.ref.delete()
     })
   }).then(() => {
@@ -1778,7 +1739,6 @@ function getClassDataDropdown(emailRef) {
 
       if (classData != null || classData != undefined) {
 
-        //console.log("works");
         var className = classData[1];
         var classCode = classData[0];
 
@@ -1890,7 +1850,6 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
      xhr.onreadystatechange = () => {
        if (xhr.readyState === XMLHttpRequest.DONE) {
          // Code to execute with response
-         //console.log(xhr.responseText);
    
          var responseText = JSON.parse(xhr.responseText);
    
@@ -1916,7 +1875,6 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
    
    
          } else {
-           console.log(responseText['data'])
            document.getElementById('continueButton').innerHTML = "Continue"
            document.getElementById('feedback-error-payment').innerHTML = responseText['message']
          }
@@ -1936,8 +1894,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
       xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           // Code to execute with response
-          //console.log(xhr.responseText);
-    
+
           var responseText = JSON.parse(xhr.responseText);
     
           var status = responseText['status']
@@ -1962,8 +1919,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
               "allow join": true
     
             })
-    
-            console.log("payment success")
+
             document.getElementById('feedback-error-payment').innerHTML = ''
             document.getElementById('continueButton').innerHTML = "Continue"
     
@@ -1986,7 +1942,6 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
     
     
           } else {
-            console.log(responseText['data'])
             document.getElementById('continueButton').innerHTML = "Continue"
             document.getElementById('feedback-error-payment').innerHTML = responseText['message']
           }
@@ -2020,7 +1975,6 @@ function getStudentData(code) {
 
       
   var classInfoList = [];
-  //console.log(classInfoList);
   var maxdays = 0
 
 
@@ -2046,13 +2000,9 @@ function getStudentData(code) {
 
           var exceedDate = date.seconds + (maxdays * 86400);
 
-          console.log(exceedDate)
 
-
-          //console.log(unread)
           var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
           classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
-          //console.log(classInfoList)
     
         });
 
@@ -2072,7 +2022,6 @@ function getStudentData(code) {
 
 
           if (classInfoData != null || classInfoData != undefined) {
-            //console.log("works")
             var studentName = classInfoData[0];
     
             var studentReaction = classInfoData[1];
@@ -2085,16 +2034,12 @@ function getStudentData(code) {
 
             var exceedDate = classInfoData[5]
 
-            console.log(exceedDate)
-
             
             var unreadMessagesHTML = ''
 
             if(unreadMessages && unreadMessages != undefined && unreadMessages != 0){
               unreadMessagesHTML =  `<span class = 'badge badge-warning'>${unreadMessages}</span>`
             }
-            
-            //console.log(classInfoData)
     
             descriptionOutput2 = `
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
@@ -2220,14 +2165,12 @@ function getStudentData(code) {
 
           var today = Math.floor(Date.now()/1000);
 
-          console.log(exceedDate, today)
 
           if(today > exceedDate) {
             console.log('INACTIVE STUDENT: ' + studentEmail )
 
           } 
 
-          console.log("Reaction:" + studentReaction  + ": " + studentEmail)
 
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
@@ -2469,36 +2412,29 @@ function showRemoveStudentPopup(email, code, teacherEmail){
 
 async function removeStudent(email, code, teacherEmail){
 
-  console.log(teacherEmail)
-
   document.getElementById(`removeStudentButton${code}`).innerHTML = `
 
     <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
   `
 
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-    //console.log(idToken)
 
     var url = "https://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
 
-    //console.log("Removing")
 
     /*
   
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", url, false ); // false for synchronous request
     xmlHttp.send( null );
-    console.log(xmlHttp.responseText);
     */
 
-    console.log("Getting")
 
     const xhr = new XMLHttpRequest();
 
 xhr.onreadystatechange = () => {
     if(xhr.readyState === XMLHttpRequest.DONE){
         // Code to execute with response
-        //console.log(xhr.responseText);
 
         var response = JSON.parse(xhr.responseText);
 
@@ -2534,7 +2470,6 @@ xhr.send();
 }
 
 function schedualMeeting(emailStudent, course, code, index) {
-  console.log("schedual meeting")
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -2736,7 +2671,6 @@ function getEditData(code) {
       document.getElementById('allow-join-switch').checked = false
     }
 
-    console.log("CHECKED: " +document.getElementById('allow-join-switch').checked)
   })
 }
 
@@ -2845,7 +2779,6 @@ function updateDetails(code) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
-      //console.log(email)
 
   var newName = document.getElementById('editName').value;
   var maxDays = document.getElementById('maxDays').value;
@@ -2853,7 +2786,6 @@ function updateDetails(code) {
   var joinStatus = document.getElementById('allow-join-switch').checked
   let maxDaysNum = parseInt(maxDays);
 
-  //console.log(newName, newCourse, newDescription, maxDays)
 
   if(newName, maxDaysNum != null && newName, maxDaysNum != ""){
 
@@ -2886,7 +2818,6 @@ function updateDetails(code) {
     }
 
   } else {
-    //console.log("Feilds blank")
     var feedbackError = document.getElementById('error-feedback-edit-class');
 
     feedbackError.innerHTML = 'You cannot leave any fields blank'
@@ -2898,8 +2829,6 @@ function updateDetails(code) {
 
 function getChartData(code) {
   
-  //console.log("GETTING PIE CHART DEMO");
-
   var index = 0;
   var maxdays = 0
 
@@ -2935,7 +2864,6 @@ function getChartData(code) {
               var reaction = data["status"];
               var date = data["date"];
 
-              //console.log(data["teacher unread"])
 
               if(data["teacher unread"] != undefined && data["teacher unread"] != null && data["teacher unread"] != NaN){
                 unreadMessages = unreadMessages + data["teacher unread"];
@@ -2945,19 +2873,12 @@ function getChartData(code) {
               }
 
             
-              //console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
 
               var studentTimeUpdateTimeStamp = new Date(date.seconds)
 
             
                 var exceedDate = date.seconds + (maxdays * 86400); 
 
-              //console.log('///////////////////////////////////////////')
-              //console.log('Class:' + code)
-              //console.log('student last updated:' + studentTimeUpdateTimeStamp.valueOf())
-              //console.log('today:' + today)
-              //console.log('update by:' + exceedDate)
-              //console.log('maxdays' + maxdays)
 
 
           var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
@@ -2984,7 +2905,6 @@ function getChartData(code) {
               }
 
               } else {
-                //console.log("Gray Time")
                 studentsReactionLists[3] = studentsReactionLists[3] + 1;
 
                 //document.getElementById("face").outerHTML = inactive;
@@ -2994,7 +2914,6 @@ function getChartData(code) {
 
               }
               
-              //console.log('///////////////////////////////////////////')
               
   
   
@@ -3048,8 +2967,6 @@ function getChartData(code) {
     });
             }
       
-            //console.log("UNREAD : " + unreadMessages)
-
             var unreadMessagesHTML = ''
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
@@ -3213,8 +3130,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       
       document.getElementById("no-Announcements-section").style.display = "none";
 
-      
-      console.log(announcentsList)
+
 
       const sortedannouncentsList = announcentsList.sort((a, b) => b.timestamp - a.timestamp)
 
@@ -3297,10 +3213,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     
             var formattedTime = new Date(time.seconds * 1000).toLocaleString()
       
-            //console.log(formattedTime)
-      
-            //console.log(data)
-      
             var newMessageUI = `
         
 
@@ -3379,7 +3291,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
           var type = data['sent type']
 
-         // console.log(message)
     
           var user = data.user
 
@@ -3389,9 +3300,7 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
     
-          //console.log(formattedTime)
-    
-          //console.log(data)
+
           /*
     
           var messageHTML = `
