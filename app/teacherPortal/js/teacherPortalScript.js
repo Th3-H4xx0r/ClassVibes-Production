@@ -2677,7 +2677,7 @@ function getEditData(code) {
 
     output += `
 
-    <h6>Edit Class Name</h6>
+    <h5>Edit Class Name</h5>
 
   <div class="input-group mb-3">
   <div class="input-group-prepend">
@@ -2692,6 +2692,8 @@ function getEditData(code) {
 </div>
 </div>
 
+<h5>Set Inactive Days</h5>
+
 <h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
 
 <div class="input-group mb-3">
@@ -2702,13 +2704,18 @@ function getEditData(code) {
   <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" value="${inactiveDays}" oninput = 'updateDetailsOnChange("${code}")'>
 </div>
 
-<h6>Allow Students To Join <h4><span class = 'badge badge-primary' id  = 'join-setting'>Join Enabled</span> <h4></h6>
+<h5>Allow Students To Join <h4><span class = 'badge badge-primary' id  = 'join-setting'>Join Enabled</span> <h4></h5>
 
 
     <label class="switch-container">
     <input class="switch sw-1" type="checkbox" id = 'allow-join-switch' onclick="changeJoinStatus(this, '${code}')">
     <span class="slider sl-1"></span>
   </label>
+
+
+<h5>Delete Class</h5>
+
+<button type="button" class="btn btn-outline-danger" onclick = "showDeleteClassModal('${code}')">Delete Class</button>
 
 <p style = "color: red; font-weight: 700" id = "error-feedback-edit-class"></p>
 
@@ -2731,6 +2738,74 @@ function getEditData(code) {
 
     console.log("CHECKED: " +document.getElementById('allow-join-switch').checked)
   })
+}
+
+function showDeleteClassModal(code){
+
+  var modalHTML = `
+<div class="modal fade" id="deleteClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Class</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this class? This action cannot be undone.
+        <p id = 'delete-class-error' style = 'color: red'></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" onclick = "deleteClass('${code}')" id = 'deleteClassButton'>Delete Class</button>
+      </div>
+    </div>
+  </div>
+</div>
+  `
+
+  $(modalHTML).appendTo('#page-top');
+  $('#deleteClassModal').modal('toggle')
+
+
+}
+
+function deleteClass(code){
+    document.getElementById('deleteClassButton').innerHTML = `<img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
+
+
+    
+    var url = `https://api-v1.classvibes.net/api/deleteClass?id=${customerID}&email=${email}&name=${className}&maxdays=${maxInactiveDays}&code=${code}`
+    
+    //const xhr = new XMLHttpRequest();
+  
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        // Code to execute with response
+        //console.log(xhr.responseText);
+  
+        var responseText = JSON.parse(xhr.responseText);
+  
+        var status = responseText['status']
+  
+        if(status == 'success'){
+          document.getElementById('deleteClassButton').innerHTML = `Delete Class`
+
+          window.location.reload();
+
+  
+        } else {
+          console.log(responseText['data'])
+          document.getElementById('deleteClassButton').innerHTML = "Delete Class"
+          document.getElementById('delete-class-error').innerHTML = responseText['message']
+        }
+      }
+    }
+    xhr.open('GET', url);
+    xhr.send();
+
+
 }
 
 function updateDetailsOnChange(code){
