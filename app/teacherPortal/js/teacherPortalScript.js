@@ -2772,39 +2772,49 @@ function showDeleteClassModal(code){
 }
 
 function deleteClass(code){
-    document.getElementById('deleteClassButton').innerHTML = `<img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
 
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
 
-    
-    var url = `https://api-v1.classvibes.net/api/deleteClass?id=${customerID}&email=${email}&name=${className}&maxdays=${maxInactiveDays}&code=${code}`
-    
-    //const xhr = new XMLHttpRequest();
-  
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        // Code to execute with response
-        //console.log(xhr.responseText);
-  
-        var responseText = JSON.parse(xhr.responseText);
-  
-        var status = responseText['status']
-  
-        if(status == 'success'){
-          document.getElementById('deleteClassButton').innerHTML = `Delete Class`
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
 
-          window.location.reload();
+        document.getElementById('deleteClassButton').innerHTML = `<img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
+        
+        var url = `http://localhost:3120/api/deleteClass?code=${code}&teacher=${email}&authToken=${idToken}`
+        
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
 
-  
-        } else {
-          console.log(responseText['data'])
-          document.getElementById('deleteClassButton').innerHTML = "Delete Class"
-          document.getElementById('delete-class-error').innerHTML = responseText['message']
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+      
+            if(status == 'success'){
+              document.getElementById('deleteClassButton').innerHTML = `Delete Class`
+
+              window.location.reload();
+
+      
+            } else {
+              console.log(responseText['data'])
+              document.getElementById('deleteClassButton').innerHTML = "Delete Class"
+              document.getElementById('delete-class-error').innerHTML = responseText['message']
+            }
+          }
         }
-      }
-    }
-    xhr.open('GET', url);
-    xhr.send();
+        xhr.open('GET', url);
+        xhr.send();
+  
+      }).catch(function(error) {
+        document.getElementById('delete-class-error').innerHTML = 'Error: Failed to delete class'
+      });
 
+    }
+  })
+    
 
 }
 
