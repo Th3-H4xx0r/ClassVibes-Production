@@ -2781,7 +2781,7 @@ function deleteClass(code){
 
         document.getElementById('deleteClassButton').innerHTML = `<img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
         
-        var url = `http://localhost:3120/api/deleteClass?code=${code}&teacher=${email}&authToken=${idToken}`
+        var url = `https://api-v1.classvibes.net/api/deleteClass?code=${code}&teacher=${email}&authToken=${idToken}`
         
         const xhr = new XMLHttpRequest();
       
@@ -2795,7 +2795,7 @@ function deleteClass(code){
             if(status == 'success'){
               document.getElementById('deleteClassButton').innerHTML = `Delete Class`
 
-              window.location.reload();
+              window.location = '/teacher/dashboard';
 
       
             } else {
@@ -2805,6 +2805,7 @@ function deleteClass(code){
             }
           }
         }
+
         xhr.open('GET', url);
         xhr.send();
   
