@@ -347,7 +347,7 @@ async function getBillingInformation(){
     console.log(switchObject.checked )
     if(switchObject.checked == true){
       
-      var url = `http://localhost:3120/api/updateSubscriptionPref?id=${customerID}&subid=${subscriptionID}&pref=false`
+      var url = `https://api-v1.classvibes.net/api/updateSubscriptionPref?id=${customerID}&subid=${subscriptionID}&pref=false`
   
       const xhr = new XMLHttpRequest();
   
@@ -372,7 +372,7 @@ async function getBillingInformation(){
         xhr.send();
 
     } else {
-      var url = `http://localhost:3120/api/updateSubscriptionPref?id=${customerID}&subid=${subscriptionID}&pref=true`
+      var url = `https://api-v1.classvibes.net/api/updateSubscriptionPref?id=${customerID}&subid=${subscriptionID}&pref=true`
   
       const xhr = new XMLHttpRequest();
   
@@ -610,7 +610,7 @@ async function getBillingInformation(){
                 firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
                   //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
               
-                  var url = `http://localhost:3120/api/getPaymentMethods?id=${id}&authToken=${idToken}`
+                  var url = `https://api-v1.classvibes.net/api/getPaymentMethods?id=${id}&authToken=${idToken}`
           
                   console.log(url)
               
