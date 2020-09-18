@@ -237,6 +237,17 @@ router.get('/teacher/login',function(req,res){
   });
 
 
+  router.get('/teacher/paymentSuccess',function(req,res){
+    if(serverStatus){
+      res.sendFile(path.join(__dirname+'/app/teacherPortal/paymentSuccess.html'));
+
+  
+    } else {
+      res.redirect('/serverDown');
+    }
+    });
+
+
   router.get('/teacher/serverDown',function(req,res){
     if(serverStatus){
       res.redirect('/serverDown');
