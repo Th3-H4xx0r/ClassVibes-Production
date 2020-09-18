@@ -226,6 +226,8 @@ async function getBillingInformation(){
 
                       var subscriptions = subscriptionsJSON.message.data
 
+                      console.log(subscriptions)
+
       
                       for(var i = 0; i <= subscriptions.length; i++){
     

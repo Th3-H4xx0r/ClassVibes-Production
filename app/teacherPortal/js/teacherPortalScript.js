@@ -1843,7 +1843,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
        }
      };
 
-     var url = `https://api-v1.classvibes.net/api/createCheckoutSession?id=${customerID}&email=${email}&name=${className}&maxdays=${maxInactiveDays}&code=${code}`
+     var url = `http://localhost:3120/api/createCheckoutSession?id=${customerID}&email=${email}&name=${className}&maxdays=${maxInactiveDays}&code=${code}`
     
      const xhr = new XMLHttpRequest();
    
