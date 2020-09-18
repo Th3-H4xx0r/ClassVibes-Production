@@ -880,7 +880,7 @@ function getClassData(emailRef) {
   <img src = 'img/undraw_taking_notes_tjaf.svg'/ width="25%">
 
   <h1 style="margin-top: 20px;">No Classes To See</h1>
-  <p>You have not created any classes yet. <br> Go to <strong>Sidebar > Classes > Create Class</strong> <br> to get started</p>
+  <p>You have not created any classes yet. <br> Go to <strong>Sidebar > Create Class</strong> <br> to get started</p>
   </center>
   `;
 
@@ -2629,7 +2629,7 @@ function getEditData(code) {
 
 <h5>Set Inactive Days</h5>
 
-<h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
+<h6>Set the minimum number of days for your students to choose a mood. Inactive students will show up gray on your graph.</h6>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
