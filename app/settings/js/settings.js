@@ -297,10 +297,6 @@ async function getBillingInformation(){
     
                               $(subscriptionHTML).appendTo('#active-subscriptions-section')
 
-                              setTimeout(function(){ 
-                                console.log(subscription)
-                              }, 500);
-
                               
                             //} else {
 
