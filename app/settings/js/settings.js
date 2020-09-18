@@ -209,7 +209,7 @@ async function getBillingInformation(){
       
           const xhr = new XMLHttpRequest();
       
-            xhr.onreadystatechange = () => {
+            xhr.onreadystatechange = async () => {
               console.log("Got")
                 if(xhr.readyState === XMLHttpRequest.DONE){
                     // Code to execute with response
@@ -246,21 +246,18 @@ async function getBillingInformation(){
                           var autoRenuew = subscription['cancel_at_period_end']
 
             
-                          firebase.firestore().collection("Classes").doc(classCode).get().then(doc => {
+                          //firebase.firestore().collection("Classes").doc(classCode).get().then(async doc => {
 
-                            if(doc.data() != undefined){
+                            //if(doc.data() != undefined){
 
-                              var data  = doc.data()
+                              //var data  = doc.data()
 
                               //console.log(data)
 
-                              var name = data['class name']
+                              var name = subscription['metadata']['className']//data['class name']
 
-                              var code = doc.id
+                              var code = classCode
 
-                              console.log(subscription)
-    
-                              console.log(autoRenuew)
     
                               var autoRenuewHTML = ''
     
@@ -299,11 +296,17 @@ async function getBillingInformation(){
                               `
     
                               $(subscriptionHTML).appendTo('#active-subscriptions-section')
-                            } else {
 
-                            }
+                              setTimeout(function(){ 
+                                console.log(subscription)
+                              }, 500);
+
+                              
+                            //} else {
+
+                            //}
                            
-                          })
+                          //})
 
                          
                         }
