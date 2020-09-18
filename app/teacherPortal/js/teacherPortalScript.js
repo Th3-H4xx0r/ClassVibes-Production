@@ -1796,7 +1796,7 @@ function createClass() {
 
       </div>
       <div class="modal-footer" id = 'payment-modal-options'>
-        <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', '${className}', ${maxInactiveDays})" id = 'continueButton'>Checkout</button>
+        <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', "${className}", ${maxInactiveDays})" id = 'continueButton'>Checkout</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>
