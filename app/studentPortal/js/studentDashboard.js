@@ -860,45 +860,33 @@ function checkIfClassCodeExists(addType) {
     // var _ref = firebase.database().ref().child("Classes").child(code).child("Code");
 
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
-      var classCode = doc.data();
+      var data = doc.data();
 
       try {
 
-        if(classCode != undefined){
-          exists = true
+        if(data){
 
           var allowJoin = classCode['allow join']
 
                   
-        if(allowJoin != undefined){
+        if(allowJoin != undefined && allowJoin == true){
           allowJoin = classCode['allow join']
         } else {
-          allowJoin = true
-        }
-
-        } else {
-          exists = false
-        }
-
-
-          if(allowJoin == true){
-            exists = true;
-          } else {
-            error.innerHTML = `
+          error.innerHTML = `
             <div class="alert alert-danger" role="alert" style="width: 310px;">
             This class isn't currently accepting students
            </div>
            `;
-          }
-          
-  
-        if (exists == false) {
-          error.innerHTML = `
-        <div class="alert alert-danger" role="alert" style="width: 310px;">
-        Class code doesn't exist
-       </div>
-       `;
         }
+
+        } else {
+          error.innerHTML = `
+          <div class="alert alert-danger" role="alert" style="width: 310px;">
+          Class code doesn't exist
+         </div>
+         `;
+        }
+  
   
         if (exists == "enrolledInClass") {
           error.innerHTML = `
