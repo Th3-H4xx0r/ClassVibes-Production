@@ -30,7 +30,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     
 </head>
-<body>
+<body id = 'page-top'>
 
   <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
@@ -136,11 +136,20 @@
                 <center>  
                   
                   <center>  
-                    <div id = 'profilePic' style="margin-top: 20%;"></div>      
+                    <div id = 'profilePic' style="margin-top: 20%;"></div>    
+                    
                   </center>
+
                   
                   <div style="width: 130px; height: 130px;  border-radius: 360px; margin-top: 40px; ">
                 </center>
+
+                <center>
+                  <a style="color: red" href = '#delete' onclick = 'showDeleteUserModal()'>Delete Account</a>
+
+                </center>
+
+
                 <div class="form-group" style="margin-top: 40px;">
                   <label for="emailInputField">Email address</label>
                   <input type="email" class="form-control" id="emailInputField" aria-describedby="emailHelp" placeholder="Loading..." style="width: 400px;" disabled>
@@ -189,5 +198,25 @@
 
       }
   </style>
+
+      <!-- Bootstrap core JavaScript-->
+      <script src="/vendor/jquery/jquery.min.js"></script>
+      <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
+      <!-- Core plugin JavaScript-->
+      <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+  
+      <!-- Custom scripts for all pages-->
+      <script src="/teacherjs/sb-admin-2.min.js"></script>
+  
+      <script src="/teacherjs/datatables-demo.js"></script>
+  
+      <script src="/vendor/chart.js/Chart.min.js"></script>
+  
+      <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+  
+      <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 </body>
+
+
 </html>

@@ -851,5 +851,96 @@ async function getBillingInformation(){
     document.getElementById('SecurityCode').value = ''
     document.getElementById('ZIPCode').value = ''
   }
+
+  function showDeleteUserModal(){
+    var deleteModal = `
+    <div class="modal fade" tabindex="-1" role="dialog" id = 'deleteModal'>
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+  <h5 class="modal-title" id = 'payment-modal-header'>Delete Account Confirmation</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" id = 'payment-modal-text'>
+
+  <p>Are you sure you want to delete your account? This action cannot be un done.</p>
+  <p style = 'color: red;' id = 'feedback-error-delete'></p>
+
+</div>
+<div class="modal-footer" id = 'payment-modal-options'>
+  <button type="button" class="btn btn-danger" onclick = "deleteUserAccount()" id = 'deleteButton'>Delete Account</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal" id = 'cancel-button'>Cancel</button>
+</div>
+</div>
+</div>
+</div>
+    `
+
+    $(deleteModal).appendTo('#page-top')
+
+    $('#deleteModal').modal('toggle')
+  }
   
+  function deleteUserAccount(){
+
+    document.getElementById('cancel-button').enabled = false
+    document.getElementById('deleteButton').enabled = false
+    document.getElementById('deleteButton').innerHTML = `
+    <img src = 'img/infinity.svg' width = '7%'/>`
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+          var email = user.email
+          
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+    const xhr = new XMLHttpRequest();
+  
+        var url = `http://localhost:3120/api/deleteUserAccount?email=${email}&type=Teacher`
+          
+        xhr.onreadystatechange = () => {
+          console.log("Got")
+            if(xhr.readyState === XMLHttpRequest.DONE){
+                // Code to execute with response
+                //console.log(xhr.responseText); 
+
+                document.getElementById('cancel-button').enabled = false
+                document.getElementById('deleteButton').innerHTML = `
+                Delete Account`
+      
+                var response = JSON.parse(xhr.responseText);
+      
+                console.log(response)
+      
+                if(response.status == 'failed'){
+                  document.getElementById('feedback-error-delete').innerHTML = response.message
+                  
+                } else {
+                  console.log(xhr.responseText)
+                  document.getElementById('feedback-error-delete').innerHTML = ''
+                  window.location = '/'
+                }
+      
+            }
+          }
+      
+          
+          xhr.open('GET', url);
+          xhr.send();
+      
+
+  }).catch(function(error) {
+    console.log(error)
+    console.log("Failed")
+
+    document.getElementById('cancel-button').enabled = true
+    document.getElementById('deleteButton').enabled = true
+    document.getElementById('deleteButton').innerHTML = `Delete Account`
+
+  });
+              
+      }
+  })
+  }
   
