@@ -810,10 +810,7 @@ function setMainClassForMood(index) {
 
 }
 
-function checkIfAlreadyinClass(addType) {
-  
 
-}
 //Firestore migrated fully
 function checkIfClassCodeExists(addType) {
 
