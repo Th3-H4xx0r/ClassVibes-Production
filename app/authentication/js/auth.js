@@ -845,7 +845,7 @@ googleSignUp = (type) => {
                                     firebase.firestore().collection("UserData").doc(email).update({
                                         "customer stripe id": customerID
                                     }).then(() => {
-                                        var url = `http://localhost:3120/api/createClass?email=${email}&mode=signup`
+                                        var url = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
 
                                         const xhr = new XMLHttpRequest();
                                         xhr.onreadystatechange = () => {
