@@ -844,6 +844,28 @@ googleSignUp = (type) => {
 
                                     firebase.firestore().collection("UserData").doc(email).update({
                                         "customer stripe id": customerID
+                                    }).then(() => {
+                                        var url = `http://localhost:3120/api/createClass?email=${email}&mode=signup`
+
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.onreadystatechange = () => {
+                                            if(xhr.readyState === XMLHttpRequest.DONE){
+                                                // Code to execute with response
+            
+                                                console.log(xhr.responseText)
+            
+                                                var responseText = xhr.responseText
+                                                
+                                                var response = JSON.parse(responseText);
+
+                                                console.log(response)
+        
+                                        
+                                            }
+                                        }
+                                        
+                                        xhr.open('GET', url);
+                                        xhr.send();
                                     })
                             
                                 }
@@ -891,7 +913,7 @@ googleSignUp = (type) => {
                         var successPage = document.getElementById('signup-success-form');
     
                         successPage.style.display = "initial";
-                    }, 200)
+                    }, 1500)
     
                 }
             }).catch((e) => {
