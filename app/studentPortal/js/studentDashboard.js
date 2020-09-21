@@ -829,7 +829,7 @@ function checkIfClassCodeExists(addType) {
 
         if(data){
 
-          var allowJoin = classCode['allow join']
+          var allowJoin = data['allow join']
 
           var enrolledInClass = false
 
@@ -902,7 +902,7 @@ function checkIfClassCodeExists(addType) {
 
         if(data){
 
-          var allowJoin = classCode['allow join']
+          var allowJoin = data['allow join']
 
           var enrolledInClass = false
 
