@@ -826,6 +826,8 @@ function checkIfClassCodeExists(addType) {
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       var data = doc.data();
 
+      console.log('working')
+
       try {
 
         if(data){
@@ -861,7 +863,6 @@ function checkIfClassCodeExists(addType) {
                      `;
                   }
 
-                  checkIfClassCodeExists(addType)
                 }
 
               })
@@ -934,8 +935,6 @@ function checkIfClassCodeExists(addType) {
                      </div>
                      `;
                   }
-
-                  checkIfClassCodeExists(addType)
                 }
 
               })
