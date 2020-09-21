@@ -897,7 +897,7 @@ async function getBillingInformation(){
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     const xhr = new XMLHttpRequest();
   
-        var url = `http://localhost:3120/api/deleteUserAccount?email=${email}&type=Teacher&authToken=${idToken}`
+        var url = `https://api-v1.classvibes.net/api/deleteUserAccount?email=${email}&type=Teacher&authToken=${idToken}`
           
         xhr.onreadystatechange = () => {
           console.log("Gottem")
