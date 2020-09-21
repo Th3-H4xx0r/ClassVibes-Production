@@ -897,10 +897,10 @@ async function getBillingInformation(){
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     const xhr = new XMLHttpRequest();
   
-        var url = `http://localhost:3120/api/deleteUserAccount?email=${email}&type=Teacher`
+        var url = `http://localhost:3120/api/deleteUserAccount?email=${email}&type=Teacher&authToken=${idToken}`
           
         xhr.onreadystatechange = () => {
-          console.log("Got")
+          console.log("Gottem")
             if(xhr.readyState === XMLHttpRequest.DONE){
                 // Code to execute with response
                 //console.log(xhr.responseText); 
