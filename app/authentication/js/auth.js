@@ -804,7 +804,7 @@ googleSignUp = (type) => {
                             "email": email,
                             "username": email,
                             "account type": "Student",
-                            "account status": "Deactivated",
+                            "account status": "Activated",
                         });
     
                         const increment = firebase.firestore.FieldValue.increment(1);
