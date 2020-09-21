@@ -821,7 +821,7 @@ googleSignUp = (type) => {
                             "email": email,
                             "username": email,
                             "account type": "Teacher",
-                            "account status": "Deactivated",
+                            "account status": "Activated",
                             "billing status": "Inactive",
                         }).then(() => {
 
