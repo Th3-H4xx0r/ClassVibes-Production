@@ -568,29 +568,58 @@ function emailSignUp(type) {
                                 "billing status": "Inactive",
                             }).then(() => {
 
+                                
+                            var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
 
-                                var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
-
-                                const xhr = new XMLHttpRequest();
+                            const xhr = new XMLHttpRequest();
                             xhr.onreadystatechange = () => {
                                 if(xhr.readyState === XMLHttpRequest.DONE){
                                     // Code to execute with response
 
-                                    var transactionsList = JSON.parse(xhr.responseText);
+                                    console.log(xhr.responseText)
 
-                                    var customerID = transactionsList.message
+                                    var responseText = xhr.responseText
+                                    
+                                    var response = JSON.parse(responseText);
+
+                                    var customerID = response.message
+
+                                    console.log(response, customerID)
 
                                     firebase.firestore().collection("UserData").doc(email).update({
                                         "customer stripe id": customerID
+                                    }).then(() => {
+                                        var url = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
+
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.onreadystatechange = () => {
+                                            if(xhr.readyState === XMLHttpRequest.DONE){
+                                                // Code to execute with response
+            
+                                                console.log(xhr.responseText)
+            
+                                                var responseText = xhr.responseText
+                                                
+                                                var response = JSON.parse(responseText);
+
+                                                console.log(response)
+        
+                                        
+                                            }
+                                        }
+                                        
+                                        xhr.open('GET', url);
+                                        xhr.send();
                                     })
                             
                                 }
                             }
-                                
-                                xhr.open('GET', url);
-                                xhr.send();
+                            
+                            xhr.open('GET', url);
+                            xhr.send();
 
-                            });
+                        });
+
     
                             const increment = firebase.firestore.FieldValue.increment(1);
     
