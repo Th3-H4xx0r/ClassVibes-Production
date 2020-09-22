@@ -266,7 +266,7 @@ function getClassPageData(classCode){
     var data = doc.data();
 
     if(data){
-      var expireDateValue = data['expire date'] * 1000
+      var expireDateValue = data['expire date']
 
       var today = new Date()
 
