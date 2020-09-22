@@ -2599,6 +2599,17 @@ function getEditData(code) {
 
     var joinStatus = data['allow join']
 
+    var expireDate = data['expire date'];
+
+    var expireDateFormatted = new Date(expireDate).toDateString()
+
+    var today = new Date();
+
+    var Difference_In_Time = expireDate.getTime() - today.getTime(); 
+      
+    // To calculate the no. of days between two dates 
+    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+
 
     document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
 
@@ -2611,6 +2622,12 @@ function getEditData(code) {
     maxDaysGlobal = inactiveDays
 
     output += `
+
+    <h5>Class Expire Date</h5>
+
+    <h6>${expireDateFormatted} * Class expires in ${Difference_In_Days} days<br></h6>
+
+
 
     <h5>Edit Class Name</h5>
 
