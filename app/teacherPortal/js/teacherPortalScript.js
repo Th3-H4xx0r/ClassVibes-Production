@@ -86,12 +86,8 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   else if (pageType == 'class-page') {
                     getProfileInfo();
                     //getClassData();
-                    getClassDataDropdown(email)
-                    getStudentData(classCode);
-                    getEditData(classCode);
-                    getAnnouncementForClass(classCode);
-                    getMeetingForClass(classCode);
-                    getStudentJoinRequests(classCode)
+                    getClassDataDropdown(email);
+                    getClassPageData(classCode);
                   }
       
                   else if (pageType == 'dashboard') {
@@ -158,11 +154,9 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   getProfileInfo();
                   //getClassData();
                   getClassDataDropdown(email);
-                  getStudentData(classCode);
-                  getEditData(classCode);
-                  getAnnouncementForClass(classCode);
-                  getMeetingForClass(classCode);    
-                  getStudentJoinRequests(classCode)
+
+                  getClassPageData(classCode);
+                
                 }
                 else if (pageType == 'dashboard') {
                   //console.log("executing");
@@ -264,6 +258,60 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
   });
 
 
+}
+
+function getClassPageData(classCode){
+
+  firebase.firestore().collection('Classes').doc(classCode).get().then(doc => {
+    var data = doc.data();
+
+    if(data){
+      var expireDateValue = data['expire date'] * 1000
+
+      var today = new Date()
+
+      var expireDate = new Date(expireDateValue)
+
+      console.log(expireDate.toLocaleDateString())
+
+      if(today > expireDate){
+
+        var expiredHTML = `
+
+        <div class="d-flex justify-content-center" style = 'margin-top: 15%'>
+        <img  src = '/teacher/img/undraw_blank_canvas_3rbb.svg' width = '20%'/>
+
+        </div>
+
+
+        <div class="d-flex justify-content-center">
+        <h1>Class Expired</h1>
+        
+        </div>
+
+        <div class="d-flex justify-content-center">
+        <p>This class has expired, please renew it in the <a href = '/settings/payments'>payment settings</a></p>
+
+        
+        </div>
+
+        
+          
+        `
+
+        document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
+      } else {
+        getStudentData(classCode);
+        getEditData(classCode);
+        getAnnouncementForClass(classCode);
+        getMeetingForClass(classCode);    
+        getStudentJoinRequests(classCode)
+      }
+    } else {
+
+    }
+  })
+ 
 }
 
 function getStudentRequests(){
