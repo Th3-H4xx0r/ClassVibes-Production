@@ -2979,9 +2979,6 @@ function getChartData(code) {
 
               }
               
-              
-  
-  
           });
   
             if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0 && studentsReactionLists[3] == 0){
@@ -3043,10 +3040,6 @@ function getChartData(code) {
          
       });
       })
-
-
-
-
 }
 
 function storeGraphReactionsCode(code, event = "none"){
@@ -3097,10 +3090,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
     })
   }
 
-
       var announcementsCount = 0;
-
-
 
       for (let i = 0; i <= classesListCodes.length; i++) {
         var classcode = classesListCodes[i];
@@ -3195,8 +3185,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       
       document.getElementById("no-Announcements-section").style.display = "none";
 
-
-
       const sortedannouncentsList = announcentsList.sort((a, b) => b.timestamp - a.timestamp)
 
       for(var i = 0; i <= sortedannouncentsList.length; i++){
@@ -3279,7 +3267,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
             var formattedTime = new Date(time.seconds * 1000).toLocaleString()
       
             var newMessageUI = `
-        
 
             <div>
 
@@ -3292,7 +3279,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
         `
 
   var otherMessage = `
-
  
   <div>
 
@@ -3311,7 +3297,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
   }
           }
 
-    
           
         })
     
@@ -3364,31 +3349,8 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
 
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
-    
-
-          /*
-    
-          var messageHTML = `
-          <div class="message-component" style="margin-top: 50px">
-          <div class="row">
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-            <div class="col">
-              <div class="row" style="margin-left: 5px;">
-                <h5>${user}</h5>
-                <div style="width: 80%;"></div>
-              </div>
-              <p>${formattedTime}</p>
-
-              <p style="width: 100%;">${message}</p>
-            </div>
-          </div>
-          <hr>
-        </div>
-        `
-        */
 
         var newMessageUI = `
-        
 
         <div>
 
@@ -3399,7 +3361,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         `
 
   var otherMessage = `
-
  
   <div>
 
@@ -3421,12 +3382,9 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     $('#message-components').prepend(newMessageUI)
 
   }
-    
-          //$('#message-components').prepend(messageHTML)
 
           messagesListIDs.push(doc.id)
-    
-          
+
         })
     
       }).then(() => {
@@ -3440,8 +3398,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           }
         });
 
-
-    
           firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
 
@@ -3495,26 +3451,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
             })
             scrollSmoothToBottom()
           })
-
-
-        //   $('#message-components').on('scroll', function() {
-        //     var scrollTop = $(this).scrollTop();
-        
-        //         var topDistance = $(this).offset().top;
-        
-        //         if ( (topDistance) < scrollTop ) {
-        //             alert( $(this).text() + ' was scrolled to the top' );
-        //         }
-            
-        // });
-
-          // $('#message-components').on('scroll', function() { 
-          //   if ($(this).scrollTop() + 
-          //       $(this).innerHeight() >=  
-          //       $(this)[0].scrollHeight) { 
-        
-          //       } 
-          // });
       })
     }
   });
