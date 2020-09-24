@@ -250,15 +250,11 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
               }
             }
           }
-         
-    
-
       });
     }
   });
-
-
 }
+
 
 function getClassPageData(classCode){
 
@@ -294,9 +290,6 @@ function getClassPageData(classCode){
 
         
         </div>
-
-        
-          
         `
 
         document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
@@ -445,9 +438,6 @@ function getStudentRequests(){
         document.getElementById('main-page').style.display = "initial"
     }
    }, 1200);
-
-
-
   })
 }
 
