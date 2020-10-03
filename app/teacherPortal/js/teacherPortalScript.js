@@ -294,7 +294,7 @@ function getClassPageData(classCode){
 
         document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
       } else {
-        getStudentData(classCode);
+        //getStudentData(classCode);
         getEditData(classCode);
         getAnnouncementForClass(classCode);
         getMeetingForClass(classCode);    
@@ -2021,7 +2021,7 @@ function getStudentData(code, liveData) {
         //doc.forEach(snapshot => {
 
         for (var x = 0; x <= liveData.length; x ++){
-          var data = snapshot.data();
+          var data = liveData[x];
     
           var reaction = data["status"];
           var studentName = data["name"];
@@ -2907,7 +2907,7 @@ function getChartData(code) {
             index = index + 1
               var data = snapshot.data();
 
-              studentsListData.append(data)
+              studentsListData.push(data)
               
               var reaction = data["status"];
               var date = data["date"];
