@@ -1997,6 +1997,8 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
 function getStudentData(code, liveData, teacherEmail) {
 
+  console.log(liveData)
+
   var happyCount = 0
   var mehCount = 0
   var frustratedCount = 0
@@ -2009,11 +2011,14 @@ function getStudentData(code, liveData, teacherEmail) {
 
   var className = '';
   var today = Math.floor(Date.now()/1000);
-  $("#studentTable").html = ''
-  $("#studentTable-doing-good").html = ''
-  $("#studentTable-meh").html = ''
-  $("#studentTable-frustrated").html = ''
-  $("#studentTable-inactive").html = ''
+
+  document.getElementById("studentTable").innerHTML = ''
+  document.getElementById("studentTable-doing-good").innerHTML = ''
+  document.getElementById("studentTable-meh").innerHTML = ''
+  document.getElementById("studentTable-frustrated").innerHTML = ''
+  document.getElementById("studentTable-inactive").innerHTML = ''
+
+
 
   //firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       //var data = doc.data();
@@ -2028,8 +2033,6 @@ function getStudentData(code, liveData, teacherEmail) {
         for (var x = 0; x <= liveData.length; x ++){
           var data = liveData[x];
 
-          console.log(data)
-
           if(data){
 
             var reaction = data["status"];
@@ -2042,6 +2045,8 @@ function getStudentData(code, liveData, teacherEmail) {
   
   
             var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
+
+            console.log(dateReported)
             classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
           }
     
