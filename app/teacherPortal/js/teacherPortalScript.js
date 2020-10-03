@@ -1995,18 +1995,13 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 }
 
 
-function getStudentData(code) {
+function getStudentData(code, data) {
 
   var happyCount = 0
   var mehCount = 0
   var frustratedCount = 0
   var inactiveCount = 0
   var totalCount = 0
-
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      var teacherEmail = user.email;
-
       
   var classInfoList = [];
   var maxdays = 0
@@ -2015,13 +2010,13 @@ function getStudentData(code) {
   var className = '';
   var today = Math.floor(Date.now()/1000);
 
-  firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
-      var data = doc.data();
+  //firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
+      //var data = doc.data();
 
-      className = data["class name"];
-      maxdays = data["max days inactive"]
+      //className = data["class name"];
+      //maxdays = data["max days inactive"]
 
-    }).then(() => {
+    //}).then(() => {
       firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', true).get().then(function (doc) {
         doc.forEach(snapshot => {
           var data = snapshot.data();
@@ -2313,13 +2308,7 @@ function getStudentData(code) {
           }
 
       });
-    })
-
-    }
-  })
-
-  
-
+   // })
 
 }
 
