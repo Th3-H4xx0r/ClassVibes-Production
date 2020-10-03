@@ -258,13 +258,15 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
 
 function getClassPageData(classCode){
 
+  var expireDateValue = ''
+
   firebase.firestore().collection('Classes').doc(classCode).get().then(doc => {
     var data = doc.data();
 
     if(data){
       var stripeSubscription = data['stripe subscription']
 
-      var expireDateValue = ''
+
 
       if(stripeSubscription){
 
@@ -288,12 +290,13 @@ function getClassPageData(classCode){
             if(status == 'success'){
               //window.location = "dashboard.html"
    
-              var endDate = responseText.message
+              expireDateValue = responseText.message['current_period_end']
+
+              console.log(expireDateValue)
       
       
             } else {
-              document.getElementById('continueButton').innerHTML = "Continue"
-              document.getElementById('feedback-error-payment').innerHTML = responseText['message']
+
             }
           }
         }
@@ -310,44 +313,44 @@ function getClassPageData(classCode){
       }
 
 
-      var today = new Date()
+    } 
+  }).then(() => {
 
-      var expireDate = new Date(expireDateValue)
+    var today = new Date()
 
-      console.log(expireDate.toLocaleDateString())
+    var expireDate = new Date(expireDateValue)
 
-      if(today > expireDate){
+    console.log(expireDate.toLocaleDateString())
+    
+    if(today > expireDate){
 
-        var expiredHTML = `
+      var expiredHTML = `
 
-        <div class="d-flex justify-content-center" style = 'margin-top: 15%'>
-        <img  src = '/teacher/img/undraw_blank_canvas_3rbb.svg' width = '20%'/>
+      <div class="d-flex justify-content-center" style = 'margin-top: 15%'>
+      <img  src = '/teacher/img/undraw_blank_canvas_3rbb.svg' width = '20%'/>
 
-        </div>
+      </div>
 
 
-        <div class="d-flex justify-content-center">
-        <h1>Class Expired</h1>
-        
-        </div>
+      <div class="d-flex justify-content-center">
+      <h1>Class Expired</h1>
+      
+      </div>
 
-        <div class="d-flex justify-content-center">
-        <p>This class has expired, please renew it in the <a href = '/settings/payments'>payment settings</a></p>
+      <div class="d-flex justify-content-center">
+      <p>This class has expired, please renew it in the <a href = '/settings/payments'>payment settings</a></p>
 
-        
-        </div>
-        `
+      
+      </div>
+      `
 
-        document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
-      } else {
-        //getStudentData(classCode);
-        getEditData(classCode);
-        getAnnouncementForClass(classCode);
-        getMeetingForClass(classCode);    
-        getStudentJoinRequests(classCode)
-      }
+      document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
     } else {
-
+      //getStudentData(classCode);
+      getEditData(classCode);
+      getAnnouncementForClass(classCode);
+      getMeetingForClass(classCode);    
+      getStudentJoinRequests(classCode)
     }
   })
  
