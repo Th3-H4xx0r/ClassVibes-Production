@@ -547,7 +547,7 @@ function emailSignUp(type) {
                                 "email": email,
                                 "username": email,
                                 "account type": "Student",
-                                "account status": "Deactivated",
+                                "account status": "Activated",
                             });
     
                             const increment = firebase.firestore.FieldValue.increment(1);
@@ -564,8 +564,8 @@ function emailSignUp(type) {
                                 "email": email,
                                 "username": email,
                                 "account type": "Teacher",
-                                "account status": "Deactivated",
-                                "billing status": "Inactive",
+                                "account status": "Activated",
+                                "billing status": "Activated",
                             }).then(() => {
 
                                 
@@ -636,7 +636,7 @@ function emailSignUp(type) {
                                 "email": email,
                                 "username": email,
                                 "account type": "District",
-                                "account status": "Deactivated",
+                                "account status": "Activated",
                             });
     
                             const increment = firebase.firestore.FieldValue.increment(1);
@@ -708,7 +708,7 @@ facebookSignUp = (type) => {
                         "email": email,
                         "username": email,
                         "account type": "Student",
-                        "account status": "Deactivated",
+                        "account status": "Activated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -725,7 +725,7 @@ facebookSignUp = (type) => {
                         "email": email,
                         "username": email,
                         "account type": "Teacher",
-                        "account status": "Deactivated",
+                        "account status": "Activated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -743,7 +743,7 @@ facebookSignUp = (type) => {
                         "email": email,
                         "username": email,
                         "account type": "District",
-                        "account status": "Deactivated",
+                        "account status": "Activated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -920,7 +920,7 @@ googleSignUp = (type) => {
                             "email": email,
                             "username": email,
                             "account type": "District",
-                            "account status": "Deactivated",
+                            "account status": "Activated",
                         });
     
                         const increment = firebase.firestore.FieldValue.increment(1);
