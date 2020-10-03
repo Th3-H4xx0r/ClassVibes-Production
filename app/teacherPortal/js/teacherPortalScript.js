@@ -1995,7 +1995,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 }
 
 
-function getStudentData(code, liveData, teacherEmail) {
+function getStudentData(code, liveData, teacherEmail, maxdays) {
 
   console.log(liveData)
 
@@ -2006,7 +2006,6 @@ function getStudentData(code, liveData, teacherEmail) {
   var totalCount = 0
       
   var classInfoList = [];
-  var maxdays = 0
 
 
   var className = '';
@@ -3033,7 +3032,7 @@ function getChartData(code) {
       
             var unreadMessagesHTML = ''
 
-            getStudentData(code, studentsListData, teacherEmail);
+            getStudentData(code, studentsListData, teacherEmail, maxdays);
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
               var unreadMessagesHTML =  `<h2><span class="badge badge-warning" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
