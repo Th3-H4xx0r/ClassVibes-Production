@@ -1995,7 +1995,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 }
 
 
-function getStudentData(code, liveData) {
+function getStudentData(code, liveData, teacherEmail) {
 
   var happyCount = 0
   var mehCount = 0
@@ -2009,6 +2009,11 @@ function getStudentData(code, liveData) {
 
   var className = '';
   var today = Math.floor(Date.now()/1000);
+  $("#studentTable").html = ''
+  $("#studentTable-doing-good").html = ''
+  $("#studentTable-meh").html = ''
+  $("#studentTable-frustrated").html = ''
+  $("#studentTable-inactive").html = ''
 
   //firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
       //var data = doc.data();
@@ -2022,18 +2027,24 @@ function getStudentData(code, liveData) {
 
         for (var x = 0; x <= liveData.length; x ++){
           var data = liveData[x];
+
+          console.log(data)
+
+          if(data){
+
+            var reaction = data["status"];
+            var studentName = data["name"];
+            var studentEmail = data["email"];
+            var unread = data['teacher unread'];
+            var date = data["date"];
+  
+            var exceedDate = date.seconds + (maxdays * 86400);
+  
+  
+            var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
+            classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
+          }
     
-          var reaction = data["status"];
-          var studentName = data["name"];
-          var studentEmail = data["email"];
-          var unread = data['teacher unread'];
-          var date = data["date"];
-
-          var exceedDate = date.seconds + (maxdays * 86400);
-
-
-          var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
-          classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
     
         }
         
@@ -2876,6 +2887,8 @@ function getChartData(code) {
   var index = 0;
   var maxdays = 0
 
+  var teacherEmail = '';
+
   var studentsListData = [];
 
 
@@ -2889,6 +2902,7 @@ function getChartData(code) {
         if( data != undefined){
           if(data["max days inactive"]){
           maxdays = data["max days inactive"] 
+          teacherEmail = data['teacher email']
           }
         }
         
@@ -3014,7 +3028,7 @@ function getChartData(code) {
       
             var unreadMessagesHTML = ''
 
-            getStudentData(code, studentsListData);
+            getStudentData(code, studentsListData, teacherEmail);
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
               var unreadMessagesHTML =  `<h2><span class="badge badge-warning" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
