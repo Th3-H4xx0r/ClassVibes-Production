@@ -35,6 +35,8 @@
     <!-- Custom styles for this template -->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
     <!-- Custom styles for this page -->
     <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -72,7 +74,7 @@
             getLiveSeverAlerts();
             checkUserAuthStatus('teacher');
             getTeacherAccountStatus('class-page', classCode);
-            getGraphData_Classes_page(classCode)
+            //getGraphData_Classes_page(classCode)
 
         });
     </script>
@@ -219,6 +221,15 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid" id="main-body-page-teacher">
 
+                <div id="loader-widget">
+                    <section id="loadingIndicator">
+                        <center style="margin-top: 25%;">
+                            <div class="loader">
+                        </center>
+                    </section>
+                </div>
+
+                <div id="mainClassPage" style="display: none;">
 
                     <!-- Page Heading -->
                     <div id="className">
@@ -404,6 +415,9 @@
                         </style>
                     </div>
                     <!--TABLES-->
+                </div>
+
+
                 </div>
 
 

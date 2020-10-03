@@ -266,8 +266,6 @@ function getClassPageData(classCode){
     if(data){
       var stripeSubscription = data['stripe subscription']
 
-
-
       if(stripeSubscription){
 
         firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
@@ -290,7 +288,7 @@ function getClassPageData(classCode){
             if(status == 'success'){
               //window.location = "dashboard.html"
    
-              expireDateValue = responseText.message['current_period_end']
+              expireDateValue = responseText.message['current_period_end'] * 1000
 
               console.log(expireDateValue)
       
@@ -316,42 +314,53 @@ function getClassPageData(classCode){
     } 
   }).then(() => {
 
-    var today = new Date()
+    setTimeout(function(){
 
-    var expireDate = new Date(expireDateValue)
+      var today = new Date()
 
-    console.log(expireDate.toLocaleDateString())
-    
-    if(today > expireDate){
-
-      var expiredHTML = `
-
-      <div class="d-flex justify-content-center" style = 'margin-top: 15%'>
-      <img  src = '/teacher/img/undraw_blank_canvas_3rbb.svg' width = '20%'/>
-
-      </div>
-
-
-      <div class="d-flex justify-content-center">
-      <h1>Class Expired</h1>
+      var expireDate = new Date(expireDateValue)
+  
+      console.log(expireDate)
       
-      </div>
+      if(today > expireDate){
+  
+        var expiredHTML = `
+  
+        <div class="d-flex justify-content-center" style = 'margin-top: 15%'>
+        <img  src = '/teacher/img/undraw_blank_canvas_3rbb.svg' width = '20%'/>
+  
+        </div>
+  
+  
+        <div class="d-flex justify-content-center">
+        <h1>Class Expired</h1>
+        
+        </div>
+  
+        <div class="d-flex justify-content-center">
+        <p>This class has expired, please renew it in the <a href = '/settings/payments'>payment settings</a></p>
+  
+        
+        </div>
+        `
+  
+        document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
+      } else {
+        //getStudentData(classCode);
 
-      <div class="d-flex justify-content-center">
-      <p>This class has expired, please renew it in the <a href = '/settings/payments'>payment settings</a></p>
+        document.getElementById('loader-widget').style.display = "none";
+        document.getElementById('mainClassPage').style.display = "initial";
+        
 
-      
-      </div>
-      `
+        getEditData(classCode, expireDate);
+        getAnnouncementForClass(classCode);
+        getMeetingForClass(classCode);    
+        getStudentJoinRequests(classCode)
+        getGraphData_Classes_page(classCode);
+      }
+     }, 2000);
 
-      document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
-    } else {
-      //getStudentData(classCode);
-      getEditData(classCode);
-      getAnnouncementForClass(classCode);
-      getMeetingForClass(classCode);    
-      getStudentJoinRequests(classCode)
-    }
+ 
   })
  
 }
@@ -2676,7 +2685,7 @@ var classNameGlobal = ''
 
 var maxDaysGlobal = ''
 
-function getEditData(code) {
+function getEditData(code, expireDate) {
   output = ''
 
   firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
@@ -2689,8 +2698,6 @@ function getEditData(code) {
     var className = data['class name'];
 
     var joinStatus = data['allow join']
-
-    var expireDate = data['expire date'];
 
     var expireDateFormatted = new Date(expireDate).toDateString()
 
