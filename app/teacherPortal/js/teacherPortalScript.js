@@ -273,7 +273,7 @@ function getClassPageData(classCode){
           console.log(idToken)
 
             
-        var url = `http://localhost:3120/api/getSubscriptionInfo?id=${stripeSubscription}&authToken=${idToken}`
+        var url = `https://api-v1.classvibes.net/api/getSubscriptionInfo?id=${stripeSubscription}&authToken=${idToken}`
     
         const xhr = new XMLHttpRequest();
       
