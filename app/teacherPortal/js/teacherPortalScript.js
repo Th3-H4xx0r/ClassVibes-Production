@@ -267,7 +267,13 @@ function getClassPageData(classCode){
       var expireDateValue = ''
 
       if(stripeSubscription){
-        var url = `https://api-v1.classvibes.net/api/`
+
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+          console.log(idToken)
+
+            
+        var url = `http://localhost:3120/api/getSubscriptionInfo?id=${stripeSubscription}&authToken=${idToken}`
     
         const xhr = new XMLHttpRequest();
       
@@ -282,20 +288,7 @@ function getClassPageData(classCode){
             if(status == 'success'){
               //window.location = "dashboard.html"
    
-              var sessionID = responseText.message.id
-   
-              
-             stripe
-             .redirectToCheckout({
-               sessionId: sessionID,
-             })
-             .then(handleResult);
-   
-             var handleResult = function (result) {
-               if (result.error) {
-                 document.getElementById('feedback-error-payment').innerHTML = result.error.message
-               }
-             };
+              var endDate = responseText.message
       
       
             } else {
@@ -306,6 +299,11 @@ function getClassPageData(classCode){
         }
         xhr.open('GET', url);
         xhr.send();
+    
+        }).catch(function(error) {
+          // Handle error
+        });
+      
    
       } else {
         expireDateValue = data['expire date']
