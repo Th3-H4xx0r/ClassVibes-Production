@@ -2876,6 +2876,8 @@ function getChartData(code) {
   var index = 0;
   var maxdays = 0
 
+  var studentsListData = [];
+
 
 
   var today = Math.floor(Date.now()/1000);
@@ -2904,6 +2906,8 @@ function getChartData(code) {
           doc.forEach(snapshot => {
             index = index + 1
               var data = snapshot.data();
+
+              studentsListData.append(data)
               
               var reaction = data["status"];
               var date = data["date"];
@@ -3009,6 +3013,8 @@ function getChartData(code) {
             }
       
             var unreadMessagesHTML = ''
+
+            getStudentData(code, studentsListData);
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
               var unreadMessagesHTML =  `<h2><span class="badge badge-warning" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
