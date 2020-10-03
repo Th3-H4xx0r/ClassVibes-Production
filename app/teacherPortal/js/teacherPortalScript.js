@@ -1995,7 +1995,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 }
 
 
-function getStudentData(code, data) {
+function getStudentData(code, liveData) {
 
   var happyCount = 0
   var mehCount = 0
@@ -2017,8 +2017,10 @@ function getStudentData(code, data) {
       //maxdays = data["max days inactive"]
 
     //}).then(() => {
-      firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', true).get().then(function (doc) {
-        doc.forEach(snapshot => {
+      //firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', true).get().then(function (doc) {
+        //doc.forEach(snapshot => {
+
+        for (var x = 0; x <= liveData.length; x ++){
           var data = snapshot.data();
     
           var reaction = data["status"];
@@ -2033,7 +2035,9 @@ function getStudentData(code, data) {
           var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
           classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
     
-        });
+        }
+        
+        //});
 
     
         document.getElementById("studentTable").innerHTML = "";
@@ -2280,7 +2284,7 @@ function getStudentData(code, data) {
 
           
         }
-      }).then(() => {
+      //}).then(() => {
 
 
           var noStudentsHTML = `
@@ -2307,7 +2311,7 @@ function getStudentData(code, data) {
             $(noStudentsHTML).appendTo("#studentTable-inactive")
           }
 
-      });
+      //});
    // })
 
 }
