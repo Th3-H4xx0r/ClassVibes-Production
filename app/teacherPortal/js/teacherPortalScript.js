@@ -1650,8 +1650,6 @@ function getMeetingForClass_Pagenation(code, lastElement) {
         })
       }
     })
-  //}
-
 }
 
 
@@ -1746,8 +1744,6 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
   });
 
   });
-
-
 }
 
 
