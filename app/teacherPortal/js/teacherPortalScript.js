@@ -262,7 +262,55 @@ function getClassPageData(classCode){
     var data = doc.data();
 
     if(data){
-      var expireDateValue = data['expire date']
+      var stripeSubscription = data['stripe subscription']
+
+      var expireDateValue = ''
+
+      if(stripeSubscription){
+        var url = `https://api-v1.classvibes.net/api/`
+    
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // Code to execute with response
+      
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+      
+            if(status == 'success'){
+              //window.location = "dashboard.html"
+   
+              var sessionID = responseText.message.id
+   
+              
+             stripe
+             .redirectToCheckout({
+               sessionId: sessionID,
+             })
+             .then(handleResult);
+   
+             var handleResult = function (result) {
+               if (result.error) {
+                 document.getElementById('feedback-error-payment').innerHTML = result.error.message
+               }
+             };
+      
+      
+            } else {
+              document.getElementById('continueButton').innerHTML = "Continue"
+              document.getElementById('feedback-error-payment').innerHTML = responseText['message']
+            }
+          }
+        }
+        xhr.open('GET', url);
+        xhr.send();
+   
+      } else {
+        expireDateValue = data['expire date']
+      }
+
 
       var today = new Date()
 
