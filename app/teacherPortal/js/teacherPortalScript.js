@@ -2920,6 +2920,8 @@ function getChartData(code) {
           //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
   
           var studentsReactionLists = [0,0,0,0];
+
+          studentsListData = [];
   
           doc.forEach(snapshot => {
             index = index + 1
