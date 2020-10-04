@@ -1108,7 +1108,7 @@ async function writeAnnouncement(code, className) {
 
   button.innerHTML = `
   <button class="btn btn-primary" type="button" disabled>
-  <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
+  <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
 </button>
   `
   var socket = io.connect('https://api-v1.classvibes.net', {transports: ['polling']});
@@ -1914,7 +1914,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
   document.getElementById('continueButton').disabled = true
 
-  document.getElementById('continueButton').innerHTML = ` <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
+  document.getElementById('continueButton').innerHTML = ` <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
 
     firebase.firestore().collection("UserData").doc(email).get().then(doc => {
 
@@ -2396,6 +2396,10 @@ function getStudentJoinRequests(code){
 
   document.getElementById('student-requests-list').innerHTML = ''
   firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).onSnapshot(snap => {
+    document.getElementById('student-requests-list').innerHTML = ''
+    
+    
+
     snap.forEach(doc => {
 
       requests = requests + 1
@@ -2439,26 +2443,30 @@ function getStudentJoinRequests(code){
 
 
     })
-  }).then(() => {
-    if(requests == 0){
-      document.getElementById('student-requests-list').innerHTML = `
-      <div class="d-flex justify-content-center">
-        <img src = '/teacher/img/undraw_Checklist__re_2w7v.svg' width = '25%' style = 'margin-top: 5%'>
-      
-        </div>
-        <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
 
-        <h1>No Pending Requests</h1>
-       
-        </div>
+      if(requests == 0){
+        document.getElementById('join-request-tab-text').innerHTML = `Requests`
+        document.getElementById('student-requests-list').innerHTML = `
         <div class="d-flex justify-content-center">
+          <img src = '/teacher/img/undraw_Checklist__re_2w7v.svg' width = '25%' style = 'margin-top: 5%'>
+        
+          </div>
+          <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+  
+          <h1>No Pending Requests</h1>
+         
+          </div>
+          <div class="d-flex justify-content-center">
+  
+          <p>Any pending student join requests will show up here</p>
+          </div>
+  
+        `
+      } else {
+        document.getElementById('join-request-tab-text').innerHTML = `Requests <span class = 'badge badge-primary'>New</span>`
+      }
+  })
 
-        <p>Any pending student join requests will show up here</p>
-        </div>
-
-      `
-    }
-})
 }
 
 function declineStudentRequest(code, email){
@@ -2514,7 +2522,7 @@ async function removeStudent(email, code, teacherEmail){
 
   document.getElementById(`removeStudentButton${code}`).innerHTML = `
 
-    <img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
+    <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
   `
 
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
@@ -2828,7 +2836,7 @@ function deleteClass(code){
 
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
 
-        document.getElementById('deleteClassButton').innerHTML = `<img src = '/teacher/img/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
+        document.getElementById('deleteClassButton').innerHTML = `<img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
         
         var url = `https://api-v1.classvibes.net/api/deleteClass?code=${code}&teacher=${email}&authToken=${idToken}`
         
