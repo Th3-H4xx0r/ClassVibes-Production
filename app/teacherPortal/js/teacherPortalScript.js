@@ -2395,7 +2395,7 @@ function getStudentJoinRequests(code){
   var requests = 0
 
   document.getElementById('student-requests-list').innerHTML = ''
-  firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).get().then(snap => {
+  firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).onSnapshot(snap => {
     snap.forEach(doc => {
 
       requests = requests + 1
