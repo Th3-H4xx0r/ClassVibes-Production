@@ -255,6 +255,47 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
   });
 }
 
+function createClassPopup(){
+  var modalHTML = `
+  <div class="modal fade" id="createClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Class</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+          <input type="text" class="form-control" placeholder="Class Name" aria-label="Username"
+          aria-describedby="basic-addon1" id="className" maxlength = '25'>
+          </div>
+
+        
+
+        </form>
+
+        <p>* You will be charged $1.99/year for the creation of this class</p>
+
+        <p>By creating a class, you agree with our <a href="/privacy">Privacy Policy</a> and our <a href="/legal">Terms & Condtions</a></p>
+
+        <p style="color: red; font-weight: 700;" id = "feedbackError"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick = 'createClass()'>Create Class</button>
+      </div>
+    </div>
+  </div>
+</div>
+  `
+
+  $(modalHTML).appendTo('#main-body-page-teacher');
+
+  $('#createClassModal').modal('toggle')
+}
 
 function getClassPageData(classCode){
 
@@ -1864,46 +1905,8 @@ function createClass() {
 
       var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
       var className = document.getElementById("className").value;
-      var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
-      var maxInactiveDays = Number(maxInactiveDaysInput)
 
-      if(maxInactiveDays <= 14){
-        var paymentPopupHTML = `
-          <div class="modal fade" tabindex="-1" role="dialog" id = 'paymentModal'>
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id = 'payment-modal-header'>Payment Confirmation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id = 'payment-modal-text'>
-   
-        <p>Your default payment method will be charged with $1.99 for the creation of this class. Continue?</p>
-        <p style = 'color: red;' id = 'feedback-error-payment'></p>
-   
-
-      
-
-      </div>
-      <div class="modal-footer" id = 'payment-modal-options'>
-        <button type="button" class="btn btn-primary" onclick = "chargeCardForClassCreation('${email}', '${code}', '${className}', ${maxInactiveDays})" id = 'continueButton'>Checkout</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-          `
-
-          $(paymentPopupHTML).appendTo('#page-top')
-
-          $('#paymentModal').modal('toggle')
-     
- 
-      } else {
-        document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
-      }
+      chargeCardForClassCreation('${email}', '${code}', '${className}', 1)
 
 }
 })
