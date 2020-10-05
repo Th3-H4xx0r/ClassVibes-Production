@@ -285,7 +285,7 @@ function createClassPopup(){
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick = 'createClass()'>Create Class</button>
+        <button type="button" class="btn btn-primary" onclick = 'createClass()' id = 'continueButton'>Create Class</button>
       </div>
     </div>
   </div>
@@ -1906,7 +1906,7 @@ function createClass() {
       var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
       var className = document.getElementById("className").value;
 
-      chargeCardForClassCreation('${email}', '${code}', '${className}', 1)
+      chargeCardForClassCreation(email, code, className, 1)
 
 }
 })
@@ -1922,6 +1922,9 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
     firebase.firestore().collection("UserData").doc(email).get().then(doc => {
 
       var data = doc.data();
+
+      console.log(data)
+      console.log(email)
 
       var customerID = data['customer stripe id']
 
