@@ -1152,7 +1152,7 @@ async function writeAnnouncement(code, className) {
   <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
 </button>
   `
-  var socket = io.connect('https://api-v1.classvibes.net', {transports: ['polling']});
+  var socket = io.connect('http://localhost:3120', {transports: ['polling']});
 
   sendRealtimeAnnouncement(code, messageTitle, messageText)
 
