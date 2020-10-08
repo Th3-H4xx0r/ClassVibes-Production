@@ -602,7 +602,7 @@ async function getStudentClasses(studentUsername, pageType) {
                 
                 <section>
                   <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
-                       <h2><span class = 'badge badge-primary'>Pending</span></h2> <a href = '#deleteClass' onclick = "removePendingRequest('${classCode}', '${studentUsername}')"><i class="fas fa-trash" style = 'font-size: 25px; margin-left: 10px; color: #e74a3b; margin-top: 7px'></i></a>
+                       <h2><span class = 'badge badge-primary'>Pending Approval</span></h2> <a href = '#deleteClass' onclick = "removePendingRequest('${classCode}', '${studentUsername}')"><i class="fas fa-trash" style = 'font-size: 25px; margin-left: 10px; color: #e74a3b; margin-top: 7px'></i></a>
   
                   </div>
                 </section>
