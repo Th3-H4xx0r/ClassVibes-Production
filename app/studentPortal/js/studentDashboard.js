@@ -277,6 +277,27 @@ function updateAnnouncementReaction(announcementID, classCode, reaction, email){
 }
 
 function getClassDataClassesPage(code){
+
+  
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
+
+      firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).get().then(snap => {
+        var data = snap.data();
+
+        if(data){
+
+        } else {
+
+        }
+      })
+
+    }
+  });
+
+
+
   firebase.firestore().collection("Classes").doc(code).get().then(snap => {
     var data = snap.data();
 
