@@ -278,6 +278,8 @@ function updateAnnouncementReaction(announcementID, classCode, reaction, email){
 
 function getClassDataClassesPage(code){
 
+  document.getElementById('main-body-page-classpage').style.display = 'none'
+
   
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -289,6 +291,12 @@ function getClassDataClassesPage(code){
         if(data){
 
           firebase.firestore().collection("Classes").doc(code).get().then(snap => {
+
+            document.getElementById('loader-icon').style.display = 'none'
+  
+            document.getElementById('main-body-page-classpage').style.display = 'initial'
+
+
             var data = snap.data();
         
             var className = data['class name']
@@ -362,8 +370,23 @@ function getClassDataClassesPage(code){
 
         } else {
 
+          document.getElementById('loader-icon').style.display = 'none'
+  
+          document.getElementById('main-body-page-classpage').style.display = 'initial'
+
           var permissionDeniedHTML = `
-            <img src = 'student/img/undraw_access_denied_6w73.svg'/>
+
+          <div class="d-flex justify-content-center">
+            <img src = '/student/img/undraw_access_denied_6w73.svg' width = '16%' style = 'margin-top: 9%'/>
+          </div>
+
+          <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+            <h1>Permission Denied</h1>
+          </div>
+
+          <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+            <p>You are not enrolled in this class. So you <br> do not have permission to view this content.</p>
+          </div>
           `
 
           document.getElementById('main-body-page-classpage').innerHTML = permissionDeniedHTML

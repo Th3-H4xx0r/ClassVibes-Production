@@ -3,110 +3,113 @@
 
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <script src="https://cstatic.classvibes.net/init.js"></script>
-    <link rel="icon" href="/img/classvibelogo.png">
-    <title>Chat</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <script src="https://cstatic.classvibes.net/init.js"></script>
+  <link rel="icon" href="/img/classvibelogo.png">
+  <title>Chat</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
 
-    <script src="/socket.io/socket.io.js"></script>
-
-
-    <script src="https://cstatic.classvibes.net/applicationManagement.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
 
 
-    <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../js/studentDashboard.js"></script>
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+  <script src="https://cstatic.classvibes.net/applicationManagement.js"></script>
 
-    <!-- Custom styles for this template -->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this page -->
-    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Custom styles for this template-->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="../js/studentDashboard.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
 
-    <script src="/app/app_config.js"></script>
-    <script src="https://use.fontawesome.com/f42b47bc2c.js"></script>
+  <!-- Custom styles for this template -->
+  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 
-    <script src="/Js/realtimeUpdates.js"></script>
+  <!-- Custom styles for this page -->
+  <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script src="/app/app_config.js"></script>
+  <script src="https://use.fontawesome.com/f42b47bc2c.js"></script>
+
+  <script src="/Js/realtimeUpdates.js"></script>
+
+  <link rel="stylesheet" href="css/loader.css">
+
 
 </head>
 
 <body id="page-top">
-    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js"></script>
 
-    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-analytics.js"></script>
 
-    <!-- Add Firebase products that you want to use -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.6/firebase-firestore.js"></script>
 
 
- <script>
+  <script>
 
-   var username = 'PLACEHOLDER'
-   var email = "TEST EMAIL"
-   var classCode = '<%= code %>'
+    var username = 'PLACEHOLDER'
+    var email = "TEST EMAIL"
+    var classCode = '<%= code %>'
 
-   console.log("Getting")
+    console.log("Getting")
 
     $(document).ready(function () {
       initializeFirebase();
       getProfileInfo();
       setVersionFooter();
       getLiveSeverAlerts();
-       getServerStatus();
-       checkUserAuthStatus('student');
+      getServerStatus();
+      checkUserAuthStatus('student');
       firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      var email = user.email;
+        if (user) {
+          var email = user.email;
 
-      email = user.email
+          email = user.email
 
-      username = user.displayName
+          username = user.displayName
 
-      updateAddClasesDropdown(email, "class-page")
+          updateAddClasesDropdown(email, "class-page")
 
-      getAnnouncements_ForClass(classCode, email);
+          getAnnouncements_ForClass(classCode, email);
 
-      getMeetings(email, 'class-page')
+          getMeetings(email, 'class-page')
 
-      getClassDataClassesPage("<%= code %>")
+          getClassDataClassesPage("<%= code %>")
 
-      getMessagesForChat_Classes_page("<%= code %>", email)
+          getMessagesForChat_Classes_page("<%= code %>", email)
 
-    } else {
-      console.log("user Signed out");
-      
-    }
-  })
-});
+        } else {
+          console.log("user Signed out");
+
+        }
+      })
+    });
   </script>
 
 
-<section id="toast-show-container" style="position: absolute; top: 2rem; right: 1rem; z-index: 99999999;">
+  <section id="toast-show-container" style="position: absolute; top: 2rem; right: 1rem; z-index: 99999999;">
 
-</section>
+  </section>
 
-<!--
+  <!--
 <script>
         
   var socket = io.connect('https://api-chat.classvibes.net/');
@@ -239,89 +242,89 @@
 
 
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
 
     <!-- Sidebar -->
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../../">
-          <div class="sidebar-brand-icon">
-            <img src="/img/classvibelogo.png" alt="" style="width: 50px;">
-          </div>
-          <div class="sidebar-brand-text mx-3">ClassVibes</div>
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../../">
+        <div class="sidebar-brand-icon">
+          <img src="/img/classvibelogo.png" alt="" style="width: 50px;">
+        </div>
+        <div class="sidebar-brand-text mx-3">ClassVibes</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="/student/dashboard">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Quick Access
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item active">
+        <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+          aria-controls="collapseTwo">
+          <i class="fas fa-fw fas fa-stream"></i>
+          <span>Classes</span>
         </a>
-  
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-  
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-          <a class="nav-link" href="/student/dashboard">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-        </li>
-  
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Quick Access
-        </div>
-  
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item active">
-          <a class="nav-link collapsed" href="" data-toggle="collapse"
-            data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fas fa-stream"></i>
-            <span>Classes</span>
-          </a>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded" id="classesListSideBar">
-              <h6 class="collapse-header">MY CLASSES</h6>
-            </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded" id="classesListSideBar">
+            <h6 class="collapse-header">MY CLASSES</h6>
           </div>
-        </li>
-  
-        <!-- Nav Item - Add Class -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="/student/add">
-            <i class="fas fa-fw fas fa-plus-square"></i>
-            <span>Join Class</span>
-          </a>
-        </li>
-  
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="/student/announcements">
-            <i class="fas fa-fw fas fa-bullhorn"></i>
-            <span>Announcements</span>
-          </a>
-        </li>
-        
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-  
-        <!-- Heading -->
-        <div class="sidebar-heading">
-          Information
         </div>
-  
-        <!-- Nav Item - Mettings -->
-        <li class="nav-item">
-          <a class="nav-link" href="/student/meetings">
-            <i class="fas fa-fw fas fa-phone-square-alt"></i>
-            <span>Meetings</span>
-          </a>
-        </li>
+      </li>
+
+      <!-- Nav Item - Add Class -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/student/add">
+          <i class="fas fa-fw fas fa-plus-square"></i>
+          <span>Join Class</span>
+        </a>
+      </li>
+
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="/student/announcements">
+          <i class="fas fa-fw fas fa-bullhorn"></i>
+          <span>Announcements</span>
+        </a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Information
+      </div>
+
+      <!-- Nav Item - Mettings -->
+      <li class="nav-item">
+        <a class="nav-link" href="/student/meetings">
+          <i class="fas fa-fw fas fa-phone-square-alt"></i>
+          <span>Meetings</span>
+        </a>
+      </li>
 
 
-  
-        <!-- Nav Item - Chat -->
 
-        <!--
+      <!-- Nav Item - Chat -->
+
+      <!--
         <li class="nav-item">
           <a class="nav-link" href="/student/chat">
             <i class="fas fa-fw far far fa-comments"></i>
@@ -329,113 +332,124 @@
         </li>
         -->
 
-  
-  
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
-  
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-          <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-  
-      </ul>
-      <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
 
 
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
 
+    </ul>
+    <!-- End of Sidebar -->
 
-                            <div class="topbar-divider d-none d-sm-block"></div>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
 
-                            <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                                    id="displayName">Loading...</span>
-                                <div id="profilePic"></div>
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
+      <!-- Main Content -->
+      <div id="content">
 
-                    </ul>
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid" id="main-body-page-classpage">
-                    
-
-                    <!-- Page Heading -->
-                    <div id="className"></div>
-                    <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('<%= code %>')" style="float: right; margin-top: -30px">Leave Class</button>
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
 
 
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
 
-                      <!--
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+
+
+              <div class="topbar-divider d-none d-sm-block"></div>
+
+              <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="displayName">Loading...</span>
+                <div id="profilePic"></div>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Settings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+
+        <!--LOADING PAGE-->
+        <section id='loader-icon'>
+          <center style="margin-top: 25%;">
+            <div class="loader">
+          </center>
+        </section>
+
+
+        <div class="container-fluid" id="main-body-page-classpage" style="display: none;">
+
+
+          <!-- Page Heading -->
+          <div id="className"></div>
+          <button type="button" class="btn btn-outline-danger" onclick="toggleLeaveClassPopup('<%= code %>')"
+            style="float: right; margin-top: -30px">Leave Class</button>
+
+
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+            <!--
 
                         <li class="nav-item">
                             <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Course Info</a>
                         </li>
                       -->
 
-                      <li class="nav-item">
-                        <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" id = "chatTab" onclick='getMessagesForChat_Classes_page("<%= code %>")'>Chat</a>
-                      </li>
+            <li class="nav-item">
+              <a class="nav-link active" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat"
+                aria-selected="false" id="chatTab" onclick='getMessagesForChat_Classes_page("<%= code %>")'>Chat</a>
+            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="meetings-tab" data-toggle="tab" href="#meetings" role="tab" aria-controls="meetings" aria-selected="false">Meetings</a>
-                        </li>
+            <li class="nav-item">
+              <a class="nav-link" id="meetings-tab" data-toggle="tab" href="#meetings" role="tab"
+                aria-controls="meetings" aria-selected="false">Meetings</a>
+            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" id="announcements-tab" data-toggle="tab" href="#announcements" role="tab" aria-controls="announcements" aria-selected="false">Announcements</a>
-                        </li>
+            <li class="nav-item">
+              <a class="nav-link" id="announcements-tab" data-toggle="tab" href="#announcements" role="tab"
+                aria-controls="announcements" aria-selected="false">Announcements</a>
+            </li>
 
-                    
-                       
-                      </ul>
 
-                      <div class="tab-content" id="myTabContent">
 
-                        <!-- COURSE INFO TAB -->
-                        <!--
+          </ul>
+
+          <div class="tab-content" id="myTabContent">
+
+            <!-- COURSE INFO TAB -->
+            <!--
 
                         <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="profile-tab">
                           <div id="info-pannel" style="margin-top: 20px;">
@@ -444,172 +458,174 @@
                         -->
 
 
-                        <!-- CHAT TAB -->
-                        <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                          <div class="message-components" id = 'message-components'>
-                            
-                            
-                          </div>
-
-            
-                          
-                          <div class="input-group mb-3" >
-                            <form  onsubmit="event.preventDefault(); sendMessage_Classes_page('<%= code %>')" style="width: 95%; margin-left: 1%;">
-                              <input class="form-control" role="textbox"  placeholder="Message ..." aria-label="Message ..." aria-describedby="basic-addon2" id = "message-input"  contenteditable></input>
-                            </form>
-
-                            <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true" onclick = 'sendMessage_Classes_page("<%= code %>")' id = "sendMessagebutton"></i>
-                          
-                              </span>
-                            </div>
-                            
-                          </div>
-                        </div>
-
-                        <style>
-
-                          /* CHROMEBOOKS */
-                          @media only screen and (min-height: 600px) {
-                            
-                            #message-components{
-                              overflow-x: hidden; 
-                              overflow-y: scroll;
-                              padding-left: 15px;
-                              height: 28rem;
-                            }
-                          
-                            .sticky-footer{
-                              display: none;
-                            }
-
-                            #classAnnouncement{
-                              overflow-x: hidden; 
-                              overflow-y: scroll;
-                              height: 33rem;
-                            }
-
-                            #meetingsList{
-                              overflow-x: hidden; 
-                              overflow-y: scroll;
-                              height: 33rem;
-                            }
-                          }
-                          
-                          /* REGULAR LAPTOPS */
-                          @media only screen and (min-width: 1600px) {
-                            .sticky-footer{
-                              display: initial;
-                            }
-                          
-                            #message-components{
-                              overflow-x: hidden; 
-                              overflow-y: scroll;
-                              height: 36rem;
-                            }
-
-                            #meetingsList{
-                              overflow-x: hidden; 
-                              overflow-y: scroll;
-                              height: 37rem;
-                            }
-                          
-
-                            #classAnnouncement{
-                              overflow-x: hidden; 
-                              overflow-y: scroll;
-                              padding-left: 15px;
-                              height: 37rem;
-                            }
-                          }
-                                    </style>
+            <!-- CHAT TAB -->
+            <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+              <div class="message-components" id='message-components'>
 
 
-                        <style>
-                          .avatar {
-                              vertical-align: middle;
-                              width: 60px;
-                              height: 60px;
-                              border-radius: 60%;
-                            }
-                        </style>
+              </div>
 
-                        <!-- MEETINGS TAB -->
-                        <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
-                            <div class="row" id="meetingsList" style="margin-left: 10px; margin-top: 30px"></div>
-                        </div>
 
-                        <!-- ANNOUNCEMENTS TAB -->
-                        <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
-                            <div id="classAnnouncement" style="margin-top: 30px;"></div>
-                        </div>
-                      </div>
 
+              <div class="input-group mb-3">
+                <form onsubmit="event.preventDefault(); sendMessage_Classes_page('<%= code %>')"
+                  style="width: 95%; margin-left: 1%;">
+                  <input class="form-control" role="textbox" placeholder="Message ..." aria-label="Message ..."
+                    aria-describedby="basic-addon2" id="message-input" contenteditable></input>
+                </form>
+
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2"><i class="fa fa-paper-plane" aria-hidden="true"
+                      onclick='sendMessage_Classes_page("<%= code %>")' id="sendMessagebutton"></i>
+
+                  </span>
                 </div>
 
-                <!-- /.container-fluid -->
-
+              </div>
             </div>
 
+            <style>
+              /* CHROMEBOOKS */
+              @media only screen and (min-height: 600px) {
 
-    <!-- End of Main Content -->
+                #message-components {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  padding-left: 15px;
+                  height: 28rem;
+                }
 
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-      <div class="container my-auto">
-        <div class="copyright text-center my-auto" id = "footer-version-code">
-          <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
+                .sticky-footer {
+                  display: none;
+                }
+
+                #classAnnouncement {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  height: 33rem;
+                }
+
+                #meetingsList {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  height: 33rem;
+                }
+              }
+
+              /* REGULAR LAPTOPS */
+              @media only screen and (min-width: 1600px) {
+                .sticky-footer {
+                  display: initial;
+                }
+
+                #message-components {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  height: 36rem;
+                }
+
+                #meetingsList {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  height: 37rem;
+                }
+
+
+                #classAnnouncement {
+                  overflow-x: hidden;
+                  overflow-y: scroll;
+                  padding-left: 15px;
+                  height: 37rem;
+                }
+              }
+            </style>
+
+
+            <style>
+              .avatar {
+                vertical-align: middle;
+                width: 60px;
+                height: 60px;
+                border-radius: 60%;
+              }
+            </style>
+
+            <!-- MEETINGS TAB -->
+            <div class="tab-pane fade" id="meetings" role="tabpanel" aria-labelledby="meetings">
+              <div class="row" id="meetingsList" style="margin-left: 10px; margin-top: 30px"></div>
+            </div>
+
+            <!-- ANNOUNCEMENTS TAB -->
+            <div class="tab-pane fade" id="announcements" role="tabpanel" aria-labelledby="announcements">
+              <div id="classAnnouncement" style="margin-top: 30px;"></div>
+            </div>
+          </div>
+
         </div>
+
+        <!-- /.container-fluid -->
+
       </div>
-    </footer>
-    <!-- End of Footer -->
+
+
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto" id="footer-version-code">
+            <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-    <div class=""></div> <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="" onclick="logout()">Logout</a>
-                </div>
-            </div>
+  <div class=""></div> <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="" onclick="logout()">Logout</a>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="/vendor/jquery/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="/teacherjs/sb-admin-2.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="/teacherjs/sb-admin-2.min.js"></script>
 
-    <script src="/teacherjs/datatables-demo.js"></script>
+  <script src="/teacherjs/datatables-demo.js"></script>
 
-    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 
-    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 
 
