@@ -288,7 +288,9 @@ function getClassDataClassesPage(code){
       firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).get().then(snap => {
         var data = snap.data();
 
-        if(data){
+        var accepted = data['accepted']
+
+        if(data && accepted){
 
           firebase.firestore().collection("Classes").doc(code).get().then(snap => {
 
