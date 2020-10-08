@@ -288,6 +288,78 @@ function getClassDataClassesPage(code){
 
         if(data){
 
+          firebase.firestore().collection("Classes").doc(code).get().then(snap => {
+            var data = snap.data();
+        
+            var className = data['class name']
+            var course = data['Course']
+            var courseDescription = data["courseDescription"]
+            var teacherName = ""
+            var teacherPicture = ""
+            var teacherEmail = data['teacher email']
+            var teacherNote = data['teachersNote']
+            console.log(data['max days inactive'])
+            var grayTimelimit = data['max days inactive'] != undefined? data['max days inactive']: "Not Set"
+        
+            firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
+              var data = snap.data();
+        
+              teacherName = data['display name']
+              teacherPicture = data['Profile Picture'] != undefined ? data['Profile Picture'] : "https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg"
+            }).then(() => {
+              if(document.getElementById('className') != null){
+                document.getElementById('className').innerHTML = `<h1>${className}</h1>`
+              }
+          
+              var courseInfoHTML = `
+              <h3>Instructor</h3>
+          
+              <div style="margin-top: 20px;">
+          
+                  <div class="row" style = "margin-left: 6px">
+                      <img class="img-profile rounded-circle" style= "width: 90px; height: 90px; object-fit: cover" src="${teacherPicture}">
+                     <div class="col" style="margin-left: 20px; margin-top: 10px;">
+                      <h4>${teacherName}</h4>
+                      <p>${teacherEmail}</p>
+                     </div>
+                  </div>
+          
+              </div>
+          
+              <h3 style="margin-top: 40px;">Course Description</h3>
+          
+              <div style="margin-top: 20px; width: 95%;">
+                  
+                  <p>${courseDescription}</p>
+          
+              </div>
+          
+              <h3 style="margin-top: 40px;">Teacher's Note</h3>
+          
+              <div style="margin-top: 20px; width: 95%;">
+                  
+                  <p>${teacherNote}</p>
+          
+              </div>
+          
+              <h3 style="margin-top: 40px;">Student Inactive Time Limit</h3>
+          
+              <div style="margin-top: 20px; width: 95%;">
+                  
+                  <p>Inactive time limit: ${grayTimelimit} Days</p>
+          
+              </div>
+        
+              <h3 style="margin-top: 30px;">Leave Class</h3>
+        
+              <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${code}')">Leave Class</button>
+              `;
+          
+              //document.getElementById('info-pannel').innerHTML = courseInfoHTML;
+            })
+        
+          })
+
         } else {
 
           var permissionDeniedHTML = `
@@ -304,80 +376,7 @@ function getClassDataClassesPage(code){
 
 
 
-  firebase.firestore().collection("Classes").doc(code).get().then(snap => {
-    var data = snap.data();
 
-    var className = data['class name']
-    var course = data['Course']
-    var courseDescription = data["courseDescription"]
-    var teacherName = ""
-    var teacherPicture = ""
-    var teacherEmail = data['teacher email']
-    var teacherNote = data['teachersNote']
-    console.log(data['max days inactive'])
-    var grayTimelimit = data['max days inactive'] != undefined? data['max days inactive']: "Not Set"
-
-    firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
-      var data = snap.data();
-
-      teacherName = data['display name']
-      teacherPicture = data['Profile Picture'] != undefined ? data['Profile Picture'] : "https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg"
-    }).then(() => {
-      if(document.getElementById('className') != null){
-        document.getElementById('className').innerHTML = `<h1>${className}</h1>`
-      }
-  
-      var courseInfoHTML = `
-      <h3>Instructor</h3>
-  
-      <div style="margin-top: 20px;">
-  
-          <div class="row" style = "margin-left: 6px">
-              <img class="img-profile rounded-circle" style= "width: 90px; height: 90px; object-fit: cover" src="${teacherPicture}">
-             <div class="col" style="margin-left: 20px; margin-top: 10px;">
-              <h4>${teacherName}</h4>
-              <p>${teacherEmail}</p>
-             </div>
-          </div>
-  
-      </div>
-  
-      <h3 style="margin-top: 40px;">Course Description</h3>
-  
-      <div style="margin-top: 20px; width: 95%;">
-          
-          <p>${courseDescription}</p>
-  
-      </div>
-  
-      <h3 style="margin-top: 40px;">Teacher's Note</h3>
-  
-      <div style="margin-top: 20px; width: 95%;">
-          
-          <p>${teacherNote}</p>
-  
-      </div>
-  
-      <h3 style="margin-top: 40px;">Student Inactive Time Limit</h3>
-  
-      <div style="margin-top: 20px; width: 95%;">
-          
-          <p>Inactive time limit: ${grayTimelimit} Days</p>
-  
-      </div>
-
-      <h3 style="margin-top: 30px;">Leave Class</h3>
-
-      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${code}')">Leave Class</button>
-      `;
-  
-      //document.getElementById('info-pannel').innerHTML = courseInfoHTML;
-    })
-
-
-
-
-  })
 }
 
 function toggleLeaveClassPopup(classCode){
