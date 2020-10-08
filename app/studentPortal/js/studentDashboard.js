@@ -290,6 +290,12 @@ function getClassDataClassesPage(code){
 
         } else {
 
+          var permissionDeniedHTML = `
+            <img src = 'student/img/undraw_access_denied_6w73.svg'/>
+          `
+
+          document.getElementById('main-body-page-classpage').innerHTML = permissionDeniedHTML
+
         }
       })
 
