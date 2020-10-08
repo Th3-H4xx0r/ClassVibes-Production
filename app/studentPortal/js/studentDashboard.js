@@ -433,6 +433,7 @@ async function getStudentClasses(studentUsername, pageType) {
 
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
   let classesRefGet = await classesRef.get();
+
   for(const doc of classesRefGet.docs){
 
     var classData = doc.data();
