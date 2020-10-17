@@ -516,140 +516,148 @@ function emailSignUp(type) {
     
                 }).then(() => {
 
+                    firebase.auth().currentUser.sendEmailVerification()
+                    .then(function() {
+                        if (loginSuccess == true) {
+                            var user = firebase.auth().currentUser;
+        
+                            user.updateProfile({
+                              displayName: displayName,
+                            }).then(function() {
+                              console.log("update success")
+                            }).catch(function(error) {
+                                console.log("update Failed")
+                            });
+        
+        
+                            var signUpPage = document.getElementById('signup-page-full');
+        
+                            signUpPage.style.display = "none";
+        
+                            var successPage = document.getElementById('signup-success-form');
+        
+                            successPage.style.display = "initial";
+        
+                            //FIREBASE DATABASE UPLOAD
+        
+                            if (type == "student") {
+        
+                                firebase.firestore().collection("UserData").doc(email).set({
+                                    "display name": displayName,
+                                    "email": email,
+                                    "username": email,
+                                    "account type": "Student",
+                                    "account status": "Activated",
+                                });
+        
+                                const increment = firebase.firestore.FieldValue.increment(1);
+        
+                                firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                    "webUsers": increment,
+                                    "totalUsers": increment,
+                                });
+                            }
+        
+                            else if (type == 'teacher' || type == 'Solo Teacher') {
+                                firebase.firestore().collection("UserData").doc(email).set({
+                                    "display name": displayName,
+                                    "email": email,
+                                    "username": email,
+                                    "account type": "Teacher",
+                                    "account status": "Activated",
+                                    "billing status": "Activated",
+                                }).then(() => {
+    
+                                    
+                                var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
+    
+                                const xhr = new XMLHttpRequest();
+                                xhr.onreadystatechange = () => {
+                                    if(xhr.readyState === XMLHttpRequest.DONE){
+                                        // Code to execute with response
+    
+                                        console.log(xhr.responseText)
+    
+                                        var responseText = xhr.responseText
+                                        
+                                        var response = JSON.parse(responseText);
+    
+                                        var customerID = response.message
+    
+                                        console.log(response, customerID)
+    
+                                        firebase.firestore().collection("UserData").doc(email).update({
+                                            "customer stripe id": customerID
+                                        }).then(() => {
+                                            var url = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
+    
+                                            const xhr = new XMLHttpRequest();
+                                            xhr.onreadystatechange = () => {
+                                                if(xhr.readyState === XMLHttpRequest.DONE){
+                                                    // Code to execute with response
+                
+                                                    console.log(xhr.responseText)
+                
+                                                    var responseText = xhr.responseText
+                                                    
+                                                    var response = JSON.parse(responseText);
+    
+                                                    console.log(response)
+            
+                                            
+                                                }
+                                            }
+                                            
+                                            xhr.open('GET', url);
+                                            xhr.send();
+                                        })
+                                
+                                    }
+                                }
+                                
+                                xhr.open('GET', url);
+                                xhr.send();
+    
+                            });
+    
+        
+                                const increment = firebase.firestore.FieldValue.increment(1);
+        
+                                firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                    "webUsers": increment,
+                                    "totalUsers": increment,
+                                });
+    
+                            }
+        
+                            else if (type == 'district') {
+                                firebase.firestore().collection("UserData").doc(email).set({
+                                    "display name": displayName,
+                                    "email": email,
+                                    "username": email,
+                                    "account type": "District",
+                                    "account status": "Activated",
+                                });
+        
+                                const increment = firebase.firestore.FieldValue.increment(1);
+        
+                                firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                    "webUsers": increment,
+                                    "totalUsers": increment,
+                                    "totalDistricts": increment
+                                });
+                            }
+        
+        
+                        }
+                      })
+                      .catch(function(error) {
+                        
+                      });
+
                     console.log(loginSuccess);
     
-                    if (loginSuccess == true) {
-                        var user = firebase.auth().currentUser;
-    
-                        user.updateProfile({
-                          displayName: displayName,
-                        }).then(function() {
-                          console.log("update success")
-                        }).catch(function(error) {
-                            console.log("update Failed")
-                        });
-    
-    
-                        var signUpPage = document.getElementById('signup-page-full');
-    
-                        signUpPage.style.display = "none";
-    
-                        var successPage = document.getElementById('signup-success-form');
-    
-                        successPage.style.display = "initial";
-    
-                        //FIREBASE DATABASE UPLOAD
-    
-                        if (type == "student") {
-    
-                            firebase.firestore().collection("UserData").doc(email).set({
-                                "display name": displayName,
-                                "email": email,
-                                "username": email,
-                                "account type": "Student",
-                                "account status": "Activated",
-                            });
-    
-                            const increment = firebase.firestore.FieldValue.increment(1);
-    
-                            firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                "webUsers": increment,
-                                "totalUsers": increment,
-                            });
-                        }
-    
-                        else if (type == 'teacher' || type == 'Solo Teacher') {
-                            firebase.firestore().collection("UserData").doc(email).set({
-                                "display name": displayName,
-                                "email": email,
-                                "username": email,
-                                "account type": "Teacher",
-                                "account status": "Activated",
-                                "billing status": "Activated",
-                            }).then(() => {
 
-                                
-                            var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
-
-                            const xhr = new XMLHttpRequest();
-                            xhr.onreadystatechange = () => {
-                                if(xhr.readyState === XMLHttpRequest.DONE){
-                                    // Code to execute with response
-
-                                    console.log(xhr.responseText)
-
-                                    var responseText = xhr.responseText
-                                    
-                                    var response = JSON.parse(responseText);
-
-                                    var customerID = response.message
-
-                                    console.log(response, customerID)
-
-                                    firebase.firestore().collection("UserData").doc(email).update({
-                                        "customer stripe id": customerID
-                                    }).then(() => {
-                                        var url = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
-
-                                        const xhr = new XMLHttpRequest();
-                                        xhr.onreadystatechange = () => {
-                                            if(xhr.readyState === XMLHttpRequest.DONE){
-                                                // Code to execute with response
-            
-                                                console.log(xhr.responseText)
-            
-                                                var responseText = xhr.responseText
-                                                
-                                                var response = JSON.parse(responseText);
-
-                                                console.log(response)
-        
-                                        
-                                            }
-                                        }
-                                        
-                                        xhr.open('GET', url);
-                                        xhr.send();
-                                    })
-                            
-                                }
-                            }
-                            
-                            xhr.open('GET', url);
-                            xhr.send();
-
-                        });
-
-    
-                            const increment = firebase.firestore.FieldValue.increment(1);
-    
-                            firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                "webUsers": increment,
-                                "totalUsers": increment,
-                            });
-
-                        }
-    
-                        else if (type == 'district') {
-                            firebase.firestore().collection("UserData").doc(email).set({
-                                "display name": displayName,
-                                "email": email,
-                                "username": email,
-                                "account type": "District",
-                                "account status": "Activated",
-                            });
-    
-                            const increment = firebase.firestore.FieldValue.increment(1);
-    
-                            firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                "webUsers": increment,
-                                "totalUsers": increment,
-                                "totalDistricts": increment
-                            });
-                        }
-    
-    
-                    }
     
                 });
             }
