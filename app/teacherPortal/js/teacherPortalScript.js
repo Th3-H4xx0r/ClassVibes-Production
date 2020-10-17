@@ -348,7 +348,7 @@ function getClassPageData(classCode){
       
    
       } else {
-        expireDateValue = data['expire date']
+        expireDateValue = data['expire date'].seconds * 1000
       }
 
 
