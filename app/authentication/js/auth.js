@@ -683,9 +683,19 @@ function emailSignUp(type) {
 function sendEmailVerification(){
     firebase.auth().currentUser.sendEmailVerification()
     .then(function() {
-        return 'success';
+        var errorHTML = `<div class="alert alert-success" role="alert" 
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                <strong>Success</strong> Verification email sent 
+            </div>`;
+
+                    document.getElementById('signupError').innerHTML = errorHTML;
     }).catch(err => {
-        return err
+        errorHTML = `<div class="alert alert-danger" role="alert" 
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                <strong>Oops! </strong> Something went wrong. <a onclick = 'sendEmailVerification()' href = "#sendVerification">Resend Verification</a>
+            </div>`;
+
+                    document.getElementById('signupError').innerHTML = errorHTML;
     })
 }
 
@@ -1130,7 +1140,7 @@ function loginWithEmailTeacher() {
             } else {
                 errorHTML = `<div class="alert alert-danger" role="alert" 
                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                <strong>Oops! </strong> This account is not yet verified. Check your inbox for the verification email. <a onclick = 'sendEmailVerification()'>Resend Verification</a>
+                <strong>Oops! </strong> This account is not yet verified. Check your inbox for the verification email. <a onclick = 'sendEmailVerification()' href = "#sendVerification">Resend Verification</a>
             </div>`;
 
                     document.getElementById('signupError').innerHTML = errorHTML;
