@@ -680,6 +680,14 @@ function emailSignUp(type) {
     }, 500)
 }
 
+function sendEmailVerification(){
+    firebase.auth().currentUser.sendEmailVerification()
+    .then(function() {
+        return 'success';
+    }).catch(err => {
+        return err
+    })
+}
 
 //FIRESTORE MIGRATED
 facebookSignUp = (type) => {
@@ -1069,51 +1077,67 @@ function loginWithEmailTeacher() {
 
         if (authValid == true) {
 
-            firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
+            var currentUser = firebase.auth().currentUser
 
-                var accountType = doc.data()['account type'];
+            var emailVerified = currentUser.emailVerified
 
+            if(emailVerified == true){
+                firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
-                if (doc.exists) {
-
-
-                    if (accountType != null) {
-                        if (accountType == "Teacher" || accountType == 'Solo Teacher') {
-                            window.localStorage.setItem("clientType", '9HX4-5H7Y-4CEH-UKPT');
-
-                             window.location = "teacher/dashboard";
-
-
+                    var accountType = doc.data()['account type'];
+    
+    
+                    if (doc.exists) {
+    
+    
+                        if (accountType != null) {
+                            if (accountType == "Teacher" || accountType == 'Solo Teacher') {
+                                window.localStorage.setItem("clientType", '9HX4-5H7Y-4CEH-UKPT');
+    
+                                 window.location = "teacher/dashboard";
+    
+    
+                            } else {
+    
+                                errorHTML = `<div class="alert alert-danger" role="alert" 
+                            style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                            <strong>Oops! </strong> This account was signed up as a ${accountType} account. You do not have sufficient permissions.
+                        </div>`;
+    
+                                document.getElementById('signupError').innerHTML = errorHTML;
+    
+                            }
                         } else {
-
-                            errorHTML = `<div class="alert alert-danger" role="alert" 
+    
+                            errorHTML = `<div class="alert alert-danger" role="alert"
                         style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                        <strong>Oops! </strong> This account was signed up as a ${accountType} account. You do not have sufficient permissions.
+                        <strong>Error! </strong> An unexpected error has acurred, please contact customer support.
                     </div>`;
-
+    
                             document.getElementById('signupError').innerHTML = errorHTML;
-
                         }
                     } else {
-
-                        errorHTML = `<div class="alert alert-danger" role="alert"
-                    style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                    <strong>Error! </strong> An unexpected error has acurred, please contact customer support.
-                </div>`;
-
-                        document.getElementById('signupError').innerHTML = errorHTML;
+                        errorHTML = `<div class="alert alert-danger" role="alert" 
+                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                   <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
+                 </div>`;
+    
+                        errorMessage.innerHTML = errorHTML;
                     }
-                } else {
-                    errorHTML = `<div class="alert alert-danger" role="alert" 
-             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-               <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
-             </div>`;
+                }).catch(function (error) {
+                    console.log("Error getting document:", error);
+                });
+            } else {
+                errorHTML = `<div class="alert alert-danger" role="alert" 
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                <strong>Oops! </strong> This account is not yet verified. Check your inbox for the verification email. <a onclick = 'sendEmailVerification()'>Resend Verification</a>
+            </div>`;
 
-                    errorMessage.innerHTML = errorHTML;
-                }
-            }).catch(function (error) {
-                console.log("Error getting document:", error);
-            });
+                    document.getElementById('signupError').innerHTML = errorHTML;
+
+            }
+
+
         }
     });
 

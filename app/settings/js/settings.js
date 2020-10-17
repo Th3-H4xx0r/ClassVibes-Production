@@ -888,7 +888,7 @@ async function getBillingInformation(){
     document.getElementById('cancel-button').enabled = false
     document.getElementById('deleteButton').enabled = false
     document.getElementById('deleteButton').innerHTML = `
-    <img src = 'img/infinity.svg' width = '7%'/>`
+    <img src = '/settings/img/infinity.svg' width = '7%'/>`
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -900,7 +900,6 @@ async function getBillingInformation(){
         var url = `https://api-v1.classvibes.net/api/deleteUserAccount?email=${email}&type=Teacher&authToken=${idToken}`
           
         xhr.onreadystatechange = () => {
-          console.log("Gottem")
             if(xhr.readyState === XMLHttpRequest.DONE){
                 // Code to execute with response
                 //console.log(xhr.responseText); 
