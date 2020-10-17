@@ -518,6 +518,7 @@ function emailSignUp(type) {
 
                     firebase.auth().currentUser.sendEmailVerification()
                     .then(function() {
+                        console.log("Success send email verification")
                         if (loginSuccess == true) {
                             var user = firebase.auth().currentUser;
         
@@ -652,7 +653,7 @@ function emailSignUp(type) {
                         }
                       })
                       .catch(function(error) {
-                        
+                        console.log(error)
                       });
 
                     console.log(loginSuccess);
