@@ -1056,6 +1056,7 @@ function getClassData(emailRef) {
             storeGraphReactionsCode(classCode)
             
           }
+          /*
           output = `
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
@@ -1073,8 +1074,9 @@ function getClassData(emailRef) {
                 </div>
               </div>
             `;
+            */
 
-          output2 = `
+          sidebarElement = `
             <a class="collapse-item" href="/teacher/classes/${classCode}" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${className}</a>
             `;
 
@@ -1105,10 +1107,10 @@ function getClassData(emailRef) {
             `
 
           $(output5).appendTo("#topClassesSection");
-          $(output2).appendTo("#classesOp");
+          $(sidebarElement).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
           //$(output4).appendTo("#classesDropdownGraphWeeklyReactions");
-          $(output2).appendTo("#dropdown-sidebar");
+          $(sidebarElement).appendTo("#dropdown-sidebar");
 
           
           // Pie Chart Example
