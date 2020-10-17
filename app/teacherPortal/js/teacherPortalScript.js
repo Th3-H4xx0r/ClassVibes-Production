@@ -281,7 +281,7 @@ function createClassPopup(){
 
         <p>By creating a class, you agree with our <a href="/privacy">Privacy Policy</a> and our <a href="/legal">Terms & Condtions</a></p>
 
-        <p style="color: red; font-weight: 700;" id = "feedbackError"></p>
+        <p style="color: red; font-weight: 700;" id = "feedback-error-payment"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
