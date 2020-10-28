@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
   
   firebase.auth().onAuthStateChanged(user => {
@@ -3555,6 +3557,36 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
           "timestamp": new Date()
     
       }).then(() => {
+
+       
+        var url = `http://localhost:3120/api/sendNotificationtoGroup?group=classes-student-${classCode}&token=${'test'}&title=New message from ${name}&msg=${message}`
+    
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // Code to execute with response
+      
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+
+            console.log(responseText);
+      
+            if(status == 'success'){
+              //window.location = "dashboard.html"
+
+              console.log("Notification sent")
+      
+      
+            } else {
+              console.log("Notification FAILED")
+            }
+          }
+        }
+        xhr.open('GET', url);
+        xhr.send();
+
 
         firebase.firestore().collection('UserData').doc(studentEmail).collection('Classes').doc(classCode).update({
           "student unread": increment,

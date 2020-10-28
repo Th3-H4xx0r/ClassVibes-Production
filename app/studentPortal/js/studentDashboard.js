@@ -2243,6 +2243,34 @@ function sendMessage_Classes_page(classCode){
       }).then(() => {
         //console.log("Message sent")
 
+        var url = `http://localhost:3120/api/sendNotificationtoGroup?group=classes-teacher-${classCode}&token=${'test'}&title=New message from ${name}&msg=${message}`
+    
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // Code to execute with response
+      
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+
+            console.log(responseText);
+      
+            if(status == 'success'){
+              //window.location = "dashboard.html"
+
+              console.log("Notification sent")
+      
+      
+            } else {
+              console.log("Notification FAILED")
+            }
+          }
+        }
+        xhr.open('GET', url);
+        xhr.send();
+
         firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(email).update({
           "teacher unread": increment,
       })
