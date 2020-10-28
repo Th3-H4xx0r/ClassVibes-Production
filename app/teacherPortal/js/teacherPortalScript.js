@@ -2725,7 +2725,7 @@ function getEditData(code, expireDate) {
     var Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24)); 
 
 
-    document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
+    document.getElementById("className").innerHTML = `<h1>${className}</h1>`
 
     showSendAnnouncementModal(code, className);
 
@@ -2736,6 +2736,10 @@ function getEditData(code, expireDate) {
     maxDaysGlobal = inactiveDays
 
     output += `
+
+    <h5>Class Code</h5>
+
+    <h1><span class = 'badge badge-primary'>${code}</span></h1>
 
     <h5>Class Expire Date</h5>
 
