@@ -111,33 +111,63 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-white sidebar sidebar-light accordionSidebar toggled" style="width: 10px">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../">
         <div class="sidebar-brand-icon">
-          <img src="/img/classvibelogo.png" alt="" style="width: 50px;">
+          <img src="img/classvibeslogo.png" alt="" style="width: 50px;">
         </div>
         <div class="sidebar-brand-text mx-3">ClassVibes</div>
       </a>
 
       <!-- Divider -->
-      <hr class="sidebar-divider my-0">
+
+      <div style="height: 50px;"></div>
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="dashboard">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <img src="img/dashboardicon.png" alt="">
+        </a>
+      </li>
+      <div style="height: 15px;"></div>
+
+      <!-- Nav Item - Mettings -->
+      <li class="nav-item">
+        <a class="nav-link" href="meetings">
+          <img src="img/meetingsicon.png" alt="">
+        </a>
       </li>
 
-      <!-- Divider -->
-      <hr class="sidebar-divider">
+      <div style="height: 15px;"></div>
 
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Quick Access
-      </div>
+
+      <!-- Nav Item - Add Class -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="add">
+          <img src="img/addclassicon.png" alt="">
+        </a>
+      </li>
+
+      <div style="height: 15px;"></div>
+
+
+       <!-- Nav Item - Utilities Collapse Menu -->
+       <li class="nav-item">
+        <a class="nav-link collapsed" href="announcements">
+          <i class="fas fa-fw fas fa-bullhorn" style="font-size: 30px;"></i>
+        </a>
+      </li>
+
+      <div style="height: 15px;"></div>
+
+      
+
+       
+
+
+   
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -153,37 +183,14 @@
               </div>
           </li>
 
-      <!-- Nav Item - Add Class -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="add">
-          <i class="fas fa-fw fas fa-plus-square"></i>
-          <span>Join Class</span>
-        </a>
-      </li>
-
-      <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="announcements">
-          <i class="fas fa-fw fas fa-bullhorn"></i>
-          <span>Announcements</span>
-        </a>
-      </li>
       
-      <!-- Divider -->
-      <hr class="sidebar-divider">
 
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Information
-      </div>
+     
+  
 
-      <!-- Nav Item - Mettings -->
-      <li class="nav-item">
-        <a class="nav-link" href="meetings">
-          <i class="fas fa-fw fas fa-phone-square-alt"></i>
-          <span>Meetings</span>
-        </a>
-      </li>
+     
+
+      
 
       <!-- Nav Item - Chat -->
       <!--
@@ -196,15 +203,65 @@
 
 
 
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
+      
 
       <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
+      <!--
+        <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div>
+      -->
 
     </ul>
+    <div class="rightnav">
+      <center>
+        <div class="col">
+          <div class="pfp" style="height: 200px; width: 200px; border-radius: 360px; background-color: red;"></div>
+          <h3 class="name" style="margin-top: 20px">Kushagra Singh</h3>
+          <hr>
+          <div class="row">
+            <div class="total-classes" style="margin-left: 20px;">
+              <p>Total Classes</p>
+              <div style="height: 50px; width: 50px; border-left-color: orange; border-width: 5px;"><h3 style="text-align: left;">13</h3></div>
+            </div>
+
+            <div class="total-classes" style="margin-left: 50px;">
+              <p>Total Classes</p>
+              <div style="height: 50px; width: 50px; border-left-color: orange; border-width: 5px;"><h3 style="text-align: left;">13</h3></div>
+            </div>
+
+            <div class="total-classes" style="margin-left: 20px;">
+              <p>Total Classes</p>
+              <div style="height: 50px; width: 50px; border-left-color: orange; border-width: 5px;"><h3 style="text-align: left;">13</h3></div>
+            </div>
+
+            <div class="total-classes" style="margin-left: 50px;">
+              <p>Total Classes</p>
+              <div style="height: 50px; width: 50px; border-left-color: orange; border-width: 5px;"><h3 style="text-align: left;">13</h3></div>
+            </div>
+
+          </div>
+          <hr>
+          <h4>Messages</h4>
+          <div style=""></div>
+
+      </div>
+      </center>
+    </div>
+    <style>
+      .rightnav {
+      height: 100%; /* Full-height: remove this if you want "auto" height */
+      width: 280px; /* Set the width of the sidebar */
+      position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+      z-index: 1; /* Stay on top */
+      top: 0; /* Stay at the top */
+      right: 0;
+      background-color: rgb(255, 255, 255); /* Black */
+      overflow-x: hidden; /* Disable horizontal scroll */
+      padding-top: 20px;
+    }
+    </style>
+
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -214,12 +271,27 @@
       <div id="content">
 
         <!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top">
 
           <!-- Sidebar Toggle (Topbar) -->
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
             <i class="fa fa-bars"></i>
           </button>
+          <button class="join-class">Join Class</button>
+          <style>
+            .join-class {
+              height: 40px;
+              width: 200px;
+              background-color: #43B0FF;
+              color: white;
+              border-radius: 50px;
+              border: none;
+              margin-left: 1200px
+              
+
+            }
+          </style>
+
 
 
           <!-- Topbar Navbar -->
@@ -271,7 +343,7 @@
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
-        <div class="container-fluid" id = "main-body-content">
+        <div class="container-fluid" id = "main-body-content" style="border-radius: 200px;">
           
 
           <!-- Page Heading -->
@@ -284,7 +356,7 @@
             </center>
           </section>
 
-          <section id="dashboardSection-content" style="display: none;">
+          <section id="dashboardSection-content" style="display: none; border-radius: 50px;">
 
   
             <div class="row" id="classesRowDisplay"></div>
@@ -424,13 +496,15 @@
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      <footer class="sticky-footer bg-white">
+     <!--
+        <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto" id = "footer-version-code">
             <span>Copyright &copy; Xeon Developers. v0.9.0-beta</span>
           </div>
         </div>
       </footer>
+     -->
       <!-- End of Footer -->
 
     </div>
