@@ -82,7 +82,7 @@
 
 
 
-<div class="mobile">
+<div id="mobile">
   <center>
     <h2 style="z-index: 9999999; color:white; margin-left: 130px; text-align: center; width: 400px; margin-top: 120px">Download the mobile app or continue using classvibes.net on a desktop!</h2>
 
@@ -139,7 +139,7 @@
     </style>
 </div>
 
-  <div class="desktop">
+  <div id="desktop">
     <!-- HEADER -->
   <section id="header">
     <header style="background-color: royalblue; margin-bottom: 0px;">
@@ -296,11 +296,11 @@
 
   <style>
     @media only screen and (max-width: 600px) {
-      .desktop{
+      #desktop{
         display: none;
       }
   
-      .mobile{
+      #mobile{
         display: initial;
       }
   
@@ -309,12 +309,12 @@
       }
     }
 
-    @media only screen and (max-width: 926px) {
-      .desktop{
+    @media only screen and (min-width: 601px) {
+      #desktop{
         display: initial;
       }
   
-      .mobile{
+      #mobile{
         display: none;
       }
   
