@@ -37,6 +37,8 @@
     <!-- Custom scripts for all pages-->
     <script src="../app/app_config.js"></script>
 
+    <script src="https://js.stripe.com/v3/"></script>
+
 </head>
 
 <body id="page-top">
@@ -140,6 +142,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link" href="/settings" data-target="#collapseUtilities" aria-expanded="true"
+          aria-controls="collapseUtilities">
+          <i class="fa fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -180,17 +190,9 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
-                </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="/settings">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -219,15 +221,9 @@
             <div class="input-group-prepend">
             </div>
             <input type="text" class="form-control" placeholder="Class Name" aria-label="Username"
-              aria-describedby="basic-addon1" id="className">
+              aria-describedby="basic-addon1" id="className" maxlength = '25'>
           </div>
 
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Course" aria-label="Recipient's username"
-              aria-describedby="basic-addon2" id="course">
-            <div class="input-group-append">
-            </div>
-          </div>
 
           <div class="input-group mb-3" id="hackLocation">
             <input type="number" class="form-control" placeholder="Max Inactive Days (1-14)" aria-label="Recipient's username"
@@ -236,19 +232,16 @@
             </div>
           </div>
 
+          <p>By creating a class, you agree with our <a href="/privacy">Privacy Policy</a> and our <a href="/legal">Terms & Condtions</a></p>
+
+          <p>* The creation of a class costs $1.99 per year</a></p>
+
           <div>
 
-          </div>
-          <div style="height: 40px;">
+     
 
           </div>
-          <h4>Course Description</h4>
-
-
-          <div class="form-group">
-            <textarea class="form-control" id="courseDescription" rows="3"></textarea>
-          </div>
-
+        
           <p style="color: red; font-weight: 700;" id = "feedbackError"></p>
 
           <button class="btn btn-primary" onclick="createClass()">Create Class</button>

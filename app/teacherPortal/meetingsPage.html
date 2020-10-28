@@ -31,7 +31,7 @@
 
     <script src="../app/app_config.js"></script>
 
-
+    <script src="https://js.stripe.com/v3/"></script>
 
 </head>
 
@@ -116,7 +116,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="create-class" data-target="#collapseUtilities" aria-expanded="true"
+                <a class="nav-link" onclick="createClassPopup()" data-target="#collapseUtilities" aria-expanded="true"
                   aria-controls="collapseUtilities">
                   <i class="fas fa-plus-square"></i>
                   <span>Create Class</span>
@@ -136,6 +136,14 @@
                   aria-controls="collapseUtilities">
                   <i class="fa fa-bullhorn"></i>
                   <span>Annoucements</span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="/settings" data-target="#collapseUtilities" aria-expanded="true"
+                  aria-controls="collapseUtilities">
+                  <i class="fa fa-cog"></i>
+                  <span>Settings</span>
                 </a>
               </li>
         
@@ -183,17 +191,9 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/settings">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

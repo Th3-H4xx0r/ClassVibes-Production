@@ -277,80 +277,131 @@ function updateAnnouncementReaction(announcementID, classCode, reaction, email){
 }
 
 function getClassDataClassesPage(code){
-  firebase.firestore().collection("Classes").doc(code).get().then(snap => {
-    var data = snap.data();
 
-    var className = data['class name']
-    var course = data['Course']
-    var courseDescription = data["courseDescription"]
-    var teacherName = ""
-    var teacherPicture = ""
-    var teacherEmail = data['teacher email']
-    var teacherNote = data['teachersNote']
-    console.log(data['max days inactive'])
-    var grayTimelimit = data['max days inactive'] != undefined? data['max days inactive']: "Not Set"
+  document.getElementById('main-body-page-classpage').style.display = 'none'
 
-    firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
-      var data = snap.data();
+  
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
 
-      teacherName = data['display name']
-      teacherPicture = data['Profile Picture'] != undefined ? data['Profile Picture'] : "https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg"
-    }).then(() => {
-      if(document.getElementById('className') != null){
-        document.getElementById('className').innerHTML = `<h1>${className}</h1>`
-      }
+      firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).get().then(snap => {
+        var data = snap.data();
+
+        var accepted = data['accepted']
+
+        if(data && accepted){
+
+          firebase.firestore().collection("Classes").doc(code).get().then(snap => {
+
+            document.getElementById('loader-icon').style.display = 'none'
   
-      var courseInfoHTML = `
-      <h3>Instructor</h3>
+            document.getElementById('main-body-page-classpage').style.display = 'initial'
+
+
+            var data = snap.data();
+        
+            var className = data['class name']
+            var course = data['Course']
+            var courseDescription = data["courseDescription"]
+            var teacherName = ""
+            var teacherPicture = ""
+            var teacherEmail = data['teacher email']
+            var teacherNote = data['teachersNote']
+            console.log(data['max days inactive'])
+            var grayTimelimit = data['max days inactive'] != undefined? data['max days inactive']: "Not Set"
+        
+            firebase.firestore().collection('UserData').doc(teacherEmail).get().then(snap => {
+              var data = snap.data();
+        
+              teacherName = data['display name']
+              teacherPicture = data['Profile Picture'] != undefined ? data['Profile Picture'] : "https://thumbs.dreamstime.com/b/creative-illustration-default-avatar-profile-placeholder-isolated-background-art-design-grey-photo-blank-template-mockup-144849704.jpg"
+            }).then(() => {
+              if(document.getElementById('className') != null){
+                document.getElementById('className').innerHTML = `<h1>${className}</h1>`
+              }
+          
+              var courseInfoHTML = `
+              <h3>Instructor</h3>
+          
+              <div style="margin-top: 20px;">
+          
+                  <div class="row" style = "margin-left: 6px">
+                      <img class="img-profile rounded-circle" style= "width: 90px; height: 90px; object-fit: cover" src="${teacherPicture}">
+                     <div class="col" style="margin-left: 20px; margin-top: 10px;">
+                      <h4>${teacherName}</h4>
+                      <p>${teacherEmail}</p>
+                     </div>
+                  </div>
+          
+              </div>
+          
+              <h3 style="margin-top: 40px;">Course Description</h3>
+          
+              <div style="margin-top: 20px; width: 95%;">
+                  
+                  <p>${courseDescription}</p>
+          
+              </div>
+          
+              <h3 style="margin-top: 40px;">Teacher's Note</h3>
+          
+              <div style="margin-top: 20px; width: 95%;">
+                  
+                  <p>${teacherNote}</p>
+          
+              </div>
+          
+              <h3 style="margin-top: 40px;">Student Inactive Time Limit</h3>
+          
+              <div style="margin-top: 20px; width: 95%;">
+                  
+                  <p>Inactive time limit: ${grayTimelimit} Days</p>
+          
+              </div>
+        
+              <h3 style="margin-top: 30px;">Leave Class</h3>
+        
+              <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${code}')">Leave Class</button>
+              `;
+          
+              //document.getElementById('info-pannel').innerHTML = courseInfoHTML;
+            })
+        
+          })
+
+        } else {
+
+          document.getElementById('loader-icon').style.display = 'none'
   
-      <div style="margin-top: 20px;">
-  
-          <div class="row" style = "margin-left: 6px">
-              <img class="img-profile rounded-circle" style= "width: 90px; height: 90px; object-fit: cover" src="${teacherPicture}">
-             <div class="col" style="margin-left: 20px; margin-top: 10px;">
-              <h4>${teacherName}</h4>
-              <p>${teacherEmail}</p>
-             </div>
+          document.getElementById('main-body-page-classpage').style.display = 'initial'
+
+          var permissionDeniedHTML = `
+
+          <div class="d-flex justify-content-center">
+            <img src = '/student/img/undraw_access_denied_6w73.svg' width = '16%' style = 'margin-top: 9%'/>
           </div>
-  
-      </div>
-  
-      <h3 style="margin-top: 40px;">Course Description</h3>
-  
-      <div style="margin-top: 20px; width: 95%;">
-          
-          <p>${courseDescription}</p>
-  
-      </div>
-  
-      <h3 style="margin-top: 40px;">Teacher's Note</h3>
-  
-      <div style="margin-top: 20px; width: 95%;">
-          
-          <p>${teacherNote}</p>
-  
-      </div>
-  
-      <h3 style="margin-top: 40px;">Student Inactive Time Limit</h3>
-  
-      <div style="margin-top: 20px; width: 95%;">
-          
-          <p>Inactive time limit: ${grayTimelimit} Days</p>
-  
-      </div>
 
-      <h3 style="margin-top: 30px;">Leave Class</h3>
+          <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+            <h1>Permission Denied</h1>
+          </div>
 
-      <button type="button" class="btn btn-outline-danger" onclick = "toggleLeaveClassPopup('${code}')">Leave Class</button>
-      `;
-  
-      //document.getElementById('info-pannel').innerHTML = courseInfoHTML;
-    })
+          <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+            <p>You are not enrolled in this class. So you <br> do not have permission to view this content.</p>
+          </div>
+          `
+
+          document.getElementById('main-body-page-classpage').innerHTML = permissionDeniedHTML
+
+        }
+      })
+
+    }
+  });
 
 
 
 
-  })
 }
 
 function toggleLeaveClassPopup(classCode){
@@ -427,44 +478,54 @@ async function getStudentClasses(studentUsername, pageType) {
 
   var unreadList = []
 
+  var acceptedList = []
+
   var index = 0;
 
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
   let classesRefGet = await classesRef.get();
+
   for(const doc of classesRefGet.docs){
 
     var classData = doc.data();
 
-    var classCode = classData["code"];
+    var accepted = classData['accepted'] != undefined ? classData['accepted'] : false
 
-    var reaction = classData["status"];
 
-    var unreadMessages = classData['student unread']
+      var classCode = classData["code"];
 
-    console.log("Unread for " + classCode + ": is " + unreadMessages)
-
-    console.log("UNDREAD: " + unreadMessages)
-
-    reactionsList[classCode] = reaction
-
-    getRealtimeAnnouncements(classCode);
-
-    var className = "loading"
-
-    console.log(classData['status'])
-
-    var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
-      var data = snap.data();
+      var reaction = classData["status"];
   
-      if(data != null && data != undefined){
-          className = data['class name'];
-      }
-    }).then(() => {
-      
-      classesList.push(className);
-      classCodes[className] = classCode;
-      unreadList.push(unreadMessages)
-    })
+      var unreadMessages = classData['student unread']
+  
+  
+      console.log("Unread for " + classCode + ": is " + unreadMessages)
+  
+      console.log("UNDREAD: " + unreadMessages)
+  
+      reactionsList[classCode] = reaction
+  
+      getRealtimeAnnouncements(classCode);
+  
+      var className = "loading"
+  
+      console.log(classData['status'])
+  
+      var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
+        var data = snap.data();
+    
+        if(data != null && data != undefined){
+            className = data['class name'];
+        }
+      }).then(() => {
+        
+        classesList.push(className);
+        classCodes[className] = classCode;
+        unreadList.push(unreadMessages)
+        acceptedList[className] = accepted
+      })
+   
+
   }
 
     if (classesList.length != 0) {
@@ -480,10 +541,14 @@ async function getStudentClasses(studentUsername, pageType) {
 
       $(inital).appendTo("#selectedClassForDropdown");
 
+      console.log(classCodes)
+
 
       classesList.forEach(async function (item, index) {
 
         var classCode = classCodes[item]
+
+        console.log(classCodes[item] + " : " + acceptedList[index])
 
         await getGrayStudentStatus(studentUsername, classCode)
 
@@ -550,31 +615,60 @@ async function getStudentClasses(studentUsername, pageType) {
           `
         }
 
-        output = `
-        <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
-        <div class="card bg-white text-black shadow">
-          <div class="card-body">
+        console.log(acceptedList)
 
-          ${unreadMessagesHTML}
-
-            <div style="display: inline;">
-              <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
+        if(acceptedList[item] == true){
+          console.log(acceptedList[index] + classCode)
+          output = `
+          <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
+          <div class="card bg-white text-black shadow">
+            <div class="card-body">
+  
+            ${unreadMessagesHTML}
+  
+              <div style="display: inline;">
+                <a href = "classes/${classCode}" style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
+                
+                <section>
+                  <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;" id = 'reactionsSection${classCode}'>
+                       ${buttonsGrid}
+  
+                  </div>
+                </section>
+  
+               
+              </div>
               
-              <section>
-                <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;" id = 'reactionsSection${classCode}'>
-                     ${buttonsGrid}
-
-                </div>
-              </section>
-
-             
             </div>
-            
           </div>
-        </div>
-    </div>
-            `;
+      </div>
+              `;
+        } else {
+          output = `
+          <div class="col-lg-6 mb-6" style="margin-bottom: 20px;">
+          <div class="card bg-white text-black shadow">
+            <div class="card-body">
+  
+              <div style="display: inline;">
+                <a style = "text-decoration:none; color: gray;"><h4 style="margin-left:20px; padding-top: 2%;">${item}</h4></a>
+                
+                <section>
+                  <div class="row" style=" margin-top: 2%; float: right; margin-top: -40px; margin-right: 10px;">
+                       <h2><span class = 'badge badge-primary'>Pending Approval</span></h2> <a href = '#deleteClass' onclick = "removePendingRequest('${classCode}', '${studentUsername}')"><i class="fas fa-trash" style = 'font-size: 25px; margin-left: 10px; color: #e74a3b; margin-top: 7px'></i></a>
+  
+                  </div>
+                </section>
+  
+               
+              </div>
+              
+            </div>
+          </div>
+      </div>
+              `;
+        }
 
+     
 
             if(pageType == 'class-page'){
               output2 = `
@@ -593,7 +687,11 @@ async function getStudentClasses(studentUsername, pageType) {
 
         $(output3).appendTo("#dropDownMoodPicker");
 
-        $(output2).appendTo("#classesListSideBar");
+
+          if(acceptedList[item] == true){
+            $(output2).appendTo("#classesListSideBar");
+
+          }
 
         $(output).appendTo("#classesRowDisplay");
 
@@ -639,11 +737,20 @@ async function getStudentClasses(studentUsername, pageType) {
 
         document.getElementById('noClassesSection').style.display = "initial";
 
+        document.getElementById("classesListSideBar").innerHTML = `<h6 class="collapse-header">No Classes</h6>`;
+
       }
     }   
 
 }
 
+function removePendingRequest(classCode, student){
+  firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(student).delete().then(() => {
+    firebase.firestore().collection('UserData').doc(student).collection('Classes').doc(classCode).delete().then(() => {
+      window.location.reload()
+    })
+  })
+}
 
 // FIRESTORE MIGRATED FULLY
 function updateReaction(reaction, classSelected, studentUsername, pageType) {
@@ -659,7 +766,52 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
       var studentEmail = user.email;
       //var classSelected = localStorage.getItem("selectedClassDropdown");
 
-      updateClassReaction(classSelected, studentEmail, pageType, reaction)
+      var buttonsGrid = ''
+
+      if(reaction == 'doing great'){
+        buttonsGrid = `
+          <a onclick = "updateReaction('doing great', '${classSelected}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classSelected}'></i></a>
+
+          <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+          `
+
+      } else if(reaction == 'need help'){
+       buttonsGrid = `
+          
+          <a onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+
+          <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+
+          `
+      } else if(reaction == 'frustrated'){
+        buttonsGrid = `
+          
+        <a onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+
+        <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+
+        <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
+
+        `
+      } else {
+        buttonsGrid = `
+          
+          <a onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+
+          <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+          <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+
+
+          `
+      }
+
+      document.getElementById(`reactionsSection${classSelected}`).innerHTML = buttonsGrid
+
 
       firebase.firestore().collection("UserData").doc(studentEmail).collection("Classes").doc(classSelected).update({
         "Last Status Update": currentDate.toString(),
@@ -689,53 +841,7 @@ function updateClassReaction(classCode, studentEmail, pageType, currentReaction)
 
   console.log('updating')
 
-  var buttonsGrid = ''
-
-      var reaction = currentReaction
-
-      if(reaction == 'doing great'){
-        buttonsGrid = `
-          <a onclick = "updateReaction('doing great', '${classCode}', '${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classCode}'></i></a>
-
-          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
-
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
-          `
-
-      } else if(reaction == 'need help'){
-       buttonsGrid = `
-          
-          <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
-
-          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
-
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
-
-          `
-      } else if(reaction == 'frustrated'){
-        buttonsGrid = `
-          
-        <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
-
-        <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
-
-        <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
-
-        `
-      } else {
-        buttonsGrid = `
-          
-          <a onclick = "updateReaction('doing great', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
-
-          <a onclick = "updateReaction('need help', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
-
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentEmail}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
-
-
-          `
-      }
-
-      document.getElementById(`reactionsSection${classCode}`).innerHTML = buttonsGrid
+ 
 
 
 }
@@ -756,39 +862,7 @@ function setMainClassForMood(index) {
 
 }
 
-function checkIfAlreadyinClass(addType) {
-  var enrolledClasses = []
-  var inputCode = document.getElementById('inputClassCode').value;
-  var error = document.getElementById("errorMessage");
 
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      var email = user.email
-      firebase.firestore().collection('UserData').doc(email).collection('Classes').get().then(function (doc) {
-        doc.forEach(snapshot => {
-          var classesData = snapshot.data();
-          var classCode = classesData['code'];
-          enrolledClasses.push(classCode)
-        })
-      }).then(() => {
-
-        console.log("list:" + enrolledClasses)
-        if(enrolledClasses.includes(inputCode)) {
-          error.innerHTML = `
-            <div class="alert alert-danger" role="alert" style="width: 310px;">
-            You are already enrolled in this class
-           </div> `
-        } else {
-          checkIfClassCodeExists(addType)
-        }
-
-      })
-    } else {
-      // No user is signed in.
-    }
-  });
-
-}
 //Firestore migrated fully
 function checkIfClassCodeExists(addType) {
 
@@ -798,72 +872,62 @@ function checkIfClassCodeExists(addType) {
 
     var error = document.getElementById("errorMessage-noClasses");
 
-
-    var exists = false;
-
-    var allowJoin = false
-
-    // var _ref = firebase.database().ref().child("Classes").child(code).child("Code");
-
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
-      var classCode = doc.data();
+      var data = doc.data();
+
+      console.log('working')
 
       try {
 
-        if(classCode != undefined){
-          exists = true
+        if(data){
 
-          var allowJoin = classCode['allow join']
+          var allowJoin = data['allow join']
 
-                  
-        if(allowJoin != undefined){
-          allowJoin = classCode['allow join']
+          var enrolledInClass = false
+
+          firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              var email = user.email
+
+              firebase.firestore().collection('UserData').doc(email).collection('Classes').where('code', '==', code).get().then(function (doc) {
+                doc.forEach(snapshot => {
+                  enrolledInClass = true
+                })
+              }).then(() => {
+
+                if(enrolledInClass) {
+                  error.innerHTML = `
+                    <div class="alert alert-danger" role="alert" style="width: 310px;">
+                    You are already enrolled in this class
+                  </div> `
+                } else {
+
+                  if(allowJoin != undefined && allowJoin == true){
+                    addClassToStudentData(code);
+                  } else {
+                    error.innerHTML = `
+                      <div class="alert alert-danger" role="alert" style="width: 310px;">
+                      This class isn't currently accepting students
+                     </div>
+                     `;
+                  }
+
+                }
+
+              })
+            } 
+          });
+
+
+
         } else {
-          allowJoin = true
+          error.innerHTML = `
+          <div class="alert alert-danger" role="alert" style="width: 310px;">
+          Class code doesn't exist
+         </div>
+         `;
         }
 
-        } else {
-          exists = false
-        }
-
-
-          if(allowJoin == true){
-            exists = true;
-          } else {
-            error.innerHTML = `
-            <div class="alert alert-danger" role="alert" style="width: 310px;">
-            This class isn't currently accepting students
-           </div>
-           `;
-          }
-          
-  
-        if (exists == false) {
-          error.innerHTML = `
-        <div class="alert alert-danger" role="alert" style="width: 310px;">
-        Class code doesn't exist
-       </div>
-       `;
-        }
-  
-        if (exists == "enrolledInClass") {
-          error.innerHTML = `
-       <div class="alert alert-danger" role="alert" style="width: 310px;">
-       You are already enrolled in this class
-      </div>
-      `;
-        }
-  
-        if (exists == true) {
-          error.innerHTML = `
-        <div class="alert alert-success" role="alert" style="width: 310px;">
-        You have joined this class
-       </div>
-       `;
-  
-          addClassToStudentData(code);
-  
-        }
       } catch(e){
         console.log(e)
         error.innerHTML = `
@@ -883,49 +947,72 @@ function checkIfClassCodeExists(addType) {
 
     var error = document.getElementById("errorMessage");
 
-
-    //var exists = false;
-
-    // var _ref = firebase.database().ref().child("Classes").child(code).child("Code");
-
     firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
-      var classCode = doc.data();
+      var data = doc.data();
 
-      var exist = false;
+      try {
 
-      if (classCode != null) {
-        exists = true;
-      } else {
-        exists = false;
-      }
-      
+        if(data){
 
-      if (exists == false) {
+          var allowJoin = data['allow join']
+
+          var enrolledInClass = false
+
+          firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              var email = user.email
+
+              firebase.firestore().collection('UserData').doc(email).collection('Classes').where('code', '==', code).get().then(function (doc) {
+                doc.forEach(snapshot => {
+                  enrolledInClass = true
+                })
+              }).then(() => {
+
+                if(enrolledInClass) {
+                  error.innerHTML = `
+                    <div class="alert alert-danger" role="alert" style="width: 310px;">
+                    You are already enrolled in this class
+                  </div> `
+                } else {
+
+                  if(allowJoin != undefined && allowJoin == true){
+                    addClassToStudentData(code);
+                  } else {
+                    error.innerHTML = `
+                      <div class="alert alert-danger" role="alert" style="width: 310px;">
+                      This class isn't currently accepting students
+                     </div>
+                     `;
+                  }
+                }
+
+              })
+            } 
+          });
+
+
+
+        } else {
+          error.innerHTML = `
+          <div class="alert alert-danger" role="alert" style="width: 310px;">
+          Class code doesn't exist
+         </div>
+         `;
+        }
+
+      } catch(e){
+        console.log(e)
         error.innerHTML = `
-      <div class="alert alert-danger" role="alert" style="width: 310px;">
-      Class code doesn't exist
-     </div>
-     `;
+        <div class="alert alert-danger" role="alert" style="width: 310px;">
+        Failed to join class. Internal error
+       </div>`
       }
 
-      if (exists == "enrolledInClass") {
-        error.innerHTML = `
-      <div class="alert alert-danger" role="alert" style="width: 310px;">
-      You are already enrolled in this class
-     </div>
-     `;
-      }
 
-      if (exists == true) {
-        error.innerHTML = `
-      <div class="alert alert-success" role="alert" style="width: 310px;">
-      You have joined this class
-     </div>
-     `;
 
-        addClassToStudentData(code);
-      }
+
     });
+
   }
 }
 
@@ -946,6 +1033,7 @@ function addClassToStudentData(classCode) {
         firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(classCode).set({
           'code': classCode.toString(),
           'class name': classNamE,
+          'accepted': false,
         });
     
         firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
@@ -954,6 +1042,7 @@ function addClassToStudentData(classCode) {
           'date': new Date(),
           'status': 'doing great',
           'teacher unread': 0,
+          'accepted': false,
         });
     
       }).then(() => {
@@ -973,32 +1062,42 @@ async function updateAddClasesDropdown(studentUsername, pageType) {
 
   var classCodesList = []
 
+  var acceptedList = []
+
   let classesRef = firebase.firestore().collection('UserData').doc(studentUsername).collection("Classes");
   let classesRefGet = await classesRef.get();
   for(const doc of classesRefGet.docs){
 
     var classData = doc.data();
 
-    var classCode = classData["code"];
+    var accepted = classData['accepted'] != undefined ? classData['accepted'] : false
 
-    var className = ""
+    console.log("Accepted: " + accepted + ": " + classData['code'])
 
-    getRealtimeAnnouncements(classCode);
+    if(accepted == true){
+      var classCode = classData["code"];
 
-    var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
-      var data = snap.data();
+      var className = ""
   
-      if(data != null && data != undefined){
-          className = data['class name'];
-      } else {
-        className = undefined
-      }
-    }).then(() => {
-      if(className != undefined){
-        classesList.push(className);
-        classCodesList.push(classCode)
-      }
-    })
+      getRealtimeAnnouncements(classCode);
+  
+      var x = await firebase.firestore().collection('Classes').doc(classCode).get().then(snap => {
+        var data = snap.data();
+    
+        if(data != null && data != undefined){
+            className = data['class name'];
+        } else {
+          className = undefined
+        }
+      }).then(() => {
+        if(className != undefined){
+          classesList.push(className);
+          classCodesList.push(classCode)
+        }
+      })
+    }
+
+ 
   }
 
     inital = `
@@ -2143,6 +2242,34 @@ function sendMessage_Classes_page(classCode){
     
       }).then(() => {
         //console.log("Message sent")
+
+        var url = `http://localhost:3120/api/sendNotificationtoGroup?group=classes-teacher-${classCode}&token=${'test'}&title=New message from ${name}&msg=${message}`
+    
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // Code to execute with response
+      
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+
+            console.log(responseText);
+      
+            if(status == 'success'){
+              //window.location = "dashboard.html"
+
+              console.log("Notification sent")
+      
+      
+            } else {
+              console.log("Notification FAILED")
+            }
+          }
+        }
+        xhr.open('GET', url);
+        xhr.send();
 
         firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(email).update({
           "teacher unread": increment,

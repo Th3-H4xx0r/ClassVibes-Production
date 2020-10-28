@@ -1,3 +1,5 @@
+
+
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
   
   firebase.auth().onAuthStateChanged(user => {
@@ -16,57 +18,130 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
         var pendingRequestID = data["Pending Request ID"];
     
         var pendingDistrictRequestID = data["Pending District Request"];
+
+          if (pendingSchoolRequestName) {
     
-        if (pendingSchoolRequestName) {
-    
-          var waitingRequestHTML = `
-          <center style="margin-top: 23%;">
-          <i class="far fa-check-circle" style = "font-size: 80px; color: green"></i>
-    
-          <h2 style="margin-top: 2%;">Request Sent</h2>
-    
-          <p>You have successfully sent a request to join ${pendingSchoolRequestName}</p>
-    
-          <button class="btn-screen danger" onclick = "cancelTeacherRequest('${pendingRequestID}', '${pendingDistrictRequestID}', '${email}')">Cancel</button>
-        </center>
-          `;
-    
-          $('#main-body-page-teacher').html(waitingRequestHTML);
-        } else {
-          //IN A DISTRICT
-          if (in_a_district != null && in_a_district != undefined) {
-            firebase.firestore().collection('Districts').doc(in_a_district).get().then(function (doc) {
-    
-              //console.log('Executing 1');
-    
-              var data = doc.data()["Status"];
-    
-              //console.log("STATUS:" + data);
-    
-              //DISTRICT IS NOT ACTIVATED
-              if (data != "Activated") {
-    
-                var activateDistrictHTML = `
-              <center style="margin-top: 23%;">
-              <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
-    
-              <h2 style="margin-top: 2%;">District Not Active</h2>
-    
-              <p>If this is an error, contact you district admin for more info.</p>
-            </center>
-              `;
-    
-                document.getElementById('loader-icon').style.display = 'none';
-    
-                $('#main-body-page-teacher').html(activateDistrictHTML);
-              } else {
-    
-                //console.log('Executing 2');
-    
-                if(document.getElementById('loader-icon') != null){
+            var waitingRequestHTML = `
+            <center style="margin-top: 23%;">
+            <i class="far fa-check-circle" style = "font-size: 80px; color: green"></i>
+      
+            <h2 style="margin-top: 2%;">Request Sent</h2>
+      
+            <p>You have successfully sent a request to join ${pendingSchoolRequestName}</p>
+      
+            <button class="btn-screen danger" onclick = "cancelTeacherRequest('${pendingRequestID}', '${pendingDistrictRequestID}', '${email}')">Cancel</button>
+          </center>
+            `;
+      
+            $('#main-body-page-teacher').html(waitingRequestHTML);
+          } else {
+            //IN A DISTRICT
+            if (in_a_district != null && in_a_district != undefined) {
+              firebase.firestore().collection('Districts').doc(in_a_district).get().then(function (doc) {
+      
+                //console.log('Executing 1');
+      
+                var data = doc.data()["Status"];
+      
+                //console.log("STATUS:" + data);
+      
+                //DISTRICT IS NOT ACTIVATED
+                if (data != "Activated") {
+      
+                  var activateDistrictHTML = `
+                <center style="margin-top: 23%;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
+      
+                <h2 style="margin-top: 2%;">District Not Active</h2>
+      
+                <p>If this is an error, contact you district admin for more info.</p>
+              </center>
+                `;
+      
                   document.getElementById('loader-icon').style.display = 'none';
+      
+                  $('#main-body-page-teacher').html(activateDistrictHTML);
+                } else {
+      
+                  //console.log('Executing 2');
+      
+                  if(document.getElementById('loader-icon') != null){
+                    document.getElementById('loader-icon').style.display = 'none';
+                  }
+      
+                  if (pageType == 'meetings-page') {
+                    document.getElementById('main-page-content-meetings-page').style.display = "initial";
+                    getProfileInfo();
+                    //getClassData();
+                    getClassDataDropdown(email);
+                    getMeetings();
+                  }
+                  else if (pageType == "") {
+                  }
+      
+                  else if(pageType == 'create-class'){
+                    getProfileInfo();
+                    getClassDataDropdown(email);
+                    
+                  }
+      
+                  else if (pageType == 'class-page') {
+                    getProfileInfo();
+                    //getClassData();
+                    getClassDataDropdown(email);
+                    getClassPageData(classCode);
+                  }
+      
+                  else if (pageType == 'dashboard') {
+                    getProfileInfo();
+                    getClassData(email);
+                    //getWeekStudentAverageReactions_ALL_CLASSES()
+                  }
+      
+                  else if(pageType == "student-requests"){
+                    getProfileInfo();
+                    getStudentRequests();
+                  }
+      
+                  else if(pageType == "announcementsTeacher"){
+                    getProfileInfo();
+                    getClassDataDropdown(email);
+                    getAnnouncements(email);
+      
+                  }
+      
+                  else if(pageType == "chat-page-teacher"){
+                    getProfileInfo();
+                    getClassDataDropdown(email);
+                    getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
+                  }
+      
+                  else {
+                    //getClassData();
+                    getProfileInfo();
+                  }
+      
                 }
-    
+              });
+      
+            }
+            //NOT IN A DISTRICT
+            else {
+              var accountStatus = data['account status'];
+      
+              //ACCOUNT ACTIVE
+              if (accountStatus == "Activated") {
+      
+                if (document.getElementById('loader-icon') != null) {
+                  document.getElementById('loader-icon').style.display = 'none';
+      
+                }
+      
+                if (document.getElementById('dashboard-section') != null) {
+                  document.getElementById('dashboard-section').style.display = 'none';
+                }
+      
+      
                 if (pageType == 'meetings-page') {
                   document.getElementById('main-page-content-meetings-page').style.display = "initial";
                   getProfileInfo();
@@ -75,189 +150,262 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   getMeetings();
                 }
                 else if (pageType == "") {
-                }
-    
-                else if(pageType == 'create-class'){
-                  getProfileInfo();
                   getClassDataDropdown(email);
                 }
-    
                 else if (pageType == 'class-page') {
                   getProfileInfo();
                   //getClassData();
-                  getClassDataDropdown(email)
-                  getStudentData(classCode);
-                  getEditData(classCode);
-                  getAnnouncementForClass(classCode);
-                  getMeetingForClass(classCode);
+                  getClassDataDropdown(email);
+
+                  getClassPageData(classCode);
+                
                 }
-    
                 else if (pageType == 'dashboard') {
+                  //console.log("executing");
                   getProfileInfo();
                   getClassData(email);
                   //getWeekStudentAverageReactions_ALL_CLASSES()
                 }
-    
+      
+                else if(pageType == 'create-class'){
+                  getProfileInfo();
+                  getClassDataDropdown(email);
+                }
+      
+                else if(pageType == "announcementsTeacher"){
+                  getProfileInfo();
+                  getAnnouncements(email);
+                  getClassDataDropdown(email);
+                }
+      
                 else if(pageType == "student-requests"){
                   getProfileInfo();
                   getStudentRequests();
                 }
-    
-                else if(pageType == "announcementsTeacher"){
-                  getProfileInfo();
-                  getClassDataDropdown(email);
-                  getAnnouncements(email);
-    
-                }
-    
+      
                 else if(pageType == "chat-page-teacher"){
                   getProfileInfo();
                   getClassDataDropdown(email);
                   getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
+      
                 }
-    
+      
                 else {
                   //getClassData();
-                  getProfileInfo();
+                  //getProfileInfo();
+                  //getClassDataDropdown();
                 }
-    
-              }
-            });
-    
-          }
-          //NOT IN A DISTRICT
-          else {
-            var accountStatus = data['account status'];
-    
-            //ACCOUNT ACTIVE
-            if (accountStatus == "Activated") {
-    
-              if (document.getElementById('loader-icon') != null) {
-                document.getElementById('loader-icon').style.display = 'none';
-    
-              }
-    
-              if (document.getElementById('dashboard-section') != null) {
-                document.getElementById('dashboard-section').style.display = 'none';
-              }
-    
-    
-              if (pageType == 'meetings-page') {
-                document.getElementById('main-page-content-meetings-page').style.display = "initial";
-                getProfileInfo();
-                //getClassData();
-                getClassDataDropdown(email);
-                getMeetings();
-              }
-              else if (pageType == "") {
-                getClassDataDropdown(email);
-              }
-              else if (pageType == 'class-page') {
-                getProfileInfo();
-                //getClassData();
-                getClassDataDropdown(email);
-                getStudentData(classCode);
-                getEditData(classCode);
-                getAnnouncementForClass(classCode);
-                getMeetingForClass(classCode);    
-              }
-              else if (pageType == 'dashboard') {
-                //console.log("executing");
-                getProfileInfo();
-                getClassData(email);
-                //getWeekStudentAverageReactions_ALL_CLASSES()
-              }
-    
-              else if(pageType == 'create-class'){
-                getProfileInfo();
-                getClassDataDropdown(email);
-              }
-    
-              else if(pageType == "announcementsTeacher"){
-                getProfileInfo();
-                getAnnouncements(email);
-                getClassDataDropdown(email);
-              }
-    
-              else if(pageType == "student-requests"){
-                getProfileInfo();
-                getStudentRequests();
-              }
-    
-              else if(pageType == "chat-page-teacher"){
-                getProfileInfo();
-                getClassDataDropdown(email);
-                getMessagesForChat_chatPage_teacher(additionalParams.code, additionalParams.student)
-    
-              }
-    
-              else {
-                //getClassData();
-                //getProfileInfo();
-                //getClassDataDropdown();
-              }
-    
-              //ACCOUNT NOT ACTIVE
-            } else {
-              var activateDistrictHTML = `
-            
-            <center style="margin-top: 20%;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
-    
-            <h2 style="margin-top: 2%;">Account Not Activated</h2>
-    
-            <p>If you are a solo teacher please contact <a href="mailto:sales@classvibes.net">sales@classvibes.net</a>
-              <br> to activate your account.</p>
-    
-            <h5>Or</h5>
-    
-              <div id = "district-join-input">
+      
+                //ACCOUNT NOT ACTIVE
+              } else {
+                var activateDistrictHTML = `
+              
+              <center style="margin-top: 20%;">
+              <i class="fas fa-exclamation-triangle" style="font-size: 70px;"></i>
+      
+              <h2 style="margin-top: 2%;">Account Not Activated</h2>
+      
+              <p>If you are a solo teacher please contact <a href="mailto:sales@classvibes.net">sales@classvibes.net</a>
+                <br> to activate your account.</p>
+      
+              <h5>Or</h5>
+      
+                <div id = "district-join-input">
+                  <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-6 my-4 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-3 small" placeholder="District code.." aria-label="Search" aria-describedby="basic-addon2" id="searchInputDistrict">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" onclick="checkIfDistrictCodeExists()">
+                                Join
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+      
+              <div id = "school-join-input" style="display: none;">
                 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-6 my-4 my-md-0 mw-100 navbar-search">
                   <div class="input-group">
-                      <input type="text" class="form-control bg-light border-3 small" placeholder="District code.." aria-label="Search" aria-describedby="basic-addon2" id="searchInputDistrict">
+                      <input type="text" class="form-control bg-light border-3 small" placeholder="School Code..." aria-label="Search" aria-describedby="basic-addon2" id="searchInputSchool">
                       <div class="input-group-append">
-                          <button class="btn btn-primary" type="button" onclick="checkIfDistrictCodeExists()">
+                          <button class="btn btn-primary" type="button" onclick="checkIfSchoolCodeExists()">
                               Join
                           </button>
                       </div>
                   </div>
               </form>
               </div>
-    
-            <div id = "school-join-input" style="display: none;">
-              <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-6 my-4 my-md-0 mw-100 navbar-search">
-                <div class="input-group">
-                    <input type="text" class="form-control bg-light border-3 small" placeholder="School Code..." aria-label="Search" aria-describedby="basic-addon2" id="searchInputSchool">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button" onclick="checkIfSchoolCodeExists()">
-                            Join
-                        </button>
-                    </div>
-                </div>
-            </form>
+      
+            <div id = "joinSchool-district-err">
+      
             </div>
-    
-          <div id = "joinSchool-district-err">
-    
-          </div>
-    
-          </center>
-           `;
-
-              if(document.getElementById('loader-icon') != null){
-                document.getElementById('loader-icon').style.display = 'none';
+      
+            </center>
+             `;
+  
+                if(document.getElementById('loader-icon') != null){
+                  document.getElementById('loader-icon').style.display = 'none';
+                }
+                
+                $('#main-body-page-teacher').html(activateDistrictHTML);
+                getProfileInfo();
               }
-              
-              $('#main-body-page-teacher').html(activateDistrictHTML);
-              getProfileInfo();
             }
           }
-        }
       });
     }
   });
+}
+
+function createClassPopup(){
+  var modalHTML = `
+  <div class="modal fade" id="createClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create Class</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+          <input type="text" class="form-control" placeholder="Class Name" aria-label="Username"
+          aria-describedby="basic-addon1" id="className" maxlength = '25'>
+          </div>
+
+        
+
+        </form>
+
+        <p>* You will be charged $1.99/year for the creation of this class</p>
+
+        <p>By creating a class, you agree with our <a href="/privacy">Privacy Policy</a> and our <a href="/legal">Terms & Condtions</a></p>
+
+        <p style="color: red; font-weight: 700;" id = "feedback-error-payment"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick = 'createClass()' id = 'continueButton'>Create Class</button>
+      </div>
+    </div>
+  </div>
+</div>
+  `
+
+  $(modalHTML).appendTo('#main-body-page-teacher');
+
+  $('#createClassModal').modal('toggle')
+}
+
+function getClassPageData(classCode){
+
+  var expireDateValue = ''
+
+  firebase.firestore().collection('Classes').doc(classCode).get().then(doc => {
+    var data = doc.data();
+
+    if(data){
+      var stripeSubscription = data['stripe subscription']
+
+      if(stripeSubscription){
+
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
+          console.log(idToken)
+
+            
+        var url = `https://api-v1.classvibes.net/api/getSubscriptionInfo?id=${stripeSubscription}&authToken=${idToken}`
+    
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // Code to execute with response
+      
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+      
+            if(status == 'success'){
+              //window.location = "dashboard.html"
+   
+              expireDateValue = responseText.message['current_period_end'] * 1000
+
+              console.log(expireDateValue)
+      
+      
+            } else {
+
+            }
+          }
+        }
+        xhr.open('GET', url);
+        xhr.send();
+    
+        }).catch(function(error) {
+          // Handle error
+        });
+      
+   
+      } else {
+        expireDateValue = data['expire date'].seconds * 1000
+      }
 
 
+    } 
+  }).then(() => {
+
+    setTimeout(function(){
+
+      var today = new Date()
+
+      var expireDate = new Date(expireDateValue)
+  
+      console.log(expireDate)
+      
+      if(today > expireDate){
+  
+        var expiredHTML = `
+  
+        <div class="d-flex justify-content-center" style = 'margin-top: 15%'>
+        <img  src = '/teacher/img/undraw_blank_canvas_3rbb.svg' width = '20%'/>
+  
+        </div>
+  
+  
+        <div class="d-flex justify-content-center">
+        <h1>Class Expired</h1>
+        
+        </div>
+  
+        <div class="d-flex justify-content-center">
+        <p>This class has expired, please renew it in the <a href = '/settings/payments'>payment settings</a></p>
+  
+        
+        </div>
+        `
+  
+        document.getElementById('main-body-page-teacher').innerHTML = expiredHTML
+      } else {
+        //getStudentData(classCode);
+
+        document.getElementById('loader-widget').style.display = "none";
+        document.getElementById('mainClassPage').style.display = "initial";
+        
+
+        getEditData(classCode, expireDate);
+        getAnnouncementForClass(classCode);
+        getMeetingForClass(classCode);    
+        getStudentJoinRequests(classCode)
+        getGraphData_Classes_page(classCode);
+      }
+     }, 2000);
+
+ 
+  })
+ 
 }
 
 function getStudentRequests(){
@@ -391,9 +539,6 @@ function getStudentRequests(){
         document.getElementById('main-page').style.display = "initial"
     }
    }, 1200);
-
-
-
   })
 }
 
@@ -515,7 +660,7 @@ function getProfileInfo() {
 
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
         //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
-        //console.log(idToken)
+        console.log(idToken)
   
       }).catch(function(error) {
         // Handle error
@@ -547,8 +692,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
 
   var code = localStorage.getItem("graphClassCode") != null ? localStorage.getItem("graphClassCode") : "none";
 
-  //console.log(code)
-
   var getNewData = false;
 
   document.getElementById('studentReportText').innerText = "Student Report - " + code
@@ -566,18 +709,13 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
       if(lastWeeklyReport != null){
         var restrictionTimeEnd = new Date(lastWeeklyReport)
         restrictionTimeEnd.setHours(restrictionTimeEnd.getHours() + 5)
-
-        //console.log(dateNow.getTime(),  restrictionTimeEnd.getTime(), restrictionTimeEnd)
   
         if(dateNow.getTime() >= restrictionTimeEnd.getTime()){
           getNewData = true
-          //console.log("SHOULD GET NEW REPORT")
         }
       } else {
         getNewData = true
       }
-
-      //console.log("GET NEW REPORT:" + getNewData)
 
       if(getNewData == false){
         
@@ -613,10 +751,8 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     var satTotal = [];
     var sunTotal = [];
 
-    //console.log(reportData)
 
     if(reportData == null || reportData.length == 0){
-      //console.log("GETTING NEW DATA")
       var d = new Date();
       var day = d.getDay(),
           diff = d.getDate() - day + (day == 0 ? -6:1);
@@ -626,9 +762,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
           d.setMilliseconds(0);
   
       var weekStart =  new Date(d.setDate(diff));
-  
-      //console.log(weekStart)
-  
+    
       var weekStartTimestamp = weekStart.getTime().toString();
   
   
@@ -654,9 +788,7 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
           } else if (studentReaction == 'frustrated'){
             reactionKey = 1
           }
-  
-          //console.log(reactionDay)
-  
+    
           if(reactionDay == 1){
             monTotal.push(reactionKey)
           }
@@ -685,7 +817,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
             sunTotal.push(reactionKey)
           }
   
-         // console.log(doc.data());
         })
       }).then(() => {
   
@@ -725,8 +856,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
         sunAverage = sumSun / sunTotal.length;
         sunAverage = sunAverage ? sunAverage: 0
   
-       // console.log(monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage)
-        //console.log('//')
 
         firebase.firestore().collection("Classes-Cache").doc(code).set({
           "Last Weekly Report": new Date().toString(),
@@ -750,7 +879,6 @@ function getWeekStudentAverageReactions_ALL_CLASSES(){
     return [monAverage, tueAverage, wedAverage, thuAverage, friAverage, satAverage, sunAverage]
 
   }).then((avgList) => {
-    //console.log("Setting area chart")
     //Configure Graph
     // Set new default font family and font color to mimic Bootstrap's default styling
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -876,7 +1004,7 @@ function getGraphData_Classes_page(code){
 
       var className = data["class name"];
 
-      document.getElementById('classNameLabel').innerHTML = ` ${className} <span class = 'badge badge-primary'> ${classCode}</span>`
+      document.getElementById('classNameLabel').innerHTML = `${className}`
 
       getChartData(code)
     });
@@ -891,7 +1019,7 @@ function getClassData(emailRef) {
   <img src = 'img/undraw_taking_notes_tjaf.svg'/ width="25%">
 
   <h1 style="margin-top: 20px;">No Classes To See</h1>
-  <p>You have not created any classes yet. <br> Go to <strong>Sidebar > Classes > Create Class</strong> <br> to get started</p>
+  <p>You have not created any classes yet. <br> Go to <strong>Sidebar > Create Class</strong> <br> to get started</p>
   </center>
   `;
 
@@ -930,6 +1058,7 @@ function getClassData(emailRef) {
             storeGraphReactionsCode(classCode)
             
           }
+          /*
           output = `
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
@@ -947,8 +1076,9 @@ function getClassData(emailRef) {
                 </div>
               </div>
             `;
+            */
 
-          output2 = `
+          sidebarElement = `
             <a class="collapse-item" href="/teacher/classes/${classCode}" style = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>${className}</a>
             `;
 
@@ -970,7 +1100,7 @@ function getClassData(emailRef) {
                     <canvas id="myPieChart${classCode}"></canvas>
                   </div>
                   <div style="height: 30px"></div>
-                  <center><h5 class="card-title">${className} <span class = 'badge badge-primary'>${classCode}</span></h5>
+                  <center><h5 class="card-title">${className}</h5>
                   </center>
 
                 </div>
@@ -979,10 +1109,10 @@ function getClassData(emailRef) {
             `
 
           $(output5).appendTo("#topClassesSection");
-          $(output2).appendTo("#classesOp");
+          $(sidebarElement).appendTo("#classesOp");
           $(output3).appendTo("#classesOp1");
           //$(output4).appendTo("#classesDropdownGraphWeeklyReactions");
-          $(output2).appendTo("#dropdown-sidebar");
+          $(sidebarElement).appendTo("#dropdown-sidebar");
 
           
           // Pie Chart Example
@@ -1006,10 +1136,6 @@ function storeClassforChart(code) {
 }
 
 function sendRealtimeAnnouncement(code, title, message){
-
-  //console.log("Senindg realtime announcement")
-  
-  
           socket.emit('join-class-room', code.toString());
   
           socket.emit('send-announcement-to-class-realtime', {"code": code, "title": title, "message": message});
@@ -1027,8 +1153,7 @@ async function writeAnnouncement(code, className) {
 
   button.innerHTML = `
   <button class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="sr-only"> Sending Announcement...</span>
+  <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
 </button>
   `
   var socket = io.connect('https://api-v1.classvibes.net', {transports: ['polling']});
@@ -1037,7 +1162,6 @@ async function writeAnnouncement(code, className) {
 
 
   socket.on('connect', function(data) {
-    //console.log("Connected to Email Server - Sender:" + data)
     
 });
   
@@ -1059,7 +1183,6 @@ async function writeAnnouncement(code, className) {
   }).then(() => {
 
     setTimeout(function(){ 
-        console.log('Completed')
         $('#exampleModal').modal('toggle')
         window.location.reload()
      }, 4000);
@@ -1075,11 +1198,7 @@ function getMeetings_pageNation(lastElement) {
     if (user) {
       var email = user.email;
 
-      //console.log("geeting page nation")
-
       var index = 0;
-    
-      //console.log(lastElement)
     
       firebase.firestore().collection('UserData').doc(email).collection("Meetings").orderBy('timestamp', 'desc').startAfter(lastElement).limit(4).get().then(function (doc) {
         doc.forEach(snapshot => {
@@ -1093,7 +1212,6 @@ function getMeetings_pageNation(lastElement) {
           var length = data1["length"]
     
           lastElement = data1['timestamp']
-          //console.log(meetingsList_PageNation_MainPageList)
     
           if(meetingsList_PageNation_MainPageList.includes(snapshot.id) != true){
     
@@ -1220,7 +1338,6 @@ var lastItemGlobalAnnouncements = ''
 var announcementsIDList = []
 
 async function getAnnouncementForClass_Pagenation(code, lastElement) {
-  console.log("LAST ELEMENT: " + lastElement)
 
   var lastElementID = lastElement
 
@@ -1232,15 +1349,11 @@ firebase.firestore().collection('Classes').doc(code).collection('Announcements')
       var message = data["message"]
       var title = data["title"]
       var announcementId = doc.id
-  
-      console.log(title)
 
       if(announcementsIDList.includes(announcementId) != true){
         announcementsIDList.push(doc.id)
       
         lastElementID = data['date']
-    
-        console.log(lastElementID)
     
         /*
     
@@ -1380,13 +1493,9 @@ async function getAnnouncementForClass(code) {
         var title = data["title"]
         var announcementId = doc.id
     
-        console.log(title)
-    
         announcementsIDList.push(doc.id)
         
         lastItem = data['date']
-    
-        console.log(lastItem)
     
         /*
     
@@ -1499,7 +1608,7 @@ async function getAnnouncementForClass(code) {
       var noAnnouncementsHTML = ` 
       
       <center>
-      <img src="/teacher/img/undraw_popular_7nrh.svg" width="20%">  
+      <img src="/teacher/img/undraw_news_go0e.svg" width="20%" style = 'margin-top: 5%'>  
     
       <h2 style="margin-top: 3%;">No Announcements</h2>
       <p>You're all caught up</p>
@@ -1567,7 +1676,6 @@ function showSendAnnouncementModal(code, className){
 }
 
 function deleteAnnouncement(id, classCode){
-  console.log(id)
 
   firebase.firestore().collection("Classes").doc(classCode).collection("Announcements").doc(id).delete().then(() => {
     window.location.reload()
@@ -1645,8 +1753,6 @@ function getMeetingForClass_Pagenation(code, lastElement) {
         })
       }
     })
-  //}
-
 }
 
 
@@ -1734,7 +1840,6 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
   //Delete for Student
   firebase.firestore().collection('UserData').doc(recipient).collection('Meetings').where('class id', '==', meetingClass).where('date and time', '==', date).where('title', '==', title).get().then(snap => {
     snap.forEach(doc => {
-      console.log(doc.data())
       doc.ref.delete()
     })
   }).then(() => {
@@ -1742,8 +1847,6 @@ function cancelMeeting(teacherMeetingID, recipient, meetingClass, message, title
   });
 
   });
-
-
 }
 
 
@@ -1773,7 +1876,6 @@ function getClassDataDropdown(emailRef) {
 
       if (classData != null || classData != undefined) {
 
-        //console.log("works");
         var className = classData[1];
         var classCode = classData[0];
 
@@ -1807,85 +1909,218 @@ function createClass() {
 
       var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
       var className = document.getElementById("className").value;
-      var course = document.getElementById("course").value;
-      var courseDescription = document.getElementById("courseDescription").value;
-      var maxInactiveDaysInput = document.getElementById('max-inactive-days').value
-      var maxInactiveDays = Number(maxInactiveDaysInput)
 
-      if(maxInactiveDays <= 14){
-    
-        firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
-          "class code": code,
-          "class name": className,
-          "Course": course,
-          "courseDescription": courseDescription,
-          "max days inactive": maxInactiveDays,
-          "teacher email" : email,
-          "allow join": true
-      
-        });
-      
-        firebase.firestore().collection("Classes").doc(code).set({
-          "class code": code,
-          "class name": className,
-          "Course": course,
-          "courseDescription": courseDescription,
-          "teacher email" : email,
-          "max days inactive": maxInactiveDays,
-          "allow join": true
-  
-  
-      
-        }).then(() => {
-          window.location = "dashboard.html"
-        });
-      } else {
-        document.getElementById('feedbackError').innerText = "Max days inactive has to been between 1 and 14 days"
-      }
+      chargeCardForClassCreation(email, code, className, 1)
 
 }
 })
 }
 
-function getStudentData(code) {
+
+function chargeCardForClassCreation( email, code, className, maxInactiveDays){
+
+  document.getElementById('continueButton').disabled = true
+
+  document.getElementById('continueButton').innerHTML = ` <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
+
+    firebase.firestore().collection("UserData").doc(email).get().then(doc => {
+
+      var data = doc.data();
+
+      console.log(data)
+      console.log(email)
+
+      var customerID = data['customer stripe id']
+
+      
+     var val = "pk_test_51HJSAPHxKyunjmTecWP4BIWHHPha6jEzvfJopOrydgMBJmW0F5yJDEIb1eh57hVvZGm7h3KxciXREcXotTqjrHwR00GuN4JVdJ";
+
+     var stripe = Stripe(val);
 
 
+     var handleResult = function (result) {
+       if (result.error) {
+         var displayError = document.getElementById("error-message");
+         displayError.textContent = result.error.message;
+       }
+     };
+
+     var url = `https://api-v1.classvibes.net/api/createCheckoutSession?id=${customerID}&email=${email}&name=${className}&maxdays=${maxInactiveDays}&code=${code}`
+    
+     const xhr = new XMLHttpRequest();
+   
+     xhr.onreadystatechange = () => {
+       if (xhr.readyState === XMLHttpRequest.DONE) {
+         // Code to execute with response
+   
+         var responseText = JSON.parse(xhr.responseText);
+   
+         var status = responseText['status']
+   
+         if(status == 'success'){
+           //window.location = "dashboard.html"
+
+           var sessionID = responseText.message.id
+
+           
+          stripe
+          .redirectToCheckout({
+            sessionId: sessionID,
+          })
+          .then(handleResult);
+
+          var handleResult = function (result) {
+            if (result.error) {
+              document.getElementById('feedback-error-payment').innerHTML = result.error.message
+            }
+          };
+   
+   
+         } else {
+           document.getElementById('continueButton').innerHTML = "Continue"
+           document.getElementById('feedback-error-payment').innerHTML = responseText['message']
+         }
+       }
+     }
+     xhr.open('GET', url);
+     xhr.send();
+
+
+
+  /*
+    
+      var url = `https://api-v1.classvibes.net/api/subscribe?id=${customerID}&class=${code}`
+    
+      const xhr = new XMLHttpRequest();
+    
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          // Code to execute with response
+
+          var responseText = JSON.parse(xhr.responseText);
+    
+          var status = responseText['status']
+    
+          if(status == 'success'){
+            //window.location = "dashboard.html"
+    
+            firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).set({
+              "class code": code,
+              "class name": className,
+              "max days inactive": maxInactiveDays,
+              "teacher email" : email,
+              "allow join": true
+          
+            });
+          
+            firebase.firestore().collection("Classes").doc(code).set({
+              "class code": code,
+              "class name": className,
+              "teacher email" : email,
+              "max days inactive": maxInactiveDays,
+              "allow join": true
+    
+            })
+
+            document.getElementById('feedback-error-payment').innerHTML = ''
+            document.getElementById('continueButton').innerHTML = "Continue"
+    
+            document.getElementById('payment-modal-text').innerHTML = `
+            <center>
+            <i class="far fa-check-circle" style = 'color: green; font-size: 55px'></i>
+            <h2 style = 'margin-top: 10px'>Payment Success</h2>
+    
+            <p>The payment has been added to your card and an reciept has been mailed to you. You have successfully created your class.</p>
+            </center>
+            `
+    
+            document.getElementById('payment-modal-header').innerHTML = `
+            Class successfully created
+            `
+    
+            document.getElementById('payment-modal-options').innerHTML = `
+            <button type="button" class="btn btn-primary" onclick = 'window.location = "/teacher/dashboard"'>Continue</button>
+            `
+    
+    
+          } else {
+            document.getElementById('continueButton').innerHTML = "Continue"
+            document.getElementById('feedback-error-payment').innerHTML = responseText['message']
+          }
+        }
+      }
+      xhr.open('GET', url);
+      xhr.send();
+
+      */
+    })
+
+
+
+
+
+  
+}
+
+
+function getStudentData(code, liveData, teacherEmail, maxdays) {
+
+  console.log(liveData)
+
+  var happyCount = 0
+  var mehCount = 0
+  var frustratedCount = 0
+  var inactiveCount = 0
+  var totalCount = 0
+      
   var classInfoList = [];
-  //console.log(classInfoList);
-  var maxdays = 0
 
 
   var className = '';
   var today = Math.floor(Date.now()/1000);
 
-  firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
-      var data = doc.data();
+  document.getElementById("studentTable").innerHTML = ''
+  document.getElementById("studentTable-doing-good").innerHTML = ''
+  document.getElementById("studentTable-meh").innerHTML = ''
+  document.getElementById("studentTable-frustrated").innerHTML = ''
+  document.getElementById("studentTable-inactive").innerHTML = ''
 
-      className = data["class name"];
-      maxdays = data["max days inactive"]
 
-    }).then(() => {
-      firebase.firestore().collection('Classes').doc(code).collection("Students").get().then(function (doc) {
-        doc.forEach(snapshot => {
-          var data = snapshot.data();
+
+  //firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
+      //var data = doc.data();
+
+      //className = data["class name"];
+      //maxdays = data["max days inactive"]
+
+    //}).then(() => {
+      //firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', true).get().then(function (doc) {
+        //doc.forEach(snapshot => {
+
+        for (var x = 0; x <= liveData.length; x ++){
+          var data = liveData[x];
+
+          if(data){
+
+            var reaction = data["status"];
+            var studentName = data["name"];
+            var studentEmail = data["email"];
+            var unread = data['teacher unread'];
+            var date = data["date"];
+  
+            var exceedDate = date.seconds + (maxdays * 86400);
+  
+  
+            var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
+
+            console.log(dateReported)
+            classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
+          }
     
-          var reaction = data["status"];
-          var studentName = data["name"];
-          var studentEmail = data["email"];
-          var unread = data['teacher unread'];
-          var date = data["date"];
-
-          var exceedDate = date.seconds + (maxdays * 86400);
-
-          console.log(exceedDate)
-
-
-          //console.log(unread)
-          var dateReported = new Date(data['date'].seconds * 1000).toLocaleString()
-          classInfoList.push([studentName, reaction, studentEmail,dateReported, unread, exceedDate])
-          //console.log(classInfoList)
     
-        });
+        }
+        
+        //});
 
     
         document.getElementById("studentTable").innerHTML = "";
@@ -1903,7 +2138,6 @@ function getStudentData(code) {
 
 
           if (classInfoData != null || classInfoData != undefined) {
-            //console.log("works")
             var studentName = classInfoData[0];
     
             var studentReaction = classInfoData[1];
@@ -1916,23 +2150,19 @@ function getStudentData(code) {
 
             var exceedDate = classInfoData[5]
 
-            console.log(exceedDate)
-
             
             var unreadMessagesHTML = ''
 
             if(unreadMessages && unreadMessages != undefined && unreadMessages != 0){
               unreadMessagesHTML =  `<span class = 'badge badge-warning'>${unreadMessages}</span>`
             }
-            
-            //console.log(classInfoData)
     
             descriptionOutput2 = `
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
             <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} 
-            <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a>
+            <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a>
             ${unreadMessagesHTML} </h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
@@ -1949,7 +2179,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${happy}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>        
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>        
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -1964,7 +2194,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${meh}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>      
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>      
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -1979,7 +2209,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${sad}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -1994,7 +2224,7 @@ function getStudentData(code) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "inactive_face" ></div></div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -2051,24 +2281,29 @@ function getStudentData(code) {
 
           var today = Math.floor(Date.now()/1000);
 
-          console.log(exceedDate, today)
 
           if(today > exceedDate) {
             console.log('INACTIVE STUDENT: ' + studentEmail )
 
           } 
 
-          console.log("Reaction:" + studentReaction  + ": " + studentEmail)
 
             $(outputModel).appendTo("#outputModel")
             $(descriptionOutput2).appendTo("#studentTable")
+
+            totalCount = totalCount + 1
     
         if (studentReaction == "doing great") {
               //$(descriptionOutput2).appendTo("#studentsListGreat");
               $(happy_face_Column).appendTo('#studentTable-doing-good');
 
+              happyCount = happyCount + 1
+
+
               if(today > exceedDate) {
                 $(inactive_column_face).appendTo("#studentTable-inactive");
+
+                inactiveCount = inactiveCount + 1
 
                 document.getElementById("face").outerHTML = inactive_happy;
                 document.getElementById("inactive_face").outerHTML = inactive_happy;
@@ -2084,12 +2319,16 @@ function getStudentData(code) {
               //$(descriptionOutput2).appendTo("#studentsListHelp");
               $(meh_colum_face).appendTo('#studentTable-meh');
 
+              mehCount = mehCount + 1
+
               if(today > exceedDate) {
 
                 $(inactive_column_face).appendTo("#studentTable-inactive");
 
                 document.getElementById("face").outerHTML = inactive_meh;
                 document.getElementById("inactive_face").outerHTML = inactive_meh;
+
+                inactiveCount = inactiveCount + 1
     
               
 
@@ -2099,6 +2338,8 @@ function getStudentData(code) {
     
     
             } else if (studentReaction == "frustrated") {
+
+              frustratedCount = frustratedCount + 1
     
               $(frustrated_column_face).appendTo("#studentTable-frustrated");
 
@@ -2106,6 +2347,8 @@ function getStudentData(code) {
                 $(inactive_column_face).appendTo("#studentTable-inactive");
                 document.getElementById("face").outerHTML = inactive_sad;
                 document.getElementById("inactive_face").outerHTML = inactive_sad;
+
+                inactiveCount = inactiveCount + 1
                 
 
               } else {
@@ -2118,14 +2361,145 @@ function getStudentData(code) {
               
 
             }
+            
+            
           }
+
+          
         }
-      });
-    })
+      //}).then(() => {
+
+
+          var noStudentsHTML = `
+            <h2 style = 'margin-top: 5%; margin-left: 15%'>No Students here</h2>
+          `
+
+          if(totalCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable")
+          }
+
+          if(happyCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-doing-good")
+          }
+
+          if(mehCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-meh")
+          }
+
+          if(frustratedCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-frustrated")
+          }
+
+          if(inactiveCount == 0){
+            $(noStudentsHTML).appendTo("#studentTable-inactive")
+          }
+
+      //});
+   // })
+
 }
 
 
-function showRemoveStudentPopup(email, code){
+function getStudentJoinRequests(code){
+
+  var requests = 0
+
+  document.getElementById('student-requests-list').innerHTML = ''
+  firebase.firestore().collection("Classes").doc(code).collection("Students").where('accepted', '==', false).onSnapshot(snap => {
+    document.getElementById('student-requests-list').innerHTML = ''
+    
+    
+
+    snap.forEach(doc => {
+
+      requests = requests + 1
+      var data = doc.data()
+
+      var name = data['name']
+
+      var accepted = data['accepted']
+
+      var email = data['email']
+
+
+      var requestHTML = `
+      <div class="col-xl-12 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+
+              <h3 style = 'font-weight: 700; margin: 2px'>${name}</h3>
+
+              <p style = 'color: gray'>${email}</p>
+
+            </div>
+            <div class="col-auto">
+
+              <div class = 'row'>
+              <a onclick = "acceptStudentRequest('${code}', '${email}')" href = '#'><i class="fas fa-check-circle" style = 'color: green; font-size: 45px; margin-right: 20px'></i></a>
+              <a onclick = "declineStudentRequest('${code}', '${email}')" href = '#'><i class="fas fa-times" style = 'color: red; font-size: 45px; margin-right: 25px'></i></a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      `;
+
+      $(requestHTML).appendTo('#student-requests-list')
+
+
+    })
+
+      if(requests == 0){
+        document.getElementById('join-request-tab-text').innerHTML = `Requests`
+        document.getElementById('student-requests-list').innerHTML = `
+        <div class="d-flex justify-content-center">
+          <img src = '/teacher/img/undraw_Checklist__re_2w7v.svg' width = '25%' style = 'margin-top: 5%'>
+        
+          </div>
+          <div class="d-flex justify-content-center" style = 'margin-top: 1%'>
+  
+          <h1>No Pending Requests</h1>
+         
+          </div>
+          <div class="d-flex justify-content-center">
+  
+          <p>Any pending student join requests will show up here</p>
+          </div>
+  
+        `
+      } else {
+        document.getElementById('join-request-tab-text').innerHTML = `Requests <span class = 'badge badge-primary'>New</span>`
+      }
+  })
+
+}
+
+function declineStudentRequest(code, email){
+  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).delete().then(() => {
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(email).delete().then(() => {
+      getStudentJoinRequests(code)
+    })
+  })
+}
+
+function acceptStudentRequest(code, email){
+  firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
+    'accepted': true
+  }).then(() => {
+    firebase.firestore().collection('Classes').doc(code).collection('Students').doc(email).update({
+      'accepted': true
+    }).then(() => {
+      getStudentJoinRequests(code)
+    })
+  })
+}
+
+function showRemoveStudentPopup(email, code, teacherEmail){
   
   var popupHTML = `
   <div class="modal" tabindex="-1" role="dialog" id = 'removeStudentModal${code}'>
@@ -2141,7 +2515,7 @@ function showRemoveStudentPopup(email, code){
         <p>Are you sure you want to remove this student from the class?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" onclick = "removeStudent('${email}', '${code}')">Remove Student</button>
+        <button type="button" class="btn btn-danger" onclick = "removeStudent('${email}', '${code}', '${teacherEmail}')" id = 'removeStudentButton${code}'>Remove Student</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -2154,17 +2528,66 @@ function showRemoveStudentPopup(email, code){
 }
 
 
-async function removeStudent(email, code){
-  console.log("Removing")
-  firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete().then(() => {
-    firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
-      window.location.reload();
-    })
-  })
+async function removeStudent(email, code, teacherEmail){
+
+  document.getElementById(`removeStudentButton${code}`).innerHTML = `
+
+    <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />
+  `
+
+  firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+
+    var url = "https://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
+
+
+    /*
+  
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", url, false ); // false for synchronous request
+    xmlHttp.send( null );
+    */
+
+
+    const xhr = new XMLHttpRequest();
+
+xhr.onreadystatechange = () => {
+    if(xhr.readyState === XMLHttpRequest.DONE){
+        // Code to execute with response
+
+        var response = JSON.parse(xhr.responseText);
+
+        console.log(response.status)
+
+        if(response.status == 'success'){
+
+          window.location.reload()
+        }
+
+        document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
+
+    }
+}
+
+xhr.open('GET', url);
+xhr.send();
+
+  
+
+
+  }).catch(function(error) {
+    console.log(error)
+    console.log("Failed")
+
+    document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
+
+  });
+
+
+
+
 }
 
 function schedualMeeting(emailStudent, course, code, index) {
-  console.log("schedual meeting")
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -2275,7 +2698,12 @@ function cancelTeacherRequest(ID, districtID, teacher_email) {
   });
 }
 
-function getEditData(code) {
+
+var classNameGlobal = ''
+
+var maxDaysGlobal = ''
+
+function getEditData(code, expireDate) {
   output = ''
 
   firebase.firestore().collection('Classes').doc(code).get().then(function (doc) {
@@ -2286,16 +2714,42 @@ function getEditData(code) {
 
   }).then((data) => {
     var className = data['class name'];
-    document.getElementById("className").innerHTML = `<h1>${className} <span class = "badge badge-primary">${code}</span></h1>`
+
+    var joinStatus = data['allow join']
+
+    var expireDateFormatted = new Date(expireDate).toDateString()
+
+    var today = new Date();
+
+    var Difference_In_Time = new Date(expireDate).getTime() - today.getTime(); 
+      
+    // To calculate the no. of days between two dates 
+    var Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24)); 
+
+
+    document.getElementById("className").innerHTML = `<h1>${className}</h1>`
 
     showSendAnnouncementModal(code, className);
 
-    var course = data['Course']
-    var description = data['courseDescription'] != undefined ? data['courseDescription'] : "Not Set"
     var inactiveDays = data['max days inactive'] != NaN ?  data['max days inactive'] : "Not Set"
+
+    classNameGlobal = className
+
+    maxDaysGlobal = inactiveDays
+
     output += `
 
-    <h6>Edit Class Name</h6>
+    <h5>Class Code</h5>
+
+    <h1><span class = 'badge badge-primary'>${code}</span></h1>
+
+    <h5>Class Expire Date</h5>
+
+    <h4>${expireDateFormatted} <span class = 'badge badge-warning'>${Difference_In_Days} Days Remaining </span></h4> <br>
+
+
+
+    <h5>Edit Class Name</h5>
 
   <div class="input-group mb-3">
   <div class="input-group-prepend">
@@ -2304,65 +2758,173 @@ function getEditData(code) {
     </span>
   </div>
 
-  <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="editName" id="editName" value = '${className}'>
-</div>
-<h6>Edit Class Course</h6>
-
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">
-    <i class="fa fa-pencil" aria-hidden="true" onclick = "editTitle()"></i>
-    </span>
-  </div>
-
-  <input type="text" class="form-control" value="${course}" aria-label="Username" aria-describedby="basic-addon1" name="editCourse" id="editCourse">
-</div>
-<h6>Edit Class Description</h6>
-
-<div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="basic-addon1">
-    <i class="fa fa-pencil" aria-hidden="true" onclick = "editTitle()"></i>
-    </span>
-  </div>
-
-  <input type="text" class="form-control" value="${description}" aria-label="Username" aria-describedby="basic-addon1" name="editDescription" id="editDescription">
+  <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="editName" id="editName" value = '${className}' oninput = 'updateDetailsOnChange("${code}")'>
 </div>
 
-<h6>Set the minimum number of days for you students to choose a mood.  Students who dont select will shod up as a gray color on your graph.</h6>
+</div>
+</div>
+
+<h5>Set Inactive Days</h5>
+
+<h6>Set the minimum number of days for your students to choose a mood. Inactive students will show up gray on your graph.</h6>
 
 <div class="input-group mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text">Days</span>
     <span class="input-group-text">1-14</span>
   </div>
-  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" value="${inactiveDays}">
+  <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" value="${inactiveDays}" oninput = 'updateDetailsOnChange("${code}")'>
 </div>
+
+<h5>Allow Students To Join <h4><span class = 'badge badge-primary' id  = 'join-setting'>Join Enabled</span> <h4></h5>
+
+
+    <label class="switch-container">
+    <input class="switch sw-1" type="checkbox" id = 'allow-join-switch' onclick="changeJoinStatus(this, '${code}')">
+    <span class="slider sl-1"></span>
+  </label>
+
+
+<h5>Delete Class</h5>
+
+<button type="button" class="btn btn-outline-danger" onclick = "showDeleteClassModal('${code}')">Delete Class</button>
 
 <p style = "color: red; font-weight: 700" id = "error-feedback-edit-class"></p>
 
-<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
-
+<div id = 'update-details-section'></div>
   `
+
+  //<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>
     $(output).appendTo("#editInfo");   
+
+    if(joinStatus == true){
+      document.getElementById('join-setting').className  = "badge badge-primary"
+      document.getElementById('join-setting').innerText = "Allowed"
+      document.getElementById('allow-join-switch').checked = true
+
+    } else {
+      document.getElementById('join-setting').className  = "badge badge-danger"
+      document.getElementById('join-setting').innerText = "Not Allowed"
+      document.getElementById('allow-join-switch').checked = false
+    }
+
   })
+}
+
+function showDeleteClassModal(code){
+
+  var modalHTML = `
+<div class="modal fade" id="deleteClassModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Class</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this class? This action cannot be undone.
+        <p id = 'delete-class-error' style = 'color: red'></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" onclick = "deleteClass('${code}')" id = 'deleteClassButton'>Delete Class</button>
+      </div>
+    </div>
+  </div>
+</div>
+  `
+
+  $(modalHTML).appendTo('#page-top');
+  $('#deleteClassModal').modal('toggle')
+
+
+}
+
+function deleteClass(code){
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      var email = user.email;
+
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+
+        document.getElementById('deleteClassButton').innerHTML = `<img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
+        
+        var url = `https://api-v1.classvibes.net/api/deleteClass?code=${code}&teacher=${email}&authToken=${idToken}`
+        
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+      
+            if(status == 'success'){
+              document.getElementById('deleteClassButton').innerHTML = `Delete Class`
+
+              window.location = '/teacher/dashboard';
+
+      
+            } else {
+              console.log(responseText['data'])
+              document.getElementById('deleteClassButton').innerHTML = "Delete Class"
+              document.getElementById('delete-class-error').innerHTML = responseText['message']
+            }
+          }
+        }
+
+        xhr.open('GET', url);
+        xhr.send();
+  
+      }).catch(function(error) {
+        document.getElementById('delete-class-error').innerHTML = 'Error: Failed to delete class'
+      });
+
+    }
+  })
+    
+
+}
+
+function updateDetailsOnChange(code){
+
+  var updateClassButton = `<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>`
+
+  document.getElementById('update-details-section').innerHTML = updateClassButton
+
+}
+
+function changeJoinStatus(value, code){
+
+  var updateClassButton = `<button class="btn btn-primary" onclick="updateDetails('${code}')">Update Class Details</button>`
+
+  document.getElementById('update-details-section').innerHTML = updateClassButton
+  if(value.checked == true){
+    document.getElementById('join-setting').className  = "badge badge-primary"
+    document.getElementById('join-setting').innerText = "Allowed"
+  } else {
+    document.getElementById('join-setting').className  = "badge badge-danger"
+    document.getElementById('join-setting').innerText = "Not Allowed"
+  }
 }
 
 function updateDetails(code) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
-      //console.log(email)
 
   var newName = document.getElementById('editName').value;
-  var newCourse = document.getElementById('editCourse').value;
-  var newDescription = document.getElementById('editDescription').value;
   var maxDays = document.getElementById('maxDays').value;
+
+  var joinStatus = document.getElementById('allow-join-switch').checked
   let maxDaysNum = parseInt(maxDays);
 
-  //console.log(newName, newCourse, newDescription, maxDays)
 
-  if(newName, newCourse, newDescription, maxDaysNum != null && newName, newCourse, newDescription, maxDaysNum != ""){
+  if(newName, maxDaysNum != null && newName, maxDaysNum != ""){
 
     if(maxDaysNum > 14){
       var feedbackError = document.getElementById('error-feedback-edit-class');
@@ -2375,15 +2937,13 @@ function updateDetails(code) {
   
       firebase.firestore().collection('UserData').doc(email).collection('Classes').doc(code).update({
         "class name": newName,
-        "Course": newCourse,
-        "courseDescription": newDescription,
+        "allow join": joinStatus,
         "max days inactive": maxDaysNum,
     
       }).then(() => {
         firebase.firestore().collection('Classes').doc(code).update({
           "class name": newName,
-        "Course": newCourse,
-        "courseDescription": newDescription,
+        "allow join": joinStatus,
         "max days inactive": maxDaysNum,
     
     
@@ -2395,7 +2955,6 @@ function updateDetails(code) {
     }
 
   } else {
-    //console.log("Feilds blank")
     var feedbackError = document.getElementById('error-feedback-edit-class');
 
     feedbackError.innerHTML = 'You cannot leave any fields blank'
@@ -2407,10 +2966,12 @@ function updateDetails(code) {
 
 function getChartData(code) {
   
-  //console.log("GETTING PIE CHART DEMO");
-
   var index = 0;
   var maxdays = 0
+
+  var teacherEmail = '';
+
+  var studentsListData = [];
 
 
 
@@ -2423,28 +2984,32 @@ function getChartData(code) {
         if( data != undefined){
           if(data["max days inactive"]){
           maxdays = data["max days inactive"] 
+          teacherEmail = data['teacher email']
           }
         }
         
 
 
       }).then(() => {
-        firebase.firestore().collection('Classes').doc(code).collection("Students").onSnapshot(function (doc) {
+        firebase.firestore().collection('Classes').doc(code).collection("Students").where('accepted', '==', true).onSnapshot(function (doc) {
 
           var unreadMessages = 0
 
           //document.getElementById('studentReportHeadline').innerHTML = "Student Report - " + code;
   
           var studentsReactionLists = [0,0,0,0];
+
+          studentsListData = [];
   
           doc.forEach(snapshot => {
             index = index + 1
               var data = snapshot.data();
+
+              studentsListData.push(data)
               
               var reaction = data["status"];
               var date = data["date"];
 
-              //console.log(data["teacher unread"])
 
               if(data["teacher unread"] != undefined && data["teacher unread"] != null && data["teacher unread"] != NaN){
                 unreadMessages = unreadMessages + data["teacher unread"];
@@ -2454,19 +3019,12 @@ function getChartData(code) {
               }
 
             
-              //console.log("TIMESTAMP FORM FIRE:" + date.seconds + "//" + code)
 
               var studentTimeUpdateTimeStamp = new Date(date.seconds)
 
             
                 var exceedDate = date.seconds + (maxdays * 86400); 
 
-              //console.log('///////////////////////////////////////////')
-              //console.log('Class:' + code)
-              //console.log('student last updated:' + studentTimeUpdateTimeStamp.valueOf())
-              //console.log('today:' + today)
-              //console.log('update by:' + exceedDate)
-              //console.log('maxdays' + maxdays)
 
 
           var happy = '<i class="fas fa-smile" style="font-size: 70px; color: #1cc88a;"></i>';
@@ -2493,7 +3051,6 @@ function getChartData(code) {
               }
 
               } else {
-                //console.log("Gray Time")
                 studentsReactionLists[3] = studentsReactionLists[3] + 1;
 
                 //document.getElementById("face").outerHTML = inactive;
@@ -2503,12 +3060,7 @@ function getChartData(code) {
 
               }
               
-              //console.log('///////////////////////////////////////////')
-              
-  
-  
           });
-          setTimeout(function(){
   
             if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0 && studentsReactionLists[3] == 0){
   
@@ -2558,9 +3110,9 @@ function getChartData(code) {
     });
             }
       
-            //console.log("UNREAD : " + unreadMessages)
-
             var unreadMessagesHTML = ''
+
+            getStudentData(code, studentsListData, teacherEmail, maxdays);
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
               var unreadMessagesHTML =  `<h2><span class="badge badge-warning" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
@@ -2568,13 +3120,9 @@ function getChartData(code) {
             }
     
             document.getElementById(`unreadMessages${code}`).innerHTML = unreadMessagesHTML
-         }, 700);
+         
       });
       })
-
-
-
-
 }
 
 function storeGraphReactionsCode(code, event = "none"){
@@ -2625,10 +3173,7 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
     })
   }
 
-
       var announcementsCount = 0;
-
-
 
       for (let i = 0; i <= classesListCodes.length; i++) {
         var classcode = classesListCodes[i];
@@ -2723,9 +3268,6 @@ async function getAnnouncements(email, pageType = "annoncements-page-main") {
       
       document.getElementById("no-Announcements-section").style.display = "none";
 
-      
-      console.log(announcentsList)
-
       const sortedannouncentsList = announcentsList.sort((a, b) => b.timestamp - a.timestamp)
 
       for(var i = 0; i <= sortedannouncentsList.length; i++){
@@ -2807,12 +3349,7 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
     
             var formattedTime = new Date(time.seconds * 1000).toLocaleString()
       
-            //console.log(formattedTime)
-      
-            //console.log(data)
-      
             var newMessageUI = `
-        
 
             <div>
 
@@ -2825,7 +3362,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
         `
 
   var otherMessage = `
-
  
   <div>
 
@@ -2844,7 +3380,6 @@ function getMessagesForChat_chatPage_teacher_pageNation(classCode, studentEmail,
   }
           }
 
-    
           
         })
     
@@ -2889,7 +3424,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
           var type = data['sent type']
 
-         // console.log(message)
     
           var user = data.user
 
@@ -2898,33 +3432,8 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 
 
           var formattedTime = new Date(time.seconds * 1000).toLocaleString()
-    
-          //console.log(formattedTime)
-    
-          //console.log(data)
-          /*
-    
-          var messageHTML = `
-          <div class="message-component" style="margin-top: 50px">
-          <div class="row">
-            <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Avatar" class="avatar">
-            <div class="col">
-              <div class="row" style="margin-left: 5px;">
-                <h5>${user}</h5>
-                <div style="width: 80%;"></div>
-              </div>
-              <p>${formattedTime}</p>
-
-              <p style="width: 100%;">${message}</p>
-            </div>
-          </div>
-          <hr>
-        </div>
-        `
-        */
 
         var newMessageUI = `
-        
 
         <div>
 
@@ -2935,7 +3444,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
         `
 
   var otherMessage = `
-
  
   <div>
 
@@ -2957,12 +3465,9 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
     $('#message-components').prepend(newMessageUI)
 
   }
-    
-          //$('#message-components').prepend(messageHTML)
 
           messagesListIDs.push(doc.id)
-    
-          
+
         })
     
       }).then(() => {
@@ -2976,8 +3481,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
           }
         });
 
-
-    
           firebase.firestore().collection('Class-Chats').doc(classCode).collection('Students').doc(studentEmail).collection('Messages').orderBy('timestamp').limitToLast(1).onSnapshot(snap => {
             snap.forEach(doc => {
 
@@ -3031,26 +3534,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
             })
             scrollSmoothToBottom()
           })
-
-
-        //   $('#message-components').on('scroll', function() {
-        //     var scrollTop = $(this).scrollTop();
-        
-        //         var topDistance = $(this).offset().top;
-        
-        //         if ( (topDistance) < scrollTop ) {
-        //             alert( $(this).text() + ' was scrolled to the top' );
-        //         }
-            
-        // });
-
-          // $('#message-components').on('scroll', function() { 
-          //   if ($(this).scrollTop() + 
-          //       $(this).innerHeight() >=  
-          //       $(this)[0].scrollHeight) { 
-        
-          //       } 
-          // });
       })
     }
   });
@@ -3075,6 +3558,36 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
     
       }).then(() => {
 
+       
+        var url = `http://localhost:3120/api/sendNotificationtoGroup?group=classes-student-${classCode}&token=${'test'}&title=New message from ${name}&msg=${message}`
+    
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // Code to execute with response
+      
+            var responseText = JSON.parse(xhr.responseText);
+      
+            var status = responseText['status']
+
+            console.log(responseText);
+      
+            if(status == 'success'){
+              //window.location = "dashboard.html"
+
+              console.log("Notification sent")
+      
+      
+            } else {
+              console.log("Notification FAILED")
+            }
+          }
+        }
+        xhr.open('GET', url);
+        xhr.send();
+
+
         firebase.firestore().collection('UserData').doc(studentEmail).collection('Classes').doc(classCode).update({
           "student unread": increment,
       })
@@ -3093,3 +3606,4 @@ function scrollSmoothToBottom() {
     scrollTop: div.scrollHeight - div.clientHeight
   }, 500);
 }
+

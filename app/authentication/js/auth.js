@@ -61,7 +61,7 @@ function facebookLoginStudent() {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                 <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                     document.getElementById('signupError').innerHTML = errorHTML;
@@ -130,7 +130,7 @@ function facebookLoginDistrict() {
 
                 errorHTML = `<div class="alert alert-danger" role="alert" 
             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                 <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                 document.getElementById('signupError').innerHTML = errorHTML;
@@ -201,7 +201,7 @@ function facebookLoginTeacher() {
 
                 errorHTML = `<div class="alert alert-danger" role="alert" 
             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                 <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                 document.getElementById('signupError').innerHTML = errorHTML;
@@ -275,7 +275,7 @@ googleSignInStudent = () => {
     
                     errorHTML = `<div class="alert alert-danger" role="alert" 
                        style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                            <strong>Oops! </strong> This account is not yet registered. <a href = "signup">Sign Up</a>
+                            <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
                       </div>`;
     
                     document.getElementById('signupError').innerHTML = errorHTML;
@@ -284,7 +284,7 @@ googleSignInStudent = () => {
             } else {
                 errorHTML = `<div class="alert alert-danger" role="alert" 
                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                 <strong>Oops! </strong> Google login failed. This account might not be registered yet. <a href = "signup">Sign Up</a>
+                 <strong>Oops! </strong> Google login failed. This account might not be registered yet. <a href = "/signup">Sign Up</a>
            </div>`;
 
                document.getElementById('signupError').innerHTML = errorHTML;
@@ -319,12 +319,10 @@ googleSignInTeacher = () => {
 
            // localStorage.setItem("email", email);
 
-
             console.log("data from doc : ", doc.data());
 
-            var accountType = doc.data()['account type'];
-
             if (doc.exists) {
+                var accountType = doc.data()['account type'];
                 console.log("Document data:", doc.data()["account type"]);
 
                 if (accountType != null) {
@@ -357,7 +355,7 @@ googleSignInTeacher = () => {
 
                 errorHTML = `<div class="alert alert-danger" role="alert" 
                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+                <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
            </div>`;
 
                 errorMessage.innerHTML = errorHTML;
@@ -518,113 +516,149 @@ function emailSignUp(type) {
     
                 }).then(() => {
 
-                    var actionCodeSettings = {
-                    // URL you want to redirect back to. The domain (www.example.com) for this
-                    // URL must be whitelisted in the Firebase Console.
-                    url: 'https://classvibes.net/teacher/dashboard',
-                    // This must be true.
-                    handleCodeInApp: true,
-                    iOS: {
-                        bundleId: 'com.example.ios'
-                    },
-                    android: {
-                        packageName: 'com.example.android',
-                        installApp: true,
-                        minimumVersion: '12'
-                    },
-                    dynamicLinkDomain: 'example.page.link'
-                    };
-
-                    firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+                    firebase.auth().currentUser.sendEmailVerification()
                     .then(function() {
-                        // The link was successfully sent. Inform the user.
-                        // Save the email locally so you don't need to ask the user for it again
-                        // if they open the link on the same device.
-                        window.localStorage.setItem('emailForSignIn', email);
-                    })
-                    .catch(function(error) {
-                        // Some error occurred, you can inspect the code: error.code
-                    });
-                        
+                        console.log("Success send email verification")
+                        if (loginSuccess == true) {
+                            var user = firebase.auth().currentUser;
+        
+                            user.updateProfile({
+                              displayName: displayName,
+                            }).then(function() {
+                              console.log("update success")
+                            }).catch(function(error) {
+                                console.log("update Failed")
+                            });
+        
+        
+                            var signUpPage = document.getElementById('signup-page-full');
+        
+                            signUpPage.style.display = "none";
+        
+                            var successPage = document.getElementById('signup-success-form');
+        
+                            successPage.style.display = "initial";
+        
+                            //FIREBASE DATABASE UPLOAD
+        
+                            if (type == "student") {
+        
+                                firebase.firestore().collection("UserData").doc(email).set({
+                                    "display name": displayName,
+                                    "email": email,
+                                    "username": email,
+                                    "account type": "Student",
+                                    "account status": "Activated",
+                                });
+        
+                                const increment = firebase.firestore.FieldValue.increment(1);
+        
+                                firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                    "webUsers": increment,
+                                    "totalUsers": increment,
+                                });
+                            }
+        
+                            else if (type == 'teacher' || type == 'Solo Teacher') {
+                                firebase.firestore().collection("UserData").doc(email).set({
+                                    "display name": displayName,
+                                    "email": email,
+                                    "username": email,
+                                    "account type": "Teacher",
+                                    "account status": "Activated",
+                                    "billing status": "Activated",
+                                }).then(() => {
+    
+                                    
+                                var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
+    
+                                const xhr = new XMLHttpRequest();
+                                xhr.onreadystatechange = () => {
+                                    if(xhr.readyState === XMLHttpRequest.DONE){
+                                        // Code to execute with response
+    
+                                        console.log(xhr.responseText)
+    
+                                        var responseText = xhr.responseText
+                                        
+                                        var response = JSON.parse(responseText);
+    
+                                        var customerID = response.message
+    
+                                        console.log(response, customerID)
+    
+                                        firebase.firestore().collection("UserData").doc(email).update({
+                                            "customer stripe id": customerID
+                                        }).then(() => {
+                                            var url = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
+    
+                                            const xhr = new XMLHttpRequest();
+                                            xhr.onreadystatechange = () => {
+                                                if(xhr.readyState === XMLHttpRequest.DONE){
+                                                    // Code to execute with response
+                
+                                                    console.log(xhr.responseText)
+                
+                                                    var responseText = xhr.responseText
+                                                    
+                                                    var response = JSON.parse(responseText);
+    
+                                                    console.log(response)
+            
+                                            
+                                                }
+                                            }
+                                            
+                                            xhr.open('GET', url);
+                                            xhr.send();
+                                        })
+                                
+                                    }
+                                }
+                                
+                                xhr.open('GET', url);
+                                xhr.send();
+    
+                            });
+    
+        
+                                const increment = firebase.firestore.FieldValue.increment(1);
+        
+                                firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                    "webUsers": increment,
+                                    "totalUsers": increment,
+                                });
+    
+                            }
+        
+                            else if (type == 'district') {
+                                firebase.firestore().collection("UserData").doc(email).set({
+                                    "display name": displayName,
+                                    "email": email,
+                                    "username": email,
+                                    "account type": "District",
+                                    "account status": "Activated",
+                                });
+        
+                                const increment = firebase.firestore.FieldValue.increment(1);
+        
+                                firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                    "webUsers": increment,
+                                    "totalUsers": increment,
+                                    "totalDistricts": increment
+                                });
+                            }
+        
+        
+                        }
+                      })
+                      .catch(function(error) {
+                        console.log(error)
+                      });
+
                     console.log(loginSuccess);
     
-                    if (loginSuccess == true) {
-                        var user = firebase.auth().currentUser;
-    
-                        user.updateProfile({
-                          displayName: displayName,
-                        }).then(function() {
-                          console.log("update success")
-                        }).catch(function(error) {
-                            console.log("update Failed")
-                        });
-    
-    
-                        var signUpPage = document.getElementById('signup-page-full');
-    
-                        signUpPage.style.display = "none";
-    
-                        var successPage = document.getElementById('signup-success-form');
-    
-                        successPage.style.display = "initial";
-    
-                        //FIREBASE DATABASE UPLOAD
-    
-                        if (type == "student") {
-    
-                            firebase.firestore().collection("UserData").doc(email).set({
-                                "display name": displayName,
-                                "email": email,
-                                "username": email,
-                                "account type": "Student",
-                                "account status": "Deactivated",
-                            });
-    
-                            const increment = firebase.firestore.FieldValue.increment(1);
-    
-                            firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                "webUsers": increment,
-                                "totalUsers": increment,
-                            });
-                        }
-    
-                        else if (type == 'teacher' || type == 'Solo Teacher') {
-                            firebase.firestore().collection("UserData").doc(email).set({
-                                "display name": displayName,
-                                "email": email,
-                                "username": email,
-                                "account type": "Teacher",
-                                "account status": "Deactivated",
-                            });
-    
-                            const increment = firebase.firestore.FieldValue.increment(1);
-    
-                            firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                "webUsers": increment,
-                                "totalUsers": increment,
-                            });
-                        }
-    
-                        else if (type == 'district') {
-                            firebase.firestore().collection("UserData").doc(email).set({
-                                "display name": displayName,
-                                "email": email,
-                                "username": email,
-                                "account type": "District",
-                                "account status": "Deactivated",
-                            });
-    
-                            const increment = firebase.firestore.FieldValue.increment(1);
-    
-                            firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                "webUsers": increment,
-                                "totalUsers": increment,
-                                "totalDistricts": increment
-                            });
-                        }
-    
-    
-                    }
+
     
                 });
             }
@@ -646,6 +680,24 @@ function emailSignUp(type) {
     }, 500)
 }
 
+function sendEmailVerification(){
+    firebase.auth().currentUser.sendEmailVerification()
+    .then(function() {
+        var errorHTML = `<div class="alert alert-success" role="alert" 
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                <strong>Success</strong> Verification email sent 
+            </div>`;
+
+                    document.getElementById('signupError').innerHTML = errorHTML;
+    }).catch(err => {
+        errorHTML = `<div class="alert alert-danger" role="alert" 
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                <strong>Oops! </strong> Something went wrong. <a onclick = 'sendEmailVerification()' href = "#sendVerification">Resend Verification</a>
+            </div>`;
+
+                    document.getElementById('signupError').innerHTML = errorHTML;
+    })
+}
 
 //FIRESTORE MIGRATED
 facebookSignUp = (type) => {
@@ -683,7 +735,7 @@ facebookSignUp = (type) => {
                         "email": email,
                         "username": email,
                         "account type": "Student",
-                        "account status": "Deactivated",
+                        "account status": "Activated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -700,7 +752,7 @@ facebookSignUp = (type) => {
                         "email": email,
                         "username": email,
                         "account type": "Teacher",
-                        "account status": "Deactivated",
+                        "account status": "Activated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -718,7 +770,7 @@ facebookSignUp = (type) => {
                         "email": email,
                         "username": email,
                         "account type": "District",
-                        "account status": "Deactivated",
+                        "account status": "Activated",
                     });
 
                     const increment = firebase.firestore.FieldValue.increment(1);
@@ -808,7 +860,7 @@ googleSignUp = (type) => {
                             "email": email,
                             "username": email,
                             "account type": "Student",
-                            "account status": "Deactivated",
+                            "account status": "Activated",
                         });
     
                         const increment = firebase.firestore.FieldValue.increment(1);
@@ -825,7 +877,59 @@ googleSignUp = (type) => {
                             "email": email,
                             "username": email,
                             "account type": "Teacher",
-                            "account status": "Deactivated",
+                            "account status": "Activated",
+                            "billing status": "Inactive",
+                        }).then(() => {
+
+                            var url = "https://api-v1.classvibes.net/api/createCustomer?email=" + email
+
+                            const xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = () => {
+                                if(xhr.readyState === XMLHttpRequest.DONE){
+                                    // Code to execute with response
+
+                                    console.log(xhr.responseText)
+
+                                    var responseText = xhr.responseText
+                                    
+                                    var response = JSON.parse(responseText);
+
+                                    var customerID = response.message
+
+                                    console.log(response, customerID)
+
+                                    firebase.firestore().collection("UserData").doc(email).update({
+                                        "customer stripe id": customerID
+                                    }).then(() => {
+                                        var url = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
+
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.onreadystatechange = () => {
+                                            if(xhr.readyState === XMLHttpRequest.DONE){
+                                                // Code to execute with response
+            
+                                                console.log(xhr.responseText)
+            
+                                                var responseText = xhr.responseText
+                                                
+                                                var response = JSON.parse(responseText);
+
+                                                console.log(response)
+        
+                                        
+                                            }
+                                        }
+                                        
+                                        xhr.open('GET', url);
+                                        xhr.send();
+                                    })
+                            
+                                }
+                            }
+                            
+                            xhr.open('GET', url);
+                            xhr.send();
+
                         });
     
                         const increment = firebase.firestore.FieldValue.increment(1);
@@ -843,7 +947,7 @@ googleSignUp = (type) => {
                             "email": email,
                             "username": email,
                             "account type": "District",
-                            "account status": "Deactivated",
+                            "account status": "Activated",
                         });
     
                         const increment = firebase.firestore.FieldValue.increment(1);
@@ -865,7 +969,7 @@ googleSignUp = (type) => {
                         var successPage = document.getElementById('signup-success-form');
     
                         successPage.style.display = "initial";
-                    }, 200)
+                    }, 1500)
     
                 }
             }).catch((e) => {
@@ -941,7 +1045,7 @@ function loginWithEmailStudent() {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
              style="margin-top: 20px; width: 94%; margin-left: 6%;">
-               <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+               <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
              </div>`;
 
                     document.getElementById('signupError').innerHTML = errorHTML;
@@ -983,51 +1087,67 @@ function loginWithEmailTeacher() {
 
         if (authValid == true) {
 
-            firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
+            var currentUser = firebase.auth().currentUser
 
-                var accountType = doc.data()['account type'];
+            var emailVerified = currentUser.emailVerified
 
+            if(emailVerified == true){
+                firebase.firestore().collection('UserData').doc(email).get().then(function (doc) {
 
-                if (doc.exists) {
-
-
-                    if (accountType != null) {
-                        if (accountType == "Teacher" || accountType == 'Solo Teacher') {
-                            window.localStorage.setItem("clientType", '9HX4-5H7Y-4CEH-UKPT');
-
-                             window.location = "teacher/dashboard";
-
-
+                    var accountType = doc.data()['account type'];
+    
+    
+                    if (doc.exists) {
+    
+    
+                        if (accountType != null) {
+                            if (accountType == "Teacher" || accountType == 'Solo Teacher') {
+                                window.localStorage.setItem("clientType", '9HX4-5H7Y-4CEH-UKPT');
+    
+                                 window.location = "teacher/dashboard";
+    
+    
+                            } else {
+    
+                                errorHTML = `<div class="alert alert-danger" role="alert" 
+                            style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                            <strong>Oops! </strong> This account was signed up as a ${accountType} account. You do not have sufficient permissions.
+                        </div>`;
+    
+                                document.getElementById('signupError').innerHTML = errorHTML;
+    
+                            }
                         } else {
-
-                            errorHTML = `<div class="alert alert-danger" role="alert" 
+    
+                            errorHTML = `<div class="alert alert-danger" role="alert"
                         style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                        <strong>Oops! </strong> This account was signed up as a ${accountType} account. You do not have sufficient permissions.
+                        <strong>Error! </strong> An unexpected error has acurred, please contact customer support.
                     </div>`;
-
+    
                             document.getElementById('signupError').innerHTML = errorHTML;
-
                         }
                     } else {
-
-                        errorHTML = `<div class="alert alert-danger" role="alert"
-                    style="margin-top: 20px; width: 94%; margin-left: 6%;">
-                    <strong>Error! </strong> An unexpected error has acurred, please contact customer support.
-                </div>`;
-
-                        document.getElementById('signupError').innerHTML = errorHTML;
+                        errorHTML = `<div class="alert alert-danger" role="alert" 
+                 style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                   <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
+                 </div>`;
+    
+                        errorMessage.innerHTML = errorHTML;
                     }
-                } else {
-                    errorHTML = `<div class="alert alert-danger" role="alert" 
-             style="margin-top: 20px; width: 94%; margin-left: 6%;">
-               <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
-             </div>`;
+                }).catch(function (error) {
+                    console.log("Error getting document:", error);
+                });
+            } else {
+                errorHTML = `<div class="alert alert-danger" role="alert" 
+                style="margin-top: 20px; width: 94%; margin-left: 6%;">
+                <strong>Oops! </strong> This account is not yet verified. Check your inbox for the verification email. <a onclick = 'sendEmailVerification()' href = "#sendVerification">Resend Verification</a>
+            </div>`;
 
-                    errorMessage.innerHTML = errorHTML;
-                }
-            }).catch(function (error) {
-                console.log("Error getting document:", error);
-            });
+                    document.getElementById('signupError').innerHTML = errorHTML;
+
+            }
+
+
         }
     });
 
@@ -1089,7 +1209,7 @@ function loginWithEmailDistrict() {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
              style="margin-top: 20px; width: 94%; margin-left: 6%;">
-               <strong>Oops! </strong> This account is not yet registered. <a href = "signup.html">Sign Up</a>
+               <strong>Oops! </strong> This account is not yet registered. <a href = "/signup">Sign Up</a>
              </div>`;
 
                     document.getElementById('signupError').innerHTML = errorHTML;

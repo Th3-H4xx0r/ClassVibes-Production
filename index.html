@@ -2,328 +2,869 @@
 <html lang="en">
 
 <head>
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link rel="stylesheet" href="css/index.css">
-
-  <link rel="icon" href="/img/classvibelogo.png">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>ClassVibes</title>
+  
+  <link rel="icon" href="/img/classvibelogo.png">
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 
-  <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-  <link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+        integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
+        crossorigin="anonymous"></script>
 
-  <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
 
-    <script src="../js/applicationManagement.js"></script>
+		<script src="https://use.fontawesome.com/dbaa5f02ab.js"></script>
 
-  <!--BOOTSTRAP-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/vendor/fontawesome-free/css/all.css">
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.js"></script>
 
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-<!-- Smartsupp Live Chat script -->
-<script type="text/javascript">
-  var _smartsupp = _smartsupp || {};
-  _smartsupp.key = '15a265b793716e5eaeda0981466f7614d85e2029';
-  window.smartsupp||(function(d) {
-    var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-    s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-    c.type='text/javascript';c.charset='utf-8';c.async=true;
-    c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-  })(document);
-  </script>
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CZGZ2HMNMY"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-CZGZ2HMNMY');
-</script>
-
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NCK3T72');</script>
-  <!-- End Google Tag Manager -->
 </head>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NCK3T72"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-<!--
-<script>
-  document.onkeydown = function(e) {
-    if(event.keyCode == 123) {
-       return false;
-    }
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-       document.getElementById('bodytag').innerHTML = ''
-    }
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-       return false;
-    }
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-       return false;
-    }
-    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-       return false;
-    }
-  }
-  </script>
--->
 
+<body style='overflow: hidden; overflow-x: hidden; overflow-y: scroll; background-color: #fdfdfd;'>
 
-<body id="bodytag">
-  <script>
-    AOS.init();
-  </script>
+    <script>
+        AOS.init();
+      </script>
 
-  <!-- HEADER -->
-  <section id="header">
-    <header style="background-color: royalblue; margin-bottom: 0px;" id = 'main-header'>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-custom" style="background-color: white">
+	<!--
+		<a class="navbar-brand" href="#" style="color: royalblue; font-weight: 800; font-family: 'Nunito'; font-size: 30px;">ClassVibes</a>-->
+		<a href = '/'><img src = "/img/classvibelogo.png" width="70px"></img></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+	  <span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarText">
+	  <ul class="navbar-nav mr-auto">
+		<li class="nav-item active">
+		  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="#features">Features</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="/pricing">Pricing</a>
+		</li>
+	  </ul>
+	  <span class="navbar-text" style="font-weight:700">
+		<a href="/login">Login/Signup</a>
+	  </span>
+	</div>
+  </nav>
 
-      <!-- NAVBAR -->
+  
 
-      <div class="container-fluid" >
+	
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-custom">
-          <a class="navbar-brand" href="#header" style="color: white; font-size: 25px; font-weight: 800; font-family: 'Nunito';">ClassVibes</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="#" style="color: white;">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#featuresSection2" style="color: white;">Features</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="#pricing" style="color: white;">Pricing</a>
-              </li>
-
-            </ul>
-
-            <a href="login"><p class="login-signup-btn">Login/Sign Up</p></a>
-          </div>
-        </nav>
-      </div>
-
-      <div class="d-flex justify-content-center" style="margin-top: 150px">
+    <div class="">
         <div class="row">
-  
-          <div class="col">
-            <h1 class="mainTitle-header" style="margin-right: 10%">Managing your <br> class just got <br>easier!</h1>
-            <p class="mainTitle-header-caption">ClassVibes eliminates the difficulties <br> and obstacles of distance learning. <br> Manage your class today!  </p>
+            <div class="col top-box-1" style="">
+                <h1  data-aos="fade-up"  class="main-title123">Managing your <br> Class Just got <br> Easier!</h1>
+                <p  data-aos="fade-up" class="mini-des">ClassVibes eliminates the difficulties
+                    and obstacles of distance learning.
+					Manage your class today!</p>
+					
+					<style>
 
-            <div class="row" >
-              <button class="getStarted-btn" style="margin-left: 8%"  onclick = 'window.location = "login"'>Get Started</button>
+						.main-title123 {
+							font-size: 60px; 
+							font-weight: 700;
+						}
 
-              <a href="#featuresSection2"><h2 style="margin-left: 20px; color: white; font-weight: 700; font-size: 20px; margin-top: 4px;">Features</h2></a>
-            </div>
+						.top-box-1 {
+							margin-left: 10%;
+							 margin-top: 15%;
+						}
+
+						.mini-des {
+							font-size: 25px;
+							 width: 500px;
+							  color: #666
+
+						}
+						
+						.other-box-1 {
+							display: none;
+						}
+
+						#features {
+							margin-top: 13%; margin-left: 4%; font-size: 50px;
+						}
+
+						.plat-title {
+							margin-top: 13%; margin-left: 4%; font-size: 50px;
+						}
+
+						.plat-img {
+							display: none;
+						}
+
+						.behindBox {
+							display: none;
+						}
+
+						.blue_box {
+							display: none;
+						}
+						
+						@media only screen and (max-width: 600px) {
+								.main-title123 {
+									font-size: 40px;
+									margin-top: 30px;
+									text-align: center;
+									margin-left: 10px;
+
+								}
+
+								.top-box-1 {
+									margin-left: 0;
+								}
+
+								.mini-des {
+									font-size: 20px;
+									width: 330px;
+									text-align: center;
+									margin-top: 50px;
+									margin-left: 21px;
+								}
+
+								.js-animated-button {
+									margin-left: 80px;
+								}
+
+								.moving-image {
+									display: none;
+								}
+
+								.other-box-1 {
+									display: initial;
+									margin-top: 90px;
+									width: 300px;
+									height: 370px;
+									margin-right: 30px;
+							
+									background: #f2f4f8;
+									border-radius: 50px;
+								}
+
+								.demo-box {
+									display: none;
+								}
+
+								#features {
+									margin-top: 13%; margin-left: 0%; font-size: 50px;
+									text-align: center;
+								}
+
+								.feature {
+									margin-left: 13%;
+									margin-top: 50px;
+								}
+
+								.plat-title {
+									margin-top: 13%; margin-left: 0%; font-size: 50px;
+									text-align: center;
+								}
+
+								.plat-boxes {
+									display: none;
+								}
+
+								.plat-img {
+									display: initial;
+									width: 340px; 
+									border-radius: 20px; 
+									padding: 30px 30px 30px 30px;
+									margin-left: 18px;
+									margin-top: 50px
+								}
+
+								.blue_box {
+									display: initial;
+									
+									background-color: royalblue;
+									height: 400px;
+									width: 300px;
+									border-radius: 30px;
+									margin-left: 50px;
+									margin-top: 40px
+
+								}
+
+								.moving-image2 {
+									display: initial;
+								}
+
+								.downloads {
+									display: initial;
+								}
+
+							}
+					</style>
+
             
-          </div>
-        
-        <img src="img/undraw_segment_analysis_bdn4.svg" width="500px" id = 'header-img'>
-        </div>
-      </div>
+				<div class="row" style="margin-top: 10px; margin-left: 0px;">
+					<div data-aos="fade-up">
+						<a class="btn btn--svg js-animated-button" href="/login"><span class="btn--svg__label" >Get Started
+							!</span><svg class="btn--svg__circle" width="190" x="0px" y="0px" viewBox="0 0 60 60"
+							enable-background="new 0 0 60 60">
+							<circle class="js-discover-circle" fill="#43B0FF" cx="30" cy="30" r="28.7"></circle>
+						</svg><svg class="btn--svg__border" x="0px" y="0px" preserveaspectratio="none"
+							viewBox="2 29.3 56.9 13.4" enable-background="new 2 29.3 56.9 13.4" width="190">
+							<g class="btn--svg__border--left js-discover-left-border" id="Calque_2">
+								<path fill="none" stroke="#43B0FF" stroke-width="0.5" stroke-miterlimit="1"
+									d="M30.4,41.9H9c0,0-6.2-0.3-6.2-5.9S9,30.1,9,30.1h21.4"></path>
+							</g>
+							<g class="btn--svg__border--right js-discover-right-border" id="Calque_3">
+								<path fill="none" stroke="#43B0FF" stroke-width="0.5" stroke-miterlimit="1"
+									d="M30.4,41.9h21.5c0,0,6.1-0.4,6.1-5.9s-6-5.9-6-5.9H30.4"></path>
+							</g>
+						</svg></a>
+						<div class="col moving-image2" style="margin-top: 14%">
+							<img src="/img/undraw_teaching_f1cm.svg" alt="" style="margin-left: 5%" width=80% class="hover-up-down">
+						</div>
 
-    </header>
+						<center>
+							<div class="other-box-1" data-aos="fade-up" data-aos-delay = "300">
+								<div style="height: 40px;"></div>
+								<p style="width: 250px; margin-left: -30px;">Easily manage all of your classes with ease and simplicity. With our interactive dashboard,
+									students can see which classes they are enrolled in and how they are doing.</p>
+							</div>
+						</center>
 
-    <img src="img/bottom_curve_1.png" class="image" style="width: 100%;">
-  
-  </section>
+					
+					</div>
 
+					
+				</div>
 
-  <!--FEATURES SECTION 1-->
+            </div>
 
-  <section>
-    <div class="d-flex justify-content-center"  data-aos = "fade-right" id = 'feature-section-1-css'>
-      <div class="row">
-        <div class="col">
-          <h1 style="font-weight: 700; font-size: 45px; margin-left: 20px;" id = 'caption-realtimeAccess'>Realtime Access</h1>
-          <p style="font-weight: 600; font-size: 25px; margin-left: 20px;">Easily reach your students <br> in realtime. With our <br> website, make sure your <br>are in touch with your students.</p>
-        </div>
-        <img src="img/server_isometric.png" width="500px" style="margin-left: 20px;" id = 'server-iso-img'>
-      </div>
-      
-    </div>
+            <div class="col moving-image" style="margin-top: 14%">
+                <img src="/img/undraw_teaching_f1cm.svg" alt="" style="margin-left: 5%" width=80% class="hover-up-down">
+			</div>
+			
+			<style>
+				.moving-image2 {
+					display: none;
+				}
+			</style>
 
-  </section>
-
-  <!--FEATURES SECTION 2-->
-
-  <section id = "featuresSection2" data-aos="fade-left">
-    <div class="d-flex justify-content-center"  id = "featuresSection2-css"">
-      <div class="row">
-
-        <img src="img/undraw_data_processing_yrrv.svg" width="500px" style="margin-left: 20px;" class="features_img">
-
-        <div class="col">
-          <h1 style="font-weight: 700; font-size: 45px; margin-left: 20px;">Plenty of Features</h1>
-
-          <p style="font-weight: 700; font-size: 25px; margin-left: 20px; margin-top: 30px;">Push Annoucements</p>
-
-          <p style="font-weight: 600; font-size: 20px; margin-left: 20px; margin-top: -20px;">Keep your students updated with the latest news <br> and instructions, all done with a click of a button.</p>
-
-          <p style="font-weight: 700; font-size: 25px; margin-left: 20px; margin-top: 30px;">Student Feedback</p>
-
-          <p style="font-weight: 600; font-size: 20px; margin-left: 20px; margin-top: -20px;">See what your students are feeling,<br>get student feedback in real time.<br>So you know what students to focus on.</p>
-
-          <p style="font-weight: 700; font-size: 25px; margin-left: 20px; margin-top: 30px;">Schedule Meetings</p>
-
-          <p style="font-weight: 600; font-size: 20px; margin-left: 20px; margin-top: -20px;">We know that students often confused, <br> schedule meetings with students who require help <br> to clear any confusion between your students,<br> this makes distance learning a lot easier.</p>
 
         </div>
-        
-      </div>
-      
     </div>
 
-  </section>
+    <div class="demo-box" data-aos="fade-up">
+        <div class="row">
+            <div>
+				<p style="font-size: 30px; width: 800px; margin-left: 5%; margin-top: 5%">Easily manage all of your classes with ease and simplicity. With our interactive dashboard,
+					students can see which classes they are enrolled in and how they are doing.
+                </p>
 
-  <!--PRICING SECTION-->
+                <h1 style="margin-left: 5%;">Simple <br> Communication</h1>
+                    
 
-
-  <section id = "pricing">
-    <div class="d-flex justify-content-md-center" data-aos="zoom-in" id = 'pricingsection-css' style="margin-top: 300px">
-
-      <div class="col col-lg-6" align = "center">
-        <h1 style="font-weight: 700; font-size: 45px; margin-left: 20px;">Request a quote today!</h1>
-
-        <p>Contact <a href="mailto:sales@classvibes.net">sales@classvibes.net</a> for more information about pricing and to get started with your district!</p>
-      </div>
-
-      
+            </div>
+            <div style="width: 100px; margin-top: 9%; margin-left: 2%; padding-right: 4%;"><img src="/img/dashboard_old.PNG" alt="" style="width: 700px; border-radius: 20px; " class="shadow" data-aos="fade-up" data-aos-delay = "100"></div>
+        </div>
     </div>
 
-  </section>
+    <h1 id = 'features'>Features</h1>
+	<div style="margin-top: 90px;"></div>
+	
+	<div class="d-flex justify-content-center">
+        <div class="row">
+            <div class="feature" data-aos="fade-up" data-aos-delay = "100">
+                <center>
+                    <div class="row">
+                        <center>
+                            <div style="height: 40px;"></div>
+                            <i class="fa fa-smile-o" aria-hidden="true" style="color: green; font-size: 50px; margin-left: 80px;"></i>
+                        <i class="fa fa-meh-o" aria-hidden="true" style="color: rgb(202, 202, 0); font-size: 50px;  margin-left: 20px;"></i>
 
-<!-- Footer -->
+                        <i class="fa fa-frown-o" aria-hidden="true" style="color: red; font-size: 50px;  margin-left: 20px;"></i>
+
+                        </center>
+                        <div style="height: 40px;"></div>
+
+
+
+
+                    </div>
+                    <div style="height: 20px;"></div>
+
+                </center>
+                <p style="width: 250px; text-align: center; margin-left: 30px;">Students can select their mood in their class allowing you as a teacher to manage and take care of those who are struggling in the class.</p>
+                <center><h2>Mood Selections</h1></center>
+            </div>
+            <div class="feature" data-aos="fade-up" data-aos-delay = "300">
+                <div style="height: 40px;"></div>
+                <center><img src="https://img.icons8.com/fluent/96/000000/meeting.png"/></center>
+                <p style="width: 250px; text-align: center; margin-left: 30px;">Schedule Meetings with students who are striving to do well in the class, but require assistance!</p>
+                <center><h2>Meetings</h1></center>
+            </div>
+            <div class="feature" data-aos="fade-up" data-aos-delay = "500">
+                <div style="height: 40px;"></div>
+
+                <center><img src="https://img.icons8.com/color/64/000000/messaging-.png"/></center>
+                <div style="height: 10px;"></div>
+                <p style="width: 250px; text-align: center; margin-left: 30px;">Easily chat with you students and find out whats bothering them, or simply just to inspire them to move forward in the class.</p>
+                <center><h2>Messaging</h1></center>
+            </div>
+            <div class="feature" data-aos="fade-up" data-aos-delay = "700">
+                <div style="height: 40px;"></div>
+
+                <center><img src="https://img.icons8.com/cute-clipart/64/000000/commercial.png"/></center>
+                <div style="height: 10px;"></div>
+
+                <p style="width: 250px; text-align: center; margin-left: 30px;">Send Announcements from one platofrm and notify all your students on any upcomming activites, etc.</p>
+                <center><h2>Announcements</h1></center>
+            </div>
+
+		</div>
+		</div>
+		
+		<!--PLATFORMS -->
+
+		<h1 class="plat-title">Platforms</h1>
+
+		<img src="/img/dashboard_old.PNG" alt=""  class="shadow plat-img" data-aos="fade-up" data-aos-delay = "100">
+
+		<div class="row downlaod-btn">
+			<center class="downloads">
+				<img src="Download_on_the_App_Store_Badge.svg" alt="" style="width: 240px; margin-top: 40px">
+				<img src="google-play-badge (1).png" alt="" style="width: 300px;">
+			</center>
+
+			<style>
+				.downloads {
+					display: none;
+				}
+			</style>
+
+			<div class="blue_box">
+				<div class="row">
+					<ul>
+						<li>
+							<div style="height: 20px;"></div>
+							<p style="font-size: 15px; color: white; width: 230px;">ClassVibes makes managing your class much easier, so you have less to worry about! With Class Vibes, you never have to guess which students to help.
+
+							</p>
+						</li>
+						<li>
+							<p style="font-size: 15px; color: white; width: 230px;">Know at all times how your class is feeling and doing and solve problems with your students in real time!
+							</p>
+
+						</li>
+						<li>
+							<p style="font-size: 15px; color: white; width: 230px;">With a wide range of features that help ease communication, distance learning is just a bit easier.
+							</p>
+						
+						</li>
+						<li>
+							<p style="font-size: 15px; color: white; width: 230px;">Get started today! <a href="/pricing" style="color: blanchedalmond;">Pricing Plans</a>
+							</p>
+						
+						</li>
+
+					</ul>
+					
+					
+					
+
+					</p>
+				</div>
+			</div>
+
+		</div>
+
+		<style>
+
+		</style>
+
+
+			<div class="row plat-boxes" style="margin-left: 4%; margin-top: 4%;">
+
+				<div class="platform" data-aos="fade-up" data-aos-delay = "100">
+					<h1 style="margin-top: 40px; margin-left: 40px">Web <br> Client Application</h1>
+					<div style="margin-top: 30px"></div>
+					<img src="/img/Dash (1).svg" alt="" style = " transform: rotate(35deg) translateX(40%); margin-left:20%" width="45%">
+					<img src="/img/dashboard_old.PNG" alt="" style = "transform: rotate(30deg) translateY(-60%);  margin-left:12%" width="50%">
+					
+				</div>
+				<div class="platform" data-aos="fade-up" data-aos-delay = "200" style="margin-left: 6%;">
+					<h1 style="margin-top: 40px; margin-left: 40px">Mobile <br> Application</h1>
+					<div style="margin-top: 30px"></div>
+					<img src="/img/dashboard_old.PNG" alt="" style = " transform: rotate(35deg) translateX(40%); margin-left:100px" width="50%">
+					<img src="/img/Dash.svg" alt="" style = "transform: rotate(30deg) translateY(-60%);  margin-left:20px" width="50%">
+					
+				</div>
+            </div>
+
+            <div style="height: 130px;"></div>
+
+            <div class="behindBox" data-aos="fade-up">
+                <div class="inFrontBox" data-aos="fade-up" >
+
+                    <div style="height: 50px;"></div>
+                    <h1 style="color: white; font-weight: bold; margin-left: 50px; ">A Simple and Effertless solution to manage all your students!</h1>
+                    <div style="height: 100px;"></div>
+
+                    <div class="row">
+                        <ul>
+                            <li>
+                                <p style="font-size: 20px; color: white; width: 500px;">ClassVibes makes managing your class much easier, so you have less to worry about! With Class Vibes, you never have to guess which students to help.
+
+                                </p>
+                            </li>
+                            <li>
+                                <p style="font-size: 20px; color: white; width: 500px;">Know at all times how your class is feeling and doing and solve problems with your students in real time!
+								</p>
+
+							</li>
+							<li>
+								<p style="font-size: 20px; color: white; width: 500px;">With a wide range of features that help ease communication, distance learning is just a bit easier.
+								</p>
+							
+                            </li>
+                            <li>
+								<p style="font-size: 20px; color: white; width: 500px;">Get started today! <a href="/pricing" style="color: blanchedalmond;">Pricing Plans</a>
+								</p>
+							
+                            </li>
+
+						</ul>
+						
+						<img src="/img/undraw_Marketing_re_7f1g (1).svg" alt="" width="45%" class="img-fluid">
+                        
+                        
+
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+           
+
+            <style>
+
+					html {
+					scroll-behavior: smooth;
+					}
+
+                .behindBox {
+                    width: 1100px;
+                    height: 700px;
+                    background-color: rgb(24, 53, 139);
+                    margin-left: 13%;
+                    margin-top: 10%;
+                    border-radius: 30px;
+                    position: relative;
+                    bottom: 150px;
+                    left: 150px;
+                }
+
+                .inFrontBox {
+                    width: 1100px;
+                    height: 700px;
+                    background-color: royalblue;
+                    margin-left: 19%;
+                    margin-top: 10%;
+                    border-radius: 30px;
+                    position: relative;
+                    top: -30px;
+                    right: 30px;
+                    left: -250px;
+                }
+            </style>
+            
+            
+
+	<style>
+
+
+		.get-started-pricing{
+			width: 90%;
+			border-radius: 20px;
+			border: none;
+			height: 40px;
+			transition: background-color 0.3s;
+		}
+
+		.get-started-pricing:hover{
+			background-color: royalblue;
+			color: white;
+		}
+
+		ul {
+		list-style: none;
+		}
+
+		ul .pricing-li:before {
+		content: '✓ ';
+		}
+
+		.pricing-li{
+			padding-top: 10px;
+			font-weight: 600;
+
+		}
+
+		.pricing-card-description{
+			text-align: left;
+			color: grey;
+			margin-left: 10%;
+			margin-right: 10%;
+
+		}
+
+		.pricing-card-list{
+			 background-image: url(img/large-bullet.png) no-repeat;
+		}
+
+		#pricing-card-title{
+			text-align: left;
+			margin-top: 7%;
+			margin-left: 10%;
+			font-size: 30px;
+			font-weight: 700;
+			font-family: 'Nunito';
+		}
+
+		#pricing-card-description{
+			margin-top: 5%;
+			margin-left: 2%;
+			font-size: 30px;
+			font-weight: 700;
+			font-family: 'Nunito';
+		}
+
+		#pricing-card{
+			height: 550px;
+			width: 25%;
+			background:white;
+			border-radius: 20px;
+			margin-right: 5%;
+		}
+
+		.pricing-background-box{
+			background: #f2f4f8;
+			width: 70%;
+			height: 900px;
+			border-radius: 20px;
+		}
+        .feature {
+            /* Rectangle 14 */
+        width: 300px;
+        height: 370px;
+        margin-right: 30px;
+       
+
+        background: #f2f4f8;
+        border-radius: 50px;
+		}
+		
+		.platform {
+            /* Rectangle 14 */
+        width:45%;
+        height: 570px;
+
+       
+
+		background-color: #f2f4f8;
+        border-radius: 50px;
+        }
+    </style>
+
+	<!-- Footer -->
 <footer class="page-footer font-small unique-color-dark" style="background-color: royalblue; color: white;">
 
-  <!-- Footer Links -->
-  <div class="container text-center text-md-left mt-5" style="padding-top: 40px;">
-
-    <!-- Grid row -->
-    <div class="row mt-3">
-
-      <!-- Grid column -->
-      <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-
-        <!-- Content -->
-        <h6 class="text-uppercase font-weight-bold">Xeon Developers 2020</h6>
-        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-        <p>Xeon Developers is a tech solutions company based in the Bay Area. Contact support@classvibes.net for any inquiries or questions. Contact sales@classvibes.net for sales information.</p>
-
-      </div>
-      <!-- Grid column -->
-
-      <!-- Grid column -->
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-
-        <!-- Links -->
-        <h6 class="text-uppercase font-weight-bold">Navigation</h6>
-        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-        <p>
-          <a href="#header" style="color: white; text-decoration: none;">Home</a>
-        </p>
-        <p>
-          <a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
-        </p>
-        <p>
-          <a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
-        </p>
-        <p>
-          <a href="#!" style="color: white; text-decoration: none;">Help</a>
-        </p>
-
-      </div>
-      <!-- Grid column -->
-
-      <!-- Grid column -->
-      <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4" >
-
-        <!-- Links -->
-        <h6 class="text-uppercase font-weight-bold">Legal</h6>
-        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-        <p>
-          <a href="privacy" style="color: white; text-decoration: none;">Privacy Policy</a>
-        </p>
-        <p>
-          <a href="legal" style="color: white; text-decoration: none;">Terms and Conditions</a>
-        </p>
-
-      </div>
-      <!-- Grid column -->
-
-      <!-- Grid column -->
-      <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-
-        <!-- Links -->
-        <h6 class="text-uppercase font-weight-bold">Contact</h6>
-        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-        <p>
-          <i class="fas fa-home mr-3"></i> Mountain House, California</p>
-        <p>
-          <i class="fas fa-envelope mr-3"></i> support@classvibes.net</p>
-        
-          <p>
-            <i class="fas fa-comments-dollar mr-3"></i>sales@classvibes.net</p>
-
-      </div>
-      <!-- Grid column -->
-
-    </div>
-    <!-- Grid row -->
-
-  </div>
-  <!-- Footer Links -->
-
-  <!-- Copyright -->
-  <div class="footer-copyright text-center py-3">© 2020 Xeon Developers</a>
-  </div>
-  <!-- Copyright -->
-
-</footer>
-<!-- Footer -->
+	<!-- Footer Links -->
+	<div class="container text-center text-md-left mt-5" style="padding-top: 40px;">
   
-
+	  <!-- Grid row -->
+	  <div class="row mt-3">
+  
+		<!-- Grid column -->
+		<div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+  
+		  <!-- Content -->
+		  <h6 class="text-uppercase font-weight-bold">Proto Systems</h6>
+		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+		  <p>Proto Systems is a tech solutions company based in the Bay Area. Contact support@classvibes.net for any inquiries or questions. Contact sales@classvibes.net for sales information.</p>
+  
+		</div>
+		<!-- Grid column -->
+  
+		<!-- Grid column -->
+		<div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+  
+		  <!-- Links -->
+		  <h6 class="text-uppercase font-weight-bold">Navigation</h6>
+		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+		  <p>
+			<a href="#header" style="color: white; text-decoration: none;">Home</a>
+		  </p>
+		  <p>
+			<a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
+		  </p>
+		  <p>
+			<a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
+		  </p>
+		  <p>
+			<a href="#!" style="color: white; text-decoration: none;">Help</a>
+		  </p>
+  
+		</div>
+		<!-- Grid column -->
+  
+		<!-- Grid column -->
+		<div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4" >
+  
+		  <!-- Links -->
+		  <h6 class="text-uppercase font-weight-bold">Legal</h6>
+		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+		  <p>
+			<a href="privacy" style="color: white; text-decoration: none;">Privacy Policy</a>
+		  </p>
+		  <p>
+			<a href="legal" style="color: white; text-decoration: none;">Terms and Conditions</a>
+		  </p>
+  
+		</div>
+		<!-- Grid column -->
+  
+		<!-- Grid column -->
+		<div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+  
+		  <!-- Links -->
+		  <h6 class="text-uppercase font-weight-bold">Contact</h6>
+		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+		  <p>
+			<i class="fas fa-home mr-3"></i> Mountain House, California</p>
+		  <p>
+			<i class="fas fa-envelope mr-3"></i> support@classvibes.net</p>
+		  
+			<p>
+			  <i class="fas fa-comments-dollar mr-3"></i>sales@classvibes.net</p>
+  
+		</div>
+		<!-- Grid column -->
+  
+	  </div>
+	  <!-- Grid row -->
+  
+	</div>
+	<!-- Footer Links -->
+  
+	<!-- Copyright -->
+	<div class="footer-copyright text-center py-3">Copyright © 2020 ProtoSystems</a>
+	</div>
+	<!-- Copyright -->
+  
+  </footer>
+  <!-- Footer -->
+	
 
 </body>
 
 <style>
-  @media only screen and (max-width: 600px) {
-    
-  }
 
-  /* Small devices (portrait tablets and large phones, 600px and up) */
-  @media only screen and (min-width: 600px) {
+	.hover-up-down{
+		-webkit-animation: action 2s infinite  alternate;
+        animation: action 2s infinite  alternate;
+	}
 
-  }
+	@-webkit-keyframes action {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-20px); }
+    }
+    @keyframes action {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-20px); }
+    }
+
+
+	
+    .demo-box {
+        
+        width: 90%;
+        height: 460px;
+        margin-top: 200px;
+        margin-left: 5%;
+        
+
+        background: #F7F9F9;
+        border-radius: 50px;
+    }
+
+    .btn {
+	 font-size: 1em;
+	 line-height: 1em;
+	 letter-spacing: 0.04em;
+	 display: inline-block;
+     
+}
+ .btn--svg {
+	 position: relative;
+	 height: 42px;
+	 width: 190px;
+	 overflow: hidden;
+	 border-radius: 21px;
+     color: white
+}
+ .btn--svg:hover .btn--svg__circle circle {
+	 -webkit-transform: scale(0);
+	 -moz-transform: scale(0);
+	 -ms-transform: scale(0);
+	 transform: scale(0);
+}
+ .btn--svg:hover .btn--svg__label {
+     color: black
+}
+ .btn--svg:hover .btn--svg__border--left path, .btn--svg:hover .btn--svg__border--right path {
+	 stroke-dasharray: 61.8204345703 61.8204345703;
+	 stroke-dashoffset: 0;
+	 -webkit-transition-delay: 0.25s;
+	 -webkit-transition-duration: 0.5s;
+	 -webkit-transition-timing-function: ease-in-out;
+	 -webkit-transition-property: stroke-dashoffset;
+	 -moz-transition-delay: 0.25s;
+	 -moz-transition-duration: 0.5s;
+	 -moz-transition-timing-function: ease-in-out;
+	 -moz-transition-property: stroke-dashoffset;
+	 -ms-transition-delay: 0.25s;
+	 -ms-transition-duration: 0.5s;
+	 -ms-transition-timing-function: ease-in-out;
+	 -ms-transition-property: stroke-dashoffset;
+	 transition-delay: 0.25s;
+	 transition-duration: 0.5s;
+	 transition-timing-function: ease-in-out;
+	 transition-property: stroke-dashoffset;
+     color: white
+}
+ .btn--svg__label {
+	 -webkit-font-smoothing: antialiased;
+	 font-family: sans-serif;
+	 font-weight: bold;
+	 text-align: center;
+	 color: white;
+	 z-index: 3;
+	 width: 100%;
+	 -webkit-transition: color 0.5s ease-in-out;
+	 -moz-transition: color 0.5s ease-in-out;
+	 -ms-transition: color 0.5s ease-in-out;
+	 transition: color 0.5s ease-in-out;
+}
+ .btn--svg__circle circle {
+	 -webkit-transition: transform 0.5s ease-in-out;
+	 -webkit-transform: scale(1.1);
+	 -webkit-transform-origin: 50% 50%;
+	 -moz-transition: transform 0.5s ease-in-out;
+	 -moz-transform: scale(1.1);
+	 -moz-transform-origin: 50% 50%;
+	 -ms-transition: transform 0.5s ease-in-out;
+	 -ms-transform: scale(1.1);
+	 -ms-transform-origin: 50% 50%;
+	 transition: transform 0.5s ease-in-out;
+	 transform: scale(1.1);
+	 transform-origin: 50% 50%;
+}
+ .btn--svg__border--left path, .btn--svg__border--right path {
+	 stroke-dasharray: 61.8204345703 61.8204345703;
+	 -webkit-transition-duration: 0s;
+	 -webkit-transition-timing-function: ease-in-out;
+	 -webkit-transition-property: stroke-dashoffset;
+	 -webkit-transition-delay: 0.5s;
+	 -moz-transition-duration: 0s;
+	 -moz-transition-timing-function: ease-in-out;
+	 -moz-transition-property: stroke-dashoffset;
+	 -moz-transition-delay: 0.5s;
+	 -ms-transition-duration: 0s;
+	 -ms-transition-timing-function: ease-in-out;
+	 -ms-transition-property: stroke-dashoffset;
+	 -ms-transition-delay: 0.5s;
+	 transition-duration: 0s;
+	 transition-timing-function: ease-in-out;
+	 transition-property: stroke-dashoffset;
+	 transition-delay: 0.5s;
+}
+ .btn--svg__border--left path {
+	 stroke-dashoffset: -61.8204345703;
+}
+ .btn--svg__border--right path {
+	 stroke-dashoffset: 61.8204345703;
+}
+ .btn--svg svg, .btn--svg__label {
+	 position: absolute;
+	 top: 50%;
+	 left: 50%;
+	 -webkit-transform: translate(-50%, -50%);
+	 -webkit-transform-origin: 50% 50%;
+	 -moz-transform: translate(-50%, -50%);
+	 -moz-transform-origin: 50% 50%;
+	 -ms-transform: translate(-50%, -50%);
+	 -ms-transform-origin: 50% 50%;
+	 transform: translate(-50%, -50%);
+	 transform-origin: 50% 50%;
+}
+ .c-white {
+	 color: rgb(104, 32, 197);
+}
+ .trailer {
+	 margin-bottom: 40px;
+}
+ .trailer--nano {
+	 margin-bottom: 10px;
+}
+ a {
+	 position: relative;
+	 text-decoration: none;
+	 color: white;
+}
+ a:after {
+	 content: '';
+	 height: 1px;
+	 bottom: -4px;
+	 position: absolute;
+	 left: 5%;
+	 right: 95%;
+	 background: black;
+	 transition: right 0.25s ease-in-out;
+}
+ a:hover:after {
+	 right: 5%;
+     color: black
+}
+ .teasing-1, .heading-2 {
+	 font-family: sans-serif;
+	 letter-spacing: 0.04em;
+	 -webkit-font-smoothing: antialiased;
+}
+ .teasing-1 {
+	 font-size: 14px;
+	 line-height: 14px;
+}
+ .heading-2 {
+	 font-weight: bold;
+	 font-size: 20px;
+	 line-height: 20px;
+	 text-transform: uppercase;
+}
+ 
 </style>
 
 </html>

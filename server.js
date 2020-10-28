@@ -237,6 +237,17 @@ router.get('/teacher/login',function(req,res){
   });
 
 
+  router.get('/teacher/paymentSuccess',function(req,res){
+    if(serverStatus){
+      res.sendFile(path.join(__dirname+'/app/teacherPortal/paymentSuccess.html'));
+
+  
+    } else {
+      res.redirect('/serverDown');
+    }
+    });
+
+
   router.get('/teacher/serverDown',function(req,res){
     if(serverStatus){
       res.redirect('/serverDown');
@@ -304,7 +315,31 @@ router.get('/district/dashboard',function(req,res){
     });
 
 
+/////////////////////////
+//Settings Pages Paths
+/////////////////////////
 
+router.get('/settings',function(req,res){
+  if(serverStatus){
+    res.sendFile(path.join(__dirname+'/app/settings/settings.html'));
+
+
+  } else {
+    res.redirect('/serverDown');
+
+  }
+  });
+
+  router.get('/settings/payments',function(req,res){
+    if(serverStatus){
+      res.sendFile(path.join(__dirname+'/app/settings/payment.html'));
+  
+  
+    } else {
+      res.redirect('/serverDown');
+  
+    }
+    });
 
 
 
@@ -316,6 +351,11 @@ router.get('/serverdown',function(req,res){
 router.get('/legal',function(req,res){
 
   res.sendFile(path.join(__dirname+'/terms-conditions.html'));
+});
+
+router.get('/pricing',function(req,res){
+
+  res.sendFile(path.join(__dirname+'/pricing.html'));
 });
 
 router.get('/privacy',function(req,res){
@@ -347,8 +387,10 @@ app.use('/teacher', express.static('app/teacherPortal/'))
 app.use('/app', express.static('app/'))
 app.use('/teacherjs', express.static('app/teacherPortal/js/'))
 app.use('/teachercss', express.static('app/teacherPortal/css/'))
+app.use('/teacherimg', express.static('app/teacherPortal/img/'))
 app.use('/404page', express.static('PageNotFound/'))
 app.use('/socket.io', express.static('socket.io/'))
+app.use('/settings', express.static('app/settings/'))
 
 //add the router
 app.use('/', router);
