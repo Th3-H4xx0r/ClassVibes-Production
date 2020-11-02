@@ -2243,7 +2243,7 @@ function sendMessage_Classes_page(classCode){
       }).then(() => {
         //console.log("Message sent")
 
-        var url = `http://localhost:3120/api/sendNotificationtoGroup?group=classes-teacher-${classCode}&token=${'test'}&title=New message from ${name}&msg=${message}`
+        var url = `https://api-v1.classvibes.net/api/sendNotificationtoGroup?group=classes-teacher-${classCode}&token=${'test'}&title=New message from ${name}&msg=${message}`
     
         const xhr = new XMLHttpRequest();
       
