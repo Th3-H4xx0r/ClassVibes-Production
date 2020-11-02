@@ -10,7 +10,7 @@ function setVersionFooter(){
 
     if(document.getElementById('footer-version-code') != null){
         document.getElementById('footer-version-code').innerHTML = `
-        <span>Copyright &copy; ProtoSystems. v${VERSION_CODE}</span>
+        <span>Copyright &copy; Proto Systems. v${VERSION_CODE}</span>
     `;
     }
 
