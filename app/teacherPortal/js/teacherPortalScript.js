@@ -3558,8 +3558,10 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
     
       }).then(() => {
 
+        var fixedEmail = studentEmail.replace(/[|&;$%@"<>()+,]/g, "-");
+
        
-        var url = `https://api-v1.classvibes.net/api/sendNotificationtoGroup?group=classes-student-${classCode}-${email}&token=${'test'}&title=New message from ${name}&msg=${message}`
+        var url = `https://api-v1.classvibes.net/api/sendNotificationtoGroup?group=classes-student-${classCode}-${fixedEmail}&token=${'test'}&title=New message from ${name}&msg=${message}`
     
         const xhr = new XMLHttpRequest();
       
