@@ -981,7 +981,7 @@ function getGraphData_Classes_page(code){
 
   document.getElementById('chartBody').innerHTML = `
   <a href='/teacher/classes/${code}' style = 'text-decoration: none'>
-            <div class="card" style="width: 10rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
+            <div class="card" style="width: 25rem; Box-shadow:0 10px 20px rgba(0,0,0,0.05), 0 6px 6px rgba(0,0,0,0.05); margin-right: 50px; margin-left: 5px; margin-bottom: 40px; border-radius: 20px">
                 <div class="card-body">
                     <h2><span id = 'unreadMessages${code}'></span></h2>
                   <div class="chart-pie pt-4 pb-2" id = "chartPie${code}">
@@ -1093,13 +1093,14 @@ function getClassData(emailRef) {
             
             output5 = `
             <a href="classes/${classCode}" style = 'text-decoration: none'>
-            <div class="card" style="width: 10rem; Box-shadow:0 10px 20px rgba(0,0,0,0.10), 0 6px 6px rgba(0,0,0,0.10); margin-right: 50px; margin-left: 5px; margin-bottom: 40px">
-                <div class="card-body">
+            <div class="" style="width: 300px; height: 300px; Box-shadow:0 10px 20px rgba(0,0,0,0.05), 0 6px 6px rgba(0,0,0,0.05); margin-right: 50px; margin-left: 5px; margin-bottom: 40px; border-radius: 20px">
+                <div class="card-body" style = "width: 300px; height: 300px">
                 <h2><span id = 'unreadMessages${classCode}'></span></h2>
-                  <div class="chart-pie pt-4 pb-2" id = "chartPie${classCode}">
+                  <center>
+                  <div class="chart-pie pt-4 pb-2" id = "chartPie${classCode}" style = "width: 200px; margin-top: -50px">
                     <canvas id="myPieChart${classCode}"></canvas>
                   </div>
-                  <div style="height: 30px"></div>
+                  </center>
                   <center><h5 class="card-title">${className}</h5>
                   </center>
 
