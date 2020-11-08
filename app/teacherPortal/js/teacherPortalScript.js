@@ -2740,17 +2740,17 @@ function getEditData(code, expireDate) {
 
     output += `
 
-    <h5>Class Code</h5>
+    <h5 style = 'margin-top: -20px; font-weight: 700'>Class Code</h5>
 
-    <h1><span class = 'badge badge-primary'>${code}</span></h1>
+    <h1>${code}</h1>
 
-    <h5>Class Expire Date</h5>
+    <h5 style = 'margin-top: 20px; font-weight: 700'>Class Expire Date</h5>
 
     <h4>${expireDateFormatted} <span class = 'badge badge-warning'>${Difference_In_Days} Days Remaining </span></h4> <br>
 
 
 
-    <h5>Edit Class Name</h5>
+    <h5 style = 'font-weight: 700'>Edit Class Name</h5>
 
   <div class="input-group mb-3">
   <div class="input-group-prepend">
@@ -2759,13 +2759,13 @@ function getEditData(code, expireDate) {
     </span>
   </div>
 
-  <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" name="editName" id="editName" value = '${className}' oninput = 'updateDetailsOnChange("${code}")'>
+  <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" maxlength = "20" name="editName" id="editName" value = '${className}' oninput = 'updateDetailsOnChange("${code}")'>
 </div>
 
 </div>
 </div>
 
-<h5>Set Inactive Days</h5>
+<h5 style = 'font-weight: 700'>Set Inactive Days</h5>
 
 <h6>Set the minimum number of days for your students to choose a mood. Inactive students will show up gray on your graph.</h6>
 
@@ -2777,7 +2777,7 @@ function getEditData(code, expireDate) {
   <input type="number" class="form-control" aria-label="Number of Days" min="1" max = "14" id="maxDays" value="${inactiveDays}" oninput = 'updateDetailsOnChange("${code}")'>
 </div>
 
-<h5>Allow Students To Join <h4><span class = 'badge badge-primary' id  = 'join-setting'>Join Enabled</span> <h4></h5>
+<h5 style = 'font-weight: 700'>Allow Students To Join <h4><span class = 'badge badge-primary' id  = 'join-setting'>Join Enabled</span> <h4></h5>
 
 
     <label class="switch-container">
@@ -2786,7 +2786,7 @@ function getEditData(code, expireDate) {
   </label>
 
 
-<h5>Delete Class</h5>
+<h5 style = 'font-weight: 700'>Delete Class</h5>
 
 <button type="button" class="btn btn-outline-danger" onclick = "showDeleteClassModal('${code}')">Delete Class</button>
 
