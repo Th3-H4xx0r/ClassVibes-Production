@@ -2129,13 +2129,24 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
         for (var i = 0; i <= classInfoList.length; i++) {
           let descriptionOutput = "";
           classInfoData = classInfoList[i];
-          var happy = '<i class="fas fa-user" style="font-size: 70px; color: #1cc88a;"></i>';
-          var meh = '<i class="fas fa-user" style="font-size: 70px; color: #f6c23e;"></i>';
-          var sad = '<i class="fas fa-user" style="font-size: 70px; color: #e74a3b;"></i>'
+          var happy = '<div style="border: 6px solid #1cc88a; background-color: #FFFFFF; height: 80px; border-radius:50%; width: 80px;"><center><img src="/teacherimg/logo.png" style = "width: 50px; margin-top: 10px"/></center></div>';
 
-          var inactive_happy = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
-          var inactive_meh = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
-          var inactive_sad = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
+          //var meh = '<i class="fas fa-user" style="font-size: 70px; color: #f6c23e;"></i>';
+          var meh = '<div style="border: 6px solid #f6c23e; background-color: #FFFFFF; height: 80px; border-radius:50%; width: 80px;"><center><img src="/teacherimg/logo.png" style = "width: 50px; margin-top: 10px"/></center></div>';
+
+          //var sad = '<i class="fas fa-user" style="font-size: 70px; color: #e74a3b;"></i>'
+          var sad = '<div style="border: 6px solid #e74a3b; background-color: #FFFFFF; height: 80px; border-radius:50%; width: 80px;"><center><img src="/teacherimg/logo.png" style = "width: 50px; margin-top: 10px"/></center></div>';
+
+
+          //var inactive_happy = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_happy = '<div style="border: 6px solid #b5b0a3; background-color: #FFFFFF; height: 80px; border-radius:50%; width: 80px;"><center><img src="/teacherimg/logo.png" style = "width: 50px; margin-top: 10px"/></center></div>';
+
+          //var inactive_meh = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_meh = '<div style="border: 6px solid #b5b0a3; background-color: #FFFFFF; height: 80px; border-radius:50%; width: 80px;"><center><img src="/teacherimg/logo.png" style = "width: 50px; margin-top: 10px"/></center></div>';
+
+          //var inactive_sad = '<i class="fas fa-user" style="font-size: 70px; color: #b5b0a3;"></i>'
+          var inactive_sad = '<div style="border: 6px solid #b5b0a3; background-color: #FFFFFF; height: 80px; border-radius:50%; width: 80px;"><center><img src="/teacherimg/logo.png" style = "width: 50px; margin-top: 10px"/></center></div>';
+
 
 
           if (classInfoData != null || classInfoData != undefined) {
