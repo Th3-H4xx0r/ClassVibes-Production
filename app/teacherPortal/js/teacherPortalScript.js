@@ -2175,7 +2175,7 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "face" ></div></div>
             <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} 
             <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a>
-            ${unreadMessagesHTML} </h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            ${unreadMessagesHTML} </h4> <br> <p style = 'margin-top: -25px'>${moment(studentReportedDate).fromNow()}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -2191,7 +2191,7 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${happy}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>        
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${moment(studentReportedDate).fromNow()}</p></div>        
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -2206,7 +2206,7 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${meh}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>      
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${moment(studentReportedDate).fromNow()}</p></div>      
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -2221,7 +2221,7 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'>${sad}</div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName}  <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${moment(studentReportedDate).fromNow()}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
@@ -2236,7 +2236,7 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
             <div class="shadow-m p-3 mb-3 bg-white rounded" style = 'margin-top: 0px; margin-bottom: 5px; margin-top: 5px; margin-right: 10px'>
             <div class = "row">
             <div style = 'margin-left: 10px; font-size: 30px'><div id = "inactive_face" ></div></div>
-            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${studentReportedDate}</p></div>
+            <div style = 'margin-left: 20px;'> <h4 style = 'margin-top: 10px'>${studentName} <a href = '#' onclick = "showRemoveStudentPopup('${studentEmail}', '${code}', '${teacherEmail}')" style = 'margin-top: 10px'><i class="fas fa-minus-circle"  data-toggle="tooltip" data-placement="top" title="Remove Student"></i></a></h4> <br> <p style = 'margin-top: -25px'>${moment(studentReportedDate).fromNow()}</p></div>
             </div>
             <div style = 'float: right; margin-top: -65px; margin-right: 20px'>
             <div class = 'row'>
