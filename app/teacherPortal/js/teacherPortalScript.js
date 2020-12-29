@@ -2307,9 +2307,7 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
     
         if (studentReaction == "doing great") {
               //$(descriptionOutput2).appendTo("#studentsListGreat");
-              $(happy_face_Column).appendTo('#studentTable-doing-good');
 
-              happyCount = happyCount + 1
 
 
               if(today > exceedDate) {
@@ -2322,6 +2320,10 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
             
 
               } else {
+                $(happy_face_Column).appendTo('#studentTable-doing-good');
+
+                happyCount = happyCount + 1
+
                 document.getElementById("face").outerHTML = happy;
 
               }
@@ -2329,9 +2331,7 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
             } else if (studentReaction == "need help") {
               
               //$(descriptionOutput2).appendTo("#studentsListHelp");
-              $(meh_colum_face).appendTo('#studentTable-meh');
 
-              mehCount = mehCount + 1
 
               if(today > exceedDate) {
 
@@ -2345,15 +2345,17 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
               
 
               } else {
+
+                $(meh_colum_face).appendTo('#studentTable-meh');
+
+                mehCount = mehCount + 1
+
                 document.getElementById("face").outerHTML = meh
               }
     
     
             } else if (studentReaction == "frustrated") {
 
-              frustratedCount = frustratedCount + 1
-    
-              $(frustrated_column_face).appendTo("#studentTable-frustrated");
 
               if(today > exceedDate) {
                 $(inactive_column_face).appendTo("#studentTable-inactive");
@@ -2364,6 +2366,12 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
                 
 
               } else {
+
+                
+                frustratedCount = frustratedCount + 1
+      
+                $(frustrated_column_face).appendTo("#studentTable-frustrated");
+
                 document.getElementById("face").outerHTML = sad;
               }
     
