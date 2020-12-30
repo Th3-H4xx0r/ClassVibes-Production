@@ -2,522 +2,578 @@
 <html lang="en">
 
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	 crossorigin="anonymous">
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,200;1,300;1,400;1,600;1,700&display=swap"
-	 rel="stylesheet">
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-	 rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,200;1,300;1,400;1,600;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+        integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
+        integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ=="
+        crossorigin="anonymous"></script>
 
-	<title>ClassVibes</title>
+    <title>ClassVibes</title>
 </head>
 
 <body style="background-color: #F8FAFF; overflow-x: hidden;">
-	<header>
-		<!--Navbar-->
-		<nav class="navbar navbar-expand-lg navbar-light bg-custom justify-content-between">
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
+    <header>
+        <!--Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-custom justify-content-between">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-              <a class="navbar-brand" href="/" style="color: royalblue; font-weight: 600; font-size: 30px;">ClassVibes</a>
-              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                  <a class="nav-link" href="/" style="color: royalblue">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#features" style="color: royalblue">Features</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/pricing" style="color: royalblue">Pricing</a>
-                </li>
-              </ul>
+                <a class="navbar-brand" href="/"
+                    style="color: royalblue; font-weight: 600; font-size: 30px;">ClassVibes</a>
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/" style="color: royalblue">Home <span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features" style="color: royalblue">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pricing" style="color: royalblue">Pricing</a>
+                    </li>
+                </ul>
 
-							<div>
-								
-								
-								<a style="color: royalblue; font-weight: 600" href="/login">Login/Signup</a>
-							</div>
-							
+                <div>
+
+
+                    <a style="color: royalblue; font-weight: 600" href="/login">Login/Signup</a>
+                </div>
+
 
 
             </div>
-          </nav>
+        </nav>
 
         <!--Ending of Navbar-->
 
         <!--Top Section of Header-->
 
-            <div class="title" style="text-align: center; margin-top: 8rem">
-              <h1 class="mainTitle">Managing your class <br/> just got easier!</h1>
-              <p class="titleSubtext">ClassVibes eliminates the difficulties and obstacles of <br/> distance learning. Manage your class today!</p>
-              
-            </div>
+        <div class="title" style="text-align: center; margin-top: 8rem">
+            <h1 class="mainTitle">Managing your class <br /> just got easier!</h1>
+            <p class="titleSubtext">ClassVibes eliminates the difficulties and obstacles of <br /> distance learning.
+                Manage your class today!</p>
+
+        </div>
 
         <!--End of Top header-->
     </header>
 
-		<!-- Header image section -->
+    <!-- Header image section -->
 
-		<section style="margin-top: 10rem; ">
+    <section style="margin-top: 10rem; ">
 
-			<div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center">
 
-				<!-- MAIN BOX -->
+            <!-- MAIN BOX -->
 
-			<div style="width: 70%; height: 40rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position:relative">
+            <div
+                style="width: 70%; height: 40rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position:relative">
 
-				<center>
-					<div style="margin-top: 2rem; font-size: 30px; font-weight: 600; font-family: Nunito">
-						Dashboard
-					</div>
-				</center>
+                <center>
+                    <div style="margin-top: 2rem; font-size: 30px; font-weight: 600; font-family: Nunito">
+                        Dashboard
+                    </div>
+                </center>
 
-        <div style="width: 23rem; height: 23rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position: absolute; top: -10rem; left: -10rem">
+                <div
+                    style="width: 23rem; height: 23rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position: absolute; top: -10rem; left: -10rem">
 
-            <center>
-              <div style="margin-top: 2rem; font-family: Nunito">
-                
-                <h3 style="font-weight: 600;" >Realtime Stats</h3>
+                    <center>
+                        <div style="margin-top: 2rem; font-family: Nunito">
 
-                <p style="margin-left: 10%; margin-right: 10%; color: #737373">Use data to know how your class is feeling and doing at all times.</p>
-              </div>
-            </center>
-			  </div>
+                            <h3 style="font-weight: 600;">Realtime Stats</h3>
 
-          <div style="width: 20rem; height: 20rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position: absolute; top: 30rem; left: -5rem">
+                            <p style="margin-left: 10%; margin-right: 10%; color: #737373">Use data to know how your
+                                class is feeling and doing at all times.</p>
+                        </div>
+                    </center>
+                </div>
 
-            <center>
-              <div style="margin-top: 2rem; font-family: Nunito">
-                
-                <h3 style="font-weight: 600;" >Announcements</h3>
+                <div
+                    style="width: 20rem; height: 20rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position: absolute; top: 30rem; left: -5rem">
 
-                <p style="margin-left: 5%; margin-right: 5%; color: #737373">Send announcements to your students and communicate efficiently. This helps to erase the need for sending emails.</p>
-              </div>
-            </center>
-			  </div>
+                    <center>
+                        <div style="margin-top: 2rem; font-family: Nunito">
 
-          <div style="width: 20rem; height: 20rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position: absolute; top: 10rem; left: 90%">
+                            <h3 style="font-weight: 600;">Announcements</h3>
 
-            <center>
-              <div style="margin-top: 2rem; font-family: Nunito">
-                
-                <h3 style="font-weight: 600;">Live Chat</h3>
+                            <p style="margin-left: 5%; margin-right: 5%; color: #737373">Send announcements to your
+                                students and communicate efficiently. This helps to erase the need for sending emails.
+                            </p>
+                        </div>
+                    </center>
+                </div>
 
-                <p style="margin-left: 10%; margin-right: 10%;">Chat with your students to give them help on specific tasks</p>
-              </div>
-            </center>
-			  </div>
-			</div>
+                <div
+                    style="width: 20rem; height: 20rem; background-color: white; border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; position: absolute; top: 10rem; left: 90%">
+
+                    <center>
+                        <div style="margin-top: 2rem; font-family: Nunito">
+
+                            <h3 style="font-weight: 600;">Live Chat</h3>
+
+                            <p style="margin-left: 10%; margin-right: 10%;">Chat with your students to give them help on
+                                specific tasks</p>
+                        </div>
+                    </center>
+                </div>
+            </div>
 
 
-			</div>
+        </div>
 
 
-		</section>
+    </section>
 
 
     <!--End of Header image section-->
 
 
 
-    <!--Second Section--> 
+    <!--Second Section-->
 
-      <section >
+    <section id='secondSection'>
         <div style="margin-top: 20rem; background-color: white; margin-bottom: 10rem; height: 60rem">
 
-					<div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center">
 
-						<!-- CENTER BOX -->
-
-
-						<div style="width: 35rem; height: 35rem; background-color: #F8FAFF; border-radius: 20px; margin-top: 5rem; position:relative; ">
-
-						
-							<!-- CHAT BOX ANIMATION -->
-
-              <div style="position: absolute; top: 5rem; left: -10rem; height: 370px; width: 370px; background: #FFFFFF;border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; ">
-                <div class="hero__illustration">
-
-                    <div class="row" style="justify-content: space-between;">
-                        <h4 style="position: relative; top: 1rem; left: 2rem;">Clark Kent</h4>
-
-                        <h4 style="position: relative; top: 1rem; left: 2rem;">Clark Kent</h4>
-                    </div>
-                  <div class="chat__row" id = 'chatBox'>
-   
-                  </div>
-
-                  <div class="row" style="position: absolute; bottom: 1rem;">
-
-                    <fieldset >
-                        <input type="text" id="formElement" style="border-radius: 30px; border: solid 1px black; padding-left: 5px; width: 18rem; margin-left: 2rem;"/>
-                      </fieldset>
-
-                    <button style="width: 2rem; margin-left: 1rem; height: 2rem; border-radius: 100%; background-color: royalblue; border: none; color: white;">→</button>
-                  </div>
+                <!-- CENTER BOX -->
 
 
-                  <script>
-                      const instance = new TypeIt("#formElement", {
-                        strings: "Hi Mr. Kent, I had trouble with last night’s homework. Could you help me?",
-                        waitUntilVisible: true,
-                        startDelay: 100,
-                        speed: 40,
-                        }).go();
+                <div
+                    style="width: 35rem; height: 35rem; background-color: #F8FAFF; border-radius: 20px; margin-top: 5rem; position:relative; ">
 
 
-                                                    
-                        setTimeout(function(){ 
-                                    formElement.value = ''
+                    <!-- CHAT BOX ANIMATION -->
 
-                                    var messageHTML = `
+                    <div
+                        style="position: absolute; top: 5rem; left: -10rem; height: 370px; width: 370px; background: #FFFFFF;border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; ">
+                        <div class="hero__illustration">
+
+                            <div class="row" style="justify-content: space-between;">
+                                <h4 style="position: relative; top: 1rem; left: 2rem;">Clark Kent</h4>
+
+                                <i class="fas fa-comments"
+                                    style="position: relative; top: 1rem; left: -2rem; font-size: 25px; color: royalblue;"></i>
+                            </div>
+                            <div class="chat__row" id='chatBox'>
+
+                            </div>
+
+                            <div class="row" style="position: absolute; bottom: 1rem;">
+
+                                <fieldset>
+                                    <input type="text" id="formElement"
+                                        style="border-radius: 30px; padding-left: 5px; width: 18rem; margin-left: 2rem; border: none; background-color: whitesmoke; padding-left: 1rem; padding-top: 0.5rem; padding-bottom: 0.2rem;"
+                                        disabled />
+                                </fieldset>
+
+                                <button
+                                    style="width: 2rem; margin-left: 1rem; height: 2rem; border-radius: 100%; background-color: royalblue; border: none; color: white;">→</button>
+                            </div>
+
+
+                            <script>
+
+                                var elem = document.getElementById('secondSection')
+
+
+                                var triggered = 0
+
+                                window.onscroll = function () {
+                                    //TOP
+                                    if (elem.getBoundingClientRect().top <= 300) {
+
+                                        triggered += 1
+
+                                        if (triggered == 1) {
+                                            console.log("TRIGGER: top of div reached.");
+                                            const instance = new TypeIt("#formElement", {
+                                                strings: "Hi Mr. Kent, I had trouble with last night’s homework.",
+                                                waitUntilVisible: true,
+                                                speed: 60,
+                                            }).go();
+
+
+
+                                            setTimeout(function () {
+                                                formElement.value = ''
+
+                                                var messageHTML = `
                                      <div id="message-2" class="chat__message">
-                                        <p class="chat-message__content">Hi Mr. Kent, I had trouble with last night’s homework. Could you help me?</p>
+                                        <p class="chat-message__content">Hi Mr. Kent, I had trouble with last night’s homework.</p>
                                     </div>
                                     `;
-                                    $(messageHTML).appendTo('#chatBox');
+                                                $(messageHTML).appendTo('#chatBox');
 
-                                }, 2500)
+                                            }, 3600)
 
 
-                  </script>
-                  
+                                            setTimeout(function () {
+                                                formElement.value = ''
+
+
+                                                var messageHTML = `
+                                     <div id="message-2" class="chat__message">
+                                        <p class="chat-message__content_other">Want to setup a meeting tommorow at 8:30 AM?</p>
+                                    </div>
+                                    `;
+                                                $(messageHTML).appendTo('#chatBox');
+
+                                            }, 5500)
+
+                                            setTimeout(function () {
+                                                formElement.value = ''
+
+                                                var messageHTML = `
+                                     <div id="message-2" class="chat__message">
+                                        <p class="chat-message__content">Great! See you then!</p>
+                                    </div>
+                                    `;
+                                                $(messageHTML).appendTo('#chatBox');
+
+                                            }, 7500)
+                                        }
+                                    }
+
+                                }
+
+                            </script>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        style="position: absolute; top: 10rem; left: 24rem; height:370px; width: 400px; font-family: Nunito">
+                        <h1 style="font-weight: bold; font-size: 40px; color: #2D3958">Here to help with distance
+                            learning!</h1>
+                        <p style="color: #7B88A8">Stay connected with your students remotely. Class Vibes comes packed
+                            with plenty of features to help you stay in touch with your class!</p>
+                        <a href="" style="color: #4E72DE; font-size:20px; font-weight: 700; margin-top: -10px">Check it
+                            out! →</a>
+                    </div>
+
+
+
+                    <style>
+                        .hero__illustration {}
+
+                        .chat__row {
+                            position: relative;
+                            padding-top: 0.3215rem;
+                            padding-bottom: 0.3215rem;
+                        }
+
+                        .chat__message {
+                            display: flex;
+                            justify-content: flex-start;
+                        }
+
+                        .chat-message--loader {
+                            position: absolute;
+                            top: 50%;
+                            opacity: 0;
+                            transform: translate(50%);
+                            transform: translateY(-50%);
+                        }
+
+                        .chat-message__content {
+                            padding: .75rem 1.25rem;
+                            max-width: 60%;
+                            margin-left: 40%;
+                            margin-right: 1rem;
+                            margin-top: 1rem;
+                            font-size: 1rem;
+                            line-height: 1;
+                            text-align: left;
+                            color: white;
+                            border-radius: 10px;
+                            background: royalblue;
+                            z-index: 0;
+                        }
+
+
+                        .chat-message__content_other {
+                            position: relative;
+                            padding: .75rem 1.25rem;
+                            max-width: 65%;
+                            margin-left: 1rem;
+                            margin-top: 1rem;
+                            font-size: 1rem;
+                            line-height: 1;
+                            text-align: left;
+                            color: #343A40;
+                            border-radius: 10px;
+                            background: #F1F3F5;
+                            z-index: 0;
+                        }
+
+                        @keyframes message1 {
+                            0% {
+                                opacity: 0;
+                                transform: translateY(50%);
+                            }
+
+                            10% {
+                                opacity: 1;
+                                transform: translateY(0%);
+                            }
+
+                            20%,
+                            100% {
+                                opacity: 0;
+                                transform: translateY(-50%);
+                            }
+                        }
+
+                        #message-1 {
+                            animation-fill-mode: forwards;
+                            animation-name: message1;
+                            animation-duration: 9s;
+                        }
+
+                        @keyframes message2 {
+
+                            0%,
+                            10% {
+                                opacity: 0;
+                                transform: translateY(50%);
+                            }
+
+                            20%,
+                            100% {
+                                opacity: 1;
+                                transform: translateY(0%);
+                            }
+                        }
+
+                        #message-2 {
+                            animation-fill-mode: forwards;
+                            animation-name: message2;
+                            animation-duration: 9s;
+                        }
+
+                        #message-7 .chat-message__content {
+                            width: 40px;
+                        }
+
+                        :root {
+                            --loader-size: 0.625rem;
+                            --loader-spacing: 0.3125rem;
+                            --loader-background: rgba(0, 0, 0, .1);
+                            --loader-background-active: rgba(0, 0, 0, .3);
+                            /*#ADB5BD;*/
+                            --loader-animation-duration: 0.8s;
+                        }
+
+                        .loader {
+                            position: relative;
+                            margin-left: calc(var(--loader-spacing) + var(--loader-size));
+                            margin-right: calc(var(--loader-spacing) + var(--loader-size));
+                            animation-delay: calc(var(--loader-animation-duration) / 3);
+                        }
+
+                        .loader,
+                        .loader::before,
+                        .loader::after {
+                            display: inline-block;
+                            width: var(--loader-size);
+                            height: var(--loader-size);
+                            background: var(--loader-background);
+                            border-radius: 100%;
+                            animation-name: loader;
+                            animation-duration: var(--loader-animation-duration);
+                            animation-iteration-count: infinite;
+                            animation-timing-function: linear;
+                        }
+
+                        .loader::before,
+                        .loader::after {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                        }
+
+                        .loader::before {
+                            left: calc((var(--loader-spacing) + var(--loader-size)) * -1);
+                        }
+
+                        .loader::after {
+                            right: calc((var(--loader-spacing) + var(--loader-size)) * -1);
+                            animation-delay: calc(var(--loader-animation-duration) / 3 * 2);
+                        }
+
+                        @keyframes loader {
+
+                            0%,
+                            66%,
+                            100% {
+                                transform: translateY(10%);
+                                background: var(--loader-background);
+                            }
+
+                            33% {
+                                transform: translateY(-25%);
+                                background: var(--loader-background-active);
+                            }
+                        }
+                    </style>
+
+
+
+
+
                 </div>
-                
-              </div>
 
-              <div style="position: absolute; top: 10rem; left: 24rem; height:370px; width: 400px; font-family: Nunito">
-                <h1 style="font-weight: bold; font-size: 40px; color: #2D3958">Here to help with distance learning!</h1>
-                <p style="color: #7B88A8">Stay connected with your students remotely.  Class Vibes comes packed with plenty of features to help you stay in touch with your class!</p>
-                <a href="" style="color: #4E72DE; font-size:20px; font-weight: 700; margin-top: -10px">Check it out! →</a>
-              </div>
-              
+            </div>
 
-	
+        </div>
 
-<script>
-
-		var messageHTML = `
-				<div id="message-2" class="chat__message">
-					<p class="chat-message__content">Hi Mr. Kent</p>
-				</div>
-        `;
-        /*
-
-		setTimeout(function(){ 
-					$(messageHTML).appendTo('#chatBox');
-
-
-		 }, 1000)
-
-
-
-		 		var messageHTML = `
-				<div id="message-2" class="chat__message">
-					<p class="chat-message__content">That would be awesome Mr. Kent thank</p>
-				</div>
-		`;
-
-		setTimeout(function(){ 
-					$(messageHTML).appendTo('#chatBox');
-		 }, 5000);
-
-		 							 		var messageHTML = `
-				<div id="message-2" class="chat__message">
-					<p class="chat-message__content">Hi Mary,</p>
-				</div>
-		`;
-
-			setTimeout(function(){ 
-						$(messageHTML).appendTo('#chatBox');
-
-
-
-                }, 6000);
-                */
-
-
-
-
-
-
-</script>
-
-
-<style>
-	.hero__illustration {
-	
-}
-.chat__row {
-	position: relative;
-	padding-top: 0.3215rem;
-	padding-bottom: 0.3215rem;
-}
-.chat__message {
-	display: flex;
-    justify-content: flex-start;
-}
-.chat-message--loader {
-	position: absolute;
-	top: 50%;
-  opacity: 0;
-	transform: translate(50%);
-	transform: translateY(-50%);
-}
-.chat-message__content {
-	position: relative;
-	padding: .75rem 1.25rem;
-    width: 65%;
-    margin-left: 1rem;
-    margin-top: 1rem;
-	font-size: 1rem;
-	line-height: 1;
-  text-align: left;
-  color: #343A40;
-	border-radius: 10px;
-  background: #F1F3F5;
-  z-index: 0;
-}
-@keyframes message1 {
-	0% {
-		opacity: 0;
-		transform: translateY(50%);
-	}
-
-	10% {
-		opacity: 1;
-		transform: translateY(0%);
-	}
-
-	20%,
-	100% {
-		opacity: 0;
-		transform: translateY(-50%);
-	}
-}
-#message-1 {
-  animation-fill-mode: forwards;
-	animation-name: message1;
-	animation-duration: 9s;
-}
-@keyframes message2 {
-	0%,
-	10% {
-		opacity: 0;
-		transform: translateY(50%);
-	}
-	20%,
-	100% {
-		opacity: 1;
-		transform: translateY(0%);
-	}
-}
-#message-2 {
-	animation-fill-mode: forwards;
-	animation-name: message2;
-	animation-duration: 9s;
-}
-#message-7 .chat-message__content {
-  width: 40px;
-}
-:root {
-	--loader-size: 0.625rem;
-	--loader-spacing: 0.3125rem;
-	--loader-background: rgba(0, 0, 0, .1);
-	--loader-background-active: rgba(0, 0, 0, .3); /*#ADB5BD;*/
-	--loader-animation-duration: 0.8s;
-}
-.loader {
-	position: relative;
-	margin-left: calc(var(--loader-spacing) + var(--loader-size));
-	margin-right: calc(var(--loader-spacing) + var(--loader-size));
-	animation-delay: calc(var(--loader-animation-duration) / 3);
-}
-.loader,
-.loader::before,
-.loader::after {
-	display: inline-block;
-	width: var(--loader-size);
-	height: var(--loader-size);
-	background: var(--loader-background);
-	border-radius: 100%;
-	animation-name: loader;
-	animation-duration: var(--loader-animation-duration);
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
-}
-.loader::before,
-.loader::after {
-	content: '';
-	position: absolute;
-	top: 0;
-}
-.loader::before {
-	left: calc((var(--loader-spacing) + var(--loader-size)) * -1);
-}
-.loader::after {
-	right: calc((var(--loader-spacing) + var(--loader-size)) * -1);
-	animation-delay: calc(var(--loader-animation-duration) / 3 * 2);
-}
-@keyframes loader {
-	0%,
-	66%,
-	100% {
-		transform: translateY(10%);
-		background: var(--loader-background);
-	}
-
-	33% {
-		transform: translateY(-25%);
-		background: var(--loader-background-active);
-	}
-}
-</style>
-
-							
-
-
-
-			  		</div>
-
-					</div>
-
-				</div>
-
-		</section>
+    </section>
 
     <!--End of second section -->
 
 
-		<!-- FOOTER -->
+    <!-- FOOTER -->
 
-<footer class="page-footer font-small unique-color-dark" style="background-color: royalblue; color: white;">
+    <footer class="page-footer font-small unique-color-dark" style="background-color: royalblue; color: white;">
 
-	<!-- Footer Links -->
-	<div class="container text-center text-md-left mt-5" style="padding-top: 40px;">
-  
-	  <!-- Grid row -->
-	  <div class="row mt-3">
-  
-		<!-- Grid column -->
-		<div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-  
-		  <!-- Content -->
-		  <h6 class="text-uppercase font-weight-bold">Proto Systems</h6>
-		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-		  <p>Proto Systems is a tech solutions company based in the Bay Area. Contact support@classvibes.net for any inquiries or questions. Contact sales@classvibes.net for sales information.</p>
-  
-		</div>
-		<!-- Grid column -->
-  
-		<!-- Grid column -->
-		<div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-  
-		  <!-- Links -->
-		  <h6 class="text-uppercase font-weight-bold">Navigation</h6>
-		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-		  <p>
-			<a href="#header" style="color: white; text-decoration: none;">Home</a>
-		  </p>
-		  <p>
-			<a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
-		  </p>
-		  <p>
-			<a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
-		  </p>
-		  <p>
-			<a href="#!" style="color: white; text-decoration: none;">Help</a>
-		  </p>
-  
-		</div>
-		<!-- Grid column -->
-  
-		<!-- Grid column -->
-		<div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4" >
-  
-		  <!-- Links -->
-		  <h6 class="text-uppercase font-weight-bold">Legal</h6>
-		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-		  <p>
-			<a href="privacy" style="color: white; text-decoration: none;">Privacy Policy</a>
-		  </p>
-		  <p>
-			<a href="legal" style="color: white; text-decoration: none;">Terms and Conditions</a>
-		  </p>
-  
-		</div>
-		<!-- Grid column -->
-  
-		<!-- Grid column -->
-		<div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-  
-		  <!-- Links -->
-		  <h6 class="text-uppercase font-weight-bold">Contact</h6>
-		  <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-		  <p>
-			<i class="fas fa-home mr-3"></i> Mountain House, California</p>
-		  <p>
-			<i class="fas fa-envelope mr-3"></i> support@classvibes.net</p>
-		  
-			<p>
-			  <i class="fas fa-comments-dollar mr-3"></i>sales@classvibes.net</p>
-  
-		</div>
-		<!-- Grid column -->
-  
-	  </div>
-	  <!-- Grid row -->
-  
-	</div>
-	<!-- Footer Links -->
-  
-	<!-- Copyright -->
-	<div class="footer-copyright text-center py-3">Copyright © 2020 Proto Systems</a>
-	</div>
-	<!-- Copyright -->
-  
-  </footer>
-  <!-- Footer -->
+        <!-- Footer Links -->
+        <div class="container text-center text-md-left mt-5" style="padding-top: 40px;">
+
+            <!-- Grid row -->
+            <div class="row mt-3">
+
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+
+                    <!-- Content -->
+                    <h6 class="text-uppercase font-weight-bold">Proto Systems</h6>
+                    <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>Proto Systems is a tech solutions company based in the Bay Area. Contact support@classvibes.net
+                        for any inquiries or questions. Contact sales@classvibes.net for sales information.</p>
+
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+
+                    <!-- Links -->
+                    <h6 class="text-uppercase font-weight-bold">Navigation</h6>
+                    <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>
+                        <a href="#header" style="color: white; text-decoration: none;">Home</a>
+                    </p>
+                    <p>
+                        <a href="#pricing" style="color: white; text-decoration: none;">Pricing</a>
+                    </p>
+                    <p>
+                        <a href="#featuresSection2" style="color: white; text-decoration: none;">Features</a>
+                    </p>
+                    <p>
+                        <a href="#!" style="color: white; text-decoration: none;">Help</a>
+                    </p>
+
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+
+                    <!-- Links -->
+                    <h6 class="text-uppercase font-weight-bold">Legal</h6>
+                    <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>
+                        <a href="privacy" style="color: white; text-decoration: none;">Privacy Policy</a>
+                    </p>
+                    <p>
+                        <a href="legal" style="color: white; text-decoration: none;">Terms and Conditions</a>
+                    </p>
+
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
+                    <!-- Links -->
+                    <h6 class="text-uppercase font-weight-bold">Contact</h6>
+                    <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>
+                        <i class="fas fa-home mr-3"></i> Mountain House, California
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope mr-3"></i> support@classvibes.net
+                    </p>
+
+                    <p>
+                        <i class="fas fa-comments-dollar mr-3"></i>sales@classvibes.net
+                    </p>
+
+                </div>
+                <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
+        </div>
+        <!-- Footer Links -->
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">Copyright © 2020 Proto Systems</a>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+    <!-- Footer -->
 
 
 
     <style>
-      .mainTitle {
-        font-family: Roboto;
-        color: #2D3958;
-        font-weight: bold;
-        text-align: center;
-        font-size: 50px
-      
-        
-      }
+        .mainTitle {
+            font-family: Roboto;
+            color: #2D3958;
+            font-weight: bold;
+            text-align: center;
+            font-size: 50px
+        }
 
-      .titleSubtext {
-        color: #7B88A8;
-        font-size: 20px;
-        margin-top: 1.5rem;
-				font-family: Nunito;
-				font-weight: 400;
-      }
-
-
+        .titleSubtext {
+            color: #7B88A8;
+            font-size: 20px;
+            margin-top: 1.5rem;
+            font-family: Nunito;
+            font-weight: 400;
+        }
     </style>
 
 
