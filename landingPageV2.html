@@ -21,7 +21,9 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typeit@7.0.4/dist/typeit.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ==" crossorigin="anonymous"></script>
 
 	<title>ClassVibes</title>
 </head>
@@ -118,7 +120,7 @@
                 
                 <h3 style="font-weight: 600;">Live Chat</h3>
 
-                <p style="margin-left: 10%; margin-right: 10%; font-s">Chat with your students to give them help on specific tasks</p>
+                <p style="margin-left: 10%; margin-right: 10%;">Chat with your students to give them help on specific tasks</p>
               </div>
             </center>
 			  </div>
@@ -152,9 +154,50 @@
 
               <div style="position: absolute; top: 5rem; left: -10rem; height: 370px; width: 370px; background: #FFFFFF;border-radius: 20px; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px; ">
                 <div class="hero__illustration">
+
+                    <div class="row" style="justify-content: space-between;">
+                        <h4 style="position: relative; top: 1rem; left: 2rem;">Clark Kent</h4>
+
+                        <h4 style="position: relative; top: 1rem; left: 2rem;">Clark Kent</h4>
+                    </div>
                   <div class="chat__row" id = 'chatBox'>
    
                   </div>
+
+                  <div class="row" style="position: absolute; bottom: 1rem;">
+
+                    <fieldset >
+                        <input type="text" id="formElement" style="border-radius: 30px; border: solid 1px black; padding-left: 5px; width: 18rem; margin-left: 2rem;"/>
+                      </fieldset>
+
+                    <button style="width: 2rem; margin-left: 1rem; height: 2rem; border-radius: 100%; background-color: royalblue; border: none; color: white;">→</button>
+                  </div>
+
+
+                  <script>
+                      const instance = new TypeIt("#formElement", {
+                        strings: "Hi Mr. Kent, I had trouble with last night’s homework. Could you help me?",
+                        waitUntilVisible: true,
+                        startDelay: 100,
+                        speed: 40,
+                        }).go();
+
+
+                                                    
+                        setTimeout(function(){ 
+                                    formElement.value = ''
+
+                                    var messageHTML = `
+                                     <div id="message-2" class="chat__message">
+                                        <p class="chat-message__content">Hi Mr. Kent, I had trouble with last night’s homework. Could you help me?</p>
+                                    </div>
+                                    `;
+                                    $(messageHTML).appendTo('#chatBox');
+
+                                }, 2500)
+
+
+                  </script>
                   
                 </div>
                 
@@ -175,7 +218,8 @@
 				<div id="message-2" class="chat__message">
 					<p class="chat-message__content">Hi Mr. Kent</p>
 				</div>
-		`;
+        `;
+        /*
 
 		setTimeout(function(){ 
 					$(messageHTML).appendTo('#chatBox');
@@ -206,7 +250,8 @@
 
 
 
-				}, 6000);
+                }, 6000);
+                */
 
 
 
@@ -227,7 +272,7 @@
 }
 .chat__message {
 	display: flex;
-  justify-content: flex-start;
+    justify-content: flex-start;
 }
 .chat-message--loader {
 	position: absolute;
@@ -238,13 +283,15 @@
 }
 .chat-message__content {
 	position: relative;
-	max-width: 45%;
 	padding: .75rem 1.25rem;
-	font-size: 1.25rem;
+    width: 65%;
+    margin-left: 1rem;
+    margin-top: 1rem;
+	font-size: 1rem;
 	line-height: 1;
   text-align: left;
   color: #343A40;
-	border-radius: 100px;
+	border-radius: 10px;
   background: #F1F3F5;
   z-index: 0;
 }
