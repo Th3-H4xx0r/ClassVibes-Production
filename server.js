@@ -368,6 +368,10 @@ router.get('/webRTC',function(req,res){
   res.sendFile(path.join(__dirname+'/app/liveClass/test.html'));
 });
 
+router.get('/v2',function(req,res){
+
+  res.sendFile(path.join(__dirname+'/landingPageV2.html'));
+});
 
 
 /////////////////////////
