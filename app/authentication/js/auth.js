@@ -531,13 +531,7 @@ function emailSignUp(type) {
                             });
         
         
-                            var signUpPage = document.getElementById('signup-page-full');
-        
-                            signUpPage.style.display = "none";
-        
-                            var successPage = document.getElementById('signup-success-form');
-        
-                            successPage.style.display = "initial";
+                           
         
                             //FIREBASE DATABASE UPLOAD
         
@@ -549,14 +543,27 @@ function emailSignUp(type) {
                                     "username": email,
                                     "account type": "Student",
                                     "account status": "Activated",
+                                }).then(() => {
+
+                                    const increment = firebase.firestore.FieldValue.increment(1);
+        
+                                    firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                        "webUsers": increment,
+                                        "totalUsers": increment,
+                                    }).then(() => {
+                                        var signUpPage = document.getElementById('signup-page-full');
+        
+                                        signUpPage.style.display = "none";
+                    
+                                        var successPage = document.getElementById('signup-success-form');
+                    
+                                        successPage.style.display = "initial";
+                                    });
+
+
                                 });
         
-                                const increment = firebase.firestore.FieldValue.increment(1);
-        
-                                firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                    "webUsers": increment,
-                                    "totalUsers": increment,
-                                });
+
                             }
         
                             else if (type == 'teacher' || type == 'Solo Teacher') {
@@ -591,49 +598,75 @@ function emailSignUp(type) {
                                             "customer stripe id": customerID
                                         }).then(() => {
 
-                                            var url = `https://api.revenuecat.com/v1/subscribers/${user.uid}`
+                                            var url1 = `https://api.revenuecat.com/v1/subscribers/${user.uid}`
     
-                                            const xhr = new XMLHttpRequest();
-                                            xhr.onreadystatechange = () => {
-                                                if(xhr.readyState === XMLHttpRequest.DONE){
+                                            const xhr1 = new XMLHttpRequest();
+
+
+                                            xhr1.onreadystatechange = () => {
+                                                if(xhr1.readyState === XMLHttpRequest.DONE){
                                                     // Code to execute with response
                 
-                                                    console.log(xhr.responseText)
+                                                    console.log(xhr1.responseText)
                 
-                                                    var responseText = xhr.responseText
+                                                    var responseText = xhr1.responseText
                                                     
                                                     var response = JSON.parse(responseText);
     
                                                     //console.log(response)
 
-                                                    var url = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
+                                                    var url2 = `https://api-v1.classvibes.net/api/createClass?email=${email}&mode=signup`
     
-                                                    const xhr = new XMLHttpRequest();
-                                                    xhr.onreadystatechange = () => {
-                                                        if(xhr.readyState === XMLHttpRequest.DONE){
+                                                    const xhr2 = new XMLHttpRequest();
+                                                    xhr2.onreadystatechange = () => {
+                                                        if(xhr2.readyState === XMLHttpRequest.DONE){
                                                             // Code to execute with response
                         
-                                                            console.log(xhr.responseText)
+                                                            console.log(xhr2.responseText)
                         
-                                                            var responseText = xhr.responseText
+                                                            var responseText = xhr2.responseText
                                                             
                                                             var response = JSON.parse(responseText);
             
                                                             console.log(response)
+
+
+                                                                    
+                                                            const increment = firebase.firestore.FieldValue.increment(1);
+                                    
+                                                            firebase.firestore().collection("Application Management").doc("Statistics").update({
+                                                                "webUsers": increment,
+                                                                "totalUsers": increment,
+                                                            }).then(() => {
+                                                                var signUpPage = document.getElementById('signup-page-full');
+        
+                                                                signUpPage.style.display = "none";
+                                            
+                                                                var successPage = document.getElementById('signup-success-form');
+                                            
+                                                                successPage.style.display = "initial";
+                                                            });
+
+
                     
                                                     
                                                         }
                                                     }
                                                     
-                                                    xhr.open('GET', url);
-                                                    xhr.send();
+                                                    xhr2.open('GET', url2);
+                                                    
+                                                    xhr2.send();
             
-                                            
                                                 }
                                             }
                                             
-                                            xhr.open('GET', url);
-                                            xhr.send();
+                                            xhr1.open('GET', url1);
+
+                                            xhr1.setRequestHeader("Authorization", "Bearer icBZdQAfwvIZlcBZcMCTKxplUedWSFtM");
+                                            xhr1.setRequestHeader("Content-Type", "application/json");
+                                            xhr1.setRequestHeader("X-Platform", "ios");
+
+                                            xhr1.send();
 
                                             
 
@@ -647,13 +680,7 @@ function emailSignUp(type) {
     
                             });
     
-        
-                                const increment = firebase.firestore.FieldValue.increment(1);
-        
-                                firebase.firestore().collection("Application Management").doc("Statistics").update({
-                                    "webUsers": increment,
-                                    "totalUsers": increment,
-                                });
+
     
                             }
         
@@ -673,6 +700,14 @@ function emailSignUp(type) {
                                     "totalUsers": increment,
                                     "totalDistricts": increment
                                 });
+
+                                var signUpPage = document.getElementById('signup-page-full');
+        
+                                signUpPage.style.display = "none";
+            
+                                var successPage = document.getElementById('signup-success-form');
+            
+                                successPage.style.display = "initial";
                             }
         
         
