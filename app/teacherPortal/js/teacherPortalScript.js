@@ -1934,7 +1934,7 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
       var customerID = data['customer stripe id']
 
       
-     var val = "pk_test_51HJSAPHxKyunjmTecWP4BIWHHPha6jEzvfJopOrydgMBJmW0F5yJDEIb1eh57hVvZGm7h3KxciXREcXotTqjrHwR00GuN4JVdJ";
+     var val = "pk_live_51HJSAPHxKyunjmTedWKjP3qkGWRuXtrFNf4Vy55vIU2BHgHfM9rkNsNteYnPt9Mn01fodZMYpNQPt52WwjcnQiqX00tpW6qZcR";
 
      var stripe = Stripe(val);
 
