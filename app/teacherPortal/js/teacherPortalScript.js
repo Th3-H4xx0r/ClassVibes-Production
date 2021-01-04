@@ -1,3 +1,4 @@
+const { response } = require("express");
 
 
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
@@ -1911,14 +1912,50 @@ function createClass() {
       var code = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
       var className = document.getElementById("className").value;
 
-      chargeCardForClassCreation(email, code, className, 1)
+      fetch("https://api-v1.classvibes.net/api/getStripeCreds", {
+      "method": "GET",
+    }).then(function(response) {
+      return response.text();
+    }).then(function(data) {
 
+        var responseText = JSON.parse(data);
+
+        var creds = responseText['message']
+
+        var url = `https://api-v1.classvibes.net/api/decryptStripeCreds?val=${creds}`
+      
+        const xhr = new XMLHttpRequest();
+      
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            // Code to execute with response
+      
+            var responseText = JSON.parse(xhr.responseText);
+
+            console.log(responseText)
+
+            var key = responseText['message']
+
+            chargeCardForClassCreation(email, code, className, 1, key)
+
+        }
+
+      }
+
+      xhr.open('GET', url);
+      xhr.send();
+
+      
+    });
+
+
+
+    }
+  })
 }
-})
-}
 
 
-function chargeCardForClassCreation( email, code, className, maxInactiveDays){
+function chargeCardForClassCreation( email, code, className, maxInactiveDays, key){
 
   document.getElementById('continueButton').disabled = true
 
@@ -1933,10 +1970,9 @@ function chargeCardForClassCreation( email, code, className, maxInactiveDays){
 
       var customerID = data['customer stripe id']
 
-      
-     var val = "pk_live_51HJSAPHxKyunjmTedWKjP3qkGWRuXtrFNf4Vy55vIU2BHgHfM9rkNsNteYnPt9Mn01fodZMYpNQPt52WwjcnQiqX00tpW6qZcR";
+     var stripe = Stripe(key);
 
-     var stripe = Stripe(val);
+     console.log(key)
 
 
      var handleResult = function (result) {
