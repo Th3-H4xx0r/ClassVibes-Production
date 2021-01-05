@@ -2619,7 +2619,7 @@ xhr.onreadystatechange = () => {
 
         if(response.status == 'success'){
 
-          //window.location.reload()
+          window.location.reload()
         }
 
         document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
