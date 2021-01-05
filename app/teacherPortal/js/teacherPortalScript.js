@@ -2117,11 +2117,15 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
   var className = '';
   var today = Math.floor(Date.now()/1000);
 
-  document.getElementById("studentTable").innerHTML = ''
-  document.getElementById("studentTable-doing-good").innerHTML = ''
-  document.getElementById("studentTable-meh").innerHTML = ''
-  document.getElementById("studentTable-frustrated").innerHTML = ''
-  document.getElementById("studentTable-inactive").innerHTML = ''
+  if(document.getElementById("studentTable") != null){
+    document.getElementById("studentTable").innerHTML = ''
+    document.getElementById("studentTable-doing-good").innerHTML = ''
+    document.getElementById("studentTable-meh").innerHTML = ''
+    document.getElementById("studentTable-frustrated").innerHTML = ''
+    document.getElementById("studentTable-inactive").innerHTML = ''
+  }
+
+
 
 
 
@@ -2160,8 +2164,9 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
         
         //});
 
-    
-        document.getElementById("studentTable").innerHTML = "";
+        if(document.getElementById("studentTable") != null){
+          document.getElementById("studentTable").innerHTML = "";
+        }
     
         for (var i = 0; i <= classInfoList.length; i++) {
           let descriptionOutput = "";
