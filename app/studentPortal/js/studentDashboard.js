@@ -747,7 +747,11 @@ async function getStudentClasses(studentUsername, pageType) {
 function removePendingRequest(classCode, student){
   firebase.firestore().collection('Classes').doc(classCode).collection('Students').doc(student).delete().then(() => {
     firebase.firestore().collection('UserData').doc(student).collection('Classes').doc(classCode).delete().then(() => {
-      window.location.reload()
+      firebase.firestore().collection('Classes').doc(classCode).update({
+        'students': firebase.firestore.FieldValue.arrayRemove(student)
+      }).then(() => {
+        window.location.reload()
+      })
     })
   })
 }
@@ -1034,23 +1038,27 @@ function addClassToStudentData(classCode) {
           'code': classCode.toString(),
           'class name': classNamE,
           'accepted': false,
+        }).then(() => {
+          firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
+            'name': name,
+            'email': email,
+            'date': new Date(),
+            'status': 'doing great',
+            'teacher unread': 0,
+            'accepted': false,
+          }).then(() => {
+
+            firebase.firestore().collection('Classes').doc(classCode).update({
+              'students': firebase.firestore.FieldValue.arrayUnion(email)
+            }).then(() => {
+              window.location.reload();
+            })
+          });
         });
     
-        firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
-          'name': name,
-          'email': email,
-          'date': new Date(),
-          'status': 'doing great',
-          'teacher unread': 0,
-          'accepted': false,
-        });
+
     
-      }).then(() => {
-        setTimeout(function(){
-          window.location.reload();
-       }, 500);
-        
-      });
+      })
     }
   });
 }

@@ -1,5 +1,3 @@
-const { response } = require("express");
-
 
 function getTeacherAccountStatus(pageType, classCode = "null", additionalParams) {
   
@@ -96,6 +94,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   else if (pageType == 'dashboard') {
                     getProfileInfo();
                     getClassData(email);
+
                     //getWeekStudentAverageReactions_ALL_CLASSES()
                   }
       
@@ -162,6 +161,8 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 
                 }
                 else if (pageType == 'dashboard') {
+
+
                   //console.log("executing");
                   getProfileInfo();
                   getClassData(email);
@@ -2593,7 +2594,7 @@ async function removeStudent(email, code, teacherEmail){
 
   firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
 
-    var url = "https://api-v1.classvibes.net/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
+    var url = "http://localhost:3120/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
 
 
     /*
