@@ -447,8 +447,14 @@ function leaveClass(code){
 
       firebase.firestore().collection("UserData").doc(email).collection("Classes").doc(code).delete().then(() => {
         console.log("Deleted class")
-        firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete()
-          window.location.href = "/student/dashboard";
+        firebase.firestore().collection("Classes").doc(code).collection("Students").doc(email).delete().then(() => {
+          firebase.firestore().collection("Classes").doc(code).update({
+            'students': firebase.firestore.FieldValue.arrayRemove(email)
+          }).then(() => {
+            window.location.href = "/student/dashboard";
+          })
+        })
+
   
         
       }).catch(err => {

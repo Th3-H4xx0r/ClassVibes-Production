@@ -2596,6 +2596,8 @@ async function removeStudent(email, code, teacherEmail){
 
     var url = "http://localhost:3120/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken
 
+    console.log("http://localhost:3120/api/removeStudent?email=" + email + "&code=" + code + "&teacher=" + teacherEmail + "&classUID=" + code + "&authToken=" + idToken)
+
 
     /*
   
@@ -2617,7 +2619,7 @@ xhr.onreadystatechange = () => {
 
         if(response.status == 'success'){
 
-          window.location.reload()
+          //window.location.reload()
         }
 
         document.getElementById(`removeStudentButton${code}`).innerHTML = `Remove Student`
