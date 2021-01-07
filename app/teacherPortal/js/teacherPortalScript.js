@@ -2697,7 +2697,7 @@ function schedualMeeting(emailStudent, course, code, index) {
 }
 
 function showGreat() {
-  document.getElementById('studentTable').style.display = "none";
+  //document.getElementById('studentTable').style.display = "none";
   document.getElementById('allStudentsTable').style.display = "none";
   document.getElementById("doing-good-table-section").style.display = "initial";
   document.getElementById("meh-table-section").style.display = "none";
@@ -2709,7 +2709,7 @@ function showGreat() {
 
 function showHelp() {
 
-  document.getElementById('studentTable').style.display = "none";
+  //document.getElementById('studentTable').style.display = "none";
   document.getElementById('allStudentsTable').style.display = "none";
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "initial";
@@ -2719,7 +2719,7 @@ function showHelp() {
 }
 
 function showFrustrated() {
-  document.getElementById('studentTable').style.display = "none";
+  //document.getElementById('studentTable').style.display = "none";
   document.getElementById('allStudentsTable').style.display = "none";
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "none";
@@ -2730,7 +2730,7 @@ function showFrustrated() {
 
 function showInactive() {
 
-  document.getElementById('studentTable').style.display = "none";
+  //document.getElementById('studentTable').style.display = "none";
   document.getElementById('allStudentsTable').style.display = "none";
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "none";
@@ -2740,7 +2740,7 @@ function showInactive() {
 }
 
 function showAll() {
-  document.getElementById('studentTable').style.display = "initial";
+  //document.getElementById('studentTable').style.display = "initial";
   document.getElementById('allStudentsTable').style.display = "initial";
   document.getElementById("doing-good-table-section").style.display = "none";
   document.getElementById("meh-table-section").style.display = "none";
