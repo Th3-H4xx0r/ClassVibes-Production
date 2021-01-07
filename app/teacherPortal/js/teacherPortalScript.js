@@ -38,11 +38,8 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
             if (in_a_district != null && in_a_district != undefined) {
               firebase.firestore().collection('Districts').doc(in_a_district).get().then(function (doc) {
       
-                //console.log('Executing 1');
       
                 var data = doc.data()["Status"];
-      
-                //console.log("STATUS:" + data);
       
                 //DISTRICT IS NOT ACTIVATED
                 if (data != "Activated") {
@@ -62,7 +59,6 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                   $('#main-body-page-teacher').html(activateDistrictHTML);
                 } else {
       
-                  //console.log('Executing 2');
       
                   if(document.getElementById('loader-icon') != null){
                     document.getElementById('loader-icon').style.display = 'none';
@@ -93,7 +89,7 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
       
                   else if (pageType == 'dashboard') {
                     getProfileInfo();
-                    getClassData(email);
+                    getClassData(email, 'dashboard');
 
                     //getWeekStudentAverageReactions_ALL_CLASSES()
                   }
@@ -163,9 +159,8 @@ function getTeacherAccountStatus(pageType, classCode = "null", additionalParams)
                 else if (pageType == 'dashboard') {
 
 
-                  //console.log("executing");
                   getProfileInfo();
-                  getClassData(email);
+                  getClassData(email, 'dashboard');
                   //getWeekStudentAverageReactions_ALL_CLASSES()
                 }
       
@@ -315,7 +310,7 @@ function getClassPageData(classCode){
 
         firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
           //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
-          console.log(idToken)
+          //console.log(idToken)
 
             
         var url = `https://api-v1.classvibes.net/api/getSubscriptionInfo?id=${stripeSubscription}&authToken=${idToken}`
@@ -335,7 +330,7 @@ function getClassPageData(classCode){
    
               expireDateValue = responseText.message['current_period_end'] * 1000
 
-              console.log(expireDateValue)
+              //console.log(expireDateValue)
       
       
             } else {
@@ -365,7 +360,7 @@ function getClassPageData(classCode){
 
       var expireDate = new Date(expireDateValue)
   
-      console.log(expireDate)
+      //console.log(expireDate)
       
       if(today > expireDate){
   
@@ -454,7 +449,6 @@ function getStudentRequests(){
 
       if (classData != null || classData != undefined) {
 
-        //console.log("works");
         var className1 = classData[1];
         var classCode = classData[0];
 
@@ -478,7 +472,6 @@ function getStudentRequests(){
       
                 var requestDocID = doc.id;
       
-                //console.log(className1);
       
                 var output = `
                 <div class="col-xl-12 col-md-6 mb-4">
@@ -627,7 +620,7 @@ function checkIfSchoolCodeExists() {
               "School Name": name,
             }).then(() => {
     
-              console.log(_requestRef.id);
+              //console.log(_requestRef.id);
     
     
               firebase.firestore().collection('UserData').doc(teacher_email).update({
@@ -662,7 +655,7 @@ function getProfileInfo() {
 
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
         //socket.emit('send-announcement-emails-to-students', {"code": code, 'title': messageTitle, 'message': messageText, 'className': className, 'authToken': idToken});
-        console.log(idToken)
+        //console.log(idToken)
   
       }).catch(function(error) {
         // Handle error
@@ -1013,7 +1006,7 @@ function getGraphData_Classes_page(code){
 
 }
 
-function getClassData(emailRef) {
+function getClassData(emailRef, page) {
   var classesList = [];
 
   var no_classes_HTML = `
@@ -1119,7 +1112,13 @@ function getClassData(emailRef) {
 
           
           // Pie Chart Example
-          getChartData(classCode)
+          if(page == 'dashboard'){
+            getChartData(classCode, 'dashboard')
+          } else {
+            getChartData(classCode)
+          }
+
+          
         }
       }
     }
@@ -2117,13 +2116,12 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
   var className = '';
   var today = Math.floor(Date.now()/1000);
 
-  if(document.getElementById("studentTable") != null){
-    document.getElementById("studentTable").innerHTML = ''
-    document.getElementById("studentTable-doing-good").innerHTML = ''
-    document.getElementById("studentTable-meh").innerHTML = ''
-    document.getElementById("studentTable-frustrated").innerHTML = ''
-    document.getElementById("studentTable-inactive").innerHTML = ''
-  }
+  document.getElementById("studentTable").innerHTML = ''
+  document.getElementById("studentTable-doing-good").innerHTML = ''
+  document.getElementById("studentTable-meh").innerHTML = ''
+  document.getElementById("studentTable-frustrated").innerHTML = ''
+  document.getElementById("studentTable-inactive").innerHTML = ''
+
 
 
 
@@ -2164,9 +2162,8 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
         
         //});
 
-        if(document.getElementById("studentTable") != null){
-          document.getElementById("studentTable").innerHTML = "";
-        }
+        document.getElementById("studentTable").innerHTML = "";
+  
     
         for (var i = 0; i <= classInfoList.length; i++) {
           let descriptionOutput = "";
@@ -2342,8 +2339,11 @@ function getStudentData(code, liveData, teacherEmail, maxdays) {
           } 
 
 
-            $(outputModel).appendTo("#outputModel")
-            $(descriptionOutput2).appendTo("#studentTable")
+
+
+          $(outputModel).appendTo("#outputModel")
+          $(descriptionOutput2).appendTo("#studentTable")
+
 
             totalCount = totalCount + 1
     
@@ -3028,7 +3028,7 @@ function updateDetails(code) {
 };
 
 
-function getChartData(code) {
+function getChartData(code, page) {
   
   var index = 0;
   var maxdays = 0
@@ -3176,7 +3176,13 @@ function getChartData(code) {
       
             var unreadMessagesHTML = ''
 
-            getStudentData(code, studentsListData, teacherEmail, maxdays);
+            if(page != 'dashboard'){
+              console.log("PAGE IS NOT DASh")
+              getStudentData(code, studentsListData, teacherEmail, maxdays);
+            } else {
+              console.log("PAGE IS DASHBOARD")
+            }
+
 
             if(unreadMessages, unreadMessages != 0 && unreadMessages != NaN && unreadMessages != 'NaN'){
               var unreadMessagesHTML =  `<h2><span class="badge badge-warning" style = 'position: absolute; margin-left: 83%; top: 10px'>${unreadMessages}</span><h2></h2>`
@@ -3604,7 +3610,6 @@ function getMessagesForChat_chatPage_teacher(classCode, studentEmail){
 } 
 
 function sendMessage_ChatPage_teacher(classCode, studentEmail){
-  //console.log("Message queued")
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       var email = user.email;
@@ -3623,9 +3628,6 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
       }).then(() => {
 
         var fixedEmail = studentEmail.replace(/[|&;$%@"<>()+,.]/g, "-");
-
-        console.log(fixedEmail);
-
        
         var url = `https://api-v1.classvibes.net/api/sendNotificationtoGroup?group=classes-student-${classCode}-${fixedEmail}&token=${'test'}&title=New message from ${name}&msg=${message}`
     
@@ -3668,7 +3670,6 @@ function sendMessage_ChatPage_teacher(classCode, studentEmail){
 } 
 
 function scrollSmoothToBottom() {
-  //console.log("scrolling")
   var div = document.getElementById('message-components');
   $(div).animate({
     scrollTop: div.scrollHeight - div.clientHeight
