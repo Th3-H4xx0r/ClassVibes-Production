@@ -419,7 +419,15 @@ googleSignInDistrict = () => {
                 if (accountType == "District") {
                     console.log('Login Success');
                     //localStorage.setItem("email", email);
-                    window.location = "/district/dashboard";
+
+                    const url = `https://api-v1.classvibes.net/api/authLogger?email=${email}&platform=web`
+
+                    $.get(url, function(data, status){
+                        //console.log(data)
+                        window.location = "/district/dashboard";
+                    })
+
+                    
                 } else {
 
                     errorHTML = `<div class="alert alert-danger" role="alert" 
@@ -1120,7 +1128,14 @@ function loginWithEmailStudent() {
                         
                             window.localStorage.setItem("clientType", '35TK-KSMY-C7NR-2CEF');
 
-                            window.location = "/student/dashboard";
+                            const url = `https://api-v1.classvibes.net/api/authLogger?email=${email}&platform=web`
+
+                            $.get(url, function(data, status){
+                                //console.log(data)
+                                window.location = "/student/dashboard";
+
+                            })
+
 
                     } else {
 
@@ -1194,8 +1209,16 @@ function loginWithEmailTeacher() {
                         if (accountType != null) {
                             if (accountType == "Teacher" || accountType == 'Solo Teacher') {
                                 window.localStorage.setItem("clientType", '9HX4-5H7Y-4CEH-UKPT');
-    
-                                 window.location = "teacher/dashboard";
+
+
+                                 const url = `https://api-v1.classvibes.net/api/authLogger?email=${email}&platform=web`
+
+                                 $.get(url, function(data, status){
+                                     //console.log(data)
+                                         
+                                    window.location = "teacher/dashboard";
+     
+                                 })
     
     
                             } else {
