@@ -258,8 +258,14 @@ googleSignInStudent = () => {
                         console.log('Login Success');
     
                         window.localStorage.setItem("clientType", '35TK-KSMY-C7NR-2CEF');
+
+                        const url = `https://api-v1.classvibes.net/api/authLogger?email=${email}&platform=web`
+
+                        $.get(url, function(data, status){
+                            //console.log(data)
+                            window.location = "/student/dashboard";
+                        })
     
-                        window.location = "/student/dashboard";
     
                     } else {
     
