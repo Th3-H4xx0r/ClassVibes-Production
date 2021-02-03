@@ -580,42 +580,42 @@ async function getStudentClasses(studentUsername, pageType) {
         if(reaction == 'doing great'){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classCode}'></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classCode}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classCode}'></i></a>
 
-          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Frustrated"  onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
 
 
           `
         } else if (reaction == "need help"){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
 
-          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Frustrated" onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
 
           `
         } else if (reaction == "frustrated"){
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
 
-          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Frustrated"  onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
 
           `
         } else {
           buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
 
-          <a onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Frustrated"  onclick = "updateReaction('frustrated', '${classCode}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
 
           `
@@ -780,41 +780,41 @@ function updateReaction(reaction, classSelected, studentUsername, pageType) {
 
       if(reaction == 'doing great'){
         buttonsGrid = `
-          <a onclick = "updateReaction('doing great', '${classSelected}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classSelected}'></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classSelected}', '${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;" id = 'doingGreat${classSelected}'></i></a>
 
-          <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Frustrated"  onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
           `
 
       } else if(reaction == 'need help'){
        buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
 
-          <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Frustrated"  onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b"></i></a>
 
           `
       } else if(reaction == 'frustrated'){
         buttonsGrid = `
           
-        <a onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
+        <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-smile" style="font-size: 50px; color: #1cc88a"></i></a>
 
-        <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
+        <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: #f6c23e;"></i></a>
 
-        <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
+        <a data-toggle="tooltip" data-placement="top" title="Frustrated"  onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-frown" style="font-size: 50px; margin-left: 15px; color: #e74a3b;"></i></a>
 
         `
       } else {
         buttonsGrid = `
           
-          <a onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Doing great"  onclick = "updateReaction('doing great', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="fas fa-smile" style="font-size: 50px; color: #1cc88a;"></i></a>
 
-          <a onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Need help"  onclick = "updateReaction('need help', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-meh" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
-          <a onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
+          <a data-toggle="tooltip" data-placement="top" title="Frustrated"  onclick = "updateReaction('frustrated', '${classSelected}','${studentUsername}', '${pageType}')" href = "javascript:;"><i class="far fa-frown" style="font-size: 50px; margin-left: 15px; color: lightslategray"></i></a>
 
 
           `
