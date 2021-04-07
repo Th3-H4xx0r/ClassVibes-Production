@@ -3170,7 +3170,7 @@ function getChartData(code, page) {
             if(studentsReactionLists[0] == 0 && studentsReactionLists[1] == 0 && studentsReactionLists[2] == 0 && studentsReactionLists[3] == 0){
   
               var noStudentsHTML = `
-              <center style = 'margin-top: 10%'>
+              <center style = 'margin-top: 20%'>
                 <img src = '/teacher/img/undraw_empty_xct9.svg' width = "50%" />
                 <h3 style = 'margin-top: 10px'>No Students</h3>
               </center>
