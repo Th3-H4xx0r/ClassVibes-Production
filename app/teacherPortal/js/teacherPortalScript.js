@@ -1961,26 +1961,12 @@ function createClass() {
                 var status = responseText['status']
           
                 if(status == 'success'){
-                  //window.location = "dashboard.html"
-       
-                  var sessionID = responseText.message.id
-       
-                  
-                 stripe
-                 .redirectToCheckout({
-                   sessionId: sessionID,
-                 })
-                 .then(handleResult);
-       
-                 var handleResult = function (result) {
-                   if (result.error) {
-                     document.getElementById('feedback-error-payment').innerHTML = result.error.message
-                   }
-                 };
-          
+
+                  window.location.reload()
+
           
                 } else {
-                  document.getElementById('continueButton').innerHTML = "Continue"
+                  document.getElementById('continueButton').innerHTML = "Create Class"
                   document.getElementById('feedback-error-payment').innerHTML = responseText['message']
                 }
               }
