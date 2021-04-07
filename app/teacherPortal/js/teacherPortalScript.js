@@ -280,7 +280,8 @@ function createClassPopup(){
 
         <p>By creating a class, you agree with our <a href="/privacy">Privacy Policy</a> and our <a href="/legal">Terms & Condtions</a></p>
 
-        <p style="color: red; font-weight: 700;" id = "feedback-error-payment"></p>
+        <p style="color: red; font-weight: 700;" id = "feedback-error-payment"></p>        
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1936,7 +1937,55 @@ function createClass() {
 
             var key = responseText['message']
 
-            chargeCardForClassCreation(email, code, className, 1, key)
+            //chargeCardForClassCreation(email, code, className, 1, key)
+
+            document.getElementById('continueButton').disabled = true
+
+            document.getElementById('continueButton').innerHTML = ` <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
+            
+
+            var url = `https://api-v1.classvibes.net/api/createClassBETA?email=${email}&className=${className}`
+    
+            const xhr = new XMLHttpRequest();
+          
+            xhr.onreadystatechange = () => {
+              if (xhr.readyState === XMLHttpRequest.DONE) {
+                // Code to execute with response
+          
+                var responseText = JSON.parse(xhr.responseText);
+          
+                var status = responseText['status']
+          
+                if(status == 'success'){
+                  //window.location = "dashboard.html"
+       
+                  var sessionID = responseText.message.id
+       
+                  
+                 stripe
+                 .redirectToCheckout({
+                   sessionId: sessionID,
+                 })
+                 .then(handleResult);
+       
+                 var handleResult = function (result) {
+                   if (result.error) {
+                     document.getElementById('feedback-error-payment').innerHTML = result.error.message
+                   }
+                 };
+          
+          
+                } else {
+                  document.getElementById('continueButton').innerHTML = "Continue"
+                  document.getElementById('feedback-error-payment').innerHTML = responseText['message']
+                }
+              }
+            }
+            xhr.open('GET', url);
+            xhr.send();
+
+
+
 
         }
 
