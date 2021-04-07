@@ -1939,6 +1939,10 @@ function createClass() {
 
             //chargeCardForClassCreation(email, code, className, 1, key)
 
+            //TODO: REMOVE CODE BELOW FOR PRODUCTION
+
+            //////////////////////////////////////////////////////////////////////////////////
+
             document.getElementById('continueButton').disabled = true
 
             document.getElementById('continueButton').innerHTML = ` <img src = '/teacherimg/infinity.svg' style = 'margin-left: 40px; margin-right: 40px; max-height: 23px' width = '30px' height = '30px' />`
@@ -1946,10 +1950,10 @@ function createClass() {
 
             var url = `https://api-v1.classvibes.net/api/createClassBETA?email=${email}&className=${className}`
     
-            const xhr = new XMLHttpRequest();
+            const xhrCreate = new XMLHttpRequest();
           
-            xhr.onreadystatechange = () => {
-              if (xhr.readyState === XMLHttpRequest.DONE) {
+            xhrCreate.onreadystatechange = () => {
+              if (xhrCreate.readyState === XMLHttpRequest.DONE) {
                 // Code to execute with response
           
                 var responseText = JSON.parse(xhr.responseText);
@@ -1981,8 +1985,10 @@ function createClass() {
                 }
               }
             }
-            xhr.open('GET', url);
-            xhr.send();
+            xhrCreate.open('GET', url);
+            xhrCreate.send();
+
+            //////////////////////////////////////////////////////////////////////////////////
 
 
 
