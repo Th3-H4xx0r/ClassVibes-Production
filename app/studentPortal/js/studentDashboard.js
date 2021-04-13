@@ -1044,13 +1044,17 @@ function addClassToStudentData(classCode) {
           'code': classCode.toString(),
           'class name': classNamE,
           'accepted': false,
+          'teacher unread': 0,
+          'student unread': 0,
         }).then(() => {
+
           firebase.firestore().collection("Classes").doc(classCode).collection("Students").doc(email).set({
             'name': name,
             'email': email,
             'date': new Date(),
             'status': 'doing great',
             'teacher unread': 0,
+            'student unread': 0,
             'accepted': false,
           }).then(() => {
 
@@ -1060,6 +1064,7 @@ function addClassToStudentData(classCode) {
               window.location.reload();
             })
           });
+
         });
     
 
